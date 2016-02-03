@@ -355,7 +355,7 @@ private void Inicializa_config()
       
       create_jtable_metrics_jpanel1(jTable9,panelImbalanceDataMetrics,button_all_3,button_none_3,button_invert_3,button_calculate_3,button_save3,30,50,500,200,"imbalanced"); //imbalanced class
       
-      create_jtable_metrics_jpanel1(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save,35,150,500,250,"database"); //tab Database
+      create_jtable_metrics_jpanel1(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save,35,155,500,355,"database"); //tab Database
       create_jtable_metrics_jpanel14(jTable8,panelMultipleDatasets,button_all_2,button_none_2,button_invert_2,button_calculate_2,button_save2,280,35,500,250);
       
       create_jtable_metrics_jpanel2();
@@ -396,7 +396,7 @@ private void Inicializa_config()
       //BOTON EXPORTAR PESTAÑA DATASET
       
         
-      create_button_export(jTable2,panelLabelFrequency,export1,80,305);
+      create_button_export(jTable2,panelLabelFrequency,export1,20,375);
       export2 = create_button_export_jtable4(tableImbalance,panelImbalanceLeft,export2,80,455);
      
       
@@ -995,13 +995,13 @@ private void Inicializa_config()
         panelLabelFrequency.setLayout(panelLabelFrequencyLayout);
         panelLabelFrequencyLayout.setHorizontalGroup(
             panelLabelFrequencyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
         );
         panelLabelFrequencyLayout.setVerticalGroup(
             panelLabelFrequencyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelLabelFrequencyLayout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 33, Short.MAX_VALUE))
         );
 
         textChooseFile.addActionListener(new java.awt.event.ActionListener() {
@@ -1164,18 +1164,16 @@ private void Inicializa_config()
             .addGroup(panelDatasetLayout.createSequentialGroup()
                 .addGap(33, 33, 33)
                 .addGroup(panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelDatasetLayout.createSequentialGroup()
-                        .addGroup(panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(panelCurrentDataset, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(panelDatasetLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(panelLabelFrequency, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(21, 21, 21))
-                    .addGroup(panelDatasetLayout.createSequentialGroup()
-                        .addComponent(textChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 641, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(buttonChooseFile)
-                        .addContainerGap(83, Short.MAX_VALUE))))
+                    .addComponent(panelCurrentDataset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDatasetLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(panelLabelFrequency, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDatasetLayout.createSequentialGroup()
+                        .addComponent(textChooseFile)
+                        .addGap(18, 18, 18)
+                        .addComponent(buttonChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(17, 17, 17)))
+                .addGap(21, 21, 21))
         );
         panelDatasetLayout.setVerticalGroup(
             panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1187,8 +1185,8 @@ private void Inicializa_config()
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelCurrentDataset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelLabelFrequency, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(91, Short.MAX_VALUE))
+                .addComponent(panelLabelFrequency, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         TabPrincipal.addTab("Dataset", panelDataset);
