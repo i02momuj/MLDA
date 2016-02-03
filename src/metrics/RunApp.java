@@ -355,7 +355,7 @@ private void Inicializa_config()
       
       create_jtable_metrics_jpanel1(jTable9,panelImbalanceDataMetrics,button_all_3,button_none_3,button_invert_3,button_calculate_3,button_save3,30,50,500,200,"imbalanced"); //imbalanced class
       
-      create_jtable_metrics_jpanel1(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save,35,155,500,355,"database"); //tab Database
+      create_jtable_metrics_jpanel1(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save,35,195,500,315,"database"); //tab Database //35,155,500,355
       create_jtable_metrics_jpanel14(jTable8,panelMultipleDatasets,button_all_2,button_none_2,button_invert_2,button_calculate_2,button_save2,280,35,500,250);
       
       create_jtable_metrics_jpanel2();
@@ -396,7 +396,7 @@ private void Inicializa_config()
       //BOTON EXPORTAR PESTAÑA DATASET
       
         
-      create_button_export(jTable2,panelLabelFrequency,export1,20,375);
+      create_button_export(jTable2,panelLabelFrequency,export1,20,335); //375
       export2 = create_button_export_jtable4(tableImbalance,panelImbalanceLeft,export2,80,455);
      
       
@@ -995,13 +995,13 @@ private void Inicializa_config()
         panelLabelFrequency.setLayout(panelLabelFrequencyLayout);
         panelLabelFrequencyLayout.setHorizontalGroup(
             panelLabelFrequencyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
         );
         panelLabelFrequencyLayout.setVerticalGroup(
             panelLabelFrequencyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelLabelFrequencyLayout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 33, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 39, Short.MAX_VALUE))
         );
 
         textChooseFile.addActionListener(new java.awt.event.ActionListener() {
@@ -1022,55 +1022,46 @@ private void Inicializa_config()
 
         panelCurrentDataset.setBorder(javax.swing.BorderFactory.createTitledBorder("Current dataset"));
 
-        labelRelation.setText("Relations:");
+        labelRelation.setText("Relation:");
         labelRelation.setName(""); // NOI18N
 
         labelInstances.setText("Instances:");
 
-        labelRelationValue.setText("None");
         labelRelationValue.setName(""); // NOI18N
 
-        labelInstancesValue.setText("None");
         labelInstancesValue.setName(""); // NOI18N
 
         labelAttributes.setText("Attributes:");
 
         labelLabels.setText("Labels:");
 
-        labelAttributesValue.setText("None");
         labelAttributesValue.setName(""); // NOI18N
 
-        labelLabelsValue.setText("None");
         labelLabelsValue.setName(""); // NOI18N
 
         labelDensity.setText("Density:");
 
         labelCardinality.setText("Cardinality:");
+        labelCardinality.setMaximumSize(new java.awt.Dimension(80, 18));
 
-        labelDensityValue.setText("None");
         labelDensityValue.setName(""); // NOI18N
 
-        labelCardinalityValue.setText("None");
         labelCardinalityValue.setName(""); // NOI18N
 
         labelDistinct.setText("Distinct labelset:");
 
         labelBound.setText("Bound:");
 
-        labelDistinctValue.setText("None");
         labelDistinctValue.setName(""); // NOI18N
 
-        labelBoundValue.setText("None");
         labelBoundValue.setName(""); // NOI18N
 
         labelDiversity.setText("Diversity:");
 
-        labelDiversityValue.setText("None");
         labelDiversityValue.setName(""); // NOI18N
 
-        labelLxIxF.setText("Labels x instances x features:");
+        labelLxIxF.setText("Labels * instances * features:");
 
-        labelLxIxFValue.setText("None");
         labelLxIxFValue.setName(""); // NOI18N
 
         javax.swing.GroupLayout panelCurrentDatasetLayout = new javax.swing.GroupLayout(panelCurrentDataset);
@@ -1079,82 +1070,91 @@ private void Inicializa_config()
             panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCurrentDatasetLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(labelAttributes)
-                    .addComponent(labelRelation)
-                    .addComponent(labelInstances))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(labelInstancesValue, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
-                    .addComponent(labelAttributesValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(labelRelationValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelCurrentDatasetLayout.createSequentialGroup()
-                        .addGroup(panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelLabels, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(panelCurrentDatasetLayout.createSequentialGroup()
-                                .addComponent(labelDensity, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(panelCurrentDatasetLayout.createSequentialGroup()
+                                        .addComponent(labelInstances)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(labelInstancesValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(panelCurrentDatasetLayout.createSequentialGroup()
+                                        .addComponent(labelCardinality, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(labelCardinalityValue, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(panelCurrentDatasetLayout.createSequentialGroup()
+                                        .addComponent(labelDiversity)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(labelDiversityValue, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(panelCurrentDatasetLayout.createSequentialGroup()
+                                        .addComponent(labelAttributes)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(labelAttributesValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                             .addGroup(panelCurrentDatasetLayout.createSequentialGroup()
-                                .addComponent(labelLabelsValue, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(labelRelation)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(labelCardinality, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(labelRelationValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(11, 11, 11)
+                        .addGroup(panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCurrentDatasetLayout.createSequentialGroup()
+                                .addComponent(labelLabels)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCurrentDatasetLayout.createSequentialGroup()
+                                .addComponent(labelBound)
+                                .addGap(5, 5, 5)))
+                        .addGroup(panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(labelLabelsValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(labelBoundValue, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(panelCurrentDatasetLayout.createSequentialGroup()
-                                .addComponent(labelDensityValue, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(labelDistinct)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(labelDistinct))))
+                                .addComponent(labelDistinctValue, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelCurrentDatasetLayout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addComponent(labelDensity)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(labelDensityValue, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(panelCurrentDatasetLayout.createSequentialGroup()
                         .addComponent(labelLxIxF)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(labelLxIxFValue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(88, 88, 88)))
-                .addGroup(panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(panelCurrentDatasetLayout.createSequentialGroup()
-                        .addComponent(labelDistinctValue, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(labelDiversity, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(labelDiversityValue, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelCurrentDatasetLayout.createSequentialGroup()
-                        .addComponent(labelCardinalityValue, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(labelBound, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(labelBoundValue, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(7, 7, 7))
+                        .addComponent(labelLxIxFValue)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelCurrentDatasetLayout.setVerticalGroup(
             panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCurrentDatasetLayout.createSequentialGroup()
-                .addGroup(panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelLxIxFValue, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(labelRelation)
-                        .addComponent(labelRelationValue)
-                        .addComponent(labelLxIxF)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelRelation)
+                    .addComponent(labelRelationValue))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelInstances)
                     .addComponent(labelInstancesValue)
-                    .addComponent(labelLabels)
-                    .addComponent(labelLabelsValue)
-                    .addComponent(labelCardinalityValue)
-                    .addComponent(labelBound)
-                    .addComponent(labelCardinality)
-                    .addComponent(labelBoundValue))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelAttributes)
                     .addComponent(labelAttributesValue)
+                    .addComponent(labelLabels)
+                    .addComponent(labelLabelsValue)
                     .addComponent(labelDensity)
-                    .addComponent(labelDensityValue)
-                    .addComponent(labelDistinct)
-                    .addComponent(labelDistinctValue)
+                    .addComponent(labelDensityValue))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelCardinality, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelCardinalityValue)
                     .addComponent(labelDiversity)
-                    .addComponent(labelDiversityValue)))
+                    .addComponent(labelDiversityValue)
+                    .addComponent(labelBound)
+                    .addComponent(labelBoundValue)
+                    .addComponent(labelDistinct)
+                    .addComponent(labelDistinctValue))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelLxIxF)
+                    .addComponent(labelLxIxFValue, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         javax.swing.GroupLayout panelDatasetLayout = new javax.swing.GroupLayout(panelDataset);
@@ -1164,16 +1164,18 @@ private void Inicializa_config()
             .addGroup(panelDatasetLayout.createSequentialGroup()
                 .addGap(33, 33, 33)
                 .addGroup(panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelCurrentDataset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDatasetLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(panelLabelFrequency, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDatasetLayout.createSequentialGroup()
-                        .addComponent(textChooseFile)
+                    .addGroup(panelDatasetLayout.createSequentialGroup()
+                        .addComponent(textChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 692, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(buttonChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(17, 17, 17)))
-                .addGap(21, 21, 21))
+                        .addContainerGap(30, Short.MAX_VALUE))
+                    .addGroup(panelDatasetLayout.createSequentialGroup()
+                        .addGroup(panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(panelCurrentDataset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(panelDatasetLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(panelLabelFrequency, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(26, 26, 26))))
         );
         panelDatasetLayout.setVerticalGroup(
             panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1419,7 +1421,7 @@ private void Inicializa_config()
             panelTrainTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTrainTestLayout.createSequentialGroup()
                 .addComponent(panelTestOption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 596, Short.MAX_VALUE))
+                .addGap(0, 610, Short.MAX_VALUE))
         );
         panelTrainTestLayout.setVerticalGroup(
             panelTrainTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1996,7 +1998,7 @@ private void Inicializa_config()
             .addGroup(panelMultipleDatasetsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panelMultipleDatasetsLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(613, Short.MAX_VALUE))
+                .addContainerGap(627, Short.MAX_VALUE))
         );
         panelMultipleDatasetsLayout.setVerticalGroup(
             panelMultipleDatasetsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2012,7 +2014,7 @@ private void Inicializa_config()
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(TabPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(TabPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 881, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

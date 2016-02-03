@@ -42,7 +42,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="TabPrincipal" min="-2" max="-2" attributes="0"/>
+          <Component id="TabPrincipal" min="-2" pref="881" max="-2" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -78,19 +78,23 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="panelCurrentDataset" max="32767" attributes="0"/>
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                              <Component id="panelLabelFrequency" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="textChooseFile" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="textChooseFile" min="-2" pref="692" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="buttonChooseFile" min="-2" pref="100" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                              <EmptySpace pref="30" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="panelCurrentDataset" max="32767" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      <Component id="panelLabelFrequency" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -135,14 +139,14 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jScrollPane3" alignment="0" pref="257" max="32767" attributes="0"/>
+                      <Component id="jScrollPane3" alignment="0" pref="265" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="jScrollPane3" min="-2" pref="345" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="33" max="32767" attributes="0"/>
+                          <Component id="jScrollPane3" min="-2" pref="300" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="39" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -213,100 +217,115 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="labelAttributes" min="-2" max="-2" attributes="0"/>
-                              <Component id="labelRelation" alignment="1" min="-2" max="-2" attributes="0"/>
-                              <Component id="labelInstances" alignment="1" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="labelInstancesValue" pref="103" max="32767" attributes="0"/>
-                              <Component id="labelAttributesValue" max="32767" attributes="0"/>
-                              <Component id="labelRelationValue" max="32767" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="labelLabels" max="32767" attributes="0"/>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="labelDensity" min="-2" pref="67" max="-2" attributes="0"/>
-                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="labelInstances" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="labelInstancesValue" max="32767" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="labelCardinality" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="labelCardinalityValue" min="-2" pref="74" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="labelDiversity" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="labelDiversityValue" min="-2" pref="95" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="labelAttributes" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="labelAttributesValue" max="32767" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                      </Group>
+                                      <Group type="102" attributes="0">
+                                          <Component id="labelRelation" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="labelRelationValue" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="labelLabelsValue" min="-2" pref="75" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <Component id="labelLabels" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="labelCardinality" min="-2" pref="67" max="-2" attributes="0"/>
                                       </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="labelDensityValue" min="-2" pref="75" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="labelDistinct" min="-2" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <Component id="labelBound" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                              </Group>
-                              <Group type="102" attributes="0">
-                                  <Component id="labelLxIxF" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="labelLabelsValue" max="32767" attributes="0"/>
+                                      <Component id="labelBoundValue" min="-2" pref="95" max="-2" attributes="0"/>
+                                  </Group>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="labelLxIxFValue" max="32767" attributes="0"/>
-                                  <EmptySpace min="-2" pref="88" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="labelDistinctValue" min="-2" pref="75" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="labelDiversity" min="-2" pref="82" max="-2" attributes="0"/>
-                                  <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="labelDiversityValue" min="-2" pref="75" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="labelDistinct" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="labelDistinctValue" min="-2" pref="75" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
+                                          <Component id="labelDensity" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="labelDensityValue" min="-2" pref="134" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="labelCardinalityValue" min="-2" pref="75" max="-2" attributes="0"/>
+                                  <Component id="labelLxIxF" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="labelBound" min="-2" pref="82" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="labelBoundValue" min="-2" pref="75" max="-2" attributes="0"/>
+                                  <Component id="labelLxIxFValue" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace min="7" pref="7" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="labelLxIxFValue" alignment="0" min="-2" pref="14" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="labelRelation" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="labelRelationValue" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="labelLxIxF" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="labelRelation" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelRelationValue" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="labelInstances" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="labelInstancesValue" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="labelLabels" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="labelLabelsValue" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="labelCardinalityValue" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="labelBound" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="labelCardinality" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="labelBoundValue" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="labelAttributes" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="labelAttributesValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelLabels" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelLabelsValue" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="labelDensity" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="labelDensityValue" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="labelDistinct" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="labelDistinctValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="labelCardinality" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelCardinalityValue" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="labelDiversity" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="labelDiversityValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelBound" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelBoundValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelDistinct" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelDistinctValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="labelLxIxF" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelLxIxFValue" alignment="3" min="-2" pref="14" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -315,7 +334,7 @@
               <SubComponents>
                 <Component class="javax.swing.JLabel" name="labelRelation">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Relations:"/>
+                    <Property name="text" type="java.lang.String" value="Relation:"/>
                     <Property name="name" type="java.lang.String" value="" noResource="true"/>
                   </Properties>
                 </Component>
@@ -326,13 +345,11 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelRelationValue">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="None"/>
                     <Property name="name" type="java.lang.String" value="" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelInstancesValue">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="None"/>
                     <Property name="name" type="java.lang.String" value="" noResource="true"/>
                   </Properties>
                 </Component>
@@ -348,13 +365,11 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelAttributesValue">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="None"/>
                     <Property name="name" type="java.lang.String" value="" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelLabelsValue">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="None"/>
                     <Property name="name" type="java.lang.String" value="" noResource="true"/>
                   </Properties>
                 </Component>
@@ -366,17 +381,18 @@
                 <Component class="javax.swing.JLabel" name="labelCardinality">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Cardinality:"/>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[80, 18]"/>
+                    </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelDensityValue">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="None"/>
                     <Property name="name" type="java.lang.String" value="" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelCardinalityValue">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="None"/>
                     <Property name="name" type="java.lang.String" value="" noResource="true"/>
                   </Properties>
                 </Component>
@@ -392,13 +408,11 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelDistinctValue">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="None"/>
                     <Property name="name" type="java.lang.String" value="" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelBoundValue">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="None"/>
                     <Property name="name" type="java.lang.String" value="" noResource="true"/>
                   </Properties>
                 </Component>
@@ -409,18 +423,16 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelDiversityValue">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="None"/>
                     <Property name="name" type="java.lang.String" value="" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelLxIxF">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Labels x instances x features:"/>
+                    <Property name="text" type="java.lang.String" value="Labels * instances * features:"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelLxIxFValue">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="None"/>
                     <Property name="name" type="java.lang.String" value="" noResource="true"/>
                   </Properties>
                 </Component>
@@ -442,7 +454,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="panelTestOption" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="596" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="610" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1543,7 +1555,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="panelMultipleDatasetsLeft" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="613" max="32767" attributes="0"/>
+                      <EmptySpace pref="627" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
