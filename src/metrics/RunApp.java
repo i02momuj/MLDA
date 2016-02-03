@@ -236,6 +236,7 @@ public class RunApp extends javax.swing.JFrame {
         
         
         initComponents();        
+
         Inicializa_config(); //add jradionbutton
      
         dataset_current_name="";          
@@ -355,7 +356,7 @@ private void Inicializa_config()
       
       create_jtable_metrics_jpanel1(jTable9,panelImbalanceDataMetrics,button_all_3,button_none_3,button_invert_3,button_calculate_3,button_save3,30,50,500,200,"imbalanced"); //imbalanced class
       
-      create_jtable_metrics_jpanel1(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save,35,195,500,315,"database"); //tab Database //35,155,500,355
+      create_jtable_metrics_jpanel1(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save,30,195,500,270,"database"); //tab Database //35,155,500,355
       create_jtable_metrics_jpanel14(jTable8,panelMultipleDatasets,button_all_2,button_none_2,button_invert_2,button_calculate_2,button_save2,280,35,500,250);
       
       create_jtable_metrics_jpanel2();
@@ -396,7 +397,7 @@ private void Inicializa_config()
       //BOTON EXPORTAR PESTAÑA DATASET
       
         
-      create_button_export(jTable2,panelLabelFrequency,export1,20,335); //375
+      create_button_export(jTable2,panelLabelFrequency,export1,20,285); //375
       export2 = create_button_export_jtable4(tableImbalance,panelImbalanceLeft,export2,80,455);
      
       
@@ -432,11 +433,11 @@ private void Inicializa_config()
      //COMMUN METRICS TRAIN/TEST
      JLabel label1 = new JLabel("Common metrics for train/test");
      panelTrainTest.add(label1);
-     label1.setBounds(255, 20, 250, 20);
+     label1.setBounds(290, 20, 250, 20);
      label1.setFont(new Font("Arial", Font.BOLD, 12));
          
      
-     create_jtable_metric(jTable5, panelTrainTest, util.Get_row_data_commun_data(), 250, 35,500,130);
+     create_jtable_metric(jTable5, panelTrainTest, util.Get_row_data_commun_data(), 285, 40, 565, 175);
      
      
    
@@ -444,17 +445,17 @@ private void Inicializa_config()
      // METRICS TEST
      JLabel label3 = new JLabel("NOT common metrics for train/test set");
      panelTrainTest.add(label3);
-     label3.setBounds(255, 170, 250, 20);
+     label3.setBounds(290, 220, 250, 20);
      label3.setFont(new Font("Arial", Font.BOLD, 12));
      
      
      
-     create_jtable_metric(jTable7, panelTrainTest, util.Get_row_data_test_data(), 250, 185,500,130);
+     create_jtable_metric(jTable7, panelTrainTest, util.Get_row_data_test_data(), 285, 240,565, 240);
      
      
      //button ALL
       JButton button_all2 = new JButton("All");
-      button_all2.setBounds(255, 320, 80, 20);
+      button_all2.setBounds(285, 485, 80, 20);
             
       button_all2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -466,7 +467,7 @@ private void Inicializa_config()
       
      //button NONE
       JButton button_none2 = new JButton("None");
-      button_none2.setBounds(350, 320, 80, 20);
+      button_none2.setBounds(385, 485, 80, 20);
             
       button_none2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt){
@@ -477,7 +478,7 @@ private void Inicializa_config()
       
       //button INVERT
      JButton button_invert2 = new JButton("Invert");
-      button_invert2.setBounds(450, 320, 80, 20);
+      button_invert2.setBounds(485, 485, 80, 20);
             
       button_invert2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -489,7 +490,7 @@ private void Inicializa_config()
       
          //button CALCULATE
       button_calculate2_train = new JButton("Show");
-      button_calculate2_train.setBounds(670, 320, 80, 20);
+      button_calculate2_train.setBounds(670, 485, 80, 20);
             
       button_calculate2_train.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -500,7 +501,7 @@ private void Inicializa_config()
      
                //button SAVE
      button_save_train = new JButton("Save");
-      button_save_train.setBounds(670, 340, 80, 20);
+      button_save_train.setBounds(770, 485, 80, 20);
             
       button_save_train.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -905,22 +906,22 @@ private void Inicializa_config()
         buttonChooseSuppliedTest = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         labelPercStratified = new javax.swing.JLabel();
-        textStratifiedHoldout = new javax.swing.JTextField();
         radioStratifiedHoldout = new javax.swing.JRadioButton();
         textRandomHoldout = new javax.swing.JTextField();
-        labelPercRandom = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         labelHoldout = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         labelCV = new javax.swing.JLabel();
         radioRandomCV = new javax.swing.JRadioButton();
         radioStratifiedCV = new javax.swing.JRadioButton();
-        textRandomCV = new javax.swing.JTextField();
         textStratifiedCV = new javax.swing.JTextField();
-        labelFoldsStratified = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
         labelFoldsRandom = new javax.swing.JLabel();
         jButton6 = new javax.swing.JButton();
+        textRandomCV = new javax.swing.JTextField();
+        labelFoldsStratified = new javax.swing.JLabel();
+        labelPercRandom = new javax.swing.JLabel();
+        textStratifiedHoldout = new javax.swing.JTextField();
         panelImbalance = new javax.swing.JPanel();
         tabsImbalance = new javax.swing.JTabbedPane();
         panelExamplesPerLabel = new javax.swing.JPanel();
@@ -1000,8 +1001,8 @@ private void Inicializa_config()
         panelLabelFrequencyLayout.setVerticalGroup(
             panelLabelFrequencyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelLabelFrequencyLayout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 39, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 35, Short.MAX_VALUE))
         );
 
         textChooseFile.addActionListener(new java.awt.event.ActionListener() {
@@ -1162,20 +1163,20 @@ private void Inicializa_config()
         panelDatasetLayout.setHorizontalGroup(
             panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelDatasetLayout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addGroup(panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(panelDatasetLayout.createSequentialGroup()
-                        .addComponent(textChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 692, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(buttonChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(30, Short.MAX_VALUE))
-                    .addGroup(panelDatasetLayout.createSequentialGroup()
+                        .addContainerGap(570, Short.MAX_VALUE)
+                        .addComponent(panelLabelFrequency, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelDatasetLayout.createSequentialGroup()
+                        .addGap(24, 24, 24)
                         .addGroup(panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(panelCurrentDataset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(panelDatasetLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(panelLabelFrequency, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(26, 26, 26))))
+                                .addComponent(textChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 701, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(buttonChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE))
+                            .addComponent(panelCurrentDataset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(26, 26, 26))
         );
         panelDatasetLayout.setVerticalGroup(
             panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1187,8 +1188,8 @@ private void Inicializa_config()
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelCurrentDataset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelLabelFrequency, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(panelLabelFrequency, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(56, Short.MAX_VALUE))
         );
 
         TabPrincipal.addTab("Dataset", panelDataset);
@@ -1225,18 +1226,6 @@ private void Inicializa_config()
 
         labelPercStratified.setText("%");
 
-        textStratifiedHoldout.setText("70");
-        textStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textStratifiedHoldoutActionPerformed(evt);
-            }
-        });
-        textStratifiedHoldout.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                textStratifiedHoldoutKeyTyped(evt);
-            }
-        });
-
         radioStratifiedHoldout.setText("Stratified holdout ");
         radioStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1256,8 +1245,6 @@ private void Inicializa_config()
             }
         });
 
-        labelPercRandom.setText("%");
-
         labelHoldout.setText("Holdout");
 
         labelCV.setText("Cross validation");
@@ -1276,18 +1263,6 @@ private void Inicializa_config()
             }
         });
 
-        textRandomCV.setText("5");
-        textRandomCV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textRandomCVActionPerformed(evt);
-            }
-        });
-        textRandomCV.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                textRandomCVKeyTyped(evt);
-            }
-        });
-
         textStratifiedCV.setText("5");
         textStratifiedCV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1300,14 +1275,40 @@ private void Inicializa_config()
             }
         });
 
-        labelFoldsStratified.setText("Folds");
-
         labelFoldsRandom.setText("Folds");
 
         jButton6.setText("Save datasets");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
+            }
+        });
+
+        textRandomCV.setText("5");
+        textRandomCV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textRandomCVActionPerformed(evt);
+            }
+        });
+        textRandomCV.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                textRandomCVKeyTyped(evt);
+            }
+        });
+
+        labelFoldsStratified.setText("Folds");
+
+        labelPercRandom.setText("%");
+
+        textStratifiedHoldout.setText("70");
+        textStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textStratifiedHoldoutActionPerformed(evt);
+            }
+        });
+        textStratifiedHoldout.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                textStratifiedHoldoutKeyTyped(evt);
             }
         });
 
@@ -1323,48 +1324,42 @@ private void Inicializa_config()
                 .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelTestOptionLayout.createSequentialGroup()
                         .addComponent(radioSuppliedTest)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(buttonChooseSuppliedTest, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(buttonChooseSuppliedTest, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(panelTestOptionLayout.createSequentialGroup()
                         .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(labelCV)
                             .addGroup(panelTestOptionLayout.createSequentialGroup()
                                 .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(labelHoldout)
                                     .addGroup(panelTestOptionLayout.createSequentialGroup()
-                                        .addComponent(labelHoldout)
-                                        .addGap(35, 35, 35))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTestOptionLayout.createSequentialGroup()
-                                        .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addGroup(panelTestOptionLayout.createSequentialGroup()
-                                                .addComponent(radioStratifiedHoldout)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                                                .addComponent(labelPercStratified))
-                                            .addGroup(panelTestOptionLayout.createSequentialGroup()
-                                                .addComponent(radioRandomHoldout)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(labelPercRandom)))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(textRandomHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(textStratifiedHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(panelTestOptionLayout.createSequentialGroup()
-                                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(panelTestOptionLayout.createSequentialGroup()
-                                        .addComponent(radioRandomCV)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(labelFoldsRandom))
-                                    .addGroup(panelTestOptionLayout.createSequentialGroup()
-                                        .addComponent(radioStratifiedCV)
+                                        .addComponent(radioStratifiedHoldout)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(labelFoldsStratified)))
-                                .addGap(18, 18, 18)
-                                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(textStratifiedCV, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(textRandomCV, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(textStratifiedHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(panelTestOptionLayout.createSequentialGroup()
+                                        .addComponent(radioRandomHoldout)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(textRandomHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(labelPercRandom)
+                                    .addComponent(labelPercStratified)))
+                            .addGroup(panelTestOptionLayout.createSequentialGroup()
+                                .addComponent(radioRandomCV)
+                                .addGap(25, 25, 25)
+                                .addComponent(textRandomCV, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(labelFoldsRandom))
                             .addGroup(panelTestOptionLayout.createSequentialGroup()
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton6)))
+                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelTestOptionLayout.createSequentialGroup()
+                                .addComponent(radioStratifiedCV)
+                                .addGap(18, 18, 18)
+                                .addComponent(textStratifiedCV, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(labelFoldsStratified)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -1382,8 +1377,8 @@ private void Inicializa_config()
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radioRandomHoldout)
-                    .addComponent(labelPercRandom)
-                    .addComponent(textRandomHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(textRandomHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelPercRandom))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radioStratifiedHoldout)
@@ -1396,23 +1391,20 @@ private void Inicializa_config()
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radioRandomCV)
-                    .addComponent(textRandomCV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelFoldsRandom))
+                    .addComponent(labelFoldsRandom)
+                    .addComponent(textRandomCV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(radioStratifiedCV)
                     .addComponent(textStratifiedCV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(radioStratifiedCV)
-                        .addComponent(labelFoldsStratified)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(labelFoldsStratified))
+                .addGap(8, 8, 8)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelTestOptionLayout.createSequentialGroup()
-                        .addComponent(jButton6)
-                        .addGap(0, 1, Short.MAX_VALUE))
+                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout panelTrainTestLayout = new javax.swing.GroupLayout(panelTrainTest);
@@ -1420,14 +1412,16 @@ private void Inicializa_config()
         panelTrainTestLayout.setHorizontalGroup(
             panelTrainTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTrainTestLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(panelTestOption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 610, Short.MAX_VALUE))
+                .addContainerGap(609, Short.MAX_VALUE))
         );
         panelTrainTestLayout.setVerticalGroup(
             panelTrainTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTrainTestLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
                 .addComponent(panelTestOption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 187, Short.MAX_VALUE))
+                .addContainerGap(192, Short.MAX_VALUE))
         );
 
         TabPrincipal.addTab("Train/test dataset", panelTrainTest);
@@ -1446,7 +1440,7 @@ private void Inicializa_config()
         );
         panelExamplesPerLabelLayout.setVerticalGroup(
             panelExamplesPerLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+            .addGap(0, 450, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("# Examples per label", panelExamplesPerLabel);
@@ -1459,7 +1453,7 @@ private void Inicializa_config()
         );
         panelExamplesPerLabelsetLayout.setVerticalGroup(
             panelExamplesPerLabelsetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+            .addGap(0, 450, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("# Examples per labelset", panelExamplesPerLabelset);
@@ -1472,7 +1466,7 @@ private void Inicializa_config()
         );
         panelLabelsPerExampleLayout.setVerticalGroup(
             panelLabelsPerExampleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+            .addGap(0, 450, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("# Labels per example ", panelLabelsPerExample);
@@ -1485,7 +1479,7 @@ private void Inicializa_config()
         );
         panelLabelsIRperLabelIntraClassLayout.setVerticalGroup(
             panelLabelsIRperLabelIntraClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+            .addGap(0, 450, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("#Labels/IR per label intra class", panelLabelsIRperLabelIntraClass);
@@ -1498,7 +1492,7 @@ private void Inicializa_config()
         );
         panelIRperLabelIntraClassLayout.setVerticalGroup(
             panelIRperLabelIntraClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+            .addGap(0, 450, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("IR per label intra class", panelIRperLabelIntraClass);
@@ -1511,7 +1505,7 @@ private void Inicializa_config()
         );
         panelIRperLabelsetLayout.setVerticalGroup(
             panelIRperLabelsetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+            .addGap(0, 450, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("IR per labelset", panelIRperLabelset);
@@ -1524,7 +1518,7 @@ private void Inicializa_config()
         );
         panelImbalanceDataMetricsLayout.setVerticalGroup(
             panelImbalanceDataMetricsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+            .addGap(0, 450, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("Imbalance data metrics ", panelImbalanceDataMetrics);
@@ -1537,7 +1531,7 @@ private void Inicializa_config()
         );
         panelBoxDiagramLayout.setVerticalGroup(
             panelBoxDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+            .addGap(0, 450, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("Box diagram", panelBoxDiagram);
@@ -1550,7 +1544,7 @@ private void Inicializa_config()
         );
         panelIRperLabelInterClassLayout.setVerticalGroup(
             panelIRperLabelInterClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+            .addGap(0, 450, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("IR per label inter class", panelIRperLabelInterClass);
@@ -1563,7 +1557,7 @@ private void Inicializa_config()
         );
         panelLabelsIRperLabelInterClassLayout.setVerticalGroup(
             panelLabelsIRperLabelInterClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+            .addGap(0, 450, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
@@ -1687,7 +1681,7 @@ private void Inicializa_config()
             .addGroup(panelImbalanceLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tabsImbalance)
+                    .addComponent(tabsImbalance, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(panelImbalanceLayout.createSequentialGroup()
                         .addComponent(panelImbalanceLeft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1724,7 +1718,7 @@ private void Inicializa_config()
         panelChiFiLayout.setVerticalGroup(
             panelChiFiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelChiFiLayout.createSequentialGroup()
-                .addContainerGap(494, Short.MAX_VALUE)
+                .addContainerGap(469, Short.MAX_VALUE)
                 .addComponent(jLabel30)
                 .addContainerGap())
         );
@@ -1819,7 +1813,7 @@ private void Inicializa_config()
                 .addGroup(panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelCoOcurrenceLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panelCoOcurrenceRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(111, Short.MAX_VALUE))
+                .addContainerGap(82, Short.MAX_VALUE))
         );
 
         tabsDependences.addTab("Co-occurrence graph", panelCoOcurrence);
@@ -1832,7 +1826,7 @@ private void Inicializa_config()
         );
         panelCoOcurrenceValuesLayout.setVerticalGroup(
             panelCoOcurrenceValuesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 524, Short.MAX_VALUE)
+            .addGap(0, 494, Short.MAX_VALUE)
         );
 
         tabsDependences.addTab("Co-occurrence values", panelCoOcurrenceValues);
@@ -1914,7 +1908,7 @@ private void Inicializa_config()
                 .addGroup(panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelHeatmapLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelHeatmapGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(111, Short.MAX_VALUE))
+                .addContainerGap(82, Short.MAX_VALUE))
         );
 
         tabsDependences.addTab(" Heatmap graph", panelHeatmapGraph);
@@ -1927,7 +1921,7 @@ private void Inicializa_config()
         );
         panelHeatmapValuesLayout.setVerticalGroup(
             panelHeatmapValuesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 524, Short.MAX_VALUE)
+            .addGap(0, 494, Short.MAX_VALUE)
         );
 
         tabsDependences.addTab("Heatmap values", panelHeatmapValues);
@@ -2005,7 +1999,7 @@ private void Inicializa_config()
             .addGroup(panelMultipleDatasetsLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(panelMultipleDatasetsLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(205, Short.MAX_VALUE))
+                .addContainerGap(175, Short.MAX_VALUE))
         );
 
         TabPrincipal.addTab("Multiple datasets", panelMultipleDatasets);
@@ -2020,8 +2014,8 @@ private void Inicializa_config()
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(TabPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+                .addComponent(TabPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
