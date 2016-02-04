@@ -22,6 +22,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Set;
@@ -201,7 +202,7 @@ public class RunApp extends javax.swing.JFrame {
      
      //variables TRAIN-TEST
      boolean choose_test=false, holdout_ramdon=false, holdout_stratified=false, cv_ramdon=false, cv_stratified =false;
-    JButton button_calculate2_train,button_save_train;
+    JButton button_show_traintest,button_save_train;
     
     //VARIABLES BOX DIAGRAM
     JRadioButton jRadioButton8;
@@ -256,7 +257,8 @@ public class RunApp extends javax.swing.JFrame {
        jPanel15.setVisible(false);
        labelIR1.setVisible(false); // comentario de IR>1.5
        labelIR2.setVisible(false); // comentario de IR>1.5
-       jLabel30.setVisible(false); // comentario de valores dependientes chi- coefficient
+       labelChiThreshold.setVisible(false); // comentario de valores dependientes chi- coefficient
+       labelChiThreshold.setVisible(true);
        
        buttonGroup5.add(jRadioButton8);
        buttonGroup5.add(radioExamplesPerLabel);
@@ -273,6 +275,7 @@ public class RunApp extends javax.swing.JFrame {
       //JTABLE CHI & FI COEFFICIENT
 
       */
+
         
     fixedTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     jTable10.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -288,6 +291,7 @@ public class RunApp extends javax.swing.JFrame {
     jTable12.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     fixedTable2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     jTable12.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
     /*
     JScrollPane scroll = new JScrollPane(jTable10);
     JViewport viewport = new JViewport();
@@ -304,21 +308,21 @@ public class RunApp extends javax.swing.JFrame {
     jPanel24.add(scroll, BorderLayout.CENTER);  
    */
    
-      chi = new JLabel("Chi");
-      chi.setBounds(0,80, 20,20);
-      chi.setBackground(Color.white);
-      chi.setForeground(Color.black);
-      chi.setOpaque(true);
-           
-      panelChiFi.add(chi);
-    
-      fi = new JLabel("Fi");
-      fi.setBounds(300,0, 20,20);
-      fi.setBackground(Color.gray);
-      fi.setForeground(Color.white);
-      fi.setOpaque(true);
-      
-      panelChiFi.add(fi);
+//      chi = new JLabel("Chi");
+//      chi.setBounds(10,120, 20,20);
+//      chi.setBackground(Color.white);
+//      chi.setForeground(Color.black);
+//      chi.setOpaque(true);
+//           
+//      panelChiFi.add(chi);
+//    
+//      fi = new JLabel("Fi");
+//      fi.setBounds(300,0, 20,20);
+//      fi.setBackground(Color.gray);
+//      fi.setForeground(Color.white);
+//      fi.setOpaque(true);
+//      
+//      panelChiFi.add(fi);
     
     }
     
@@ -362,7 +366,7 @@ private void Inicializa_config()
       create_jtable_metrics_jpanel2();
       
       jButton6.setEnabled(false);
-      button_calculate2_train.setEnabled(false);
+      button_show_traintest.setEnabled(false);
       button_save_train.setEnabled(false);
             
       //CONFIG JTABLE FI AND CHI CO-OCURRENCES VALUES
@@ -400,9 +404,7 @@ private void Inicializa_config()
       create_button_export(jTable2,panelLabelFrequency,export1,20,285); //375
       export2 = create_button_export_jtable4(tableImbalance,panelImbalanceLeft,export2,80,455);
      
-      
-      
-      create_button_export(jTable10,fixedTable ,panelChiFi ,export3,350,370); // chi and fi values
+      create_button_export(jTable10,fixedTable ,panelChiFi ,export3, panelChiFi.getWidth()/2 - 40, 420); // chi and fi values //350, 370
       create_button_export(jTable11,fixedTable1,panelCoOcurrenceValues ,export4,350,370);//graph values
       create_button_export(jTable12,fixedTable2,panelHeatmapValues ,export5,350,370);//heatmap values
       
@@ -489,15 +491,15 @@ private void Inicializa_config()
       
       
          //button CALCULATE
-      button_calculate2_train = new JButton("Show");
-      button_calculate2_train.setBounds(670, 485, 80, 20);
+      button_show_traintest = new JButton("Show");
+      button_show_traintest.setBounds(670, 485, 80, 20);
             
-      button_calculate2_train.addActionListener(new java.awt.event.ActionListener() {
+      button_show_traintest.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 button_calculateActionPerformed1_general(evt,jTable5,jTable6,jTable7);
                             }
         });
-      panelTrainTest.add(button_calculate2_train);
+      panelTrainTest.add(button_show_traintest);
      
                //button SAVE
      button_save_train = new JButton("Save");
@@ -702,7 +704,7 @@ private void Inicializa_config()
     }
 
   //"Dataset" TAB CONFIG    
-    private void create_jtable_metrics_jpanel1(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_calculate,JButton button_save, int posx,int posy, int width, int heigh,String info)
+    private void create_jtable_metrics_jpanel1(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_show_dataset,JButton button_save, int posx,int posy, int width, int heigh,String info)
     {
         if(info.equals("imbalanced"))
         create_jtable_metric(jtable,jpanel, util.Get_row_data_imbalanced(),posx,posy,width,heigh);  
@@ -746,15 +748,15 @@ private void Inicializa_config()
       jpanel.add(button_invert);
       
          //button CALCULATE
-      button_calculate = new JButton("Show");
-      button_calculate.setBounds(posx+420, posy+heigh+5, 80, 20);
+      button_show_dataset = new JButton("Show");
+      button_show_dataset.setBounds(posx+420, posy+heigh+5, 80, 20);
             
-      button_calculate.addActionListener(new java.awt.event.ActionListener() {
+      button_show_dataset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 button_calculateActionPerformed(evt,jtable);
                             }
         });
-      jpanel.add(button_calculate);
+      jpanel.add(button_show_dataset);
       
       
        //button SAVE
@@ -946,7 +948,9 @@ private void Inicializa_config()
         jPanel21 = new javax.swing.JPanel();
         tabsDependences = new javax.swing.JTabbedPane();
         panelChiFi = new javax.swing.JPanel();
-        jLabel30 = new javax.swing.JLabel();
+        labelChiThreshold = new javax.swing.JLabel();
+        labelChiCoefficients = new javax.swing.JLabel();
+        labelChiCoefficients1 = new javax.swing.JLabel();
         panelCoOcurrence = new javax.swing.JPanel();
         panelCoOcurrenceRight = new javax.swing.JPanel();
         panelCoOcurrenceLeft = new javax.swing.JPanel();
@@ -1002,7 +1006,7 @@ private void Inicializa_config()
             panelLabelFrequencyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelLabelFrequencyLayout.createSequentialGroup()
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 35, Short.MAX_VALUE))
+                .addGap(0, 32, Short.MAX_VALUE))
         );
 
         textChooseFile.addActionListener(new java.awt.event.ActionListener() {
@@ -1189,7 +1193,7 @@ private void Inicializa_config()
                 .addComponent(panelCurrentDataset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelLabelFrequency, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         TabPrincipal.addTab("Dataset", panelDataset);
@@ -1704,22 +1708,42 @@ private void Inicializa_config()
             }
         });
 
-        jLabel30.setText("When the values pair of Chi coefficient is > 6.635, then  it´s marked with a red color because they are dependents");
+        labelChiThreshold.setText("Chi coefficient values are marked in red when the labels are dependent (Chi > 6.635)");
+
+        labelChiCoefficients.setBackground(new java.awt.Color(254, 254, 254));
+        labelChiCoefficients.setText("  Chi coefficients  ");
+        labelChiCoefficients.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        labelChiCoefficients.setOpaque(true);
+
+        labelChiCoefficients1.setBackground(java.awt.Color.lightGray);
+        labelChiCoefficients1.setForeground(new java.awt.Color(1, 1, 1));
+        labelChiCoefficients1.setText("  Phi coefficients  ");
+        labelChiCoefficients1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        labelChiCoefficients1.setOpaque(true);
 
         javax.swing.GroupLayout panelChiFiLayout = new javax.swing.GroupLayout(panelChiFi);
         panelChiFi.setLayout(panelChiFiLayout);
         panelChiFiLayout.setHorizontalGroup(
             panelChiFiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelChiFiLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel30)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(24, 24, 24)
+                .addGroup(panelChiFiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelChiThreshold)
+                    .addGroup(panelChiFiLayout.createSequentialGroup()
+                        .addComponent(labelChiCoefficients)
+                        .addGap(18, 18, 18)
+                        .addComponent(labelChiCoefficients1)))
+                .addContainerGap(239, Short.MAX_VALUE))
         );
         panelChiFiLayout.setVerticalGroup(
             panelChiFiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelChiFiLayout.createSequentialGroup()
-                .addContainerGap(469, Short.MAX_VALUE)
-                .addComponent(jLabel30)
+                .addContainerGap(418, Short.MAX_VALUE)
+                .addGroup(panelChiFiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelChiCoefficients)
+                    .addComponent(labelChiCoefficients1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(labelChiThreshold)
                 .addContainerGap())
         );
 
@@ -1739,7 +1763,7 @@ private void Inicializa_config()
         panelCoOcurrenceRight.setLayout(panelCoOcurrenceRightLayout);
         panelCoOcurrenceRightLayout.setHorizontalGroup(
             panelCoOcurrenceRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 539, Short.MAX_VALUE)
+            .addGap(0, 603, Short.MAX_VALUE)
         );
         panelCoOcurrenceRightLayout.setVerticalGroup(
             panelCoOcurrenceRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1784,7 +1808,7 @@ private void Inicializa_config()
             .addGroup(panelCoOcurrenceLeftLayout.createSequentialGroup()
                 .addGap(68, 68, 68)
                 .addComponent(buttonShowCoOcurrence)
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addContainerGap(81, Short.MAX_VALUE))
         );
         panelCoOcurrenceLeftLayout.setVerticalGroup(
             panelCoOcurrenceLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1802,8 +1826,8 @@ private void Inicializa_config()
             panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCoOcurrenceLayout.createSequentialGroup()
                 .addComponent(panelCoOcurrenceLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                .addComponent(panelCoOcurrenceRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(panelCoOcurrenceRight, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelCoOcurrenceLayout.setVerticalGroup(
@@ -1813,7 +1837,7 @@ private void Inicializa_config()
                 .addGroup(panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelCoOcurrenceLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panelCoOcurrenceRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(82, Short.MAX_VALUE))
+                .addContainerGap(61, Short.MAX_VALUE))
         );
 
         tabsDependences.addTab("Co-occurrence graph", panelCoOcurrence);
@@ -1822,7 +1846,7 @@ private void Inicializa_config()
         panelCoOcurrenceValues.setLayout(panelCoOcurrenceValuesLayout);
         panelCoOcurrenceValuesLayout.setHorizontalGroup(
             panelCoOcurrenceValuesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 786, Short.MAX_VALUE)
+            .addGap(0, 841, Short.MAX_VALUE)
         );
         panelCoOcurrenceValuesLayout.setVerticalGroup(
             panelCoOcurrenceValuesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1878,7 +1902,7 @@ private void Inicializa_config()
             .addGroup(panelHeatmapLeftLayout.createSequentialGroup()
                 .addGap(67, 67, 67)
                 .addComponent(buttonShowHeatmapLeft)
-                .addContainerGap(70, Short.MAX_VALUE))
+                .addContainerGap(82, Short.MAX_VALUE))
         );
         panelHeatmapLeftLayout.setVerticalGroup(
             panelHeatmapLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1895,11 +1919,10 @@ private void Inicializa_config()
         panelHeatmapGraphLayout.setHorizontalGroup(
             panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelHeatmapGraphLayout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(panelHeatmapLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(labelHeatmapGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 547, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
         panelHeatmapGraphLayout.setVerticalGroup(
             panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1908,7 +1931,7 @@ private void Inicializa_config()
                 .addGroup(panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelHeatmapLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelHeatmapGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(82, Short.MAX_VALUE))
+                .addContainerGap(61, Short.MAX_VALUE))
         );
 
         tabsDependences.addTab(" Heatmap graph", panelHeatmapGraph);
@@ -1917,7 +1940,7 @@ private void Inicializa_config()
         panelHeatmapValues.setLayout(panelHeatmapValuesLayout);
         panelHeatmapValuesLayout.setHorizontalGroup(
             panelHeatmapValuesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 786, Short.MAX_VALUE)
+            .addGap(0, 841, Short.MAX_VALUE)
         );
         panelHeatmapValuesLayout.setVerticalGroup(
             panelHeatmapValuesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1932,8 +1955,8 @@ private void Inicializa_config()
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel21Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tabsDependences, javax.swing.GroupLayout.PREFERRED_SIZE, 791, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(tabsDependences)
+                .addContainerGap())
         );
         jPanel21Layout.setVerticalGroup(
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1999,7 +2022,7 @@ private void Inicializa_config()
             .addGroup(panelMultipleDatasetsLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(panelMultipleDatasetsLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(176, Short.MAX_VALUE))
+                .addContainerGap(159, Short.MAX_VALUE))
         );
 
         TabPrincipal.addTab("Multiple datasets", panelMultipleDatasets);
@@ -2160,8 +2183,8 @@ private void Inicializa_config()
     private void tabsDependencesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabsDependencesStateChanged
         
         //System.out.println(jTabbedPane4.getSelectedIndex());
-        if(tabsDependences.getSelectedIndex() == 0) {jLabel30.setVisible(true);}
-        else {jLabel30.setVisible(false);}
+        if(tabsDependences.getSelectedIndex() == 0) {labelChiThreshold.setVisible(true);}
+        else {labelChiThreshold.setVisible(false);}
         
     }//GEN-LAST:event_tabsDependencesStateChanged
 
@@ -2547,7 +2570,7 @@ private void Inicializa_config()
         textStratifiedCV.setEnabled(false);
         
         jButton6.setEnabled(false);
-        button_calculate2_train.setEnabled(false);
+        button_show_traintest.setEnabled(false);
         button_save_train.setEnabled(false);
         
     }//GEN-LAST:event_radioStratifiedHoldoutActionPerformed
@@ -2821,7 +2844,7 @@ private void Inicializa_config()
           }
 
            jButton6.setEnabled(true);
-           button_calculate2_train.setEnabled(true);
+           button_show_traintest.setEnabled(true);
            button_save_train.setEnabled(false);
            
            JOptionPane.showMessageDialog(null, "Dataset is generated", "Successful", JOptionPane.INFORMATION_MESSAGE);
@@ -2856,7 +2879,7 @@ private void Inicializa_config()
         textStratifiedCV.setEnabled(false);
         
         jButton6.setEnabled(false);
-        button_calculate2_train.setEnabled(false);
+        button_show_traintest.setEnabled(false);
         button_save_train.setEnabled(false);
     }//GEN-LAST:event_radioSuppliedTestActionPerformed
 
@@ -2870,7 +2893,7 @@ private void Inicializa_config()
         textStratifiedCV.setEnabled(false);
 
         jButton6.setEnabled(false);
-        button_calculate2_train.setEnabled(false);
+        button_show_traintest.setEnabled(false);
         button_save_train.setEnabled(false);
     }//GEN-LAST:event_radioRandomHoldoutActionPerformed
 
@@ -3082,7 +3105,7 @@ private void Inicializa_config()
         textStratifiedCV.setEnabled(false);
         
         jButton6.setEnabled(false);
-        button_calculate2_train.setEnabled(false);
+        button_show_traintest.setEnabled(false);
         button_save_train.setEnabled(false);
         
     }//GEN-LAST:event_radioRandomCVActionPerformed
@@ -3097,7 +3120,7 @@ private void Inicializa_config()
         textStratifiedCV.setEnabled(true);
         
         jButton6.setEnabled(false);
-        button_calculate2_train.setEnabled(false);
+        button_show_traintest.setEnabled(false);
         button_save_train.setEnabled(false);
     }//GEN-LAST:event_radioStratifiedCVActionPerformed
 
@@ -3654,8 +3677,9 @@ private void Inicializa_config()
              export2.setVisible(true); //boton salvar de la tabla de la izquierda en class imbalance
             
              
-             if(tabsDependences.getSelectedIndex()==0)jLabel30.setVisible(true);
-             else jLabel30.setVisible(false);
+//             if(tabsDependences.getSelectedIndex()==0)labelChiThreshold.setVisible(true);
+//             else labelChiThreshold.setVisible(false);
+             labelChiThreshold.setVisible(true);
             
              
              //para el box diagram
@@ -4011,7 +4035,7 @@ private void Inicializa_config()
             
               //TRAIN TEST
               jButton6.setEnabled(false);
-              button_calculate2_train.setEnabled(false);
+              button_show_traintest.setEnabled(false);
               button_save_train.setEnabled(false);
              
             }
@@ -5371,10 +5395,9 @@ private void Inicializa_config()
     viewport.setPreferredSize(fixedTable.getPreferredSize());
     scroll.setRowHeaderView(viewport);
     
-    scroll.setBounds(20, 20, 760, 350);
+    scroll.setBounds(20, 15, 825, 390); //Chi
     
-    scroll.setCorner(JScrollPane.UPPER_LEFT_CORNER, fixedTable
-        .getTableHeader());
+    scroll.setCorner(JScrollPane.UPPER_LEFT_CORNER, fixedTable.getTableHeader());
     
     jTable10.setBorder(BorderFactory.createLineBorder(Color.black));
     
@@ -5989,7 +6012,6 @@ private void Inicializa_config()
     private javax.swing.JButton buttonShowHeatmapLeft;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton6;
-    private javax.swing.JLabel jLabel30;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPopupMenu jPopupMenu1;
@@ -6009,6 +6031,9 @@ private void Inicializa_config()
     private javax.swing.JLabel labelCV;
     private javax.swing.JLabel labelCardinality;
     private javax.swing.JLabel labelCardinalityValue;
+    private javax.swing.JLabel labelChiCoefficients;
+    private javax.swing.JLabel labelChiCoefficients1;
+    private javax.swing.JLabel labelChiThreshold;
     private javax.swing.JLabel labelDensity;
     private javax.swing.JLabel labelDensityValue;
     private javax.swing.JLabel labelDistinct;
