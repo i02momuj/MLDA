@@ -57,6 +57,7 @@ public class metric_output extends javax.swing.JFrame {
         for(String metric : metric_list)
         {
             value= metric+ util.get_tabs_multi_datasets(metric);
+            System.out.println(value);
             
             for( String current_name : dataset_names)
                 if(flag){ encabezado+= current_name+"\t";}
@@ -71,7 +72,13 @@ public class metric_output extends javax.swing.JFrame {
                 
                 temp = util.get_value_metric(metric, current, es_de_tipo_meka.get(count_meka));
                 
-                if(temp.equals("-1.0")) temp= util.get_value_metric_imbalanced(metric, current, imbalanced_data);
+                if(temp.equals("-1.0")){
+                    temp= util.get_value_metric_imbalanced(metric, current, imbalanced_data);
+                }
+                
+                if(temp.contains("NaN")){
+                    temp = " ---";
+                }
                 
                 value+=temp +"\t";
                 count_meka++;
@@ -83,7 +90,7 @@ public class metric_output extends javax.swing.JFrame {
                 jTextArea1.append(encabezado+"\n");
             }
             
-          jTextArea1.append(value+"\n");
+            jTextArea1.append(value+"\n");
           
           
         }
@@ -372,10 +379,16 @@ public class metric_output extends javax.swing.JFrame {
         for(String metric : metric_list)
         {
            value= util.get_value_metric(metric, dataset, es_de_tipo_meka);
-           if(value.equals("-1.0")) value = util.get_value_metric_imbalanced(metric, dataset, imbalanced_data); 	
+           if(value.equals("-1.0")){
+               value = util.get_value_metric_imbalanced(metric, dataset, imbalanced_data);
+           } 	
            
-            
-           jTextArea1.append(metric+ util.get_tabs_multi_datasets(metric) +value+"\n");
+            System.out.println(value);
+           if(value.contains("NaN")){
+               jTextArea1.append(metric + util.get_tabs_multi_datasets(metric) + " ---" + "\n");
+           }else{
+               jTextArea1.append(metric + util.get_tabs_multi_datasets(metric) + value + "\n");
+           }           
         }
          
         if(metric_list.size()>20)
@@ -384,9 +397,15 @@ public class metric_output extends javax.swing.JFrame {
         }
         else
         { 
-         if(posy > 180 && posx<700) this.setBounds(posx, posy-180, 600, 200);
-         else if (posy > 180 && posx>700 ) this.setBounds(posx-500, posy, 600, 200);
-         else this.setBounds(posx,posy+490,600,200);
+         if(posy > 180 && posx<700) {
+             this.setBounds(posx, posy-180, 600, 200);
+         }
+         else if (posy > 180 && posx>700 ) {
+             this.setBounds(posx-500, posy, 600, 200);
+         }
+         else {
+             this.setBounds(posx,posy+490,600,200);
+         }
         }
     }
     
