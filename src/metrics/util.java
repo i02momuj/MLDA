@@ -15,6 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -228,7 +229,7 @@ public class util {
             simbol=value.substring(value.length()-3, value.length());
         }
         double valor = Double.parseDouble(value);
-        return Truncate_value(valor, digits)+simbol;
+        return Truncate_value(valor, digits);//+simbol;
     }
     private static boolean this_value_Has_E(String value)
     {               
@@ -1812,13 +1813,13 @@ public class util {
         String truncate;
         
         for(int i=0; i<fila.length;i++)
-        {
-          
+        {       
           if(i==0)
           {              
                fila[i]= name_row;
                continue;
           }
+          
           
           if(coefficient[i-1][num_fila]==-1.0)
           {
@@ -1830,13 +1831,11 @@ public class util {
           if(i-1 != num_fila  )
           {
               truncate = Double.toString(coefficient[i-1][num_fila]);
+              System.out.println("TRUNCATE2: " + util.Truncate_values_aprox_zero(truncate, 4));
               fila[i]= util.Truncate_values_aprox_zero(truncate, 4);
           }
                     
           else if (i-1==num_fila) {fila[i]= "----------"; }
-          
-         
-           
         }
         
         return fila;
@@ -1865,7 +1864,7 @@ public class util {
             case "Distinct Labelset":  value = "\t"+"\t" +"\t"+"\t";
                      break;
             
-            case "Proportion of Distinct Labelset":  value = "\t"+"\t" +"\t"+"\t";
+            case "Proportion of Distinct Labelset":  value = "\t"+"\t" +"\t";
                      break;
                 
             case "Density": value ="\t"+"\t" +"\t"+"\t"+"\t";
@@ -1880,30 +1879,30 @@ public class util {
             case "Diversity":  value ="\t"+"\t" +"\t"+"\t"+"\t";
                    break;       
                                 
-            case "Proportion of unique label combination (PUniq)":  value ="\t"+"\t" +"\t";
+            case "Proportion of unique label combination (PUniq)":  value ="\t"+"\t";
                      break;
             
-            case "Proportion of maxim label combination (PMax)": value ="\t"+"\t" +"\t";
+            case "Proportion of maxim label combination (PMax)": value ="\t"+"\t";
                      break;
                 
-            case "Ratio of number of instances to the number of attributes": value ="\t"+"\t";
+            case "Ratio of number of instances to the number of attributes": value ="\t";
                      break;
                 
-            case "Number of nominal attributes": value ="\t"+"\t" +"\t"+"\t";
+            case "Number of nominal attributes": value ="\t"+"\t" +"\t";
                      break;      
                 
                             
-            case "Labels x instances x features": value ="\t"+"\t" +"\t"+"\t";
+            case "Labels x instances x features": value ="\t"+"\t" +"\t";
                      break;      
                     
                 
             case "Number of binary attributes": value ="\t"+"\t" +"\t"+"\t";
                      break;   
                 
-             case "Proportion of binary attributes": value ="\t"+"\t" +"\t"+"\t";
+             case "Proportion of binary attributes": value ="\t"+"\t" +"\t";
                      break;
             
-            case "Proportion of nominal attributes": value ="\t"+"\t" +"\t"+"\t";
+            case "Proportion of nominal attributes": value ="\t"+"\t" +"\t";
                      break;
                 
             case "Default accuracy":  value ="\t"+"\t" +"\t"+"\t";
@@ -1912,7 +1911,7 @@ public class util {
             case "Mean of mean of numeric attributes":  value ="\t"+"\t" +"\t";
                      break;
                 
-            case "Mean of standar deviation of numeric attributes":  value ="\t"+"\t" +"\t";
+            case "Mean of standar deviation of numeric attributes":  value ="\t"+"\t";
                      break;      
                 
             case "Mean of skewness of numeric attributes": value ="\t"+"\t" +"\t";
@@ -1927,10 +1926,10 @@ public class util {
            /* case "Mean of entropies (numeric attr)":  value ="\t"+"\t" +"\t"+"\t";
                      break;
             */    
-            case "Average absolute correlation between numeric attributes":  value ="\t"+"\t";
+            case "Average absolute correlation between numeric attributes":  value ="\t";
                      break;
                 
-            case "Proportion of numeric attributes with outliers": value ="\t"+"\t" +"\t";
+            case "Proportion of numeric attributes with outliers": value ="\t"+"\t";
                      break;
                 
             case "Average gain ratio": value ="\t"+"\t" +"\t"+"\t";
@@ -1939,7 +1938,7 @@ public class util {
             case "Ratio of distinct classes to the total number label combinations": value ="\t"+"\t";
                      break;
             
-            case "Standard desviation of the label cardinality": value ="\t"+"\t" +"\t";
+            case "Standard desviation of the label cardinality": value ="\t"+"\t";
                      break;    
           
             case "Skewness cardinality":  value ="\t"+"\t" +"\t"+"\t";
@@ -1954,7 +1953,7 @@ public class util {
             case "Number of unconditionally dependent label pairs by chi-square test":  value ="\t";
                      break;
                 
-            case "Ratio of unconditionally dependent label pairs by chi-square test":  value ="\t"+"\t";
+            case "Ratio of unconditionally dependent label pairs by chi-square test":  value ="\t";
                      break;
                 
             case "Average of unconditionally dependent label pairs by chi-square test":  value ="\t";
@@ -1975,19 +1974,19 @@ public class util {
             case "Ratio of labelsets with number of examples < half of the attributes":  value ="\t";
                      break;    
                  
-             case "Ratio of number of labelsets up to 2 examples":  value ="\t"+"\t" +"\t";
+             case "Ratio of number of labelsets up to 2 examples":  value ="\t"+"\t";
                      break;
             
-            case "Ratio of number of labelsets up to 5 examples": value ="\t"+"\t" +"\t";
+            case "Ratio of number of labelsets up to 5 examples": value ="\t"+"\t";
                      break;
                 
-            case "Ratio of number of labelsets up to 10 examples":  value ="\t"+"\t" +"\t";
+            case "Ratio of number of labelsets up to 10 examples":  value ="\t"+"\t";
                      break;
                 
-            case "Ratio of number of labelsets up to 50 examples":  value ="\t"+"\t" +"\t";
+            case "Ratio of number of labelsets up to 50 examples":  value ="\t"+"\t";
                      break;     
                 
-            case "Average examples per labelset": value ="\t"+"\t" +"\t"+"\t";
+            case "Average examples per labelset": value ="\t"+"\t" +"\t";
                      break;
             
             case "Minimal entropy of labels":  value ="\t"+"\t" +"\t"+"\t";
@@ -2002,7 +2001,7 @@ public class util {
             case "Ratio of test instances over training instances":  value ="\t"+"\t" +"\t";
                     break;
                 
-            case "Standard desviation of examples per labelset":  value ="\t"+"\t" +"\t";
+            case "Standard desviation of examples per labelset":  value ="\t"+"\t";
                     break;
                 
             case "Mean of IR per labelset":  value = "\t"+"\t" +"\t"+"\t";
@@ -2011,10 +2010,10 @@ public class util {
             case "Mean of standard deviation IR per label intra class":  value = "\t"+"\t";
                     break;
                 
-            case "Mean of IR per label intra class":  value ="\t"+"\t" +"\t"+"\t";
+            case "Mean of IR per label intra class":  value ="\t"+"\t" +"\t";
                     break;
                 
-            case "Mean of IR per label inter class":  value ="\t"+"\t" +"\t"+"\t";
+            case "Mean of IR per label inter class":  value ="\t"+"\t" +"\t";
                     break;
                 
             case "Variance of examples per labelset":  value ="\t"+"\t" +"\t";
@@ -4245,6 +4244,8 @@ public class util {
            catch (Exception e) {
                 e.printStackTrace();
             }
+           
+           
            
            return chi_fi_coefficient;
             
