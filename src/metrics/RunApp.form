@@ -455,7 +455,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="panelTestOption" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="609" max="32767" attributes="0"/>
+                      <EmptySpace pref="620" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1540,16 +1540,16 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="panelMultipleDatasetsLeft" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="627" max="32767" attributes="0"/>
+                      <EmptySpace pref="623" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                       <Component id="panelMultipleDatasetsLeft" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="175" max="32767" attributes="0"/>
+                      <EmptySpace pref="176" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1572,7 +1572,7 @@
                               <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
                               <Group type="102" attributes="0">
                                   <Component id="buttonAddMultipleDatasets" min="-2" pref="80" max="-2" attributes="0"/>
-                                  <EmptySpace pref="50" max="32767" attributes="0"/>
+                                  <EmptySpace pref="61" max="32767" attributes="0"/>
                                   <Component id="buttonRemoveMultipleDatasets" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>

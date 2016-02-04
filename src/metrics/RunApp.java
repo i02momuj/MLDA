@@ -357,7 +357,7 @@ private void Inicializa_config()
       create_jtable_metrics_jpanel1(jTable9,panelImbalanceDataMetrics,button_all_3,button_none_3,button_invert_3,button_calculate_3,button_save3,30,50,500,200,"imbalanced"); //imbalanced class
       
       create_jtable_metrics_jpanel1(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save,30,195,500,270,"database"); //tab Database //35,155,500,355
-      create_jtable_metrics_jpanel14(jTable8,panelMultipleDatasets,button_all_2,button_none_2,button_invert_2,button_calculate_2,button_save2,280,35,500,250);
+      create_jtable_metrics_jpanel14(jTable8,panelMultipleDatasets,button_all_2,button_none_2,button_invert_2,button_calculate_2,button_save2,290,35,565,400); //
       
       create_jtable_metrics_jpanel2();
       
@@ -783,7 +783,7 @@ private void Inicializa_config()
         create_jtable_metric(jtable,jpanel, util.Get_row_data_multi_datasets(),posx,posy,width,heigh);  
        //button ALL
       button_all = new JButton("All");
-      button_all.setBounds(posx, posy+255, 80, 20);
+      button_all.setBounds(posx, posy+405, 80, 20);
             
       button_all.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -795,7 +795,7 @@ private void Inicializa_config()
       
      //button NONE
       button_none = new JButton("None");
-      button_none.setBounds(posx+100, posy+255, 80, 20);
+      button_none.setBounds(posx+100, posy+405, 80, 20);
             
       button_none.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -806,7 +806,7 @@ private void Inicializa_config()
       
       //button INVERT
       button_invert = new JButton("Invert");
-      button_invert.setBounds(posx+200, posy+255, 80, 20);
+      button_invert.setBounds(posx+200, posy+405, 80, 20);
             
       button_invert.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -817,7 +817,7 @@ private void Inicializa_config()
       
          //button CALCULATE
       button_calculate = new JButton("Show");
-      button_calculate.setBounds(posx+420, posy+255, 80, 20);
+      button_calculate.setBounds(posx+480, posy+405, 80, 20);
             
       button_calculate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -829,7 +829,7 @@ private void Inicializa_config()
       
        //button SAVE
       button_save = new JButton("Save");
-      button_save.setBounds(posx+420, posy+275, 80, 20);
+      button_save.setBounds(posx+480, posy+425, 80, 20);
             
       button_save.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -844,8 +844,8 @@ private void Inicializa_config()
       
       
              //button Graphics
-      button_save = new JButton("# Label per example");
-      button_save.setBounds(posx+360, posy+295,140, 20);
+      button_save = new JButton("# Labels per example");
+      button_save.setBounds(posx+390, posy+445,170, 20);
             
       button_save.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1414,7 +1414,7 @@ private void Inicializa_config()
             .addGroup(panelTrainTestLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panelTestOption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(609, Short.MAX_VALUE))
+                .addContainerGap(620, Short.MAX_VALUE))
         );
         panelTrainTestLayout.setVerticalGroup(
             panelTrainTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1970,7 +1970,7 @@ private void Inicializa_config()
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(panelMultipleDatasetsLeftLayout.createSequentialGroup()
                         .addComponent(buttonAddMultipleDatasets, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
                         .addComponent(buttonRemoveMultipleDatasets, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -1992,14 +1992,14 @@ private void Inicializa_config()
             .addGroup(panelMultipleDatasetsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panelMultipleDatasetsLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(627, Short.MAX_VALUE))
+                .addContainerGap(623, Short.MAX_VALUE))
         );
         panelMultipleDatasetsLayout.setVerticalGroup(
             panelMultipleDatasetsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelMultipleDatasetsLayout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addGap(20, 20, 20)
                 .addComponent(panelMultipleDatasetsLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(175, Short.MAX_VALUE))
+                .addContainerGap(176, Short.MAX_VALUE))
         );
 
         TabPrincipal.addTab("Multiple datasets", panelMultipleDatasets);
