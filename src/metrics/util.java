@@ -1777,7 +1777,7 @@ public class util {
                 e.printStackTrace();
             }
           
-        if(Double.isNaN(value)){
+        if(Double.isNaN(value) || value == Double.POSITIVE_INFINITY || value == Double.NEGATIVE_INFINITY){
             System.out.println("isNaN");
             return("NaN");
         }
@@ -3529,6 +3529,7 @@ public class util {
         
         String maxString = "Average of unconditionally dependent label pairs by chi-square test";
         double maxLength = maxString.length();
+        String value = new String();
           
         for(String metric : metric_list)
         {
@@ -3537,7 +3538,19 @@ public class util {
             for(int i=0; i<(maxLength-metric.length()); i++){
                 wr.write(" ");
             }
-            wr.write(tableMetrics.get(metric));
+            
+            //System.out.println("parseDouble: " + Double.parseDouble(tableMetrics.get(metric)));
+            if((Math.abs(Double.parseDouble(tableMetrics.get(metric))*1000) < 0) ||
+                    (Math.abs(Double.parseDouble(tableMetrics.get(metric))/1000.0) > 10)){
+                NumberFormat formatter = new DecimalFormat("0.###E0");
+                value = formatter.format(Double.parseDouble(tableMetrics.get(metric)));
+                wr.write(value.replace(",", "."));
+            }
+            else{
+                wr.write(tableMetrics.get(metric));
+            }
+            
+            
             wr.write(System.getProperty("line.separator"));  
         }
  
@@ -3572,9 +3585,18 @@ public class util {
             
         //atributo[] imbalanced_data =  util.Get_data_imbalanced_x_label(dataset);
         
+          String value = new String();
         for(String metric : metric_list)
         {
-            wr.write(metric + ";" + tableMetrics.get(metric));
+            if((Math.abs(Double.parseDouble(tableMetrics.get(metric))*1000) < 0) ||
+                    (Math.abs(Double.parseDouble(tableMetrics.get(metric))/1000.0) > 10)){
+                NumberFormat formatter = new DecimalFormat("0.###E0");
+                value = formatter.format(Double.parseDouble(tableMetrics.get(metric)));
+                wr.write(metric + ";" + value.replace(",", "."));
+            }
+            else{
+                wr.write(metric + ";" + tableMetrics.get(metric));
+            }
             wr.write(System.getProperty("line.separator"));  
         }
  
@@ -3638,8 +3660,16 @@ public class util {
         line += Integer.toString(num_instances) + ", ";
         
         for(String metric : metric_list)
-        {
-            line += tableMetrics.get(metric) + ", ";
+        {            
+            if((Math.abs(Double.parseDouble(tableMetrics.get(metric))*1000) < 0) ||
+                    (Math.abs(Double.parseDouble(tableMetrics.get(metric))/1000.0) > 10)){
+                NumberFormat formatter = new DecimalFormat("0.###E0");
+                line += formatter.format(Double.parseDouble(tableMetrics.get(metric)));
+            }
+            else{
+                line += tableMetrics.get(metric);
+            }
+            line += ", ";
         }
         //Delete last ", "
         line = line.substring(0, line.length()-2);
@@ -3692,7 +3722,7 @@ public class util {
                 e.printStackTrace();
             }
         
-        if(Double.isNaN(value)){
+        if(Double.isNaN(value) || value == Double.POSITIVE_INFINITY || value == Double.NEGATIVE_INFINITY){
             System.out.println("isNaN");
             return("NaN");
         }
@@ -3930,7 +3960,7 @@ public class util {
 
         //System.out.println("formatter: " + formatter.format(Double.parseDouble(val.toString().replace(",", "."))));
         
-        if(Double.isNaN(value)){
+        if(Double.isNaN(value) || value == Double.POSITIVE_INFINITY || value == Double.NEGATIVE_INFINITY){
             System.out.println("isNaN");
             return("NaN");
         }

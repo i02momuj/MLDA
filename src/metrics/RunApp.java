@@ -21,6 +21,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -38,6 +40,7 @@ import javax.imageio.ImageIO;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -5122,7 +5125,16 @@ private void Inicializa_config()
         TableModel model = jtable.getModel();
         
         for(int i=0; i<model.getRowCount(); i++){
-            model.setValueAt(tableMetrics.get(model.getValueAt(i, 0).toString()), i, 1);
+            if((Math.abs(Double.parseDouble(tableMetrics.get(model.getValueAt(i, 0).toString()))*1000) < 0) ||
+                    (Math.abs(Double.parseDouble(tableMetrics.get(model.getValueAt(i, 0).toString()))/1000.0) > 10)){
+                NumberFormat formatter = new DecimalFormat("0.###E0");
+                value = formatter.format(Double.parseDouble(tableMetrics.get(model.getValueAt(i, 0).toString())));
+                model.setValueAt(value.replace(",", "."), i, 1);
+            }
+            else{
+                model.setValueAt(tableMetrics.get(model.getValueAt(i, 0).toString()), i, 1);
+            }
+
         }
         
         jtable.repaint();
@@ -6625,8 +6637,13 @@ private void Inicializa_config()
         
        TableColumnModel tcm = table.getColumnModel();
             
-       tcm.getColumn(0).setPreferredWidth(400);
-       tcm.getColumn(1).setPreferredWidth(90);
+       tcm.getColumn(0).setPreferredWidth(420);
+       tcm.getColumn(1).setPreferredWidth(70);
+
+       DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+       rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+       tcm.getColumn(1).setCellRenderer(rightRenderer);
+
        tcm.getColumn(2).setPreferredWidth(30);
        tcm.getColumn(2).setMaxWidth(30);
        tcm.getColumn(2).setMinWidth(30);

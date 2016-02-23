@@ -744,6 +744,7 @@ public class metrics
                   
          value=value/imbalanced_data.length;
          
+
          return value;
      }
      
@@ -765,6 +766,7 @@ public class metrics
               double value=0,temp;
               double media = Mean_IR_BR_inter_class(imbalanced_data);
          
+                System.out.println("imbalanced_data.length: " + imbalanced_data.length);
               for(int i=0; i<imbalanced_data.length ; i++)
               {
                   temp = imbalanced_data[i].get_ir_inter_class() - media;
