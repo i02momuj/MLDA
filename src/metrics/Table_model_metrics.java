@@ -12,14 +12,30 @@ import javax.swing.table.AbstractTableModel;
 
 public class Table_model_metrics extends AbstractTableModel{
     
+    
  public Object rowData[][];
+ 
+String columnNames[] = {"Metric","Value", ""};
+
  
  public Table_model_metrics(Object rowData[][])
  {
      this.rowData = rowData;
  }
+ 
+ public Table_model_metrics(Object rowData[][], String type)
+ {
+     this.rowData = rowData;
+     
+     if(type.equals("train-test")){
+         columnNames = new String[4];
+         columnNames[0] = "Metric";
+         columnNames[1] = "Train";
+         columnNames[2] = "Test";
+         columnNames[3] = "";
+     }
+ }
 
-  String columnNames[] = { "Metric",""};
 
   public int getColumnCount() {
     return columnNames.length;

@@ -136,7 +136,7 @@ public class metric_output extends javax.swing.JFrame {
                 
         MultiLabelInstances current;
         
-         for(String metric : metric_list)
+        for(String metric : metric_list)
         {
             value= metric+ util.get_tabs_multi_datasets(metric);
             

@@ -42,15 +42,18 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="TabPrincipal" min="-2" pref="881" max="-2" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <Component id="TabPrincipal" min="-2" pref="950" max="-2" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
-              <Component id="TabPrincipal" min="-2" pref="550" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="TabPrincipal" min="-2" pref="580" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -76,22 +79,18 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="1" attributes="0">
+                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="panelCurrentDataset" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <EmptySpace pref="570" max="32767" attributes="0"/>
-                              <Component id="panelLabelFrequency" min="-2" max="-2" attributes="0"/>
+                              <Component id="textChooseFile" max="32767" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="buttonChooseFile" min="-2" pref="100" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="textChooseFile" min="-2" pref="701" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                                      <Component id="buttonChooseFile" min="-2" pref="100" max="-2" attributes="0"/>
-                                      <EmptySpace pref="7" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Component id="panelCurrentDataset" max="32767" attributes="0"/>
-                              </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="jScrollPane3" min="-2" pref="286" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
@@ -108,9 +107,9 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="panelCurrentDataset" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="panelLabelFrequency" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="19" max="32767" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jScrollPane3" min="-2" pref="320" max="-2" attributes="0"/>
+                      <EmptySpace pref="28" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -127,75 +126,6 @@
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
               </AuxValues>
             </Component>
-            <Container class="javax.swing.JPanel" name="panelLabelFrequency">
-              <Properties>
-                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="Label frequency"/>
-                  </Border>
-                </Property>
-              </Properties>
-
-              <Layout>
-                <DimensionLayout dim="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jScrollPane3" alignment="0" pref="265" max="32767" attributes="0"/>
-                  </Group>
-                </DimensionLayout>
-                <DimensionLayout dim="1">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jScrollPane3" min="-2" pref="250" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="32" max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
-                </DimensionLayout>
-              </Layout>
-              <SubComponents>
-                <Container class="javax.swing.JScrollPane" name="jScrollPane3">
-                  <AuxValues>
-                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-                  </AuxValues>
-
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                  <SubComponents>
-                    <Component class="javax.swing.JTable" name="jTable2">
-                      <Properties>
-                        <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                          <Table columnCount="3" rowCount="0">
-                            <Column editable="true" title="Label" type="java.lang.Object"/>
-                            <Column editable="true" title="# Examples" type="java.lang.Object"/>
-                            <Column editable="true" title="Frequency" type="java.lang.Object"/>
-                          </Table>
-                        </Property>
-                        <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                          <TableColumnModel selectionModel="0">
-                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                              <Title/>
-                              <Editor/>
-                              <Renderer/>
-                            </Column>
-                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                              <Title/>
-                              <Editor/>
-                              <Renderer/>
-                            </Column>
-                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                              <Title/>
-                              <Editor/>
-                              <Renderer/>
-                            </Column>
-                          </TableColumnModel>
-                        </Property>
-                        <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                          <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
-                        </Property>
-                      </Properties>
-                    </Component>
-                  </SubComponents>
-                </Container>
-              </SubComponents>
-            </Container>
             <Component class="javax.swing.JTextField" name="textChooseFile">
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textChooseFileActionPerformed"/>
@@ -289,7 +219,7 @@
                                   <Component id="labelLxIxFValue" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace pref="165" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -438,6 +368,48 @@
                 </Component>
               </SubComponents>
             </Container>
+            <Container class="javax.swing.JScrollPane" name="jScrollPane3">
+              <AuxValues>
+                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+              </AuxValues>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <SubComponents>
+                <Component class="javax.swing.JTable" name="jTable2">
+                  <Properties>
+                    <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                      <Table columnCount="3" rowCount="0">
+                        <Column editable="true" title="Label" type="java.lang.Object"/>
+                        <Column editable="true" title="# Examples" type="java.lang.Object"/>
+                        <Column editable="true" title="Frequency" type="java.lang.Object"/>
+                      </Table>
+                    </Property>
+                    <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+                      <TableColumnModel selectionModel="0">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                      </TableColumnModel>
+                    </Property>
+                    <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+                      <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
+                    </Property>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="panelTrainTest">
@@ -453,9 +425,9 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                       <Component id="panelTestOption" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="620" max="32767" attributes="0"/>
+                      <EmptySpace pref="698" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -464,7 +436,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                       <Component id="panelTestOption" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="192" max="32767" attributes="0"/>
+                      <EmptySpace pref="139" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -489,9 +461,10 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Component id="radioSuppliedTest" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jButton3" min="-2" pref="89" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="buttonChooseSuppliedTest" max="32767" attributes="0"/>
+                                  <Component id="jButton6" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -499,15 +472,16 @@
                                       <Group type="102" alignment="0" attributes="0">
                                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                               <Component id="labelHoldout" min="-2" max="-2" attributes="0"/>
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Component id="radioStratifiedHoldout" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace max="32767" attributes="0"/>
-                                                  <Component id="textStratifiedHoldout" min="-2" pref="31" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Component id="radioRandomHoldout" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                                  <Component id="textRandomHoldout" min="-2" pref="30" max="-2" attributes="0"/>
+                                              <Group type="102" attributes="0">
+                                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                                      <Component id="radioRandomHoldout" max="32767" attributes="0"/>
+                                                      <Component id="radioStratifiedHoldout" max="32767" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace pref="13" max="32767" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="textStratifiedHoldout" alignment="1" min="-2" pref="31" max="-2" attributes="0"/>
+                                                      <Component id="textRandomHoldout" alignment="1" min="-2" pref="30" max="-2" attributes="0"/>
+                                                  </Group>
                                               </Group>
                                           </Group>
                                           <EmptySpace max="-2" attributes="0"/>
@@ -517,29 +491,34 @@
                                           </Group>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
-                                          <Component id="radioRandomCV" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                                          <Component id="radioSuppliedTest" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Component id="buttonChooseSuppliedTest" min="-2" pref="80" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <EmptySpace max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                      <Component id="radioRandomCV" max="32767" attributes="0"/>
+                                      <Component id="radioStratifiedCV" max="32767" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="1" attributes="0">
                                           <Component id="textRandomCV" min="-2" pref="32" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="labelFoldsRandom" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="jButton3" min="-2" pref="89" max="-2" attributes="0"/>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="jButton6" min="-2" pref="107" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="radioStratifiedCV" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="1" attributes="0">
                                           <Component id="textStratifiedCV" min="-2" pref="32" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="labelFoldsStratified" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -551,9 +530,9 @@
                               <Component id="radioSuppliedTest" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="buttonChooseSuppliedTest" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                           <Component id="labelHoldout" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -567,7 +546,7 @@
                               <Component id="labelPercStratified" alignment="3" min="-2" pref="14" max="-2" attributes="0"/>
                               <Component id="textStratifiedHoldout" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jSeparator2" min="-2" pref="10" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="labelCV" min="-2" max="-2" attributes="0"/>
@@ -586,9 +565,9 @@
                           <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                           <Component id="jSeparator3" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="jButton6" max="32767" attributes="0"/>
-                              <Component id="jButton3" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jButton6" min="-2" max="-2" attributes="0"/>
+                              <Component id="jButton3" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -802,7 +781,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="450" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="398" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -824,7 +803,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="450" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="398" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -846,7 +825,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="450" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="398" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -868,7 +847,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="450" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="398" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -890,7 +869,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="450" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="398" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -912,7 +891,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="450" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="398" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -934,7 +913,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="450" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="398" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -956,7 +935,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="450" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="398" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -978,7 +957,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="450" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="398" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -1015,7 +994,7 @@
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="450" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="398" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                       </Layout>
@@ -1161,10 +1140,10 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="tabsDependences" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="tabsDependences" min="-2" pref="791" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1196,69 +1175,26 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="24" pref="24" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="labelChiThreshold" min="-2" max="-2" attributes="0"/>
-                                  <Group type="102" attributes="0">
-                                      <Component id="labelChiCoefficients" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="labelChiCoefficients1" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <EmptySpace pref="239" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jLabel30" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace pref="418" max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="labelChiCoefficients" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="labelChiCoefficients1" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="labelChiThreshold" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="474" max="32767" attributes="0"/>
+                              <Component id="jLabel30" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
                   </Layout>
                   <SubComponents>
-                    <Component class="javax.swing.JLabel" name="labelChiThreshold">
+                    <Component class="javax.swing.JLabel" name="jLabel30">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Chi coefficient values are marked in red when the labels are dependent (Chi &gt; 6.635)"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="labelChiCoefficients">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="fe" green="fe" red="fe" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="  Chi coefficients  "/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                            <LineBorder/>
-                          </Border>
-                        </Property>
-                        <Property name="opaque" type="boolean" value="true"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="labelChiCoefficients1">
-                      <Properties>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="c0" green="c0" id="lightGray" palette="1" red="c0" type="palette"/>
-                        </Property>
-                        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="1" green="1" red="1" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="  Phi coefficients  "/>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                            <LineBorder/>
-                          </Border>
-                        </Property>
-                        <Property name="opaque" type="boolean" value="true"/>
+                        <Property name="text" type="java.lang.String" value="When the values pair of Chi coefficient is &gt; 6.635, then  it&#xb4;s marked with a red color because they are dependents"/>
                       </Properties>
                     </Component>
                   </SubComponents>
@@ -1283,8 +1219,8 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="panelCoOcurrenceLeft" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="panelCoOcurrenceRight" max="32767" attributes="0"/>
+                              <EmptySpace pref="33" max="32767" attributes="0"/>
+                              <Component id="panelCoOcurrenceRight" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -1297,7 +1233,7 @@
                                   <Component id="panelCoOcurrenceLeft" min="-2" max="-2" attributes="0"/>
                                   <Component id="panelCoOcurrenceRight" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="61" max="32767" attributes="0"/>
+                              <EmptySpace pref="91" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1316,7 +1252,7 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="603" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="539" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
@@ -1346,7 +1282,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
                                   <Component id="buttonShowCoOcurrence" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="81" max="32767" attributes="0"/>
+                                  <EmptySpace pref="67" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1412,12 +1348,12 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="841" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="786" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="494" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="504" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -1438,10 +1374,11 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="panelHeatmapLeft" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="labelHeatmapGraph" min="-2" pref="547" max="-2" attributes="0"/>
-                              <EmptySpace pref="72" max="32767" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1453,7 +1390,7 @@
                                   <Component id="panelHeatmapLeft" min="-2" max="-2" attributes="0"/>
                                   <Component id="labelHeatmapGraph" min="-2" pref="363" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="61" max="32767" attributes="0"/>
+                              <EmptySpace pref="91" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1487,7 +1424,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="67" max="-2" attributes="0"/>
                                   <Component id="buttonShowHeatmapLeft" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="82" max="32767" attributes="0"/>
+                                  <EmptySpace pref="70" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1553,12 +1490,12 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="841" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="786" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="494" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="504" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -1582,7 +1519,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="panelMultipleDatasetsLeft" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="623" max="32767" attributes="0"/>
+                      <EmptySpace pref="685" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1591,7 +1528,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                       <Component id="panelMultipleDatasetsLeft" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="159" max="32767" attributes="0"/>
+                      <EmptySpace pref="186" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

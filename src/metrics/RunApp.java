@@ -24,6 +24,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Random;
 import java.util.Set;
  
@@ -161,7 +162,8 @@ public class RunApp extends javax.swing.JFrame {
     JButton button_all_3,button_none_3,button_invert_3, button_calculate_3,button_save3;
     JButton export1,export2,export3,export4,export5,export6,export7;
     
-    final JTable jTable5,jTable6,jTable7, jTable1, jTable8,jTable9;
+    final JTable jTable5,jTable6,jTable7, jTable8,jTable9;
+    final JTable jTable1;
     JTable jTable10,jTable11,jTable12,fixedTable,fixedTable1,fixedTable2;
     
     TableModel tm_BR,tm_BR1,tm_LP,tm_LP1,tm_IR,tm_coefficient,tm_labelxExamples, tm_coocurrences, tm_heapmap_values, tm_attr, tm_jgraph, tm_heapmap_graph, tm_ir_per_label_intra_class,tm_ir_per_label_inter_class,tm_ir_per_labelset, tm_ir_per_label_inter_class_only, tm_ir_per_label_intra_class_only;
@@ -202,7 +204,7 @@ public class RunApp extends javax.swing.JFrame {
      
      //variables TRAIN-TEST
      boolean choose_test=false, holdout_ramdon=false, holdout_stratified=false, cv_ramdon=false, cv_stratified =false;
-    JButton button_show_traintest,button_save_train;
+    JButton button_calculate2_train,button_save_train;
     
     //VARIABLES BOX DIAGRAM
     JRadioButton jRadioButton8;
@@ -211,12 +213,15 @@ public class RunApp extends javax.swing.JFrame {
     boolean es_de_tipo_meka = false;
     
     
+    Hashtable<String, String> tableMetrics = new Hashtable<String, String>();
+    Hashtable<String, String> tableMetrics_common = new Hashtable<String, String>();
+    Hashtable<String, String> tableMetrics_train = new Hashtable<String, String>();
+    Hashtable<String, String> tableMetrics_test = new Hashtable<String, String>();
+    
+    
     
     public RunApp() 
     {
-        
-       
-        
         jTable5 = new JTable();
         jTable6 = new JTable();
         jTable7 = new JTable();
@@ -257,8 +262,7 @@ public class RunApp extends javax.swing.JFrame {
        jPanel15.setVisible(false);
        labelIR1.setVisible(false); // comentario de IR>1.5
        labelIR2.setVisible(false); // comentario de IR>1.5
-       labelChiThreshold.setVisible(false); // comentario de valores dependientes chi- coefficient
-       labelChiThreshold.setVisible(true);
+       jLabel30.setVisible(false); // comentario de valores dependientes chi- coefficient
        
        buttonGroup5.add(jRadioButton8);
        buttonGroup5.add(radioExamplesPerLabel);
@@ -275,7 +279,6 @@ public class RunApp extends javax.swing.JFrame {
       //JTABLE CHI & FI COEFFICIENT
 
       */
-
         
     fixedTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     jTable10.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -291,7 +294,6 @@ public class RunApp extends javax.swing.JFrame {
     jTable12.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     fixedTable2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     jTable12.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
     /*
     JScrollPane scroll = new JScrollPane(jTable10);
     JViewport viewport = new JViewport();
@@ -308,21 +310,21 @@ public class RunApp extends javax.swing.JFrame {
     jPanel24.add(scroll, BorderLayout.CENTER);  
    */
    
-//      chi = new JLabel("Chi");
-//      chi.setBounds(10,120, 20,20);
-//      chi.setBackground(Color.white);
-//      chi.setForeground(Color.black);
-//      chi.setOpaque(true);
-//           
-//      panelChiFi.add(chi);
-//    
-//      fi = new JLabel("Fi");
-//      fi.setBounds(300,0, 20,20);
-//      fi.setBackground(Color.gray);
-//      fi.setForeground(Color.white);
-//      fi.setOpaque(true);
-//      
-//      panelChiFi.add(fi);
+      chi = new JLabel("Chi");
+      chi.setBounds(0,80, 20,20);
+      chi.setBackground(Color.white);
+      chi.setForeground(Color.black);
+      chi.setOpaque(true);
+           
+      panelChiFi.add(chi);
+    
+      fi = new JLabel("Fi");
+      fi.setBounds(300,0, 20,20);
+      fi.setBackground(Color.gray);
+      fi.setForeground(Color.white);
+      fi.setOpaque(true);
+      
+      panelChiFi.add(fi);
     
     }
     
@@ -360,13 +362,13 @@ private void Inicializa_config()
       
       create_jtable_metrics_jpanel1(jTable9,panelImbalanceDataMetrics,button_all_3,button_none_3,button_invert_3,button_calculate_3,button_save3,30,50,500,200,"imbalanced"); //imbalanced class
       
-      create_jtable_metrics_jpanel1(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save,30,195,500,270,"database"); //tab Database //35,155,500,355
+      create_jtable_metrics_jpanel1_principal(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save,30,190,580,320,"database"); //tab Database //35,155,500,355
       create_jtable_metrics_jpanel14(jTable8,panelMultipleDatasets,button_all_2,button_none_2,button_invert_2,button_calculate_2,button_save2,290,35,565,400); //
       
       create_jtable_metrics_jpanel2();
       
       jButton6.setEnabled(false);
-      button_show_traintest.setEnabled(false);
+      button_calculate2_train.setEnabled(false);
       button_save_train.setEnabled(false);
             
       //CONFIG JTABLE FI AND CHI CO-OCURRENCES VALUES
@@ -401,10 +403,12 @@ private void Inicializa_config()
       //BOTON EXPORTAR PESTAÑA DATASET
       
         
-      create_button_export(jTable2,panelLabelFrequency,export1,20,285); //375
+      create_button_export(jTable2,panelDataset,export1,20,285); //375
       export2 = create_button_export_jtable4(tableImbalance,panelImbalanceLeft,export2,80,455);
      
-      create_button_export(jTable10,fixedTable ,panelChiFi ,export3, panelChiFi.getWidth()/2 - 40, 420); // chi and fi values //350, 370
+      
+      
+      create_button_export(jTable10,fixedTable ,panelChiFi ,export3,350,370); // chi and fi values
       create_button_export(jTable11,fixedTable1,panelCoOcurrenceValues ,export4,350,370);//graph values
       create_button_export(jTable12,fixedTable2,panelHeatmapValues ,export5,350,370);//heatmap values
       
@@ -435,11 +439,11 @@ private void Inicializa_config()
      //COMMUN METRICS TRAIN/TEST
      JLabel label1 = new JLabel("Common metrics for train/test");
      panelTrainTest.add(label1);
-     label1.setBounds(290, 20, 250, 20);
+     label1.setBounds(300, 20, 250, 20);
      label1.setFont(new Font("Arial", Font.BOLD, 12));
          
      
-     create_jtable_metric(jTable5, panelTrainTest, util.Get_row_data_commun_data(), 285, 40, 565, 175);
+     create_jtable_metric_principal(jTable5, panelTrainTest, util.Get_row_data_commun_data(), 295, 40, 610, 175);
      
      
    
@@ -447,17 +451,17 @@ private void Inicializa_config()
      // METRICS TEST
      JLabel label3 = new JLabel("NOT common metrics for train/test set");
      panelTrainTest.add(label3);
-     label3.setBounds(290, 220, 250, 20);
+     label3.setBounds(300, 220, 250, 20);
      label3.setFont(new Font("Arial", Font.BOLD, 12));
      
      
-     
-     create_jtable_metric(jTable7, panelTrainTest, util.Get_row_data_test_data(), 285, 240,565, 240);
+     //Not Common train_test
+     create_jtable_metric_train_test(jTable7, panelTrainTest, util.Get_row_data_test_data(), 295, 240, 625, 270);
      
      
      //button ALL
       JButton button_all2 = new JButton("All");
-      button_all2.setBounds(285, 485, 80, 20);
+      button_all2.setBounds(295, 515, 80, 20);
             
       button_all2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -469,7 +473,7 @@ private void Inicializa_config()
       
      //button NONE
       JButton button_none2 = new JButton("None");
-      button_none2.setBounds(385, 485, 80, 20);
+      button_none2.setBounds(385, 515, 80, 20);
             
       button_none2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt){
@@ -480,7 +484,7 @@ private void Inicializa_config()
       
       //button INVERT
      JButton button_invert2 = new JButton("Invert");
-      button_invert2.setBounds(485, 485, 80, 20);
+      button_invert2.setBounds(475, 515, 80, 20);
             
       button_invert2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -491,19 +495,19 @@ private void Inicializa_config()
       
       
          //button CALCULATE
-      button_show_traintest = new JButton("Show");
-      button_show_traintest.setBounds(670, 485, 80, 20);
+      button_calculate2_train = new JButton("Calculate");
+      button_calculate2_train.setBounds(720, 515, 90, 20);
             
-      button_show_traintest.addActionListener(new java.awt.event.ActionListener() {
+      button_calculate2_train.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 button_calculateActionPerformed1_general(evt,jTable5,jTable6,jTable7);
                             }
         });
-      panelTrainTest.add(button_show_traintest);
+      panelTrainTest.add(button_calculate2_train);
      
                //button SAVE
      button_save_train = new JButton("Save");
-      button_save_train.setBounds(770, 485, 80, 20);
+      button_save_train.setBounds(820, 515, 80, 20);
             
       button_save_train.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -704,13 +708,17 @@ private void Inicializa_config()
     }
 
   //"Dataset" TAB CONFIG    
-    private void create_jtable_metrics_jpanel1(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_show_dataset,JButton button_save, int posx,int posy, int width, int heigh,String info)
+    private void create_jtable_metrics_jpanel1(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_calculate,JButton button_save, int posx,int posy, int width, int heigh,String info)
     {
         if(info.equals("imbalanced"))
-        create_jtable_metric(jtable,jpanel, util.Get_row_data_imbalanced(),posx,posy,width,heigh);  
+        {
+            create_jtable_metric(jtable,jpanel, util.Get_row_data_imbalanced(),posx,posy,width,heigh);
+        }  
         
         if(info.equals("database"))
-        create_jtable_metric(jtable,jpanel, util.Get_row_data(),posx,posy,width,heigh);  
+        {
+            create_jtable_metric(jtable,jpanel, util.Get_row_data(),posx,posy,width,heigh);
+        }  
         
         
        //button ALL
@@ -748,15 +756,15 @@ private void Inicializa_config()
       jpanel.add(button_invert);
       
          //button CALCULATE
-      button_show_dataset = new JButton("Show");
-      button_show_dataset.setBounds(posx+420, posy+heigh+5, 80, 20);
+      button_calculate = new JButton("Show");
+      button_calculate.setBounds(posx+420, posy+heigh+5, 80, 20);
             
-      button_show_dataset.addActionListener(new java.awt.event.ActionListener() {
+      button_calculate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 button_calculateActionPerformed(evt,jtable);
                             }
         });
-      jpanel.add(button_show_dataset);
+      jpanel.add(button_calculate);
       
       
        //button SAVE
@@ -766,7 +774,80 @@ private void Inicializa_config()
       button_save.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
-                    button_saveActionPerformed(evt,jtable);
+                    button_saveActionPerformed_principal(evt,jtable);
+                } catch (IOException ex) {
+                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                            }
+        });
+      jpanel.add(button_save);
+      
+    }
+    
+    
+    private void create_jtable_metrics_jpanel1_principal(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_calculate,JButton button_save, int posx,int posy, int width, int heigh,String info)
+    {
+        if(info.equals("imbalanced"))
+        create_jtable_metric(jtable,jpanel, util.Get_row_data_imbalanced(),posx,posy,width,heigh);  
+        
+        if(info.equals("database"))
+        create_jtable_metric_principal(jtable,jpanel, util.Get_row_data_principal(),posx,posy,width,heigh);  
+        
+        
+       //button ALL
+      button_all = new JButton("All");
+      button_all.setBounds(posx, posy+heigh+5, 80, 20);
+            //PRINCIPAL_ALL
+      button_all.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_allActionPerformed_principal(evt,jtable );
+                            }
+        });
+      jpanel.add(button_all);
+      
+      
+     //button NONE
+      button_none = new JButton("None");
+      button_none.setBounds(posx+90, posy+heigh+5, 80, 20);
+            
+      button_none.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_noneActionPerformed_principal(evt,jtable);
+                            }
+        });
+      jpanel.add(button_none);
+      
+      //button INVERT
+      button_invert = new JButton("Invert");
+      button_invert.setBounds(posx+180, posy+heigh+5, 80, 20);
+            
+      button_invert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_invertActionPerformed_principal(evt,jtable);
+                            }
+        });
+      jpanel.add(button_invert);
+      
+         //button CALCULATE
+      button_calculate = new JButton("Calculate");
+      button_calculate.setBounds(posx+400, posy+heigh+5, 90, 20);
+            
+      button_calculate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_calculateActionPerformed_principal(evt,jtable);
+                            }
+        });
+      jpanel.add(button_calculate);
+      
+      
+       //button SAVE
+      button_save = new JButton("Save");
+      button_save.setBounds(posx+500, posy+heigh+5, 80, 20);
+            
+      button_save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                try {
+                    button_saveActionPerformed_principal(evt,jtable);
                 } catch (IOException ex) {
                     Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -876,9 +957,6 @@ private void Inicializa_config()
         TabPrincipal = new javax.swing.JTabbedPane();
         panelDataset = new javax.swing.JPanel();
         buttonChooseFile = new javax.swing.JButton();
-        panelLabelFrequency = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
         textChooseFile = new javax.swing.JTextField();
         panelCurrentDataset = new javax.swing.JPanel();
         labelRelation = new javax.swing.JLabel();
@@ -901,6 +979,8 @@ private void Inicializa_config()
         labelDiversityValue = new javax.swing.JLabel();
         labelLxIxF = new javax.swing.JLabel();
         labelLxIxFValue = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
         panelTrainTest = new javax.swing.JPanel();
         panelTestOption = new javax.swing.JPanel();
         radioRandomHoldout = new javax.swing.JRadioButton();
@@ -948,9 +1028,7 @@ private void Inicializa_config()
         jPanel21 = new javax.swing.JPanel();
         tabsDependences = new javax.swing.JTabbedPane();
         panelChiFi = new javax.swing.JPanel();
-        labelChiThreshold = new javax.swing.JLabel();
-        labelChiCoefficients = new javax.swing.JLabel();
-        labelChiCoefficients1 = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
         panelCoOcurrence = new javax.swing.JPanel();
         panelCoOcurrenceRight = new javax.swing.JPanel();
         panelCoOcurrenceLeft = new javax.swing.JPanel();
@@ -983,31 +1061,6 @@ private void Inicializa_config()
                 buttonChooseFileActionPerformed(evt);
             }
         });
-
-        panelLabelFrequency.setBorder(javax.swing.BorderFactory.createTitledBorder("Label frequency"));
-
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Label", "# Examples", "Frequency"
-            }
-        ));
-        jScrollPane3.setViewportView(jTable2);
-
-        javax.swing.GroupLayout panelLabelFrequencyLayout = new javax.swing.GroupLayout(panelLabelFrequency);
-        panelLabelFrequency.setLayout(panelLabelFrequencyLayout);
-        panelLabelFrequencyLayout.setHorizontalGroup(
-            panelLabelFrequencyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
-        );
-        panelLabelFrequencyLayout.setVerticalGroup(
-            panelLabelFrequencyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelLabelFrequencyLayout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 32, Short.MAX_VALUE))
-        );
 
         textChooseFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1128,7 +1181,7 @@ private void Inicializa_config()
                         .addComponent(labelLxIxF)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelLxIxFValue)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(165, Short.MAX_VALUE))
         );
         panelCurrentDatasetLayout.setVerticalGroup(
             panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1162,24 +1215,32 @@ private void Inicializa_config()
                     .addComponent(labelLxIxFValue, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Label", "# Examples", "Frequency"
+            }
+        ));
+        jScrollPane3.setViewportView(jTable2);
+
         javax.swing.GroupLayout panelDatasetLayout = new javax.swing.GroupLayout(panelDataset);
         panelDataset.setLayout(panelDatasetLayout);
         panelDatasetLayout.setHorizontalGroup(
             panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelDatasetLayout.createSequentialGroup()
-                .addGroup(panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(24, 24, 24)
+                .addGroup(panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelCurrentDataset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(panelDatasetLayout.createSequentialGroup()
-                        .addContainerGap(570, Short.MAX_VALUE)
-                        .addComponent(panelLabelFrequency, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelDatasetLayout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addGroup(panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelDatasetLayout.createSequentialGroup()
-                                .addComponent(textChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 701, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(buttonChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE))
-                            .addComponent(panelCurrentDataset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(textChooseFile)
+                        .addGap(18, 18, 18)
+                        .addComponent(buttonChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDatasetLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(26, 26, 26))
         );
         panelDatasetLayout.setVerticalGroup(
@@ -1191,9 +1252,9 @@ private void Inicializa_config()
                     .addComponent(textChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelCurrentDataset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelLabelFrequency, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         TabPrincipal.addTab("Dataset", panelDataset);
@@ -1327,9 +1388,10 @@ private void Inicializa_config()
                 .addContainerGap()
                 .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelTestOptionLayout.createSequentialGroup()
-                        .addComponent(radioSuppliedTest)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buttonChooseSuppliedTest, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jButton6)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(panelTestOptionLayout.createSequentialGroup()
                         .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(labelCV)
@@ -1337,35 +1399,37 @@ private void Inicializa_config()
                                 .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(labelHoldout)
                                     .addGroup(panelTestOptionLayout.createSequentialGroup()
-                                        .addComponent(radioStratifiedHoldout)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(textStratifiedHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(panelTestOptionLayout.createSequentialGroup()
-                                        .addComponent(radioRandomHoldout)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(textRandomHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(radioRandomHoldout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(radioStratifiedHoldout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                                        .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(textStratifiedHoldout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(textRandomHoldout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(labelPercRandom)
                                     .addComponent(labelPercStratified)))
                             .addGroup(panelTestOptionLayout.createSequentialGroup()
-                                .addComponent(radioRandomCV)
-                                .addGap(25, 25, 25)
+                                .addComponent(radioSuppliedTest)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(buttonChooseSuppliedTest, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panelTestOptionLayout.createSequentialGroup()
+                        .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(radioRandomCV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(radioStratifiedCV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTestOptionLayout.createSequentialGroup()
                                 .addComponent(textRandomCV, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(labelFoldsRandom))
-                            .addGroup(panelTestOptionLayout.createSequentialGroup()
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(panelTestOptionLayout.createSequentialGroup()
-                                .addComponent(radioStratifiedCV)
-                                .addGap(18, 18, 18)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTestOptionLayout.createSequentialGroup()
                                 .addComponent(textStratifiedCV, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(labelFoldsStratified)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGap(20, 20, 20))))
         );
         panelTestOptionLayout.setVerticalGroup(
             panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1374,9 +1438,9 @@ private void Inicializa_config()
                 .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radioSuppliedTest)
                     .addComponent(buttonChooseSuppliedTest))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(1, 1, 1)
                 .addComponent(labelHoldout)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1388,7 +1452,7 @@ private void Inicializa_config()
                     .addComponent(radioStratifiedHoldout)
                     .addComponent(labelPercStratified, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(textStratifiedHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(labelCV)
@@ -1405,9 +1469,9 @@ private void Inicializa_config()
                 .addGap(8, 8, 8)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton6)
+                    .addComponent(jButton3))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1416,16 +1480,16 @@ private void Inicializa_config()
         panelTrainTestLayout.setHorizontalGroup(
             panelTrainTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTrainTestLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(24, 24, 24)
                 .addComponent(panelTestOption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(620, Short.MAX_VALUE))
+                .addContainerGap(698, Short.MAX_VALUE))
         );
         panelTrainTestLayout.setVerticalGroup(
             panelTrainTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTrainTestLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(panelTestOption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(192, Short.MAX_VALUE))
+                .addContainerGap(139, Short.MAX_VALUE))
         );
 
         TabPrincipal.addTab("Train/test dataset", panelTrainTest);
@@ -1444,7 +1508,7 @@ private void Inicializa_config()
         );
         panelExamplesPerLabelLayout.setVerticalGroup(
             panelExamplesPerLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
+            .addGap(0, 398, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("# Examples per label", panelExamplesPerLabel);
@@ -1457,7 +1521,7 @@ private void Inicializa_config()
         );
         panelExamplesPerLabelsetLayout.setVerticalGroup(
             panelExamplesPerLabelsetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
+            .addGap(0, 398, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("# Examples per labelset", panelExamplesPerLabelset);
@@ -1470,7 +1534,7 @@ private void Inicializa_config()
         );
         panelLabelsPerExampleLayout.setVerticalGroup(
             panelLabelsPerExampleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
+            .addGap(0, 398, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("# Labels per example ", panelLabelsPerExample);
@@ -1483,7 +1547,7 @@ private void Inicializa_config()
         );
         panelLabelsIRperLabelIntraClassLayout.setVerticalGroup(
             panelLabelsIRperLabelIntraClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
+            .addGap(0, 398, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("#Labels/IR per label intra class", panelLabelsIRperLabelIntraClass);
@@ -1496,7 +1560,7 @@ private void Inicializa_config()
         );
         panelIRperLabelIntraClassLayout.setVerticalGroup(
             panelIRperLabelIntraClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
+            .addGap(0, 398, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("IR per label intra class", panelIRperLabelIntraClass);
@@ -1509,7 +1573,7 @@ private void Inicializa_config()
         );
         panelIRperLabelsetLayout.setVerticalGroup(
             panelIRperLabelsetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
+            .addGap(0, 398, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("IR per labelset", panelIRperLabelset);
@@ -1522,7 +1586,7 @@ private void Inicializa_config()
         );
         panelImbalanceDataMetricsLayout.setVerticalGroup(
             panelImbalanceDataMetricsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
+            .addGap(0, 398, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("Imbalance data metrics ", panelImbalanceDataMetrics);
@@ -1535,7 +1599,7 @@ private void Inicializa_config()
         );
         panelBoxDiagramLayout.setVerticalGroup(
             panelBoxDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
+            .addGap(0, 398, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("Box diagram", panelBoxDiagram);
@@ -1548,7 +1612,7 @@ private void Inicializa_config()
         );
         panelIRperLabelInterClassLayout.setVerticalGroup(
             panelIRperLabelInterClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
+            .addGap(0, 398, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("IR per label inter class", panelIRperLabelInterClass);
@@ -1561,7 +1625,7 @@ private void Inicializa_config()
         );
         panelLabelsIRperLabelInterClassLayout.setVerticalGroup(
             panelLabelsIRperLabelInterClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
+            .addGap(0, 398, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
@@ -1708,42 +1772,22 @@ private void Inicializa_config()
             }
         });
 
-        labelChiThreshold.setText("Chi coefficient values are marked in red when the labels are dependent (Chi > 6.635)");
-
-        labelChiCoefficients.setBackground(new java.awt.Color(254, 254, 254));
-        labelChiCoefficients.setText("  Chi coefficients  ");
-        labelChiCoefficients.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        labelChiCoefficients.setOpaque(true);
-
-        labelChiCoefficients1.setBackground(java.awt.Color.lightGray);
-        labelChiCoefficients1.setForeground(new java.awt.Color(1, 1, 1));
-        labelChiCoefficients1.setText("  Phi coefficients  ");
-        labelChiCoefficients1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        labelChiCoefficients1.setOpaque(true);
+        jLabel30.setText("When the values pair of Chi coefficient is > 6.635, then  it´s marked with a red color because they are dependents");
 
         javax.swing.GroupLayout panelChiFiLayout = new javax.swing.GroupLayout(panelChiFi);
         panelChiFi.setLayout(panelChiFiLayout);
         panelChiFiLayout.setHorizontalGroup(
             panelChiFiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelChiFiLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(panelChiFiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelChiThreshold)
-                    .addGroup(panelChiFiLayout.createSequentialGroup()
-                        .addComponent(labelChiCoefficients)
-                        .addGap(18, 18, 18)
-                        .addComponent(labelChiCoefficients1)))
-                .addContainerGap(239, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jLabel30)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelChiFiLayout.setVerticalGroup(
             panelChiFiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelChiFiLayout.createSequentialGroup()
-                .addContainerGap(418, Short.MAX_VALUE)
-                .addGroup(panelChiFiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelChiCoefficients)
-                    .addComponent(labelChiCoefficients1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(labelChiThreshold)
+                .addContainerGap(474, Short.MAX_VALUE)
+                .addComponent(jLabel30)
                 .addContainerGap())
         );
 
@@ -1763,7 +1807,7 @@ private void Inicializa_config()
         panelCoOcurrenceRight.setLayout(panelCoOcurrenceRightLayout);
         panelCoOcurrenceRightLayout.setHorizontalGroup(
             panelCoOcurrenceRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 603, Short.MAX_VALUE)
+            .addGap(0, 539, Short.MAX_VALUE)
         );
         panelCoOcurrenceRightLayout.setVerticalGroup(
             panelCoOcurrenceRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1808,7 +1852,7 @@ private void Inicializa_config()
             .addGroup(panelCoOcurrenceLeftLayout.createSequentialGroup()
                 .addGap(68, 68, 68)
                 .addComponent(buttonShowCoOcurrence)
-                .addContainerGap(81, Short.MAX_VALUE))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
         panelCoOcurrenceLeftLayout.setVerticalGroup(
             panelCoOcurrenceLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1826,8 +1870,8 @@ private void Inicializa_config()
             panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCoOcurrenceLayout.createSequentialGroup()
                 .addComponent(panelCoOcurrenceLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(panelCoOcurrenceRight, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addComponent(panelCoOcurrenceRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         panelCoOcurrenceLayout.setVerticalGroup(
@@ -1837,7 +1881,7 @@ private void Inicializa_config()
                 .addGroup(panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelCoOcurrenceLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panelCoOcurrenceRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addContainerGap(91, Short.MAX_VALUE))
         );
 
         tabsDependences.addTab("Co-occurrence graph", panelCoOcurrence);
@@ -1846,11 +1890,11 @@ private void Inicializa_config()
         panelCoOcurrenceValues.setLayout(panelCoOcurrenceValuesLayout);
         panelCoOcurrenceValuesLayout.setHorizontalGroup(
             panelCoOcurrenceValuesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 841, Short.MAX_VALUE)
+            .addGap(0, 786, Short.MAX_VALUE)
         );
         panelCoOcurrenceValuesLayout.setVerticalGroup(
             panelCoOcurrenceValuesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 494, Short.MAX_VALUE)
+            .addGap(0, 504, Short.MAX_VALUE)
         );
 
         tabsDependences.addTab("Co-occurrence values", panelCoOcurrenceValues);
@@ -1902,7 +1946,7 @@ private void Inicializa_config()
             .addGroup(panelHeatmapLeftLayout.createSequentialGroup()
                 .addGap(67, 67, 67)
                 .addComponent(buttonShowHeatmapLeft)
-                .addContainerGap(82, Short.MAX_VALUE))
+                .addContainerGap(70, Short.MAX_VALUE))
         );
         panelHeatmapLeftLayout.setVerticalGroup(
             panelHeatmapLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1919,10 +1963,11 @@ private void Inicializa_config()
         panelHeatmapGraphLayout.setHorizontalGroup(
             panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelHeatmapGraphLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(panelHeatmapLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(labelHeatmapGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 547, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(72, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelHeatmapGraphLayout.setVerticalGroup(
             panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1931,7 +1976,7 @@ private void Inicializa_config()
                 .addGroup(panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelHeatmapLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelHeatmapGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addContainerGap(91, Short.MAX_VALUE))
         );
 
         tabsDependences.addTab(" Heatmap graph", panelHeatmapGraph);
@@ -1940,11 +1985,11 @@ private void Inicializa_config()
         panelHeatmapValues.setLayout(panelHeatmapValuesLayout);
         panelHeatmapValuesLayout.setHorizontalGroup(
             panelHeatmapValuesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 841, Short.MAX_VALUE)
+            .addGap(0, 786, Short.MAX_VALUE)
         );
         panelHeatmapValuesLayout.setVerticalGroup(
             panelHeatmapValuesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 494, Short.MAX_VALUE)
+            .addGap(0, 504, Short.MAX_VALUE)
         );
 
         tabsDependences.addTab("Heatmap values", panelHeatmapValues);
@@ -1955,8 +2000,8 @@ private void Inicializa_config()
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel21Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tabsDependences)
-                .addContainerGap())
+                .addComponent(tabsDependences, javax.swing.GroupLayout.PREFERRED_SIZE, 791, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel21Layout.setVerticalGroup(
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2015,14 +2060,14 @@ private void Inicializa_config()
             .addGroup(panelMultipleDatasetsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panelMultipleDatasetsLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(623, Short.MAX_VALUE))
+                .addContainerGap(685, Short.MAX_VALUE))
         );
         panelMultipleDatasetsLayout.setVerticalGroup(
             panelMultipleDatasetsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelMultipleDatasetsLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(panelMultipleDatasetsLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(159, Short.MAX_VALUE))
+                .addContainerGap(186, Short.MAX_VALUE))
         );
 
         TabPrincipal.addTab("Multiple datasets", panelMultipleDatasets);
@@ -2031,14 +2076,16 @@ private void Inicializa_config()
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(TabPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 881, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(TabPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 950, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(TabPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(TabPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4))
         );
 
         pack();
@@ -2183,8 +2230,8 @@ private void Inicializa_config()
     private void tabsDependencesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabsDependencesStateChanged
         
         //System.out.println(jTabbedPane4.getSelectedIndex());
-        if(tabsDependences.getSelectedIndex() == 0) {labelChiThreshold.setVisible(true);}
-        else {labelChiThreshold.setVisible(false);}
+        if(tabsDependences.getSelectedIndex() == 0) {jLabel30.setVisible(true);}
+        else {jLabel30.setVisible(false);}
         
     }//GEN-LAST:event_tabsDependencesStateChanged
 
@@ -2570,7 +2617,7 @@ private void Inicializa_config()
         textStratifiedCV.setEnabled(false);
         
         jButton6.setEnabled(false);
-        button_show_traintest.setEnabled(false);
+        button_calculate2_train.setEnabled(false);
         button_save_train.setEnabled(false);
         
     }//GEN-LAST:event_radioStratifiedHoldoutActionPerformed
@@ -2842,9 +2889,14 @@ private void Inicializa_config()
             }
               
           }
+        
+           initializeTableMetricsCommon();
+           initializeTableMetricsTrainTest();
+           clearTable_metrics_traintest();
+           
 
            jButton6.setEnabled(true);
-           button_show_traintest.setEnabled(true);
+           button_calculate2_train.setEnabled(true);
            button_save_train.setEnabled(false);
            
            JOptionPane.showMessageDialog(null, "Dataset is generated", "Successful", JOptionPane.INFORMATION_MESSAGE);
@@ -2879,7 +2931,7 @@ private void Inicializa_config()
         textStratifiedCV.setEnabled(false);
         
         jButton6.setEnabled(false);
-        button_show_traintest.setEnabled(false);
+        button_calculate2_train.setEnabled(false);
         button_save_train.setEnabled(false);
     }//GEN-LAST:event_radioSuppliedTestActionPerformed
 
@@ -2893,193 +2945,42 @@ private void Inicializa_config()
         textStratifiedCV.setEnabled(false);
 
         jButton6.setEnabled(false);
-        button_show_traintest.setEnabled(false);
+        button_calculate2_train.setEnabled(false);
         button_save_train.setEnabled(false);
     }//GEN-LAST:event_radioRandomHoldoutActionPerformed
 
-    // CAPTURA LA DIRECCION DEL XML EN EL JTEXTFIELD DE LA 1ra pestaña para cargar el dataset.
-    private void textChooseFileKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textChooseFileKeyPressed
-
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER)
-        {
-             //--------------------------------------------------------------
-            //INVOCAR EL PROGRESS BAR     
-            /*
-            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+    private void initializeTableMetrics(){
+        ArrayList<String> metricsList = util.Get_all_metrics();
         
-            progress_bar new_progress = new progress_bar();
-            task = new Task(new_progress);
-            new_progress.setVisible(true);
+        tableMetrics.clear();
         
-            task.addPropertyChangeListener(new_progress);
-            task.execute();
-            //--------------------------------------------------------------
-            */
-            
-            
-            String filename_database_arff = textChooseFile.getText();
-
-            filename_database_xml = util.Get_xml_string(filename_database_arff);
-
-            filename_database_xml = util.Get_file_name_xml(filename_database_xml);
-
-            Load_dataset(filename_database_arff, filename_database_xml);
+        for(int i=0; i<metricsList.size(); i++){
+            tableMetrics.put(metricsList.get(i), "-");
         }
-    }//GEN-LAST:event_textChooseFileKeyPressed
-
-    private void textChooseFileFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textChooseFileFocusLost
-
-        // CUANDO EL TEXTFIELD PIERDE EL FOCUS
-        /*
-        String filename_database_arff = jTextField2.getText();
-
-        filename_database_xml = filename_database_arff.substring(0,filename_database_arff.length()-5)+".xml";
-
-        filename_database_xml = util.Get_file_name_xml(filename_database_xml);
-
-        Load_dataset(filename_database_arff, filename_database_xml);
-
-        */
-    }//GEN-LAST:event_textChooseFileFocusLost
-
-    private void textChooseFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textChooseFileActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textChooseFileActionPerformed
-
-    // carga el dataset buscandolo por el filechooser
-    private void buttonChooseFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonChooseFileActionPerformed
-        // TODO add your handling code here:
-
-        // ESCOGER EL DATASET
-        JFileChooser jfile1 = new JFileChooser();
-        FileNameExtensionFilter fname = new FileNameExtensionFilter(".arff", "arff");
-        jfile1.setFileFilter(fname);
-        //int returnVal =
-
-        int returnVal = jfile1.showOpenDialog(this);
-
-        if (returnVal == JFileChooser.OPEN_DIALOG)
-        {
-
-            
-            
-            File f1 = jfile1.getSelectedFile();
-            dataset_name1 = f1.getName();
-            dataset_current_name = dataset_name1.substring(0,dataset_name1.length()-5);
-
-            String filename_database_arff = f1.getAbsolutePath();
-            
-            
-            filename_database_xml_path=  filename_database_arff.substring(0,filename_database_arff.length()-5)+".xml";
-            filename_database_xml = util.Get_file_name_xml1(filename_database_xml_path);
-            
-            File  file_temp = new File(filename_database_xml_path);
-            
-            int velocidad=5;
-            
-            //-------------------------------------------------------------------------------------------------------
-            FileReader fr;
-            try 
-            {
-                fr = new FileReader(filename_database_arff);
-                BufferedReader bf = new BufferedReader(fr);
-                
-                 String sCadena = bf.readLine();
-                 int label_found=0;
-                 String label_name;
-                 String[] label_names_found;
-                 
-                 if(util.Es_de_tipo_MEKA(sCadena))
-                 {
-                         System.out.println("el dataset es de tipo MEKA");
-                         es_de_tipo_meka = true;
-                         
-                         int label_count = util.Extract_labels_from_arff(sCadena);
-                         label_names_found = new String[label_count];
-                         
-                         while(label_found < label_count)
-                         {
-                             sCadena = bf.readLine();
-                             label_name = util.Extract_label_name_from_String(sCadena);
-                             
-                             if(label_name!= null)
-                             {
-                                 label_names_found[label_found]=label_name;
-                                 label_found++;
-                                 
-                             }                             
-                             
-                         }
-                         //util.Recorre_Arreglo(label_names_found);
-                         
-                         BufferedWriter bw_xml= new BufferedWriter(new FileWriter(filename_database_xml_path));
-                         PrintWriter wr_xml = new PrintWriter(bw_xml);
- 
-                         util.Write_into_xml_file(wr_xml, label_names_found); //crea el xml para el caso de MEKA
-                         
-                         bw_xml.close();
-                         wr_xml.close();
- 
-                         filename_database_xml = util.Get_file_name_xml(filename_database_xml_path); //carga el xml creado...
-                         file_temp = new File(filename_database_xml_path);
-                 }
-                 
-                 else 
-                 {
-                     System.out.println("el dataset NO es de tipo MEKA");
-                     es_de_tipo_meka= false;
-                     
-                 }
-            }
-            catch (FileNotFoundException ex) {
-                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            //-------------------------------------------------------------------------------------------------------
-            
-            //-------------------------------------------------------------------------------------------------------
-            
-            
-            if(!file_temp.exists()) //SI NO EXISTE EL XML
-            {
-                 filename_database_xml_path = util.Get_xml_string(filename_database_arff);
-                 filename_database_xml = util.Get_file_name_xml(filename_database_xml_path);
-            }
-            try {
-                MultiLabelInstances dataset_temp = new MultiLabelInstances(filename_database_arff, filename_database_xml);
-               //System.out.println("prueba xml "+filename_database_xml);
-                velocidad =util.get_velocidad(dataset_temp);
-            } catch (InvalidDataFormatException ex) {
-                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            
-            
-            //--------------------------------------------------------------
-            //INVOCAR EL PROGRESS BAR
-             
-            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            
-            progress_bar new_progress = new progress_bar();
-            task = new Task(new_progress,velocidad);
-            new_progress.setVisible(true);
+    }
+    
+    private void initializeTableMetricsCommon(){
+        ArrayList<String> metricsList = util.Get_common_metrics();
         
-            task.addPropertyChangeListener(new_progress);
-            task.execute();
-           
-            //--------------------------------------------------------------
-            
-            
-            
-
-            Load_dataset(filename_database_arff, filename_database_xml);
-
-            textChooseFile.setText(filename_database_arff);
+        tableMetrics_common.clear();
+        
+        for(int i=0; i<metricsList.size(); i++){
+            tableMetrics_common.put(metricsList.get(i), "-");
         }
-    }//GEN-LAST:event_buttonChooseFileActionPerformed
-
+    }
+    
+    private void initializeTableMetricsTrainTest(){
+        ArrayList<String> metricsList = util.Get_test_metrics();
+        
+        tableMetrics_train.clear();
+        tableMetrics_test.clear();
+        
+        for(int i=0; i<metricsList.size(); i++){
+            tableMetrics_train.put(metricsList.get(i), "-");
+            tableMetrics_test.put(metricsList.get(i), "-");
+        }
+    }
+    
     private void textRandomCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textRandomCVActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textRandomCVActionPerformed
@@ -3105,7 +3006,7 @@ private void Inicializa_config()
         textStratifiedCV.setEnabled(false);
         
         jButton6.setEnabled(false);
-        button_show_traintest.setEnabled(false);
+        button_calculate2_train.setEnabled(false);
         button_save_train.setEnabled(false);
         
     }//GEN-LAST:event_radioRandomCVActionPerformed
@@ -3120,7 +3021,7 @@ private void Inicializa_config()
         textStratifiedCV.setEnabled(true);
         
         jButton6.setEnabled(false);
-        button_show_traintest.setEnabled(false);
+        button_calculate2_train.setEnabled(false);
         button_save_train.setEnabled(false);
     }//GEN-LAST:event_radioStratifiedCVActionPerformed
 
@@ -3463,6 +3364,185 @@ private void Inicializa_config()
         // TODO add your handling code here:
     }//GEN-LAST:event_radioExamplesPerLabelsetActionPerformed
 
+    // CAPTURA LA DIRECCION DEL XML EN EL JTEXTFIELD DE LA 1ra pestaña para cargar el dataset.
+    private void textChooseFileKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textChooseFileKeyPressed
+
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            //--------------------------------------------------------------
+            //INVOCAR EL PROGRESS BAR
+            /*
+            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
+            progress_bar new_progress = new progress_bar();
+            task = new Task(new_progress);
+            new_progress.setVisible(true);
+
+            task.addPropertyChangeListener(new_progress);
+            task.execute();
+            //--------------------------------------------------------------
+            */
+
+            String filename_database_arff = textChooseFile.getText();
+
+            filename_database_xml = util.Get_xml_string(filename_database_arff);
+
+            filename_database_xml = util.Get_file_name_xml(filename_database_xml);
+
+            Load_dataset(filename_database_arff, filename_database_xml);
+        }
+    }//GEN-LAST:event_textChooseFileKeyPressed
+
+    private void textChooseFileFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textChooseFileFocusLost
+
+        // CUANDO EL TEXTFIELD PIERDE EL FOCUS
+        /*
+        String filename_database_arff = jTextField2.getText();
+
+        filename_database_xml = filename_database_arff.substring(0,filename_database_arff.length()-5)+".xml";
+
+        filename_database_xml = util.Get_file_name_xml(filename_database_xml);
+
+        Load_dataset(filename_database_arff, filename_database_xml);
+
+        */
+    }//GEN-LAST:event_textChooseFileFocusLost
+
+    private void textChooseFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textChooseFileActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textChooseFileActionPerformed
+
+    // carga el dataset buscandolo por el filechooser
+    private void buttonChooseFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonChooseFileActionPerformed
+        // TODO add your handling code here:
+
+        // ESCOGER EL DATASET
+        JFileChooser jfile1 = new JFileChooser();
+        FileNameExtensionFilter fname = new FileNameExtensionFilter(".arff", "arff");
+        jfile1.setFileFilter(fname);
+        //int returnVal =
+
+        int returnVal = jfile1.showOpenDialog(this);
+
+        if (returnVal == JFileChooser.OPEN_DIALOG)
+        {
+
+            File f1 = jfile1.getSelectedFile();
+            dataset_name1 = f1.getName();
+            dataset_current_name = dataset_name1.substring(0,dataset_name1.length()-5);
+
+            String filename_database_arff = f1.getAbsolutePath();
+
+            filename_database_xml_path=  filename_database_arff.substring(0,filename_database_arff.length()-5)+".xml";
+            filename_database_xml = util.Get_file_name_xml1(filename_database_xml_path);
+
+            File  file_temp = new File(filename_database_xml_path);
+
+            int velocidad=5;
+
+            //-------------------------------------------------------------------------------------------------------
+            FileReader fr;
+            try
+            {
+                fr = new FileReader(filename_database_arff);
+                BufferedReader bf = new BufferedReader(fr);
+
+                String sCadena = bf.readLine();
+                int label_found=0;
+                String label_name;
+                String[] label_names_found;
+
+                if(util.Es_de_tipo_MEKA(sCadena))
+                {
+                    System.out.println("el dataset es de tipo MEKA");
+                    es_de_tipo_meka = true;
+
+                    int label_count = util.Extract_labels_from_arff(sCadena);
+                    label_names_found = new String[label_count];
+
+                    while(label_found < label_count)
+                    {
+                        sCadena = bf.readLine();
+                        label_name = util.Extract_label_name_from_String(sCadena);
+
+                        if(label_name!= null)
+                        {
+                            label_names_found[label_found]=label_name;
+                            label_found++;
+
+                        }
+
+                    }
+                    //util.Recorre_Arreglo(label_names_found);
+
+                    BufferedWriter bw_xml= new BufferedWriter(new FileWriter(filename_database_xml_path));
+                    PrintWriter wr_xml = new PrintWriter(bw_xml);
+
+                    util.Write_into_xml_file(wr_xml, label_names_found); //crea el xml para el caso de MEKA
+
+                    bw_xml.close();
+                    wr_xml.close();
+
+                    filename_database_xml = util.Get_file_name_xml(filename_database_xml_path); //carga el xml creado...
+                    file_temp = new File(filename_database_xml_path);
+                }
+
+                else
+                {
+                    System.out.println("el dataset NO es de tipo MEKA");
+                    es_de_tipo_meka= false;
+
+                }
+            }
+            catch (FileNotFoundException ex) {
+                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            //-------------------------------------------------------------------------------------------------------
+
+            //-------------------------------------------------------------------------------------------------------
+
+            if(!file_temp.exists()) //SI NO EXISTE EL XML
+            {
+                filename_database_xml_path = util.Get_xml_string(filename_database_arff);
+                filename_database_xml = util.Get_file_name_xml(filename_database_xml_path);
+            }
+            try {
+                MultiLabelInstances dataset_temp = new MultiLabelInstances(filename_database_arff, filename_database_xml);
+                //System.out.println("prueba xml "+filename_database_xml);
+                velocidad =util.get_velocidad(dataset_temp);
+            } catch (InvalidDataFormatException ex) {
+                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            //--------------------------------------------------------------
+            //INVOCAR EL PROGRESS BAR
+
+            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
+            progress_bar new_progress = new progress_bar();
+            task = new Task(new_progress,velocidad);
+            new_progress.setVisible(true);
+
+            task.addPropertyChangeListener(new_progress);
+            task.execute();
+
+            //--------------------------------------------------------------
+
+            initializeTableMetrics();
+            initializeTableMetricsCommon();
+            initializeTableMetricsTrainTest();
+            clearTable_metrics_principal();
+            clearTable_metrics_traintest();
+
+            Load_dataset(filename_database_arff, filename_database_xml);
+
+            textChooseFile.setText(filename_database_arff);
+        }
+    }//GEN-LAST:event_buttonChooseFileActionPerformed
+
        private void save_as_ActionPerformed1(java.awt.event.ActionEvent evt) throws AWTException, IOException
     {
         BufferedImage image = new Robot().createScreenCapture(new Rectangle(labelHeatmapGraph.getLocationOnScreen().x, labelHeatmapGraph.getLocationOnScreen().y, labelHeatmapGraph.getWidth(), labelHeatmapGraph.getHeight()));
@@ -3677,9 +3757,8 @@ private void Inicializa_config()
              export2.setVisible(true); //boton salvar de la tabla de la izquierda en class imbalance
             
              
-//             if(tabsDependences.getSelectedIndex()==0)labelChiThreshold.setVisible(true);
-//             else labelChiThreshold.setVisible(false);
-             labelChiThreshold.setVisible(true);
+             if(tabsDependences.getSelectedIndex()==0)jLabel30.setVisible(true);
+             else jLabel30.setVisible(false);
             
              
              //para el box diagram
@@ -4035,7 +4114,7 @@ private void Inicializa_config()
             
               //TRAIN TEST
               jButton6.setEnabled(false);
-              button_show_traintest.setEnabled(false);
+              button_calculate2_train.setEnabled(false);
               button_save_train.setEnabled(false);
              
             }
@@ -4132,69 +4211,300 @@ private void Inicializa_config()
     // CALCULA LAS METRICAS SELECCIONADAS EN LA PESTAÑA TEST
     private void button_calculateActionPerformed1(java.awt.event.ActionEvent evt, JTable jtable, JTable jtable1, JTable jtable2)
     {
-       ArrayList<String> metric_list_commun = Get_metrics_selected(jtable);
-       ArrayList<String> metric_list_train = Get_metrics_selected(jtable2);
-       ArrayList<String> metric_list_test = Get_metrics_selected(jtable2);
+       ArrayList<String> metric_list_commun = Get_metrics_selected_principal(jtable);
+       ArrayList<String> metric_list_train = Get_metrics_selected_test(jtable2);
+       ArrayList<String> metric_list_test = Get_metrics_selected_test(jtable2);
        
        if(dataset == null) {
            JOptionPane.showMessageDialog(null, "You must load a dataset", "alert", JOptionPane.ERROR_MESSAGE); 
-            return; }
-       
-       
-       int posx = this.getBounds().x;
-       int posy = this.getBounds().y;
-       
-       // System.out.println(posx+" "+posy);
+            return; 
+       }
+
        boolean flag=true;
         
-       if(!list_dataset_train.isEmpty()) flag=false;
+       if(!list_dataset_train.isEmpty()){
+           flag=false;
+       }
        
        
        if((dataset_train ==null || dataset_test == null) && flag ){
             JOptionPane.showMessageDialog(null, "You must to click Start", "alert", JOptionPane.ERROR_MESSAGE); 
-            return;}
+            return;
+       }
        
        
-          if((dataset_train ==null || dataset_test == null))
-               {
-                JOptionPane.showMessageDialog(null, "You must to click Start", "alert", JOptionPane.ERROR_MESSAGE); 
-                return;
-               }
+       if((dataset_train ==null || dataset_test == null))
+       {
+            JOptionPane.showMessageDialog(null, "You must to click Start", "alert", JOptionPane.ERROR_MESSAGE); 
+            return;
+       }
+         
+       
+       String value = new String();
+       //Common metrics
+        for(String metric : metric_list_commun)
+        {
+            //If metric value exists, don't calculate
+           if((tableMetrics_common.get(metric) == null) || (tableMetrics_common.get(metric).equals("-"))){
+               value= util.get_value_metric(metric, dataset_train, es_de_tipo_meka); //can  be dataset_test too
+                      
+                if(value.equals("-1.000") || value.equals("-1,000")){
+                    value = util.get_alternative_metric(metric, dataset_train, dataset_test);
+                }
+
+                tableMetrics_common.put(metric, value.replace(",", "."));
+           }           
+        }
+        
+        //Train metrics
+        atributo[] label_frenquency = util.Get_Frequency_x_label(dataset_train);
+        label_frenquency = util.Ordenar_freq_x_attr(label_frenquency);// ordena de mayor a menor
              
-                metric_output mo = new metric_output(metric_list_commun,metric_list_train,metric_list_test,dataset_train,dataset_test, posx, posy,es_de_tipo_meka);
-                mo.setVisible(true);
-            
-         
-         
-    }   
+        atributo[] imbalanced_data =  util.Get_data_imbalanced_x_label_inter_class(dataset_train,label_frenquency);
+        
+        for(String metric : metric_list_train)
+        {
+            //If metric value exists, don't calculate
+            if((tableMetrics_train.get(metric) == null) || (tableMetrics_train.get(metric).equals("-"))){
+                value= util.get_value_metric(metric, dataset_train, es_de_tipo_meka);
+                if(value.equals("-1.000") || value.equals("-1,000")) {
+                    value = util.get_value_metric_imbalanced(metric, dataset_train, imbalanced_data);
+                }
+                if(value.equals("-1.000") || value.equals("-1,000")) {
+                    value ="NaN";
+                }
+                tableMetrics_train.put(metric, value.replace(",", "."));
+            }
+        }
+        
+        //Test metrics
+        label_frenquency = util.Get_Frequency_x_label(dataset_test);
+        label_frenquency = util.Ordenar_freq_x_attr(label_frenquency);// ordena de mayor a menor
+        
+        imbalanced_data = util.Get_data_imbalanced_x_label_inter_class(dataset_test,label_frenquency);
+        
+        for(String metric : metric_list_test)
+        {
+           //If metric value exists, don't calculate
+           if((tableMetrics_test.get(metric) == null) || (tableMetrics_test.get(metric).equals("-"))){
+               value= util.get_value_metric(metric, dataset_test, es_de_tipo_meka);
+                if(value.equals("-1.000") || value.equals("-1,000")) {
+                    value = util.get_alternative_metric(metric, dataset_train, dataset_test);
+                }
+                if(value.equals("-1.000") || value.equals("-1,000")) {
+                    value = util.get_value_metric_imbalanced(metric, dataset_test, imbalanced_data);
+                }
+                if(value.equals("-1.000") || value.equals("-1,000")) {
+                    value ="NaN";
+                }
+                tableMetrics_test.put(metric, value.replace(",", "."));
+           }
+        }
+       
+        TableModel model = jtable.getModel();
+        
+        for(int i=0; i<model.getRowCount(); i++){
+            model.setValueAt(tableMetrics_common.get(model.getValueAt(i, 0).toString()), i, 1);
+        }
+        
+        jtable.repaint();
+        
+        model = jtable2.getModel();
+        
+        for(int i=0; i<model.getRowCount(); i++){
+            model.setValueAt(tableMetrics_train.get(model.getValueAt(i, 0).toString()), i, 1);
+            model.setValueAt(tableMetrics_test.get(model.getValueAt(i, 0).toString()), i, 2);
+        }
+        
+        jtable2.repaint();
+       
+       //metric_output mo = new metric_output(metric_list_commun,metric_list_train,metric_list_test,dataset_train,dataset_test, posx, posy,es_de_tipo_meka);
+       //mo.setVisible(true);
+
+       
+
+    } 
     
     
      // CALCULA LAS METRICAS SELECCIONADAS EN LA PESTAÑA TEST PARA CROSS VALIDATION
-    private void button_calculateActionPerformed1(java.awt.event.ActionEvent evt, JTable jtable, JTable jtable1, JTable jtable2, ArrayList<MultiLabelInstances> dataset_train_ml, ArrayList<MultiLabelInstances> dataset_test_ml )
-    {
-       ArrayList<String> metric_list_commun = Get_metrics_selected(jtable);
-       ArrayList<String> metric_list_train = Get_metrics_selected(jtable2);
-       ArrayList<String> metric_list_test = Get_metrics_selected(jtable2);
+    private void button_calculateActionPerformed1(java.awt.event.ActionEvent evt, JTable jtable, JTable jtable1, JTable jtable2, ArrayList<MultiLabelInstances> list_datasets_train, ArrayList<MultiLabelInstances> list_datasets_test )
+    {       
+       ArrayList<String> metric_list_commun = Get_metrics_selected_principal(jtable);
+       ArrayList<String> metric_list_train = Get_metrics_selected_test(jtable2);
+       ArrayList<String> metric_list_test = Get_metrics_selected_test(jtable2);
        
        if(dataset == null) {
            JOptionPane.showMessageDialog(null, "You must load a dataset", "alert", JOptionPane.ERROR_MESSAGE); 
-            return; }
+           return; 
+       }
        
-       int posx = this.getBounds().x;
-       int posy = this.getBounds().y;
        
-       metric_output mo = new metric_output(metric_list_commun,metric_list_train,metric_list_test,dataset_train_ml,dataset_test_ml,posx,posy,es_de_tipo_meka);
+       boolean flag=true;
        
-       mo.setVisible(true);
+       String temp,temp1,value="";
+       
+       ArrayList<Double> lista_valores;
+       double current_double;
+       
+       MultiLabelInstances current;
+        
+        for(String metric : metric_list_commun)
+        {
+            //If metric value exists, don't calculate
+           if((tableMetrics_common.get(metric) == null) || (tableMetrics_common.get(metric).equals("-"))){
+               value= metric+ util.get_tabs_multi_datasets(metric);
+
+                lista_valores= new ArrayList();
+                current_double=-1.0;
+
+                for(int n=0; n<list_datasets_train.size();n++)
+                {
+                     temp = util.get_value_metric(metric, list_datasets_train.get(n), es_de_tipo_meka); //can  be dataset_test too
+
+                     if(temp.equals( "-1.000" ) || temp.equals( "-1,000" )) {
+                         temp = util.get_alternative_metric(metric, list_datasets_train.get(n), list_datasets_test.get(n));
+                     }
+
+                     //System.out.println(temp);
+                     temp=temp.replace(",", ".");
+                     //System.out.println(temp);
+                     current_double = Double.parseDouble(temp);
+
+                     if(Double.isNaN(current_double) || current_double==-1.0){
+                         break;
+                     }
+
+                     lista_valores.add(current_double);
+
+                }    
+                tableMetrics_common.put(metric, Double.toString(util.Get_media(lista_valores)).replace(",", "."));     
+           }         
+        }
+        
+        
+        
+        atributo[] imbalanced_data,imbalanced_data1, label_frequency,label_frequency1;
+        flag =true;
+        
+
+        
+        //Train metrics
+        for(String metric : metric_list_train)
+        {
+            //If metric value exists, don't calculate
+           if((tableMetrics_train.get(metric) == null) || (tableMetrics_train.get(metric).equals("-"))){
+               value= metric+ util.get_tabs_multi_datasets(metric);
+            
+                lista_valores= new ArrayList();
+                current_double=-1.0;
+
+                for(int n=0; n<list_datasets_train.size();n++)
+                {
+                    current = list_datasets_train.get(n);
+
+                    label_frequency = util.Get_Frequency_x_label(current);
+                    label_frequency = util.Ordenar_freq_x_attr(label_frequency);// ordena de mayor a menor
+
+                    imbalanced_data = util.Get_data_imbalanced_x_label_inter_class(current,label_frequency);
+
+                     temp= util.get_value_metric(metric, list_datasets_train.get(n), es_de_tipo_meka); 
+                     System.out.println(temp);              
+
+                    if(temp.equals( "-1.0" )){
+                        temp = util.get_value_metric_imbalanced(metric, list_datasets_train.get(n), imbalanced_data);
+                        System.out.println(temp);
+                    }
+                    if(temp.equals( "-1.0" )) {
+                        temp ="NaN";
+                        System.out.println(temp);
+                    }
+
+                    temp=temp.replace(",", ".");
+                    current_double = Double.parseDouble(temp);
+
+                    if(Double.isNaN(current_double) || current_double==-1.0){
+                        break;
+                    }
+
+                    lista_valores.add(current_double);
+
+                }         
+
+                tableMetrics_train.put(metric, Double.toString(util.Get_media(lista_valores)).replace(",", "."));
+           }
+        }
+        
+        
+        //Test metrics
+        for(String metric : metric_list_test)
+        {
+            //If metric value exists, don't calculate
+           if((tableMetrics_test.get(metric) == null) || (tableMetrics_test.get(metric).equals("-"))){
+               value= metric+ util.get_tabs_multi_datasets(metric);
+            
+                lista_valores= new ArrayList();
+                current_double=-1.0;
+
+                for(int n=0; n<list_datasets_test.size();n++)
+                {
+                    current = list_datasets_test.get(n);
+
+                    label_frequency = util.Get_Frequency_x_label(current);
+                    label_frequency = util.Ordenar_freq_x_attr(label_frequency);// ordena de mayor a menor
+
+                    imbalanced_data = util.Get_data_imbalanced_x_label_inter_class(current,label_frequency);
+
+                     temp= util.get_value_metric(metric, list_datasets_test.get(n), es_de_tipo_meka); 
+
+                    if(temp.equals( "-1.0" )){
+                        temp = util.get_value_metric_imbalanced(metric, list_datasets_test.get(n), imbalanced_data);
+                    }
+                    if(temp.equals( "-1.0" )) {
+                        temp ="NaN";
+                    }
+
+                    temp=temp.replace(",", ".");
+                    current_double = Double.parseDouble(temp);
+
+                    if(Double.isNaN(current_double) || current_double==-1.0){
+                        break;
+                    }
+
+                    lista_valores.add(current_double);
+
+                }         
+
+                tableMetrics_test.put(metric, Double.toString(util.Get_media(lista_valores)).replace(",", "."));
+           }
+
+        }
+        
+        
+        TableModel model = jtable.getModel();
+        
+        for(int i=0; i<model.getRowCount(); i++){
+            model.setValueAt(tableMetrics_common.get(model.getValueAt(i, 0).toString()), i, 1);
+        }
+        
+        jtable.repaint();
+        
+        model = jtable2.getModel();
+        
+        for(int i=0; i<model.getRowCount(); i++){
+            model.setValueAt(tableMetrics_train.get(model.getValueAt(i, 0).toString()), i, 1);
+            model.setValueAt(tableMetrics_test.get(model.getValueAt(i, 0).toString()), i, 2);
+        }
+        
+        jtable2.repaint();
        
     }   
     
     //SALVAR EN LA PESTAÑA TRAIN/TEST DATASET
      private void button_saveActionPerformed1(java.awt.event.ActionEvent evt, JTable jtable, JTable jtable1, JTable jtable2) throws IOException
     {
-       ArrayList<String> metric_list_commun = Get_metrics_selected(jtable);
-       ArrayList<String> metric_list_train = Get_metrics_selected(jtable2);
-       ArrayList<String> metric_list_test = Get_metrics_selected(jtable2);
+       ArrayList<String> metric_list_commun = Get_metrics_selected_principal(jtable);
+       ArrayList<String> metric_list_train = Get_metrics_selected_test(jtable2);
+       ArrayList<String> metric_list_test = Get_metrics_selected_test(jtable2);
       
        String dataset_name11;
       
@@ -4607,6 +4917,134 @@ private void Inicializa_config()
         
     }
      
+     
+      private void button_saveActionPerformed_principal(java.awt.event.ActionEvent evt, JTable jtable) throws IOException
+    {
+        ArrayList<String> metric_list = Get_metrics_selected_principal(jtable);
+        
+        
+         if(dataset == null) {
+           JOptionPane.showMessageDialog(null, "you must load a dataset ", "Warning", JOptionPane.ERROR_MESSAGE);
+           return; 
+       }
+             
+        
+       // JFILECHOOSER SAVE
+         JFileChooser fc= new JFileChooser();
+        
+         // extension txt
+        FileNameExtensionFilter fname = new FileNameExtensionFilter(".txt", "txt");
+        FileNameExtensionFilter fname1 = new FileNameExtensionFilter(".csv", "csv");
+        FileNameExtensionFilter fname3 = new FileNameExtensionFilter(".arff (Meka)", ".arff (Meka)");
+        
+        //eliminar el que tiene por defecto
+        fc.removeChoosableFileFilter(fc.getChoosableFileFilters()[0]);
+        
+        fc.setFileFilter(fname);
+        fc.setFileFilter(fname3);
+        fc.setFileFilter(fname1);
+        
+        
+        fc.addChoosableFileFilter(fname);
+        
+        int returnVal = fc.showSaveDialog(this);
+         
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+        {
+                File file = fc.getSelectedFile();
+                FileFilter f1 = fc.getFileFilter();
+                
+                if(f1.getDescription().equals(".txt"))
+                {
+                    String path = file.getAbsolutePath() +".txt";
+                
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+                    PrintWriter wr = new PrintWriter(bw);
+                
+                    util.Save_text_file(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
+                
+                    wr.close();
+                    bw.close(); 
+                    
+                    JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                    
+                }
+                
+               else if(f1.getDescription().equals(".csv"))
+               {
+              
+                   String path = file.getAbsolutePath() +".csv";
+                
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+                    PrintWriter wr = new PrintWriter(bw);
+                
+                    util.Save_csv_file(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
+                
+                    wr.close();
+                    bw.close(); 
+                    
+                    JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                /*
+                try
+                 {
+                     dataset_name1 = dataset_name1.substring(0,dataset_name1.length()-5);
+                     String path = file.getAbsolutePath() +".csv";
+                      Exporter exp = new Exporter(new File(path), dataset_name1);
+                     
+                     if(exp.exporta(metric_list,dataset,es_de_tipo_meka))
+                     {
+                         JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                     }
+                 }
+                 catch(Exception e1)
+                 {
+                     JOptionPane.showMessageDialog(null, "File NOT Saved correctly", "Error", JOptionPane.ERROR_MESSAGE); 
+                 }   
+                   */
+                
+               }
+                
+                //COMPROBAR SI TIENE SENTIDO SALVAR UNA SOLA LINEA.
+               else if (f1.getDescription().equals(".arff (Meka)"))
+                {
+                    String path = file.getAbsolutePath() +".arff";
+                
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+                    PrintWriter wr = new PrintWriter(bw);
+                
+                    util.Save_meka_file(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
+                
+                    wr.close();
+                    bw.close(); 
+                    
+                    JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                    
+                    /*
+                    String path = file.getAbsolutePath() +".arff";
+                
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+                    PrintWriter wr = new PrintWriter(bw);
+                    
+                    ArrayList<MultiLabelInstances> list_dataset1 = new ArrayList();
+                    list_dataset1.add(dataset);
+                                   
+                    util.Save_in_the_file_arff_meka(wr, metric_list, list_dataset1,file.getName(), es_de_tipo_meka);
+                    
+                    wr.close();
+                    bw.close();      
+                    
+                  JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE);   
+                    */
+                }
+                
+           Toolkit.getDefaultToolkit().beep();
+        } 
+
+            
+        
+    }
+     
+     
      //CALCULA LAS METRICAS ESPECIFICADAS
      private void button_calculateActionPerformed_datasets(java.awt.event.ActionEvent evt, JTable jtable)
     {
@@ -4648,8 +5086,108 @@ private void Inicializa_config()
      
     }   
      
-     
-     
+
+      private void button_calculateActionPerformed_principal(java.awt.event.ActionEvent evt, JTable jtable)
+    {
+       ArrayList<String> metric_list = Get_metrics_selected_principal(jtable);
+        
+       if(dataset == null) {
+           JOptionPane.showMessageDialog(null, "you must load a dataset ", "Warning", JOptionPane.ERROR_MESSAGE);
+           return; 
+       }
+
+       atributo[] label_frenquency = util.Get_Frequency_x_label(dataset);
+       label_frenquency = util.Ordenar_freq_x_attr(label_frenquency);// ordena de mayor a menor
+                
+        atributo[] imbalanced_data = util.Get_data_imbalanced_x_label_inter_class(dataset,label_frenquency);
+        
+        String value;
+        
+        System.out.println(metric_list);
+        
+        for(String metric : metric_list)
+        {
+            //If metric value exists, don't calculate
+           if((tableMetrics.get(metric) == null) || (tableMetrics.get(metric).equals("-"))){
+               value= util.get_value_metric(metric, dataset, es_de_tipo_meka);
+                if(value.equals("-1.000") || value.equals("-1,000")){
+                    value = util.get_value_metric_imbalanced(metric, dataset, imbalanced_data);
+                } 	
+
+                tableMetrics.put(metric, value.replace(",", "."));
+                //jTextArea1.append(metric + util.get_tabs_multi_datasets(metric) + value + "\n"); 
+           }     
+        }
+       
+        TableModel model = jtable.getModel();
+        
+        for(int i=0; i<model.getRowCount(); i++){
+            model.setValueAt(tableMetrics.get(model.getValueAt(i, 0).toString()), i, 1);
+        }
+        
+        jtable.repaint();
+    }   
+      
+      
+    private void clearTable_metrics_principal()
+    {
+       ArrayList<String> metric_list = util.Get_all_metrics();
+
+        String value;
+        for(String metric : metric_list)
+        {
+           tableMetrics.put(metric, "-");
+        }
+       
+        TableModel model = jTable1.getModel();
+        
+        for(int i=0; i<model.getRowCount(); i++){
+            model.setValueAt(tableMetrics.get(model.getValueAt(i, 0).toString()), i, 1);
+        }
+        
+        jTable1.repaint();
+    } 
+    
+    
+    private void clearTable_metrics_traintest()
+    {
+        ArrayList<String> metric_list = util.Get_all_metrics();
+
+        String value;
+      
+        ArrayList<String> metric_list_common = util.Get_common_metrics();
+
+        for(String metric : metric_list_common)
+        {
+           tableMetrics_common.put(metric, "-");
+        }
+       
+        TableModel model = jTable5.getModel();
+        
+        for(int i=0; i<model.getRowCount(); i++){
+            model.setValueAt(tableMetrics_common.get(model.getValueAt(i, 0).toString()), i, 1);
+        }
+        
+        jTable5.repaint();
+        
+        ArrayList<String> metric_list_test = util.Get_test_metrics();
+
+        for(String metric : metric_list_test)
+        {
+           tableMetrics_test.put(metric, "-");
+           tableMetrics_train.put(metric, "-");
+        }
+       
+        model = jTable7.getModel();
+        
+        for(int i=0; i<model.getRowCount(); i++){
+            model.setValueAt(tableMetrics_train.get(model.getValueAt(i, 0).toString()), i, 1);
+            model.setValueAt(tableMetrics_test.get(model.getValueAt(i, 0).toString()), i, 2);
+        }
+        
+        jTable7.repaint();
+    } 
+         
     
      private ArrayList<String> Get_metrics_selected(JTable jtable)
      {
@@ -4667,6 +5205,39 @@ private void Inicializa_config()
        return result;
      }
      
+     private ArrayList<String> Get_metrics_selected_test(JTable jtable)
+     {
+       ArrayList<String> result= new ArrayList();
+       TableModel tmodel = jtable.getModel();
+       
+       for(int i=0; i<tmodel.getRowCount();i++)
+       {
+           if((Boolean)tmodel.getValueAt(i, 3))
+           {
+               String selected =(String)tmodel.getValueAt(i, 0);
+               result.add(selected);                      
+           }                
+       }   
+       return result;
+     }
+     
+     private ArrayList<String> Get_metrics_selected_principal(JTable jtable)
+     {
+       ArrayList<String> result= new ArrayList();
+       TableModel tmodel = jtable.getModel();
+       
+       for(int i=0; i<tmodel.getRowCount();i++)
+       {
+           if((Boolean)tmodel.getValueAt(i, 2))
+           {
+               String selected =(String)tmodel.getValueAt(i, 0);
+               result.add(selected);                      
+           }                
+       }   
+       return result;
+     }
+     
+     
      private void button_invertActionPerformed(java.awt.event.ActionEvent evt,JTable jtable )
     {
        TableModel tmodel = jtable.getModel();
@@ -4681,15 +5252,36 @@ private void Inicializa_config()
        jtable.repaint();
        
     }     
-    
-          private void button_invertActionPerformed2(java.awt.event.ActionEvent evt,JTable jtable,JTable jtable1,JTable jtable2 )
+     
+     private void button_invertActionPerformed_principal(java.awt.event.ActionEvent evt,JTable jtable )
     {
        TableModel tmodel = jtable.getModel();
        
        for(int i=0; i<tmodel.getRowCount();i++)
        {
-           if((Boolean)tmodel.getValueAt(i, 1)) tmodel.setValueAt(Boolean.FALSE, i, 1);
-           else  tmodel.setValueAt(Boolean.TRUE, i, 1);          
+           if((Boolean)tmodel.getValueAt(i, 2)) {
+               tmodel.setValueAt(Boolean.FALSE, i, 2);
+           }
+           else  {
+               tmodel.setValueAt(Boolean.TRUE, i, 2);
+           }          
+       }      
+       
+       jtable.setModel(tmodel);
+       jtable.repaint();
+       
+    }     
+    
+    private void button_invertActionPerformed2(java.awt.event.ActionEvent evt,JTable jtable,JTable jtable1,JTable jtable2 )
+    {
+       TableModel tmodel = jtable.getModel();
+       
+       for(int i=0; i<tmodel.getRowCount();i++)
+       {
+           if((Boolean)tmodel.getValueAt(i, 2)) {
+               tmodel.setValueAt(Boolean.FALSE, i, 2);
+           }
+           else  tmodel.setValueAt(Boolean.TRUE, i, 2);          
        }      
        
        jtable.setModel(tmodel);
@@ -4699,8 +5291,10 @@ private void Inicializa_config()
        
        for(int i=0; i<tmodel.getRowCount();i++)
        {
-           if((Boolean)tmodel.getValueAt(i, 1)) tmodel.setValueAt(Boolean.FALSE, i, 1);
-           else  tmodel.setValueAt(Boolean.TRUE, i, 1);          
+           if((Boolean)tmodel.getValueAt(i, 3)) {
+               tmodel.setValueAt(Boolean.FALSE, i, 3);
+           }
+           else  tmodel.setValueAt(Boolean.TRUE, i, 3);          
        }      
        
        jtable1.setModel(tmodel);
@@ -4711,8 +5305,10 @@ private void Inicializa_config()
        
        for(int i=0; i<tmodel.getRowCount();i++)
        {
-           if((Boolean)tmodel.getValueAt(i, 1)) tmodel.setValueAt(Boolean.FALSE, i, 1);
-           else  tmodel.setValueAt(Boolean.TRUE, i, 1);          
+           if((Boolean)tmodel.getValueAt(i, 3)) {
+               tmodel.setValueAt(Boolean.FALSE, i, 3);
+           }
+           else  tmodel.setValueAt(Boolean.TRUE, i, 3);          
        }      
        
        jtable2.setModel(tmodel);
@@ -4729,14 +5325,25 @@ private void Inicializa_config()
              
        jtable.setModel(tmodel);
        jtable.repaint();
-    }        
+    }     
+    
+    private void button_noneActionPerformed_principal(java.awt.event.ActionEvent evt,JTable jtable)
+    {
+      TableModel tmodel = jtable.getModel();
+       
+       for(int i=0; i<tmodel.getRowCount();i++)
+           tmodel.setValueAt(Boolean.FALSE, i, 2);
+             
+       jtable.setModel(tmodel);
+       jtable.repaint();
+    }      
     
         private void button_noneActionPerformed2(java.awt.event.ActionEvent evt,JTable jtable,JTable jtable1,JTable jtable2)
     {
       TableModel tmodel = jtable.getModel();
        
        for(int i=0; i<tmodel.getRowCount();i++)
-           tmodel.setValueAt(Boolean.FALSE, i, 1);
+           tmodel.setValueAt(Boolean.FALSE, i, 2);
        
        jtable.setModel(tmodel);
        jtable.repaint();
@@ -4744,7 +5351,7 @@ private void Inicializa_config()
        tmodel = jtable1.getModel();
        
        for(int i=0; i<tmodel.getRowCount();i++)
-           tmodel.setValueAt(Boolean.FALSE, i, 1);
+           tmodel.setValueAt(Boolean.FALSE, i, 3);
        
        jtable1.setModel(tmodel);
        jtable1.repaint();
@@ -4753,7 +5360,7 @@ private void Inicializa_config()
        tmodel = jtable2.getModel();
        
        for(int i=0; i<tmodel.getRowCount();i++)
-           tmodel.setValueAt(Boolean.FALSE, i, 1);
+           tmodel.setValueAt(Boolean.FALSE, i, 3);
        
        jtable2.setModel(tmodel);
        jtable2.repaint();
@@ -4765,6 +5372,17 @@ private void Inicializa_config()
        
        for(int i=0; i<tmodel.getRowCount();i++)
            tmodel.setValueAt(Boolean.TRUE, i, 1);
+             
+       jtable.setModel(tmodel);
+       jtable.repaint();
+    }
+    
+    private void button_allActionPerformed_principal(java.awt.event.ActionEvent evt ,JTable jtable)
+    {
+       TableModel tmodel = jtable.getModel();
+       
+       for(int i=0; i<tmodel.getRowCount();i++)
+           tmodel.setValueAt(Boolean.TRUE, i, 2);
              
        jtable.setModel(tmodel);
        jtable.repaint();
@@ -4928,7 +5546,7 @@ private void Inicializa_config()
        TableModel tmodel = jtable.getModel();
        
        for(int i=0; i<tmodel.getRowCount();i++)
-           tmodel.setValueAt(Boolean.TRUE, i, 1);
+           tmodel.setValueAt(Boolean.TRUE, i, 2);
        
        jtable.setModel(tmodel);
        jtable.repaint();
@@ -4936,7 +5554,7 @@ private void Inicializa_config()
        tmodel = jtable1.getModel();
        
        for(int i=0; i<tmodel.getRowCount();i++)
-           tmodel.setValueAt(Boolean.TRUE, i, 1);
+           tmodel.setValueAt(Boolean.TRUE, i, 3);
        
        jtable1.setModel(tmodel);
        jtable1.repaint();
@@ -4945,7 +5563,7 @@ private void Inicializa_config()
        tmodel = jtable2.getModel();
        
        for(int i=0; i<tmodel.getRowCount();i++)
-           tmodel.setValueAt(Boolean.TRUE, i, 1);
+           tmodel.setValueAt(Boolean.TRUE, i, 3);
        
        jtable2.setModel(tmodel);
        jtable2.repaint();
@@ -5395,9 +6013,10 @@ private void Inicializa_config()
     viewport.setPreferredSize(fixedTable.getPreferredSize());
     scroll.setRowHeaderView(viewport);
     
-    scroll.setBounds(20, 15, 825, 390); //Chi
+    scroll.setBounds(20, 20, 760, 350);
     
-    scroll.setCorner(JScrollPane.UPPER_LEFT_CORNER, fixedTable.getTableHeader());
+    scroll.setCorner(JScrollPane.UPPER_LEFT_CORNER, fixedTable
+        .getTableHeader());
     
     jTable10.setBorder(BorderFactory.createLineBorder(Color.black));
     
@@ -5955,6 +6574,77 @@ private void Inicializa_config()
 
   
     }
+     
+     
+     public void create_jtable_metric_train_test(JTable table,JPanel jpanel , Object rowData[][], int posx, int posy, int width,int height)
+     {
+            
+        TableModel model = new Table_model_metrics(rowData, "train-test");
+        
+        table.setModel(model);
+       
+        //table.setPreferredScrollableViewportSize(table.getPreferredSize());
+        //JScrollPane scrollPane = new JScrollPane(table);
+        //jPanel13.add(scrollPane);
+        
+       TableColumnModel tcm = table.getColumnModel();
+            
+       tcm.getColumn(0).setPreferredWidth(350);
+       tcm.getColumn(1).setPreferredWidth(70);
+       tcm.getColumn(2).setPreferredWidth(70);
+       tcm.getColumn(3).setPreferredWidth(30);
+       tcm.getColumn(3).setMinWidth(30);
+       tcm.getColumn(3).setMaxWidth(30);
+        
+       JScrollPane scrollPane = new JScrollPane(table);
+        
+        //table.setBounds(20, 100, 200, 100);
+       
+        scrollPane.setBounds(posx, posy, width, height);
+        
+        table.setBorder(BorderFactory.createLineBorder(Color.black));
+        
+        jpanel.add(scrollPane, BorderLayout.CENTER);
+        jpanel.repaint();
+        jpanel.validate();
+
+  
+    }
+     
+     
+     public void create_jtable_metric_principal(JTable table,JPanel jpanel , Object rowData[][], int posx, int posy, int width,int height)
+     {
+            
+        TableModel model = new Table_model_metrics(rowData);
+        
+        table.setModel(model);
+       
+        //table.setPreferredScrollableViewportSize(table.getPreferredSize());
+        //JScrollPane scrollPane = new JScrollPane(table);
+        //jPanel13.add(scrollPane);
+        
+       TableColumnModel tcm = table.getColumnModel();
+            
+       tcm.getColumn(0).setPreferredWidth(400);
+       tcm.getColumn(1).setPreferredWidth(90);
+       tcm.getColumn(2).setPreferredWidth(30);
+       tcm.getColumn(2).setMaxWidth(30);
+       tcm.getColumn(2).setMinWidth(30);
+        
+       JScrollPane scrollPane = new JScrollPane(table);
+        
+        //table.setBounds(20, 100, 200, 100);
+       
+        scrollPane.setBounds(posx, posy, width, height);
+        
+        table.setBorder(BorderFactory.createLineBorder(Color.black));
+        
+        jpanel.add(scrollPane, BorderLayout.CENTER);
+        jpanel.repaint();
+        jpanel.validate();
+
+  
+    }
     
     
      
@@ -6000,7 +6690,7 @@ private void Inicializa_config()
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane TabPrincipal;
     private javax.swing.JButton buttonAddMultipleDatasets;
-    public javax.swing.JButton buttonChooseFile;
+    private javax.swing.JButton buttonChooseFile;
     private javax.swing.JButton buttonChooseSuppliedTest;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
@@ -6012,6 +6702,7 @@ private void Inicializa_config()
     private javax.swing.JButton buttonShowHeatmapLeft;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton6;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPopupMenu jPopupMenu1;
@@ -6031,9 +6722,6 @@ private void Inicializa_config()
     private javax.swing.JLabel labelCV;
     private javax.swing.JLabel labelCardinality;
     private javax.swing.JLabel labelCardinalityValue;
-    private javax.swing.JLabel labelChiCoefficients;
-    private javax.swing.JLabel labelChiCoefficients1;
-    private javax.swing.JLabel labelChiThreshold;
     private javax.swing.JLabel labelDensity;
     private javax.swing.JLabel labelDensityValue;
     private javax.swing.JLabel labelDistinct;
@@ -6077,7 +6765,6 @@ private void Inicializa_config()
     private javax.swing.JPanel panelImbalance;
     private javax.swing.JPanel panelImbalanceDataMetrics;
     private javax.swing.JPanel panelImbalanceLeft;
-    private javax.swing.JPanel panelLabelFrequency;
     private javax.swing.JPanel panelLabelsIRperLabelInterClass;
     private javax.swing.JPanel panelLabelsIRperLabelIntraClass;
     private javax.swing.JPanel panelLabelsPerExample;
