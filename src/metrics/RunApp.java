@@ -21,6 +21,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -206,8 +207,11 @@ public class RunApp extends javax.swing.JFrame {
      Object[] column;
      
      //variables TRAIN-TEST
-     boolean choose_test=false, holdout_ramdon=false, holdout_stratified=false, cv_ramdon=false, cv_stratified =false;
-    JButton button_calculate2_train,button_save_train;
+     boolean  holdout_random=false, holdout_iterative_stratified=false, 
+             cv_ramdon=false, cv_iterative_stratified =false,
+             holdout_LP_stratified=false, cv_LP_stratified=false,
+             feature_selection_1=false, feature_selection_2=false;
+    //JButton button_calculate2_train,button_save_train;
     
     //VARIABLES BOX DIAGRAM
     JRadioButton jRadioButton8;
@@ -337,15 +341,20 @@ private void Inicializa_config()
         
      //radiobutton to group
       buttonGroup1.add(radioRandomHoldout);
-      buttonGroup1.add(radioSuppliedTest);
-      buttonGroup1.add(radioStratifiedHoldout);
+      //buttonGroup1.add(radioSuppliedTest);
+      buttonGroup1.add(radioIterativeStratifiedHoldout);
+      buttonGroup1.add(radioLPStratifiedHoldout);
       buttonGroup1.add(radioRandomCV);
-      buttonGroup1.add(radioStratifiedCV);
+      buttonGroup1.add(radioIterativeStratifiedCV);
+      buttonGroup1.add(radioLPStratifiedCV);
+      buttonGroup1.add(radioBRFS);
+      buttonGroup1.add(radioRandomFS);
+      //buttonGroup1.add(radioFS2);
       
       radioRandomHoldout.setSelected(true);
       
       textRandomHoldout.setEnabled(true);
-      buttonChooseSuppliedTest.setEnabled(false);
+      //buttonChooseSuppliedTest.setEnabled(false);
       
      // jTable1.setVisible(true);        
        
@@ -365,14 +374,14 @@ private void Inicializa_config()
       
       create_jtable_metrics_jpanel1(jTable9,panelImbalanceDataMetrics,button_all_3,button_none_3,button_invert_3,button_calculate_3,button_save3,30,50,500,200,"imbalanced"); //imbalanced class
       
-      create_jtable_metrics_jpanel1_principal(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save,30,190,580,320,"database"); //tab Database //35,155,500,355
+      create_jtable_metrics_jpanel1_principal(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save,30,190,780,280,"database"); //tab Database //35,155,500,355
       create_jtable_metrics_jpanel14(jTable8,panelMultipleDatasets,button_all_2,button_none_2,button_invert_2,button_calculate_2,button_save2,290,35,565,400); //
       
-      create_jtable_metrics_jpanel2();
+      //create_jtable_metrics_jpanel2();
       
-      jButton6.setEnabled(false);
-      button_calculate2_train.setEnabled(false);
-      button_save_train.setEnabled(false);
+      jButtonSaveDatasets.setEnabled(false);
+      //button_calculate2_train.setEnabled(false);
+      //button_save_train.setEnabled(false);
             
       //CONFIG JTABLE FI AND CHI CO-OCURRENCES VALUES
       Inicializa_jtable_fi_chi();
@@ -406,7 +415,7 @@ private void Inicializa_config()
       //BOTON EXPORTAR PESTAÑA DATASET
       
         
-      create_button_export(jTable2,panelDataset,export1,20,285); //375
+      //create_button_export(jTable2,panelDataset,export1,20,285); //375
       export2 = create_button_export_jtable4(tableImbalance,panelImbalanceLeft,export2,80,455);
      
       
@@ -430,10 +439,10 @@ private void Inicializa_config()
       
       //jradio por defecto "PESTAÑA TRAIN TEST"
       textRandomHoldout.setEnabled(true);
-        textStratifiedHoldout.setEnabled(false);
-        buttonChooseSuppliedTest.setEnabled(false);
+        textIterativeStratifiedHoldout.setEnabled(false);
+        //buttonChooseSuppliedTest.setEnabled(false);
         textRandomCV.setEnabled(false);
-        textStratifiedCV.setEnabled(false);
+        textIterativeStratifiedCV.setEnabled(false);
 }
     //"TEST" TAB CONFIG
     private void create_jtable_metrics_jpanel2()
@@ -441,25 +450,25 @@ private void Inicializa_config()
      
      //COMMUN METRICS TRAIN/TEST
      JLabel label1 = new JLabel("Common metrics for train/test");
-     panelTrainTest.add(label1);
+     panelPreprocess.add(label1);
      label1.setBounds(300, 20, 250, 20);
      label1.setFont(new Font("Arial", Font.BOLD, 12));
          
      
-     create_jtable_metric_principal(jTable5, panelTrainTest, util.Get_row_data_commun_data(), 295, 40, 610, 175);
+     //create_jtable_metric_principal(jTable5, panelTrainTest, util.Get_row_data_commun_data(), 295, 40, 610, 175);
      
      
    
           
      // METRICS TEST
      JLabel label3 = new JLabel("NOT common metrics for train/test set");
-     panelTrainTest.add(label3);
+     panelPreprocess.add(label3);
      label3.setBounds(300, 220, 250, 20);
      label3.setFont(new Font("Arial", Font.BOLD, 12));
      
      
      //Not Common train_test
-     create_jtable_metric_train_test(jTable7, panelTrainTest, util.Get_row_data_test_data(), 295, 240, 625, 270);
+     //create_jtable_metric_train_test(jTable7, panelTrainTest, util.Get_row_data_test_data(), 295, 240, 625, 270);
      
      
      //button ALL
@@ -471,7 +480,7 @@ private void Inicializa_config()
                 button_allActionPerformed2(evt,jTable5,jTable6,jTable7 );
                             }
         });
-      panelTrainTest.add(button_all2);
+      panelPreprocess.add(button_all2);
       
       
      //button NONE
@@ -483,7 +492,7 @@ private void Inicializa_config()
                 button_noneActionPerformed2(evt,jTable5,jTable6,jTable7);
                             }
         });
-      panelTrainTest.add(button_none2);
+      panelPreprocess.add(button_none2);
       
       //button INVERT
      JButton button_invert2 = new JButton("Invert");
@@ -494,25 +503,25 @@ private void Inicializa_config()
                 button_invertActionPerformed2(evt,jTable5,jTable6,jTable7);
                             }
         });
-      panelTrainTest.add(button_invert2);
+      panelPreprocess.add(button_invert2);
       
       
          //button CALCULATE
-      button_calculate2_train = new JButton("Calculate");
-      button_calculate2_train.setBounds(720, 515, 90, 20);
+      //button_calculate2_train = new JButton("Calculate");
+      //button_calculate2_train.setBounds(720, 515, 90, 20);
             
-      button_calculate2_train.addActionListener(new java.awt.event.ActionListener() {
+      /*button_calculate2_train.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 button_calculateActionPerformed1_general(evt,jTable5,jTable6,jTable7);
                             }
-        });
-      panelTrainTest.add(button_calculate2_train);
+        });*/
+      //panelTrainTest.add(button_calculate2_train);
      
                //button SAVE
-     button_save_train = new JButton("Save");
-      button_save_train.setBounds(820, 515, 80, 20);
+    // button_save_train = new JButton("Save");
+     // button_save_train.setBounds(820, 515, 80, 20);
             
-      button_save_train.addActionListener(new java.awt.event.ActionListener() {
+      /*button_save_train.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     button_saveActionPerformed1(evt,jTable5,jTable6,jTable7);
@@ -524,7 +533,7 @@ private void Inicializa_config()
                             }
         });
       panelTrainTest.add(button_save_train);
-     
+     */
         
     }
 
@@ -833,7 +842,7 @@ private void Inicializa_config()
       
          //button CALCULATE
       button_calculate = new JButton("Calculate");
-      button_calculate.setBounds(posx+400, posy+heigh+5, 90, 20);
+      button_calculate.setBounds(posx+595, posy+heigh+5, 90, 25);
             
       button_calculate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -845,7 +854,7 @@ private void Inicializa_config()
       
        //button SAVE
       button_save = new JButton("Save");
-      button_save.setBounds(posx+500, posy+heigh+5, 80, 20);
+      button_save.setBounds(posx+695, posy+heigh+5, 80, 25);
             
       button_save.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -982,31 +991,43 @@ private void Inicializa_config()
         labelDiversityValue = new javax.swing.JLabel();
         labelLxIxF = new javax.swing.JLabel();
         labelLxIxFValue = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        panelTrainTest = new javax.swing.JPanel();
+        panelPreprocess = new javax.swing.JPanel();
         panelTestOption = new javax.swing.JPanel();
         radioRandomHoldout = new javax.swing.JRadioButton();
-        radioSuppliedTest = new javax.swing.JRadioButton();
-        buttonChooseSuppliedTest = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        labelPercStratified = new javax.swing.JLabel();
-        radioStratifiedHoldout = new javax.swing.JRadioButton();
+        labelPercIterativeStratified = new javax.swing.JLabel();
+        radioIterativeStratifiedHoldout = new javax.swing.JRadioButton();
         textRandomHoldout = new javax.swing.JTextField();
-        jSeparator1 = new javax.swing.JSeparator();
         labelHoldout = new javax.swing.JLabel();
-        jSeparator2 = new javax.swing.JSeparator();
         labelCV = new javax.swing.JLabel();
         radioRandomCV = new javax.swing.JRadioButton();
-        radioStratifiedCV = new javax.swing.JRadioButton();
-        textStratifiedCV = new javax.swing.JTextField();
-        jSeparator3 = new javax.swing.JSeparator();
+        radioIterativeStratifiedCV = new javax.swing.JRadioButton();
+        textIterativeStratifiedCV = new javax.swing.JTextField();
         labelFoldsRandom = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
         textRandomCV = new javax.swing.JTextField();
-        labelFoldsStratified = new javax.swing.JLabel();
+        labelFoldsIterativeStratified = new javax.swing.JLabel();
         labelPercRandom = new javax.swing.JLabel();
-        textStratifiedHoldout = new javax.swing.JTextField();
+        textIterativeStratifiedHoldout = new javax.swing.JTextField();
+        radioLPStratifiedHoldout = new javax.swing.JRadioButton();
+        textLPStratifiedHoldout = new javax.swing.JTextField();
+        labelPercLPStratified = new javax.swing.JLabel();
+        radioLPStratifiedCV = new javax.swing.JRadioButton();
+        textLPStratifiedCV = new javax.swing.JTextField();
+        labelFoldsLPStratified = new javax.swing.JLabel();
+        jButtonStartPreprocess = new javax.swing.JButton();
+        jButtonSaveDatasets = new javax.swing.JButton();
+        panelTestOption1 = new javax.swing.JPanel();
+        radioBRFS = new javax.swing.JRadioButton();
+        textBRFS = new javax.swing.JTextField();
+        labelBRFS = new javax.swing.JLabel();
+        labelBRFS_Comb = new javax.swing.JLabel();
+        jComboBox_BRFS_Comb = new javax.swing.JComboBox();
+        labelBRFS_Norm = new javax.swing.JLabel();
+        jComboBox_BRFS_Norm = new javax.swing.JComboBox();
+        labelBRFS_Out = new javax.swing.JLabel();
+        jComboBox_BRFS_Out = new javax.swing.JComboBox();
+        radioRandomFS = new javax.swing.JRadioButton();
+        textRandomFS = new javax.swing.JTextField();
+        labelRandomFS = new javax.swing.JLabel();
         panelImbalance = new javax.swing.JPanel();
         tabsImbalance = new javax.swing.JTabbedPane();
         panelExamplesPerLabel = new javax.swing.JPanel();
@@ -1082,6 +1103,7 @@ private void Inicializa_config()
         });
 
         panelCurrentDataset.setBorder(javax.swing.BorderFactory.createTitledBorder("Current dataset"));
+        panelCurrentDataset.setPreferredSize(new java.awt.Dimension(845, 134));
 
         labelRelation.setText("Relation:");
         labelRelation.setName(""); // NOI18N
@@ -1184,7 +1206,7 @@ private void Inicializa_config()
                         .addComponent(labelLxIxF)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelLxIxFValue)))
-                .addContainerGap(165, Short.MAX_VALUE))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
         panelCurrentDatasetLayout.setVerticalGroup(
             panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1218,16 +1240,6 @@ private void Inicializa_config()
                     .addComponent(labelLxIxFValue, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Label", "# Examples", "Frequency"
-            }
-        ));
-        jScrollPane3.setViewportView(jTable2);
-
         javax.swing.GroupLayout panelDatasetLayout = new javax.swing.GroupLayout(panelDataset);
         panelDataset.setLayout(panelDatasetLayout);
         panelDatasetLayout.setHorizontalGroup(
@@ -1235,16 +1247,12 @@ private void Inicializa_config()
             .addGroup(panelDatasetLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addGroup(panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelCurrentDataset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelCurrentDataset, javax.swing.GroupLayout.PREFERRED_SIZE, 795, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panelDatasetLayout.createSequentialGroup()
-                        .addComponent(textChooseFile)
+                        .addComponent(textChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 665, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(buttonChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDatasetLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(26, 26, 26))
+                        .addComponent(buttonChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         panelDatasetLayout.setVerticalGroup(
             panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1255,49 +1263,26 @@ private void Inicializa_config()
                     .addComponent(textChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelCurrentDataset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(330, Short.MAX_VALUE))
         );
 
-        TabPrincipal.addTab("Dataset", panelDataset);
+        TabPrincipal.addTab("Summary", panelDataset);
 
-        panelTestOption.setBorder(javax.swing.BorderFactory.createTitledBorder("Test option"));
+        panelTestOption.setBorder(javax.swing.BorderFactory.createTitledBorder("Splitting"));
 
-        radioRandomHoldout.setText("Random  holdout");
+        radioRandomHoldout.setText("Random holdout");
         radioRandomHoldout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 radioRandomHoldoutActionPerformed(evt);
             }
         });
 
-        radioSuppliedTest.setText("Supplied test set");
-        radioSuppliedTest.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radioSuppliedTestActionPerformed(evt);
-            }
-        });
+        labelPercIterativeStratified.setText("%");
 
-        buttonChooseSuppliedTest.setText("choose");
-        buttonChooseSuppliedTest.addActionListener(new java.awt.event.ActionListener() {
+        radioIterativeStratifiedHoldout.setText("Iterative stratified holdout ");
+        radioIterativeStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonChooseSuppliedTestActionPerformed(evt);
-            }
-        });
-
-        jButton3.setText("Start");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        labelPercStratified.setText("%");
-
-        radioStratifiedHoldout.setText("Stratified holdout ");
-        radioStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radioStratifiedHoldoutActionPerformed(evt);
+                radioIterativeStratifiedHoldoutActionPerformed(evt);
             }
         });
 
@@ -1313,8 +1298,10 @@ private void Inicializa_config()
             }
         });
 
+        labelHoldout.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         labelHoldout.setText("Holdout");
 
+        labelCV.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         labelCV.setText("Cross validation");
 
         radioRandomCV.setText("Random CV");
@@ -1324,33 +1311,26 @@ private void Inicializa_config()
             }
         });
 
-        radioStratifiedCV.setText("Stratified CV");
-        radioStratifiedCV.addActionListener(new java.awt.event.ActionListener() {
+        radioIterativeStratifiedCV.setText("Iterative stratified CV");
+        radioIterativeStratifiedCV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radioStratifiedCVActionPerformed(evt);
+                radioIterativeStratifiedCVActionPerformed(evt);
             }
         });
 
-        textStratifiedCV.setText("5");
-        textStratifiedCV.addActionListener(new java.awt.event.ActionListener() {
+        textIterativeStratifiedCV.setText("5");
+        textIterativeStratifiedCV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textStratifiedCVActionPerformed(evt);
+                textIterativeStratifiedCVActionPerformed(evt);
             }
         });
-        textStratifiedCV.addKeyListener(new java.awt.event.KeyAdapter() {
+        textIterativeStratifiedCV.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                textStratifiedCVKeyTyped(evt);
+                textIterativeStratifiedCVKeyTyped(evt);
             }
         });
 
         labelFoldsRandom.setText("Folds");
-
-        jButton6.setText("Save datasets");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
-            }
-        });
 
         textRandomCV.setText("5");
         textRandomCV.addActionListener(new java.awt.event.ActionListener() {
@@ -1364,138 +1344,339 @@ private void Inicializa_config()
             }
         });
 
-        labelFoldsStratified.setText("Folds");
+        labelFoldsIterativeStratified.setText("Folds");
 
         labelPercRandom.setText("%");
 
-        textStratifiedHoldout.setText("70");
-        textStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
+        textIterativeStratifiedHoldout.setText("70");
+        textIterativeStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textStratifiedHoldoutActionPerformed(evt);
+                textIterativeStratifiedHoldoutActionPerformed(evt);
             }
         });
-        textStratifiedHoldout.addKeyListener(new java.awt.event.KeyAdapter() {
+        textIterativeStratifiedHoldout.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                textStratifiedHoldoutKeyTyped(evt);
+                textIterativeStratifiedHoldoutKeyTyped(evt);
             }
         });
+
+        radioLPStratifiedHoldout.setText("LabelPowerset stratified holdout ");
+        radioLPStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioLPStratifiedHoldoutActionPerformed(evt);
+            }
+        });
+
+        textLPStratifiedHoldout.setText("70");
+        textLPStratifiedHoldout.setEnabled(false);
+        textLPStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textLPStratifiedHoldoutActionPerformed(evt);
+            }
+        });
+        textLPStratifiedHoldout.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                textLPStratifiedHoldoutKeyTyped(evt);
+            }
+        });
+
+        labelPercLPStratified.setText("%");
+
+        radioLPStratifiedCV.setText("LabelPowerset stratified CV");
+        radioLPStratifiedCV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioLPStratifiedCVActionPerformed(evt);
+            }
+        });
+
+        textLPStratifiedCV.setText("5");
+        textLPStratifiedCV.setEnabled(false);
+        textLPStratifiedCV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textLPStratifiedCVActionPerformed(evt);
+            }
+        });
+        textLPStratifiedCV.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                textLPStratifiedCVKeyTyped(evt);
+            }
+        });
+
+        labelFoldsLPStratified.setText("Folds");
 
         javax.swing.GroupLayout panelTestOptionLayout = new javax.swing.GroupLayout(panelTestOption);
         panelTestOption.setLayout(panelTestOptionLayout);
         panelTestOptionLayout.setHorizontalGroup(
             panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator3)
-            .addComponent(jSeparator2)
-            .addComponent(jSeparator1)
             .addGroup(panelTestOptionLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelTestOptionLayout.createSequentialGroup()
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton6)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(panelTestOptionLayout.createSequentialGroup()
-                        .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelCV)
-                            .addGroup(panelTestOptionLayout.createSequentialGroup()
-                                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(labelHoldout)
-                                    .addGroup(panelTestOptionLayout.createSequentialGroup()
-                                        .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(radioRandomHoldout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(radioStratifiedHoldout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
-                                        .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(textStratifiedHoldout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(textRandomHoldout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(labelPercRandom)
-                                    .addComponent(labelPercStratified)))
-                            .addGroup(panelTestOptionLayout.createSequentialGroup()
-                                .addComponent(radioSuppliedTest)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(buttonChooseSuppliedTest, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(labelHoldout)
                     .addGroup(panelTestOptionLayout.createSequentialGroup()
                         .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(radioRandomCV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(radioStratifiedCV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(radioRandomHoldout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(radioIterativeStratifiedHoldout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(radioLPStratifiedHoldout, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(panelTestOptionLayout.createSequentialGroup()
+                                    .addComponent(textLPStratifiedHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(labelPercLPStratified))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTestOptionLayout.createSequentialGroup()
+                                    .addComponent(textIterativeStratifiedHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(labelPercIterativeStratified)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTestOptionLayout.createSequentialGroup()
-                                .addComponent(textRandomCV, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(labelFoldsRandom))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTestOptionLayout.createSequentialGroup()
-                                .addComponent(textStratifiedCV, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(labelFoldsStratified)))
-                        .addGap(20, 20, 20))))
+                                .addComponent(textRandomHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(11, 11, 11)
+                                .addComponent(labelPercRandom)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelCV)
+                    .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(radioLPStratifiedCV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(radioIterativeStratifiedCV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(radioRandomCV, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelTestOptionLayout.createSequentialGroup()
+                            .addComponent(textRandomCV, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(labelFoldsRandom))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTestOptionLayout.createSequentialGroup()
+                            .addComponent(textIterativeStratifiedCV, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(labelFoldsIterativeStratified)))
+                    .addGroup(panelTestOptionLayout.createSequentialGroup()
+                        .addComponent(textLPStratifiedCV, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(labelFoldsLPStratified)))
+                .addGap(103, 103, 103))
         );
         panelTestOptionLayout.setVerticalGroup(
             panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTestOptionLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(radioSuppliedTest)
-                    .addComponent(buttonChooseSuppliedTest))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(labelHoldout)
+                    .addComponent(labelHoldout)
+                    .addComponent(labelCV))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radioRandomHoldout)
                     .addComponent(textRandomHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelPercRandom))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(radioStratifiedHoldout)
-                    .addComponent(labelPercStratified, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(textStratifiedHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(labelCV)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelPercRandom)
                     .addComponent(radioRandomCV)
                     .addComponent(labelFoldsRandom)
                     .addComponent(textRandomCV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(radioStratifiedCV)
-                    .addComponent(textStratifiedCV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelFoldsStratified))
-                .addGap(8, 8, 8)
-                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(radioIterativeStratifiedHoldout)
+                    .addComponent(textIterativeStratifiedHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelPercIterativeStratified, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(radioIterativeStratifiedCV)
+                    .addComponent(textIterativeStratifiedCV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelFoldsIterativeStratified))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton6)
-                    .addComponent(jButton3))
+                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(radioLPStratifiedHoldout)
+                    .addComponent(radioLPStratifiedCV)
+                    .addComponent(textLPStratifiedCV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelFoldsLPStratified)
+                    .addComponent(textLPStratifiedHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelPercLPStratified, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout panelTrainTestLayout = new javax.swing.GroupLayout(panelTrainTest);
-        panelTrainTest.setLayout(panelTrainTestLayout);
-        panelTrainTestLayout.setHorizontalGroup(
-            panelTrainTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTrainTestLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(panelTestOption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(698, Short.MAX_VALUE))
+        jButtonStartPreprocess.setText("Start");
+        jButtonStartPreprocess.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonStartPreprocessActionPerformed(evt);
+            }
+        });
+
+        jButtonSaveDatasets.setText("Save datasets");
+        jButtonSaveDatasets.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSaveDatasetsActionPerformed(evt);
+            }
+        });
+
+        panelTestOption1.setBorder(javax.swing.BorderFactory.createTitledBorder("Feature Selection"));
+
+        radioBRFS.setText("Binary Relevance attribute selection");
+        radioBRFS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioBRFSActionPerformed(evt);
+            }
+        });
+
+        textBRFS.setText("100");
+        textBRFS.setEnabled(false);
+        textBRFS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textBRFSActionPerformed(evt);
+            }
+        });
+        textBRFS.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                textBRFSKeyTyped(evt);
+            }
+        });
+
+        labelBRFS.setText("features");
+
+        labelBRFS_Comb.setText("Combination");
+        labelBRFS_Comb.setEnabled(false);
+
+        jComboBox_BRFS_Comb.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "max", "min", "avg" }));
+        jComboBox_BRFS_Comb.setEnabled(false);
+        jComboBox_BRFS_Comb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox_BRFS_CombActionPerformed(evt);
+            }
+        });
+
+        labelBRFS_Norm.setText("Normalization");
+        labelBRFS_Norm.setEnabled(false);
+
+        jComboBox_BRFS_Norm.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "dm", "dl", "none" }));
+        jComboBox_BRFS_Norm.setEnabled(false);
+        jComboBox_BRFS_Norm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox_BRFS_NormActionPerformed(evt);
+            }
+        });
+
+        labelBRFS_Out.setText("Output");
+        labelBRFS_Out.setEnabled(false);
+
+        jComboBox_BRFS_Out.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "eval", "rank" }));
+        jComboBox_BRFS_Out.setEnabled(false);
+        jComboBox_BRFS_Out.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox_BRFS_OutActionPerformed(evt);
+            }
+        });
+
+        radioRandomFS.setText("Random attribute selection");
+        radioRandomFS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioRandomFSActionPerformed(evt);
+            }
+        });
+
+        textRandomFS.setText("100");
+        textRandomFS.setEnabled(false);
+        textRandomFS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textRandomFSActionPerformed(evt);
+            }
+        });
+        textRandomFS.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                textRandomFSKeyTyped(evt);
+            }
+        });
+
+        labelRandomFS.setText("features");
+
+        javax.swing.GroupLayout panelTestOption1Layout = new javax.swing.GroupLayout(panelTestOption1);
+        panelTestOption1.setLayout(panelTestOption1Layout);
+        panelTestOption1Layout.setHorizontalGroup(
+            panelTestOption1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTestOption1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelTestOption1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelTestOption1Layout.createSequentialGroup()
+                        .addComponent(radioRandomFS)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(textRandomFS, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(labelRandomFS))
+                    .addGroup(panelTestOption1Layout.createSequentialGroup()
+                        .addGroup(panelTestOption1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(panelTestOption1Layout.createSequentialGroup()
+                                .addComponent(labelBRFS_Comb)
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboBox_BRFS_Comb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelTestOption1Layout.createSequentialGroup()
+                                .addComponent(radioBRFS)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(textBRFS, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelTestOption1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelTestOption1Layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(labelBRFS_Norm)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jComboBox_BRFS_Norm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(labelBRFS_Out)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jComboBox_BRFS_Out, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(labelBRFS))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        panelTrainTestLayout.setVerticalGroup(
-            panelTrainTestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTrainTestLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(panelTestOption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(139, Short.MAX_VALUE))
+        panelTestOption1Layout.setVerticalGroup(
+            panelTestOption1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTestOption1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelTestOption1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(radioBRFS)
+                    .addComponent(textBRFS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelBRFS))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelTestOption1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelBRFS_Comb)
+                    .addComponent(jComboBox_BRFS_Comb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelBRFS_Norm)
+                    .addComponent(jComboBox_BRFS_Norm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelBRFS_Out)
+                    .addComponent(jComboBox_BRFS_Out, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelTestOption1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(radioRandomFS)
+                    .addComponent(textRandomFS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelRandomFS))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        TabPrincipal.addTab("Train/test dataset", panelTrainTest);
+        javax.swing.GroupLayout panelPreprocessLayout = new javax.swing.GroupLayout(panelPreprocess);
+        panelPreprocess.setLayout(panelPreprocessLayout);
+        panelPreprocessLayout.setHorizontalGroup(
+            panelPreprocessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPreprocessLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(panelPreprocessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelPreprocessLayout.createSequentialGroup()
+                        .addComponent(jButtonStartPreprocess, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonSaveDatasets))
+                    .addGroup(panelPreprocessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(panelTestOption, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(panelTestOption1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
+        panelPreprocessLayout.setVerticalGroup(
+            panelPreprocessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPreprocessLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(panelTestOption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(panelTestOption1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(panelPreprocessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonSaveDatasets)
+                    .addComponent(jButtonStartPreprocess))
+                .addContainerGap(141, Short.MAX_VALUE))
+        );
+
+        panelTestOption.getAccessibleContext().setAccessibleName("");
+
+        TabPrincipal.addTab("Preprocess", panelPreprocess);
 
         tabsImbalance.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -1762,7 +1943,7 @@ private void Inicializa_config()
 
         panelImbalanceLeft.getAccessibleContext().setAccessibleName("pepe");
 
-        TabPrincipal.addTab("Imbalance data", panelImbalance);
+        TabPrincipal.addTab("Labels information", panelImbalance);
 
         tabsDependences.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1789,7 +1970,7 @@ private void Inicializa_config()
         panelChiFiLayout.setVerticalGroup(
             panelChiFiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelChiFiLayout.createSequentialGroup()
-                .addContainerGap(474, Short.MAX_VALUE)
+                .addContainerGap(444, Short.MAX_VALUE)
                 .addComponent(jLabel30)
                 .addContainerGap())
         );
@@ -1884,7 +2065,7 @@ private void Inicializa_config()
                 .addGroup(panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelCoOcurrenceLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panelCoOcurrenceRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(91, Short.MAX_VALUE))
+                .addContainerGap(61, Short.MAX_VALUE))
         );
 
         tabsDependences.addTab("Co-occurrence graph", panelCoOcurrence);
@@ -1897,7 +2078,7 @@ private void Inicializa_config()
         );
         panelCoOcurrenceValuesLayout.setVerticalGroup(
             panelCoOcurrenceValuesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 504, Short.MAX_VALUE)
+            .addGap(0, 474, Short.MAX_VALUE)
         );
 
         tabsDependences.addTab("Co-occurrence values", panelCoOcurrenceValues);
@@ -1979,7 +2160,7 @@ private void Inicializa_config()
                 .addGroup(panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelHeatmapLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelHeatmapGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(91, Short.MAX_VALUE))
+                .addContainerGap(61, Short.MAX_VALUE))
         );
 
         tabsDependences.addTab(" Heatmap graph", panelHeatmapGraph);
@@ -1992,7 +2173,7 @@ private void Inicializa_config()
         );
         panelHeatmapValuesLayout.setVerticalGroup(
             panelHeatmapValuesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 504, Short.MAX_VALUE)
+            .addGap(0, 474, Short.MAX_VALUE)
         );
 
         tabsDependences.addTab("Heatmap values", panelHeatmapValues);
@@ -2063,14 +2244,14 @@ private void Inicializa_config()
             .addGroup(panelMultipleDatasetsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panelMultipleDatasetsLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(685, Short.MAX_VALUE))
+                .addContainerGap(585, Short.MAX_VALUE))
         );
         panelMultipleDatasetsLayout.setVerticalGroup(
             panelMultipleDatasetsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelMultipleDatasetsLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(panelMultipleDatasetsLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(186, Short.MAX_VALUE))
+                .addContainerGap(156, Short.MAX_VALUE))
         );
 
         TabPrincipal.addTab("Multiple datasets", panelMultipleDatasets);
@@ -2080,15 +2261,16 @@ private void Inicializa_config()
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(TabPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 950, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(TabPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 850, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(TabPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4))
+                .addComponent(TabPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -2594,364 +2776,6 @@ private void Inicializa_config()
 
     }//GEN-LAST:event_tabsImbalanceStateChanged
 
-//FILTRA LOS NUMEROS SOLAMENTE
-    private void textRandomHoldoutKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textRandomHoldoutKeyTyped
-        // TODO add your handling code here:
-
-        char c = evt.getKeyChar();
-        if(!Character.isDigit(c))
-        {
-            getToolkit().beep();
-            evt.consume();
-        }
-    }//GEN-LAST:event_textRandomHoldoutKeyTyped
-
-    private void textRandomHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textRandomHoldoutActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textRandomHoldoutActionPerformed
-
-    //CUANDO ESTA ACTIVO "Stratification split" EN LA PESTAÑA TEST
-    private void radioStratifiedHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioStratifiedHoldoutActionPerformed
-        // TODO add your handling code here:
-        textStratifiedHoldout.setEnabled(true);
-        textRandomHoldout.setEnabled(false);
-        buttonChooseSuppliedTest.setEnabled(false);
-        textRandomCV.setEnabled(false);
-        textStratifiedCV.setEnabled(false);
-        
-        jButton6.setEnabled(false);
-        button_calculate2_train.setEnabled(false);
-        button_save_train.setEnabled(false);
-        
-    }//GEN-LAST:event_radioStratifiedHoldoutActionPerformed
-
-    //FILTRA LOS NUMEROS SOLAMENTE
-    private void textStratifiedHoldoutKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textStratifiedHoldoutKeyTyped
-        // TODO add your handling code here:
-        char c = evt.getKeyChar();
-        if(!Character.isDigit(c))
-        {
-            getToolkit().beep();
-            evt.consume();
-        }
-    }//GEN-LAST:event_textStratifiedHoldoutKeyTyped
-
-    private void textStratifiedHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textStratifiedHoldoutActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textStratifiedHoldoutActionPerformed
-
-    // COMIENZA A CALCULAR LAS METRICAS SEGUN LA OPCION DEL train/TEST (BOTON "start")
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-
-        list_dataset_train = new ArrayList();
-        list_dataset_test = new ArrayList();
-            
-        Instances train=null,test=null;
-        MultiLabelInstances train_ml=null,test_ml=null;
-        
-        
-        if(dataset == null){JOptionPane.showMessageDialog(null, "You must load a dataset", "alert", JOptionPane.ERROR_MESSAGE); return;}
-
-        if(radioSuppliedTest.isSelected()) // choose test
-        {
-            
-           if(filename_database_arff_test == null){
-                JOptionPane.showMessageDialog(null, "You must load a test Dataset", "AVISO", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            try
-            {
-                dataset_train = dataset.clone();
-                dataset_test = new MultiLabelInstances(filename_database_arff_test, filename_database_xml);
-
-                //calculte metric selected
-                choose_test=true;
-                holdout_ramdon =false;
-                holdout_stratified =false;
-                cv_ramdon =false;
-                cv_stratified =false;
-                
-                //button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7); //OPTION CHOOSE TEST
-            }
-
-            catch (InvalidDataFormatException ex) {
-                Logger.getLogger(CrossValidationExperiment.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            catch (Exception ex) {
-                JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.INFORMATION_MESSAGE);
-                Logger.getLogger(CrossValidationExperiment.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        else if(radioStratifiedHoldout.isSelected())
-        {
-            // holdout WITH STRATIFICATION
-
-            String split = textStratifiedHoldout.getText();
-            int percent_split = Integer.parseInt(split);
-
-            Stratification stratification;
-
-            //small ratio of labelsets over examples
-           
-            if(radio<=0.1)    stratification =new LabelPowersetStratification(); //el calculo del radio esta en el load_dataset
-            else   stratification =new IterativeStratification();
-
-            // int numFolds = size / numTrain;
-
-            MultiLabelInstances [] mldatasets= stratification.stratify(dataset.clone(), 100);
-
-            Instances data_train=new Instances(mldatasets[0].getDataSet());
-            Instances data_test=new Instances(mldatasets[mldatasets.length-1].getDataSet());
-
-            for(int i=1;i<mldatasets.length-1;i++)
-            {
-                if(i<percent_split)data_train.addAll(mldatasets[i].getDataSet());
-                else data_test.addAll(mldatasets[i].getDataSet());
-            }
-            try {
-
-                dataset_train = new MultiLabelInstances(data_train, mldatasets[0].getLabelsMetaData());
-                dataset_test = new MultiLabelInstances(data_test, mldatasets[0].getLabelsMetaData());
-
-                choose_test=false;
-                holdout_ramdon =false;
-                holdout_stratified =true;
-                cv_ramdon =false;
-                cv_stratified =false;
-              
-                //calculte metric selected
-               // button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7);// HOLDOUT WITH STRATIFICATION
-
-            }
-            catch (InvalidDataFormatException ex) {
-                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (Exception ex) {
-                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
-        else if(radioRandomHoldout.isSelected())
-        {
-            
-                    
-            // random holdout
-            String split = textRandomHoldout.getText();
-            double percent_split = Double.parseDouble(split);
-
-            //int num_instance = dataset.getNumInstances();
-
-            try{
-
-                Instances dataSet = dataset.getDataSet();
-
-                RemovePercentage rmvp = new RemovePercentage();
-                rmvp.setPercentage(percent_split);
-                rmvp.setInputFormat(dataSet);
-                Instances testDataSet = Filter.useFilter(dataSet, rmvp);
-                
-
-                rmvp = new RemovePercentage();
-                rmvp.setInvertSelection(true);
-                rmvp.setPercentage(percent_split);
-                rmvp.setInputFormat(dataSet);
-                Instances trainDataSet = Filter.useFilter(dataSet, rmvp);
-
-                dataset_train = new MultiLabelInstances(trainDataSet, dataset.getLabelsMetaData());
-                dataset_test = new MultiLabelInstances(testDataSet, dataset.getLabelsMetaData());
-
-                choose_test=false;
-                holdout_ramdon =true;
-                holdout_stratified =false;
-                cv_ramdon =false;
-                cv_stratified =false;
-                //calculte metric selected
-              
-                //button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7);// HOLDOUT percentage
-
-            }
-
-            catch (InvalidDataFormatException ex) {
-                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (Exception ex) {
-                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
-        // RAMDON CROSS VALIDATION
-          else if(radioRandomCV.isSelected())
-        {
-            
-           
-            String split = textRandomCV.getText();
-            
-            if(split.equals(""))
-            {
-                JOptionPane.showMessageDialog(null, "You must put a fold number", "alert", JOptionPane.ERROR_MESSAGE);
-                return;
-
-            }
-            
-            int folds = Integer.parseInt(split);
-            
-
-            
-            //int num_instance = dataset.getNumInstances();
-
-            try{
-                 MultiLabelInstances temp = dataset.clone();
-                 Instances dataset_temp = temp.getDataSet();
-                
-                 int seed = (int)(Math.random()*100)+100;
-                                                
-                 Random rand = new Random(seed);
-                                                   
-                 dataset_temp.randomize(rand);
-                   
-                         
-                 // aplica cross validation
-                  for (int n = 0; n < folds; n++) 
-                  {
-                        train = dataset_temp.trainCV(folds, n,rand);
-                        test = dataset_temp.testCV(folds, n);
-                        
-                        train_ml = new MultiLabelInstances(train, dataset.getLabelsMetaData());
-                        test_ml = new MultiLabelInstances(test, dataset.getLabelsMetaData());
-                        
-                        list_dataset_train.add(train_ml);
-                        list_dataset_test.add(test_ml);
-                  }
-                
-                                    
-                //System.out.println("numero generado "+seed);
-                
-                choose_test=false;
-                holdout_ramdon =false;
-                holdout_stratified =false;
-                cv_ramdon =true;
-                cv_stratified =false;
-               
-                //calculte metric selected
-               // button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7,list_dataset_train,list_dataset_test );// RAMDON CROSS VALIDATION
-
-            }
-
-             catch (Exception ex) {
-                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
-          // CV STRATIFIED
-          else if(radioStratifiedCV.isSelected())
-          {
-              
-            String split = textStratifiedCV.getText();
-            
-            if(split.equals(""))
-            {
-                JOptionPane.showMessageDialog(null, "You must put a fold number", "alert", JOptionPane.ERROR_MESSAGE);
-                return;
-
-            }
-            
-            int folds = Integer.parseInt(split);
-            
-              try
-              {
-                  Stratification stratification;                             
-                  
-                  if(radio<=0.1)    stratification =new LabelPowersetStratification();
-                  else   stratification =new IterativeStratification();
-                  
-                  MultiLabelInstances [] mldatasets= stratification.stratify(dataset.clone(), folds);
-                  
-                  MultiLabelInstances[] current;
-                  //train = new Instances(
-                  for (int n = 0; n < folds; n++) 
-                  {
-                      current = util.Get_dataset_train_test(n, mldatasets);
-                                                                  
-                        list_dataset_train.add(current[0]);
-                        list_dataset_test.add(current[1]);
-                  }
-                   
-                  
-                choose_test=false;
-                holdout_ramdon =false;
-                holdout_stratified =false;
-                cv_ramdon =false;
-                cv_stratified =true;
-               // return;
-                 //calculte metric selected
-                //button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7,list_dataset_train,list_dataset_test );  // CV STRATIFIED
-                  
-              }  
-              catch (Exception ex) {
-                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-            }
-              
-          }
-        
-           initializeTableMetricsCommon();
-           initializeTableMetricsTrainTest();
-           clearTable_metrics_traintest();
-           
-
-           jButton6.setEnabled(true);
-           button_calculate2_train.setEnabled(true);
-           button_save_train.setEnabled(false);
-           
-           JOptionPane.showMessageDialog(null, "Dataset is generated", "Successful", JOptionPane.INFORMATION_MESSAGE);
-           Toolkit.getDefaultToolkit().beep();
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    // "choose" ESCOGE EL TEST SET 
-    private void buttonChooseSuppliedTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonChooseSuppliedTestActionPerformed
-        // TODO add your handling code here:
-
-        // ESCOGER EL DATASET
-        JFileChooser jfile1 = new JFileChooser();
-        FileNameExtensionFilter fname = new FileNameExtensionFilter(".arff", "arff");
-        jfile1.setFileFilter(fname);
-        //int returnVal =
-        int result= jfile1.showOpenDialog(this);
-
-        if(result == JFileChooser.OPEN_DIALOG)
-        {
-            File f1 = jfile1.getSelectedFile();
-            filename_database_arff_test = f1.getAbsolutePath();
-        }
-    }//GEN-LAST:event_buttonChooseSuppliedTestActionPerformed
-
-    //OPTION "Supplied test set"
-    private void radioSuppliedTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioSuppliedTestActionPerformed
-        // TODO add your handling code here:
-        textRandomHoldout.setEnabled(false);
-        textStratifiedHoldout.setEnabled(false);
-        buttonChooseSuppliedTest.setEnabled(true);
-        textRandomCV.setEnabled(false);
-        textStratifiedCV.setEnabled(false);
-        
-        jButton6.setEnabled(false);
-        button_calculate2_train.setEnabled(false);
-        button_save_train.setEnabled(false);
-    }//GEN-LAST:event_radioSuppliedTestActionPerformed
-
-  //OPTION "Ramdon  split"  
-    private void radioRandomHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomHoldoutActionPerformed
-        // TODO add your handling code here:
-        textRandomHoldout.setEnabled(true);
-        textStratifiedHoldout.setEnabled(false);
-        buttonChooseSuppliedTest.setEnabled(false);
-        textRandomCV.setEnabled(false);
-        textStratifiedCV.setEnabled(false);
-
-        jButton6.setEnabled(false);
-        button_calculate2_train.setEnabled(false);
-        button_save_train.setEnabled(false);
-    }//GEN-LAST:event_radioRandomHoldoutActionPerformed
-
     private void initializeTableMetrics(){
         ArrayList<String> metricsList = util.Get_all_metrics();
         
@@ -2984,157 +2808,6 @@ private void Inicializa_config()
         }
     }
     
-    private void textRandomCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textRandomCVActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textRandomCVActionPerformed
-
-    private void textRandomCVKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textRandomCVKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textRandomCVKeyTyped
-
-    private void textStratifiedCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textStratifiedCVActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textStratifiedCVActionPerformed
-
-    private void textStratifiedCVKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textStratifiedCVKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textStratifiedCVKeyTyped
-
-    private void radioRandomCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomCVActionPerformed
-        // TODO add your handling code here:
-        textRandomHoldout.setEnabled(false);
-        textStratifiedHoldout.setEnabled(false);
-        buttonChooseSuppliedTest.setEnabled(false);
-        textRandomCV.setEnabled(true);
-        textStratifiedCV.setEnabled(false);
-        
-        jButton6.setEnabled(false);
-        button_calculate2_train.setEnabled(false);
-        button_save_train.setEnabled(false);
-        
-    }//GEN-LAST:event_radioRandomCVActionPerformed
-
-    private void radioStratifiedCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioStratifiedCVActionPerformed
-        // TODO add your handling code here:
-        
-        textRandomHoldout.setEnabled(false);
-        textStratifiedHoldout.setEnabled(false);
-        buttonChooseSuppliedTest.setEnabled(false);
-        textRandomCV.setEnabled(false);
-        textStratifiedCV.setEnabled(true);
-        
-        jButton6.setEnabled(false);
-        button_calculate2_train.setEnabled(false);
-        button_save_train.setEnabled(false);
-    }//GEN-LAST:event_radioStratifiedCVActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-        
-        if(dataset == null){JOptionPane.showMessageDialog(null, "You must load a dataset", "alert", JOptionPane.ERROR_MESSAGE); return;}
-        if((list_dataset_train.isEmpty() && list_dataset_test.isEmpty()) && (radioRandomCV.isSelected()|| radioStratifiedCV.isSelected() )){JOptionPane.showMessageDialog(null, "You must click Start before", "alert", JOptionPane.ERROR_MESSAGE); return;}//cross validation
-        if((dataset_train ==null && dataset_test==null) && (radioStratifiedHoldout.isSelected()|| radioRandomHoldout.isSelected() )){JOptionPane.showMessageDialog(null, "You must click Start before", "alert", JOptionPane.ERROR_MESSAGE); return;}// holdout
-
-        
-         // JFILECHOOSER SAVE
-         JFileChooser fc= new JFileChooser();
-        
-         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        String path_train, path_test,path_xml;
-        
-        int returnVal = fc.showSaveDialog(this);
-         
-        if (returnVal == JFileChooser.APPROVE_OPTION)
-        {
-               File file = fc.getSelectedFile();
-                FileFilter f1 = fc.getFileFilter();
-                
-                
-              if(fc.isDirectorySelectionEnabled())
-              {
-                  if(radioStratifiedHoldout.isSelected()|| radioRandomHoldout.isSelected()) //holdout
-                    {
-                      BufferedWriter bw_train = null;
-                      try {
-                          
-                          String name_dataset= dataset_name1.substring(0,dataset_name1.length()-5);
-                          
-                          path_train = file.getAbsolutePath()+"\\"+name_dataset+"-train.arff";
-                          path_test = file.getAbsolutePath()+"\\"+name_dataset+"-test.arff";
-                          path_xml = file.getAbsolutePath()+"\\"+name_dataset+".xml";
-
-                          bw_train = new BufferedWriter(new FileWriter(path_train));
-                          PrintWriter wr_train = new PrintWriter(bw_train);
-                          
-                          //System.out.println("longitud del train es "+dataset_train.getNumInstances());
-                          util.Save_dataset_in_the_file(wr_train, dataset_train);
-                          
-                          wr_train.close();
-                          bw_train.close();
-                          
-                          BufferedWriter bw_test = new BufferedWriter(new FileWriter(path_test));
-                          PrintWriter wr_test = new PrintWriter(bw_test);
-
-                         // System.out.println("longitud del test es "+dataset_test.getNumInstances());
-                          util.Save_dataset_in_the_file(wr_test, dataset_test);
-                          
-                          wr_test.close();
-                          bw_test.close();
-                          
-                          BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
-                          PrintWriter wr_xml = new PrintWriter(bw_xml);
-                            
-                          util.Save_xml_in_the_file(wr_xml,filename_database_xml_path);
-                          
-                          wr_xml.close();
-                          bw_xml.close();
-                          
-                         JOptionPane.showMessageDialog(null, "All Files are saved", "Successful", JOptionPane.INFORMATION_MESSAGE);
-                          
-                       } catch (IOException ex) {
-                          Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                      } 
-                                         
-                    }
-                  
-                  else //CROSS VALIDATION 
-                  {
-                      try{
-                          
-                        util.Save_dataset_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "train");
-                        util.Save_dataset_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "test");
-                        
-                          path_xml = file.getAbsolutePath()+"\\"+dataset_name1.substring(0,dataset_name1.length()-5)+".xml";
-                          
-                          BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
-                          PrintWriter wr_xml = new PrintWriter(bw_xml);
-                            
-                          util.Save_xml_in_the_file(wr_xml,filename_database_xml_path);
-                          
-                          wr_xml.close();
-                          bw_xml.close();
-                          
-                          JOptionPane.showMessageDialog(null, "All Files are saved", "Successful", JOptionPane.INFORMATION_MESSAGE);
-                          
-                        }
-                      catch(Exception e1){}
-                  
-                  }
-                  Toolkit.getDefaultToolkit().beep();
-              }
-              
-                
-        }
-        
-        
-        
-        
-        
-        
-        
-        
-    }//GEN-LAST:event_jButton6ActionPerformed
-
     private void panelCoOcurrenceMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelCoOcurrenceMouseReleased
         // TODO add your handling code here:
         
@@ -3512,6 +3185,9 @@ private void Inicializa_config()
                 filename_database_xml_path = util.Get_xml_string(filename_database_arff);
                 filename_database_xml = util.Get_file_name_xml(filename_database_xml_path);
             }
+            
+            System.out.println("Choosefilename_database_xml_path: " + filename_database_xml_path);
+            
             try {
                 MultiLabelInstances dataset_temp = new MultiLabelInstances(filename_database_arff, filename_database_xml);
                 //System.out.println("prueba xml "+filename_database_xml);
@@ -3545,6 +3221,920 @@ private void Inicializa_config()
             textChooseFile.setText(filename_database_arff);
         }
     }//GEN-LAST:event_buttonChooseFileActionPerformed
+
+    private void jButtonSaveDatasetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveDatasetsActionPerformed
+        // TODO add your handling code here:
+
+        if(dataset == null){
+            JOptionPane.showMessageDialog(null, "You must load a dataset", "alert", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+        if((list_dataset_train.isEmpty() && list_dataset_test.isEmpty()) && (radioRandomCV.isSelected() || radioIterativeStratifiedCV.isSelected() || radioLPStratifiedCV.isSelected())){
+            JOptionPane.showMessageDialog(null, "You must click Start before", "alert", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+        if((dataset_train ==null && dataset_test==null) && (radioIterativeStratifiedHoldout.isSelected()|| radioRandomHoldout.isSelected() || radioLPStratifiedHoldout.isSelected())){
+            JOptionPane.showMessageDialog(null, "You must click Start before", "alert", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+        if((false) && (radioBRFS.isSelected() || radioRandomFS.isSelected())){
+           JOptionPane.showMessageDialog(null, "You must click Start before", "alert", JOptionPane.ERROR_MESSAGE); 
+           return; 
+        }
+
+        // JFILECHOOSER SAVE
+        JFileChooser fc= new JFileChooser();
+
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        String path_train, path_test,path_xml;
+
+        int returnVal = fc.showSaveDialog(this);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+        {
+            File file = fc.getSelectedFile();
+            FileFilter f1 = fc.getFileFilter();
+
+            if(fc.isDirectorySelectionEnabled())
+            {
+                if(radioIterativeStratifiedHoldout.isSelected()|| radioRandomHoldout.isSelected() || radioLPStratifiedHoldout.isSelected()) //holdout
+                {
+                    BufferedWriter bw_train = null;
+                    try {
+
+                        String name_dataset= dataset_name1.substring(0,dataset_name1.length()-5);
+                        
+                        //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+                        //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+                        //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+
+                        path_train = file.getAbsolutePath()+"/"+name_dataset+"-train.arff";
+                        path_test = file.getAbsolutePath()+"/"+name_dataset+"-test.arff";
+                        path_xml = file.getAbsolutePath()+"/"+name_dataset+".xml";
+
+                        bw_train = new BufferedWriter(new FileWriter(path_train));
+                        PrintWriter wr_train = new PrintWriter(bw_train);
+
+                        //System.out.println("longitud del train es "+dataset_train.getNumInstances());
+                        util.Save_dataset_in_the_file(wr_train, dataset_train);
+
+                        wr_train.close();
+                        bw_train.close();
+
+                        BufferedWriter bw_test = new BufferedWriter(new FileWriter(path_test));
+                        PrintWriter wr_test = new PrintWriter(bw_test);
+
+                        // System.out.println("longitud del test es "+dataset_test.getNumInstances());
+                        util.Save_dataset_in_the_file(wr_test, dataset_test);
+
+                        wr_test.close();
+                        bw_test.close();
+
+                        BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
+                        PrintWriter wr_xml = new PrintWriter(bw_xml);
+
+                        util.Save_xml_in_the_file(wr_xml,filename_database_xml_path);
+
+                        wr_xml.close();
+                        bw_xml.close();
+
+                        JOptionPane.showMessageDialog(null, "All Files are saved", "Successful", JOptionPane.INFORMATION_MESSAGE);
+
+                    } catch (IOException ex) {
+                        Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
+
+                else if(radioIterativeStratifiedCV.isSelected()|| radioRandomCV.isSelected() || radioLPStratifiedCV.isSelected())//CROSS VALIDATION
+                {
+                    try{
+
+                        util.Save_dataset_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "train");
+                        util.Save_dataset_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "test");
+
+                        path_xml = file.getAbsolutePath()+"/"+dataset_name1.substring(0,dataset_name1.length()-5)+".xml";
+
+                        BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
+                        PrintWriter wr_xml = new PrintWriter(bw_xml);
+
+                        System.out.println("filename_database_xml_path: " + filename_database_xml_path);
+                        util.Save_xml_in_the_file(wr_xml,filename_database_xml_path);
+
+                        wr_xml.close();
+                        bw_xml.close();
+
+                        JOptionPane.showMessageDialog(null, "All Files are saved", "Successful", JOptionPane.INFORMATION_MESSAGE);
+
+                    }
+                    catch(Exception e1){
+                        e1.printStackTrace();
+                    }
+
+                }
+                Toolkit.getDefaultToolkit().beep();
+            }
+
+        }
+
+    }//GEN-LAST:event_jButtonSaveDatasetsActionPerformed
+
+    // COMIENZA A CALCULAR LAS METRICAS SEGUN LA OPCION DEL train/TEST (BOTON "start")
+    private void jButtonStartPreprocessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartPreprocessActionPerformed
+
+        list_dataset_train = new ArrayList();
+        list_dataset_test = new ArrayList();
+
+        Instances train=null,test=null;
+        MultiLabelInstances train_ml=null,test_ml=null;
+
+        if(dataset == null){
+            JOptionPane.showMessageDialog(null, "You must load a dataset", "alert", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+        
+        
+        //Random Holdout
+        if(radioRandomHoldout.isSelected()){
+            String split = textRandomHoldout.getText();
+            double percent_split = Double.parseDouble(split);
+            if((percent_split <= 0) || (percent_split >= 100)){
+                JOptionPane.showMessageDialog(null, "The percentage must be a number between 0 and 100", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try{
+                
+                Instances dataset_temp = dataset.clone().getDataSet();
+
+                Random rand = new Random();
+                dataset_temp.randomize(rand);
+
+                int trainInstances = (int) Math.round(dataset.getNumInstances()*(percent_split/100.0));
+                Instances trainDataSet = new Instances(dataset.getDataSet(), 0, trainInstances);
+                Instances testDataSet = new Instances(dataset.getDataSet(), trainInstances, dataset.getNumInstances()-trainInstances);
+
+                dataset_train = new MultiLabelInstances(trainDataSet, dataset.getLabelsMetaData());
+                dataset_test = new MultiLabelInstances(testDataSet, dataset.getLabelsMetaData());
+
+                holdout_random =true;
+                cv_ramdon =false;
+                holdout_iterative_stratified =false;
+                cv_iterative_stratified =false;
+                holdout_LP_stratified =false;
+                cv_LP_stratified =false;
+                feature_selection_1 = false;
+                feature_selection_2 = false;
+                //calculte metric selected
+
+                //button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7);// HOLDOUT percentage
+            }
+
+            catch (InvalidDataFormatException ex) {
+                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        //Random CV
+        else if(radioRandomCV.isSelected()){
+            String split = textRandomCV.getText();
+
+            if(split.equals(""))
+            {
+                JOptionPane.showMessageDialog(null, "You must give a number of folds", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int nFolds = 0;
+            
+            try{
+                nFolds = Integer.parseInt(split);
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null, "Introduce a correct number of folds", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if(nFolds < 2)
+            {
+                JOptionPane.showMessageDialog(null, "The number of folds must be greater than 2", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try{
+                MultiLabelInstances temp = dataset.clone();
+                Instances dataset_temp = temp.getDataSet();
+
+                int seed = (int)(Math.random()*100)+100;
+                Random rand = new Random(seed);
+
+                dataset_temp.randomize(rand);
+
+                Instances [] foldsCV = new Instances[nFolds];
+                for(int i=0; i<nFolds; i++){
+                    foldsCV[i] = new Instances(dataset.getDataSet(), 1);
+                }
+
+                for(int i=0; i<dataset_temp.numInstances(); i++){
+                    foldsCV[i%nFolds].add(dataset_temp.get(i));
+                }
+                  
+                train = new Instances(dataset.getDataSet(), 1);
+                test = new Instances(dataset.getDataSet(), 1);
+                for(int i=0; i<nFolds; i++){
+                    for(int j=0; j<nFolds; j++){
+                        if(i != j){
+                            train.addAll(foldsCV[j]);   
+                        }
+                    }
+                    test.addAll(foldsCV[i]);
+
+                    list_dataset_train.add(new MultiLabelInstances(train, dataset.getLabelsMetaData()));
+                    list_dataset_test.add(new MultiLabelInstances(test, dataset.getLabelsMetaData()));  
+                }
+
+                holdout_random =false;
+                cv_ramdon =true;
+                holdout_iterative_stratified =false;
+                cv_iterative_stratified =false;
+                holdout_LP_stratified =false;
+                cv_LP_stratified =false;
+                feature_selection_1 = false;
+                feature_selection_2 = false;
+            }
+
+            catch (Exception ex) {
+                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        //Iterative stratified holdout
+        else if(radioIterativeStratifiedHoldout.isSelected()){
+
+        }
+        //Iterative stratified CV
+        else if(radioIterativeStratifiedCV.isSelected()){
+            String split = textIterativeStratifiedCV.getText();
+
+            if(split.equals(""))
+            {
+                JOptionPane.showMessageDialog(null, "You must give a number of folds", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int nFolds = 0;
+            
+            try{
+                nFolds = Integer.parseInt(split);
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null, "Introduce a correct number of folds", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if(nFolds < 2)
+            {
+                JOptionPane.showMessageDialog(null, "The number of folds must be greater than 2", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            IterativeStratification strat = new IterativeStratification();
+            MultiLabelInstances folds [] = strat.stratify(dataset, nFolds);
+            
+            for(int i=0; i<nFolds; i++){
+                try {
+                    
+                    int trainSize = 0, testSize = 0;
+                    for(int j=0; j<nFolds; j++){
+                        if(i != j){
+                            trainSize += folds[j].getNumInstances();
+                        }
+                    }
+                    testSize += folds[i].getNumInstances();
+                    
+                    train = new Instances(dataset.getDataSet(), trainSize);
+                    test = new Instances(dataset.getDataSet(), testSize);
+                    for(int j=0; j<nFolds; j++){
+                        if(i != j){
+                            train.addAll(folds[j].getDataSet());
+                        }
+                    }
+                    test.addAll(folds[i].getDataSet());
+                    
+                    list_dataset_train.add(new MultiLabelInstances(train, dataset.getLabelsMetaData()));
+                    list_dataset_test.add(new MultiLabelInstances(test, dataset.getLabelsMetaData()));
+                } catch (InvalidDataFormatException ex) {
+                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+  
+        }
+        //LP stratified holdout
+        else if(radioLPStratifiedHoldout.isSelected()){
+            
+        }
+        //LP stratified CV
+        else if(radioLPStratifiedCV.isSelected()){
+            String split = textLPStratifiedCV.getText();
+
+            if(split.equals(""))
+            {
+                JOptionPane.showMessageDialog(null, "You must give a number of folds", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int nFolds = 0;
+            
+            try{
+                nFolds = Integer.parseInt(split);
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null, "Introduce a correct number of folds", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if(nFolds < 2)
+            {
+                JOptionPane.showMessageDialog(null, "The number of folds must be greater than 2", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            LabelPowersetStratification strat = new LabelPowersetStratification();
+            MultiLabelInstances folds [] = strat.stratify(dataset, nFolds);
+            
+            
+            for(int i=0; i<nFolds; i++){
+                try {
+                    int trainSize = 0, testSize = 0;
+                    for(int j=0; j<nFolds; j++){
+                        if(i != j){
+                            trainSize += folds[j].getNumInstances();
+                        }
+                    }
+                    testSize += folds[i].getNumInstances();
+                    
+                    train = new Instances(dataset.getDataSet(), trainSize);
+                    test = new Instances(dataset.getDataSet(), testSize);
+                    
+                    for(int j=0; j<nFolds; j++){
+                        if(i != j){
+                            train.addAll(folds[j].getDataSet());
+                        }
+                    }
+                    test.addAll(folds[i].getDataSet());
+                    
+                    list_dataset_train.add(new MultiLabelInstances(train, dataset.getLabelsMetaData()));
+                    list_dataset_test.add(new MultiLabelInstances(test, dataset.getLabelsMetaData()));
+                } catch (InvalidDataFormatException ex) {
+                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        //FS1
+        else if(radioBRFS.isSelected()){
+            
+        }
+        else{
+            System.out.println("No radio button is selected.");
+        }
+        
+/*
+        if(radioIterativeStratifiedHoldout.isSelected())
+        {
+            //Holdout with iterative stratification
+
+            int percent_split = Integer.parseInt(textIterativeStratifiedHoldout.getText());
+
+            Stratification stratification = new IterativeStratification();
+
+            // int numFolds = size / numTrain;
+
+            MultiLabelInstances [] mldatasets= stratification.stratify(dataset.clone(), 100);
+
+            Instances data_train=new Instances(mldatasets[0].getDataSet());
+            Instances data_test=new Instances(mldatasets[mldatasets.length-1].getDataSet());
+
+            for(int i=1;i<mldatasets.length-1;i++)
+            {
+                if(i<percent_split)data_train.addAll(mldatasets[i].getDataSet());
+                else data_test.addAll(mldatasets[i].getDataSet());
+            }
+            try {
+
+                dataset_train = new MultiLabelInstances(data_train, mldatasets[0].getLabelsMetaData());
+                dataset_test = new MultiLabelInstances(data_test, mldatasets[0].getLabelsMetaData());
+
+                holdout_random =false;
+                holdout_iterative_stratified =true;
+                cv_ramdon =false;
+                cv_iterative_stratified =false;
+                holdout_LP_stratified =true;
+                cv_LP_stratified =false;
+                feature_selection_1 = false;
+                feature_selection_2 = false;
+
+                //calculte metric selected
+                // button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7);// HOLDOUT WITH STRATIFICATION
+
+            }
+            catch (InvalidDataFormatException ex) {
+                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+        else if(radioRandomHoldout.isSelected())
+        {
+
+            // random holdout
+            String split = textRandomHoldout.getText();
+            double percent_split = Double.parseDouble(split);
+
+            //int num_instance = dataset.getNumInstances();
+
+            try{
+                
+                Instances dataset_temp = dataset.clone().getDataSet();
+
+                int seed = (int)(Math.random()*100)+100;
+
+                Random rand = new Random(seed);
+
+                dataset_temp.randomize(rand);
+
+                
+                //RemovePercentage rmvp = new RemovePercentage();
+                //rmvp.setPercentage(percent_split);
+                //rmvp.setInputFormat(dataSet);
+                //Instances testDataSet = Filter.useFilter(dataSet, rmvp);
+
+                //rmvp = new RemovePercentage();
+                //rmvp.setInvertSelection(true);
+                //rmvp.setPercentage(percent_split);
+                //rmvp.setInputFormat(dataSet);
+                //Instances trainDataSet = Filter.useFilter(dataSet, rmvp);
+                
+
+                int trainInstances = (int) Math.round(dataset.getNumInstances()*(percent_split/100.0));
+                System.out.println("train instances: " + trainInstances);
+                Instances trainDataSet = new Instances(dataset.getDataSet(), 0, trainInstances);
+                Instances testDataSet = new Instances(dataset.getDataSet(), trainInstances, dataset.getNumInstances()-trainInstances);
+
+                dataset_train = new MultiLabelInstances(trainDataSet, dataset.getLabelsMetaData());
+                dataset_test = new MultiLabelInstances(testDataSet, dataset.getLabelsMetaData());
+
+                holdout_random =true;
+                holdout_iterative_stratified =true;
+                cv_ramdon =false;
+                cv_iterative_stratified =false;
+                holdout_LP_stratified =false;
+                cv_LP_stratified =false;
+                feature_selection_1 = false;
+                feature_selection_2 = false;
+                //calculte metric selected
+
+                //button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7);// HOLDOUT percentage
+            }
+
+            catch (InvalidDataFormatException ex) {
+                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+        // RAMDON CROSS VALIDATION
+        else if(radioRandomCV.isSelected())
+        {
+
+            String split = textRandomCV.getText();
+
+            if(split.equals(""))
+            {
+                JOptionPane.showMessageDialog(null, "You must give a number of folds", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int nFolds = Integer.parseInt(split);
+            
+            if(nFolds < 2)
+            {
+                JOptionPane.showMessageDialog(null, "The number of folds must be greater than 2", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            try{
+                MultiLabelInstances temp = dataset.clone();
+                Instances dataset_temp = temp.getDataSet();
+
+                int seed = (int)(Math.random()*100)+100;
+
+                Random rand = new Random(seed);
+
+                dataset_temp.randomize(rand);
+                
+                Instances [] foldsCV = new Instances[nFolds];
+                
+                for(int i=0; i<dataset_temp.numInstances(); i++){
+                    foldsCV[i%nFolds].add(dataset_temp.get(i));
+                }
+                
+                train.clear();
+                test.clear();
+                for(int i=0; i<nFolds; i++){
+                    for(int j=0; j<nFolds; j++){
+                        if(i != j){
+                            train.addAll(foldsCV[i]);
+                        }
+                    }
+                    test.addAll(foldsCV[i]);
+                    
+                    list_dataset_train.add(new MultiLabelInstances(train, dataset.getLabelsMetaData()));
+                    list_dataset_test.add(new MultiLabelInstances(test, dataset.getLabelsMetaData()));
+                }
+                
+
+                // aplica cross validation
+                //for (int n = 0; n < nFolds; n++)
+                //{
+                 //   train = dataset_temp.trainCV(nFolds, n, rand);
+                   // test = dataset_temp.testCV(nFolds, n);
+
+                    //train_ml = new MultiLabelInstances(train, dataset.getLabelsMetaData());
+                    //test_ml = new MultiLabelInstances(test, dataset.getLabelsMetaData());
+
+                    //list_dataset_train.add(train_ml);
+                    //list_dataset_test.add(test_ml);
+                //}
+                  
+                //System.out.println("numero generado "+seed);
+
+                holdout_random =false;
+                holdout_iterative_stratified =true;
+                cv_ramdon =true;
+                cv_iterative_stratified =false;
+                holdout_LP_stratified =false;
+                cv_LP_stratified =false;
+                feature_selection_1 = false;
+                feature_selection_2 = false;
+
+                //calculte metric selected
+                // button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7,list_dataset_train,list_dataset_test );// RAMDON CROSS VALIDATION
+            }
+
+            catch (Exception ex) {
+                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+        // CV STRATIFIED
+        else if(radioIterativeStratifiedCV.isSelected())
+        {
+
+            String split = textIterativeStratifiedCV.getText();
+
+            if(split.equals(""))
+            {
+                JOptionPane.showMessageDialog(null, "You must put a fold number", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+
+            }
+
+            int folds = Integer.parseInt(split);
+
+            try
+            {
+                Stratification stratification;
+
+                if(radio<=0.1)    stratification =new LabelPowersetStratification();
+                else   stratification =new IterativeStratification();
+
+                MultiLabelInstances [] mldatasets= stratification.stratify(dataset.clone(), folds);
+
+                MultiLabelInstances[] current;
+                //train = new Instances(
+                    for (int n = 0; n < folds; n++)
+                    {
+                        current = util.Get_dataset_train_test(n, mldatasets);
+
+                        list_dataset_train.add(current[0]);
+                        list_dataset_test.add(current[1]);
+                    }
+
+                holdout_random =false;
+                holdout_iterative_stratified =true;
+                cv_ramdon =false;
+                cv_iterative_stratified =true;
+                holdout_LP_stratified =false;
+                cv_LP_stratified =false;
+                feature_selection_1 = false;
+                feature_selection_2 = false;
+                    // return;
+                    //calculte metric selected
+                    //button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7,list_dataset_train,list_dataset_test );  // CV STRATIFIED
+
+                }
+                catch (Exception ex) {
+                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        */
+
+            //initializeTableMetricsCommon();
+            //initializeTableMetricsTrainTest();
+            //clearTable_metrics_traintest();
+
+            jButtonSaveDatasets.setEnabled(true);
+            //button_calculate2_train.setEnabled(true);
+            //button_save_train.setEnabled(false);
+
+            JOptionPane.showMessageDialog(null, "Datasets generated succesfully", "Successful", JOptionPane.INFORMATION_MESSAGE);
+            Toolkit.getDefaultToolkit().beep();
+    }//GEN-LAST:event_jButtonStartPreprocessActionPerformed
+
+    private void textBRFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textBRFSActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textBRFSActionPerformed
+
+    private void textBRFSKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textBRFSKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textBRFSKeyTyped
+
+    private void radioBRFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioBRFSActionPerformed
+        // TODO add your handling code here:
+        textRandomHoldout.setEnabled(false);
+        textIterativeStratifiedHoldout.setEnabled(false);
+        // buttonChooseSuppliedTest.setEnabled(false);
+        textRandomCV.setEnabled(false);
+        textIterativeStratifiedCV.setEnabled(false);
+        textLPStratifiedHoldout.setEnabled(false);
+        textLPStratifiedCV.setEnabled(false);
+        textBRFS.setEnabled(true);
+        labelBRFS_Comb.setEnabled(true);
+        jComboBox_BRFS_Comb.setEnabled(true);
+        labelBRFS_Norm.setEnabled(true);
+        jComboBox_BRFS_Norm.setEnabled(true);
+        labelBRFS_Out.setEnabled(true);
+        jComboBox_BRFS_Out.setEnabled(true);
+        textRandomFS.setEnabled(false);
+
+        jButtonSaveDatasets.setEnabled(false);
+        //button_calculate2_train.setEnabled(false);
+        //button_save_train.setEnabled(false);
+    }//GEN-LAST:event_radioBRFSActionPerformed
+
+    private void jComboBox_BRFS_CombActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_BRFS_CombActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox_BRFS_CombActionPerformed
+
+    private void jComboBox_BRFS_NormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_BRFS_NormActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox_BRFS_NormActionPerformed
+
+    private void jComboBox_BRFS_OutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_BRFS_OutActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox_BRFS_OutActionPerformed
+
+    private void radioRandomFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomFSActionPerformed
+        // TODO add your handling code here:
+        textRandomHoldout.setEnabled(false);
+        textIterativeStratifiedHoldout.setEnabled(false);
+        // buttonChooseSuppliedTest.setEnabled(false);
+        textRandomCV.setEnabled(false);
+        textIterativeStratifiedCV.setEnabled(false);
+        textLPStratifiedHoldout.setEnabled(false);
+        textLPStratifiedCV.setEnabled(false);
+        textBRFS.setEnabled(false);
+        labelBRFS_Comb.setEnabled(false);
+        jComboBox_BRFS_Comb.setEnabled(false);
+        labelBRFS_Norm.setEnabled(false);
+        jComboBox_BRFS_Norm.setEnabled(false);
+        labelBRFS_Out.setEnabled(false);
+        jComboBox_BRFS_Out.setEnabled(false);
+        textRandomFS.setEnabled(true);
+
+        jButtonSaveDatasets.setEnabled(false);
+    }//GEN-LAST:event_radioRandomFSActionPerformed
+
+    private void textRandomFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textRandomFSActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textRandomFSActionPerformed
+
+    private void textRandomFSKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textRandomFSKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textRandomFSKeyTyped
+
+    private void textLPStratifiedCVKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textLPStratifiedCVKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textLPStratifiedCVKeyTyped
+
+    private void textLPStratifiedCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textLPStratifiedCVActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textLPStratifiedCVActionPerformed
+
+    private void radioLPStratifiedCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioLPStratifiedCVActionPerformed
+        // TODO add your handling code here:
+        textRandomHoldout.setEnabled(false);
+        textIterativeStratifiedHoldout.setEnabled(false);
+        textLPStratifiedHoldout.setEnabled(false);
+        //buttonChooseSuppliedTest.setEnabled(false);
+        textRandomCV.setEnabled(false);
+        textIterativeStratifiedCV.setEnabled(false);
+        textLPStratifiedCV.setEnabled(true);
+        textBRFS.setEnabled(false);
+        //textFS2.setEnabled(false);
+        labelBRFS_Comb.setEnabled(false);
+        jComboBox_BRFS_Comb.setEnabled(false);
+        labelBRFS_Norm.setEnabled(false);
+        jComboBox_BRFS_Norm.setEnabled(false);
+        labelBRFS_Out.setEnabled(false);
+        jComboBox_BRFS_Out.setEnabled(false);
+        textRandomFS.setEnabled(false);
+
+        jButtonSaveDatasets.setEnabled(false);
+        //button_calculate2_train.setEnabled(false);
+        //button_save_train.setEnabled(false);
+    }//GEN-LAST:event_radioLPStratifiedCVActionPerformed
+
+    private void textLPStratifiedHoldoutKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textLPStratifiedHoldoutKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textLPStratifiedHoldoutKeyTyped
+
+    private void textLPStratifiedHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textLPStratifiedHoldoutActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textLPStratifiedHoldoutActionPerformed
+
+    private void radioLPStratifiedHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioLPStratifiedHoldoutActionPerformed
+        // TODO add your handling code here:
+        textRandomHoldout.setEnabled(false);
+        textIterativeStratifiedHoldout.setEnabled(false);
+        textLPStratifiedHoldout.setEnabled(true);
+        //buttonChooseSuppliedTest.setEnabled(false);
+        textRandomCV.setEnabled(false);
+        textIterativeStratifiedCV.setEnabled(false);
+        textLPStratifiedCV.setEnabled(false);
+        textBRFS.setEnabled(false);
+        //textFS2.setEnabled(false);
+        labelBRFS_Comb.setEnabled(false);
+        jComboBox_BRFS_Comb.setEnabled(false);
+        labelBRFS_Norm.setEnabled(false);
+        jComboBox_BRFS_Norm.setEnabled(false);
+        labelBRFS_Out.setEnabled(false);
+        jComboBox_BRFS_Out.setEnabled(false);
+        textRandomFS.setEnabled(false);
+
+        jButtonSaveDatasets.setEnabled(false);
+        //button_calculate2_train.setEnabled(false);
+        //button_save_train.setEnabled(false);
+    }//GEN-LAST:event_radioLPStratifiedHoldoutActionPerformed
+
+    //FILTRA LOS NUMEROS SOLAMENTE
+    private void textIterativeStratifiedHoldoutKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textIterativeStratifiedHoldoutKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if(!Character.isDigit(c))
+        {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_textIterativeStratifiedHoldoutKeyTyped
+
+    private void textIterativeStratifiedHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textIterativeStratifiedHoldoutActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textIterativeStratifiedHoldoutActionPerformed
+
+    private void textRandomCVKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textRandomCVKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textRandomCVKeyTyped
+
+    private void textRandomCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textRandomCVActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textRandomCVActionPerformed
+
+    private void textIterativeStratifiedCVKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textIterativeStratifiedCVKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textIterativeStratifiedCVKeyTyped
+
+    private void textIterativeStratifiedCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textIterativeStratifiedCVActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textIterativeStratifiedCVActionPerformed
+
+    private void radioIterativeStratifiedCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioIterativeStratifiedCVActionPerformed
+        // TODO add your handling code here:
+
+        textRandomHoldout.setEnabled(false);
+        textIterativeStratifiedHoldout.setEnabled(false);
+        textLPStratifiedHoldout.setEnabled(false);
+        //buttonChooseSuppliedTest.setEnabled(false);
+        textRandomCV.setEnabled(false);
+        textIterativeStratifiedCV.setEnabled(true);
+        textLPStratifiedCV.setEnabled(false);
+        textBRFS.setEnabled(false);
+        //textFS2.setEnabled(false);
+        labelBRFS_Comb.setEnabled(false);
+        jComboBox_BRFS_Comb.setEnabled(false);
+        labelBRFS_Norm.setEnabled(false);
+        jComboBox_BRFS_Norm.setEnabled(false);
+        labelBRFS_Out.setEnabled(false);
+        jComboBox_BRFS_Out.setEnabled(false);
+        textRandomFS.setEnabled(false);
+
+        jButtonSaveDatasets.setEnabled(false);
+        //button_calculate2_train.setEnabled(false);
+        //button_save_train.setEnabled(false);
+    }//GEN-LAST:event_radioIterativeStratifiedCVActionPerformed
+
+    private void radioRandomCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomCVActionPerformed
+        // TODO add your handling code here:
+        textRandomHoldout.setEnabled(false);
+        textIterativeStratifiedHoldout.setEnabled(false);
+        textLPStratifiedHoldout.setEnabled(false);
+        //buttonChooseSuppliedTest.setEnabled(false);
+        textRandomCV.setEnabled(true);
+        textIterativeStratifiedCV.setEnabled(false);
+        textLPStratifiedCV.setEnabled(false);
+        textBRFS.setEnabled(false);
+        //textFS2.setEnabled(false);
+        labelBRFS_Comb.setEnabled(false);
+        jComboBox_BRFS_Comb.setEnabled(false);
+        labelBRFS_Norm.setEnabled(false);
+        jComboBox_BRFS_Norm.setEnabled(false);
+        labelBRFS_Out.setEnabled(false);
+        jComboBox_BRFS_Out.setEnabled(false);
+        textRandomFS.setEnabled(false);
+
+        jButtonSaveDatasets.setEnabled(false);
+        //button_calculate2_train.setEnabled(false);
+        //button_save_train.setEnabled(false);
+    }//GEN-LAST:event_radioRandomCVActionPerformed
+
+//FILTRA LOS NUMEROS SOLAMENTE
+    private void textRandomHoldoutKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textRandomHoldoutKeyTyped
+        // TODO add your handling code here:
+
+        char c = evt.getKeyChar();
+        if(!Character.isDigit(c))
+        {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_textRandomHoldoutKeyTyped
+
+    private void textRandomHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textRandomHoldoutActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textRandomHoldoutActionPerformed
+
+    //CUANDO ESTA ACTIVO "Stratification split" EN LA PESTAÑA TEST
+    private void radioIterativeStratifiedHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioIterativeStratifiedHoldoutActionPerformed
+        // TODO add your handling code here:
+        textIterativeStratifiedHoldout.setEnabled(true);
+        textRandomHoldout.setEnabled(false);
+        //buttonChooseSuppliedTest.setEnabled(false);
+        textRandomCV.setEnabled(false);
+        textIterativeStratifiedCV.setEnabled(false);
+        textLPStratifiedHoldout.setEnabled(false);
+        textLPStratifiedCV.setEnabled(false);
+        textBRFS.setEnabled(false);
+        //textFS2.setEnabled(false);
+        labelBRFS_Comb.setEnabled(false);
+        jComboBox_BRFS_Comb.setEnabled(false);
+        labelBRFS_Norm.setEnabled(false);
+        jComboBox_BRFS_Norm.setEnabled(false);
+        labelBRFS_Out.setEnabled(false);
+        jComboBox_BRFS_Out.setEnabled(false);
+        textRandomFS.setEnabled(false);
+
+        jButtonSaveDatasets.setEnabled(false);
+        //button_calculate2_train.setEnabled(false);
+        //button_save_train.setEnabled(false);
+    }//GEN-LAST:event_radioIterativeStratifiedHoldoutActionPerformed
+
+  //OPTION "Ramdon  split"  
+    private void radioRandomHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomHoldoutActionPerformed
+        // TODO add your handling code here:
+        textRandomHoldout.setEnabled(true);
+        textIterativeStratifiedHoldout.setEnabled(false);
+        // buttonChooseSuppliedTest.setEnabled(false);
+        textRandomCV.setEnabled(false);
+        textIterativeStratifiedCV.setEnabled(false);
+        textLPStratifiedHoldout.setEnabled(false);
+        textLPStratifiedCV.setEnabled(false);
+        textBRFS.setEnabled(false);
+        //textFS2.setEnabled(false);
+        labelBRFS_Comb.setEnabled(false);
+        jComboBox_BRFS_Comb.setEnabled(false);
+        labelBRFS_Norm.setEnabled(false);
+        jComboBox_BRFS_Norm.setEnabled(false);
+        labelBRFS_Out.setEnabled(false);
+        jComboBox_BRFS_Out.setEnabled(false);
+        textRandomFS.setEnabled(false);
+
+        jButtonSaveDatasets.setEnabled(false);
+        //button_calculate2_train.setEnabled(false);
+        //button_save_train.setEnabled(false);
+    }//GEN-LAST:event_radioRandomHoldoutActionPerformed
 
        private void save_as_ActionPerformed1(java.awt.event.ActionEvent evt) throws AWTException, IOException
     {
@@ -3827,7 +4417,7 @@ private void Inicializa_config()
              
              
              //print frequency´s table         
-             jtable_frequency(jTable2,dataset);
+             //jtable_frequency(jTable2,dataset);
                    
              temp1 = cp22.getChart().getCategoryPlot();
              temp1.clearRangeMarkers();
@@ -4116,9 +4706,9 @@ private void Inicializa_config()
               cp_box.getChart().getXYPlot().setDataset(1, xyseriescollection1);
             
               //TRAIN TEST
-              jButton6.setEnabled(false);
-              button_calculate2_train.setEnabled(false);
-              button_save_train.setEnabled(false);
+              jButtonSaveDatasets.setEnabled(false);
+              //button_calculate2_train.setEnabled(false);
+              //button_save_train.setEnabled(false);
              
             }
         catch (InvalidDataFormatException ex) {
@@ -4178,36 +4768,7 @@ private void Inicializa_config()
     
     private void button_calculateActionPerformed1_general(java.awt.event.ActionEvent evt, JTable jtable, JTable jtable1, JTable jtable2)
     {
-        button_save_train.setEnabled(true);
-        
-        if(choose_test)
-        {
-            button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7); //OPTION CHOOSE TEST
-            return;
-        }
-        if(holdout_ramdon)
-        {
-            button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7);// HOLDOUT RAMDON
-            return;
-        }
-        if(holdout_stratified)
-        {
-           button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7);// HOLDOUT WITH STRATIFICATION
-           return;
-        }
-        if(cv_ramdon)
-        {
-            button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7,list_dataset_train,list_dataset_test );// RAMDON CROSS VALIDATION
-            return;
-        }
-        if(cv_stratified)
-        {
-            button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7,list_dataset_train,list_dataset_test );  // CV STRATIFIED
-            return;
-        }
-        
-        // SINO ERROR LANZA EXCEPCION
-    
+
     }
     
     
@@ -4560,7 +5121,7 @@ private void Inicializa_config()
                 BufferedWriter bw = new BufferedWriter(new FileWriter(path));
                 PrintWriter wr = new PrintWriter(bw);
                 
-                if(radioRandomCV.isSelected() || radioStratifiedCV.isSelected())//CV STRATIFIED AND RAMDON
+                if(radioRandomCV.isSelected() || radioIterativeStratifiedCV.isSelected())//CV STRATIFIED AND RAMDON
                 {
                     //System.out.println("se va a guardar los txt");
                     util.Save_in_the_file_txt(wr,metric_list_commun,metric_list_train,metric_list_test,list_dataset_train,list_dataset_test, es_de_tipo_meka);
@@ -4578,7 +5139,7 @@ private void Inicializa_config()
               else if(f1.getDescription().equals(".csv"))
                {
                 
-                  if(radioRandomCV.isSelected() || radioStratifiedCV.isSelected())//CV STRATIFIED AND RAMDON
+                  if(radioRandomCV.isSelected() || radioIterativeStratifiedCV.isSelected())//CV STRATIFIED AND RAMDON
                     {
                       try
                         {
@@ -4642,7 +5203,7 @@ private void Inicializa_config()
                     for(String current : metric_list_test)
                         metric_list_all.add(current);
                     
-                    if(radioRandomCV.isSelected() || radioStratifiedCV.isSelected())//CV STRATIFIED AND RAMDON
+                    if(radioRandomCV.isSelected() || radioIterativeStratifiedCV.isSelected())//CV STRATIFIED AND RAMDON
                     {
                          util.Save_in_the_file_arff_meka(wr, metric_list_all, list_dataset_train,list_dataset_test,file.getName(),es_de_tipo_meka);
                     }
@@ -4675,7 +5236,7 @@ private void Inicializa_config()
                     for(String current : metric_list_test)
                         metric_list_all.add(current);
                     
-                    if(radioRandomCV.isSelected() || radioStratifiedCV.isSelected())//CV STRATIFIED AND RAMDON
+                    if(radioRandomCV.isSelected() || radioIterativeStratifiedCV.isSelected())//CV STRATIFIED AND RAMDON
                     {
                          util.Save_in_the_file_arff_mulan(wr, metric_list_all, list_dataset_train,list_dataset_test,file.getName(), es_de_tipo_meka);
                     }
@@ -5125,16 +5686,17 @@ private void Inicializa_config()
         TableModel model = jtable.getModel();
         
         for(int i=0; i<model.getRowCount(); i++){
-            if((Math.abs(Double.parseDouble(tableMetrics.get(model.getValueAt(i, 0).toString()))*1000) < 0) ||
-                    (Math.abs(Double.parseDouble(tableMetrics.get(model.getValueAt(i, 0).toString()))/1000.0) > 10)){
-                NumberFormat formatter = new DecimalFormat("0.###E0");
-                value = formatter.format(Double.parseDouble(tableMetrics.get(model.getValueAt(i, 0).toString())));
-                model.setValueAt(value.replace(",", "."), i, 1);
+            if(! (tableMetrics.get(model.getValueAt(i, 0).toString())).equals("-") ){
+                if((Math.abs(Double.parseDouble(tableMetrics.get(model.getValueAt(i, 0).toString()))*1000) < 0) ||
+                        (Math.abs(Double.parseDouble(tableMetrics.get(model.getValueAt(i, 0).toString()))/1000.0) > 10)){
+                    NumberFormat formatter = new DecimalFormat("0.###E0");
+                    value = formatter.format(Double.parseDouble(tableMetrics.get(model.getValueAt(i, 0).toString())));
+                    model.setValueAt(value.replace(",", "."), i, 1);
+                }
+                else{
+                    model.setValueAt(tableMetrics.get(model.getValueAt(i, 0).toString()), i, 1);
+                } 
             }
-            else{
-                model.setValueAt(tableMetrics.get(model.getValueAt(i, 0).toString()), i, 1);
-            }
-
         }
         
         jtable.repaint();
@@ -6707,8 +7269,7 @@ private void Inicializa_config()
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane TabPrincipal;
     private javax.swing.JButton buttonAddMultipleDatasets;
-    private javax.swing.JButton buttonChooseFile;
-    private javax.swing.JButton buttonChooseSuppliedTest;
+    public javax.swing.JButton buttonChooseFile;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
@@ -6717,23 +7278,25 @@ private void Inicializa_config()
     private javax.swing.JButton buttonRemoveMultipleDatasets;
     private javax.swing.JButton buttonShowCoOcurrence;
     private javax.swing.JButton buttonShowHeatmapLeft;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButtonSaveDatasets;
+    private javax.swing.JButton jButtonStartPreprocess;
+    private javax.swing.JComboBox jComboBox_BRFS_Comb;
+    private javax.swing.JComboBox jComboBox_BRFS_Norm;
+    private javax.swing.JComboBox jComboBox_BRFS_Out;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JTable jTable2;
     private javax.swing.JLabel labelAttributes;
     private javax.swing.JLabel labelAttributesValue;
+    private javax.swing.JLabel labelBRFS;
+    private javax.swing.JLabel labelBRFS_Comb;
+    private javax.swing.JLabel labelBRFS_Norm;
+    private javax.swing.JLabel labelBRFS_Out;
     private javax.swing.JLabel labelBound;
     private javax.swing.JLabel labelBoundValue;
     private javax.swing.JLabel labelCV;
@@ -6745,8 +7308,9 @@ private void Inicializa_config()
     private javax.swing.JLabel labelDistinctValue;
     private javax.swing.JLabel labelDiversity;
     private javax.swing.JLabel labelDiversityValue;
+    private javax.swing.JLabel labelFoldsIterativeStratified;
+    private javax.swing.JLabel labelFoldsLPStratified;
     private javax.swing.JLabel labelFoldsRandom;
-    private javax.swing.JLabel labelFoldsStratified;
     private javax.swing.JLabel labelHeatmapGraph;
     private javax.swing.JLabel labelHoldout;
     private javax.swing.JLabel labelIR1;
@@ -6757,8 +7321,10 @@ private void Inicializa_config()
     private javax.swing.JLabel labelLabelsValue;
     private javax.swing.JLabel labelLxIxF;
     private javax.swing.JLabel labelLxIxFValue;
+    private javax.swing.JLabel labelPercIterativeStratified;
+    private javax.swing.JLabel labelPercLPStratified;
     private javax.swing.JLabel labelPercRandom;
-    private javax.swing.JLabel labelPercStratified;
+    private javax.swing.JLabel labelRandomFS;
     private javax.swing.JLabel labelRelation;
     private javax.swing.JLabel labelRelationValue;
     private javax.swing.JList listMultipleDatasetsLeft;
@@ -6787,24 +7353,32 @@ private void Inicializa_config()
     private javax.swing.JPanel panelLabelsPerExample;
     private javax.swing.JPanel panelMultipleDatasets;
     private javax.swing.JPanel panelMultipleDatasetsLeft;
+    private javax.swing.JPanel panelPreprocess;
     private javax.swing.JPanel panelTestOption;
-    private javax.swing.JPanel panelTrainTest;
+    private javax.swing.JPanel panelTestOption1;
+    private javax.swing.JRadioButton radioBRFS;
     private javax.swing.JRadioButton radioExamplesPerLabel;
     private javax.swing.JRadioButton radioExamplesPerLabelset;
+    private javax.swing.JRadioButton radioIterativeStratifiedCV;
+    private javax.swing.JRadioButton radioIterativeStratifiedHoldout;
+    private javax.swing.JRadioButton radioLPStratifiedCV;
+    private javax.swing.JRadioButton radioLPStratifiedHoldout;
     private javax.swing.JRadioButton radioRandomCV;
+    private javax.swing.JRadioButton radioRandomFS;
     private javax.swing.JRadioButton radioRandomHoldout;
-    private javax.swing.JRadioButton radioStratifiedCV;
-    private javax.swing.JRadioButton radioStratifiedHoldout;
-    private javax.swing.JRadioButton radioSuppliedTest;
     private javax.swing.JTable tableCoOcurrenceLeft;
     private javax.swing.JTable tableHeatmapLeft;
     private javax.swing.JTable tableImbalance;
     private javax.swing.JTabbedPane tabsDependences;
     private javax.swing.JTabbedPane tabsImbalance;
+    private javax.swing.JTextField textBRFS;
     private javax.swing.JTextField textChooseFile;
+    private javax.swing.JTextField textIterativeStratifiedCV;
+    private javax.swing.JTextField textIterativeStratifiedHoldout;
+    private javax.swing.JTextField textLPStratifiedCV;
+    private javax.swing.JTextField textLPStratifiedHoldout;
     private javax.swing.JTextField textRandomCV;
+    private javax.swing.JTextField textRandomFS;
     private javax.swing.JTextField textRandomHoldout;
-    private javax.swing.JTextField textStratifiedCV;
-    private javax.swing.JTextField textStratifiedHoldout;
     // End of variables declaration//GEN-END:variables
 }

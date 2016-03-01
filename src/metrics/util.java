@@ -1038,15 +1038,30 @@ public class util {
     public static String Get_xml_string( String arff_text)
     {
         String result="";
+        System.out.println("arff_text: " + arff_text);
         
-        for(int i=0; i<arff_text.length();i++)
-        {
-            if(arff_text.charAt(i)=='-') return result+=".xml";
+        //for(int i=0; i<arff_text.length();i++)
+        //{
+            //if(arff_text.charAt(i)=='-') return result+=".xml";
         
-            result+=arff_text.charAt(i);
-        }        
+        //    result+=arff_text.charAt(i);
+        //}     
         
-       result = arff_text.substring(0,arff_text.length()-5)+".xml";
+        String [] words = arff_text.split("-");
+        if(words.length > 1){
+            System.out.println("words: " + Arrays.toString(words));
+            for(int i=0; i<words.length-1; i++){
+                result = result + words[i]+"-";
+            }
+            result = result.substring(0, result.length()-1) + ".xml";
+            System.out.println("result1: " + result);
+        }
+        else{
+            result = arff_text.substring(0,arff_text.length()-5)+".xml";
+            System.out.println("result2: " + result);
+        }
+        
+       
        return result;
     }
      
@@ -2302,7 +2317,7 @@ public class util {
       
       for(MultiLabelInstances dataset_current : dataset)
       {
-          current_path = path + "\\"+dataset_name+"-"+type+index+".arff";
+          current_path = path + "/"+dataset_name+"-"+type+index+".arff";
           
           bw_current = new BufferedWriter(new FileWriter(current_path));
           wr = new PrintWriter(bw_current);
@@ -2321,7 +2336,7 @@ public class util {
     {
        wr.write("@relation "+dataset.getDataSet().relationName());
        wr.write(System.getProperty("line.separator"));  
-       wr.write(System.getProperty("line.separator"));  
+       //wr.write(System.getProperty("line.separator"));  
         
         //Set<Attribute> attributeSet = dataset.getFeatureAttributes();
         Instances instancias = dataset.getDataSet();
@@ -2334,7 +2349,7 @@ public class util {
              wr.write(System.getProperty("line.separator")); 
        }   
        
-       wr.write(System.getProperty("line.separator")); 
+       //wr.write(System.getProperty("line.separator")); 
         
         String current ;
         
@@ -4923,13 +4938,46 @@ public class util {
     
     public static String Get_file_name_xml(String path)
     {           
-        for(int i=path.length()-1;i>0;i--)
-        {
-            if(path.charAt(i)=='-')
-                return path.substring(0,i)+".xml";
-            
-            if (path.charAt(i)=='\\')break;
+//        for(int i=path.length()-1;i>0;i--)
+//        {
+//            if(path.charAt(i)=='_')
+//                return path.substring(0,i)+".xml";
+//            
+//            if (path.charAt(i)=='\\')break;
+//        }
+        
+        String [] words;
+        words = path.split("/");
+        System.out.println("words1: " + Arrays.toString(words));
+        path = words[words.length-1];
+        String dir = new String();
+        if(words.length > 1){
+            for(int i=0; i<words.length-1; i++){
+                dir += words[i] + "/";
+            }
         }
+        System.out.println("dir1: " + dir);
+        System.out.println("path1: " + path);
+        /*words = path.split("-");
+        if(words.length > 1){
+            System.out.println("words2: " + Arrays.toString(words));
+            path = "";
+            for(int i=0; i<words.length-1; i++){
+                path += words[i]+"-";
+            }
+            path = path.substring(0, path.length()-1) + ".xml";
+        }
+        else{
+            System.out.println("path2: " + path);
+            path = path.split("\\.")[0];
+            System.out.println("path3: " + path);
+            path+=".xml";
+        }
+        */
+        System.out.println("path4: " + path);
+        path = dir+path;
+        System.out.println("path5: " + path);
+        
         return path;
     }
     
