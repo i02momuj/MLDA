@@ -3722,6 +3722,11 @@ private void Inicializa_config()
         //FS_BR
         else if(radioBRFS.isSelected()){
             int nFeatures = Integer.parseInt(textBRFS.getText());
+            if(nFeatures > dataset.getFeatureIndices().length){
+                JOptionPane.showMessageDialog(null, "The number of features to select must be less than the original.", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
             String combination = jComboBox_BRFS_Comb.getSelectedItem().toString();
             String normalization = jComboBox_BRFS_Norm.getSelectedItem().toString();
             String output = jComboBox_BRFS_Out.getSelectedItem().toString();
@@ -3746,6 +3751,11 @@ private void Inicializa_config()
         }
         else if(radioRandomFS.isSelected()){
             int nFeatures = Integer.parseInt(textRandomFS.getText());
+            
+            if(nFeatures > dataset.getFeatureIndices().length){
+                JOptionPane.showMessageDialog(null, "The number of features to select must be less than the original.", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             
             FeatureSelector fs = new FeatureSelector(dataset, nFeatures);
             FSdataset = fs.randomSelect();
