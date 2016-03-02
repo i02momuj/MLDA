@@ -49,7 +49,6 @@ import static metrics.util.Get_labelset_x_values;
 
 import mulan.data.InvalidDataFormatException;
 import mulan.data.IterativeStratification;
-import mulan.data.LabelPowersetStratification;
 import mulan.data.LabelSet;
 import mulan.data.MultiLabelInstances;
 import mulan.data.Statistics;
@@ -72,6 +71,9 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.DefaultXYDataset;
 import org.jfree.data.xy.XYDataset;
 import org.tc33.jheatchart.HeatChart;
+import preprocess.RandomTrainTest;
+import preprocess.IterativeTrainTest;
+import preprocess.LabelPowersetTrainTest;
 import weka.core.Attribute;
 import weka.core.Instances;
 import weka.filters.Filter;
@@ -210,7 +212,7 @@ public class RunApp extends javax.swing.JFrame {
      boolean  holdout_random=false, holdout_iterative_stratified=false, 
              cv_ramdon=false, cv_iterative_stratified =false,
              holdout_LP_stratified=false, cv_LP_stratified=false,
-             feature_selection_1=false, feature_selection_2=false;
+             feature_selection_br=false, feature_selection_random=false;
     //JButton button_calculate2_train,button_save_train;
     
     //VARIABLES BOX DIAGRAM
@@ -3365,26 +3367,23 @@ private void Inicializa_config()
 
             try{
                 
-                Instances dataset_temp = dataset.clone().getDataSet();
+                RandomTrainTest pre = new RandomTrainTest();
+                MultiLabelInstances [] partitions = pre.split(dataset, percent_split);
+                
+                //dataset_train = new MultiLabelInstances(trainDataSet, dataset.getLabelsMetaData());
+                //dataset_test = new MultiLabelInstances(testDataSet, dataset.getLabelsMetaData());
 
-                Random rand = new Random();
-                dataset_temp.randomize(rand);
-
-                int trainInstances = (int) Math.round(dataset.getNumInstances()*(percent_split/100.0));
-                Instances trainDataSet = new Instances(dataset.getDataSet(), 0, trainInstances);
-                Instances testDataSet = new Instances(dataset.getDataSet(), trainInstances, dataset.getNumInstances()-trainInstances);
-
-                dataset_train = new MultiLabelInstances(trainDataSet, dataset.getLabelsMetaData());
-                dataset_test = new MultiLabelInstances(testDataSet, dataset.getLabelsMetaData());
-
+                dataset_train = partitions[0];
+                dataset_test = partitions[1];
+                
                 holdout_random =true;
                 cv_ramdon =false;
                 holdout_iterative_stratified =false;
                 cv_iterative_stratified =false;
                 holdout_LP_stratified =false;
                 cv_LP_stratified =false;
-                feature_selection_1 = false;
-                feature_selection_2 = false;
+                feature_selection_br = false;
+                feature_selection_random = false;
                 //calculte metric selected
 
                 //button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7);// HOLDOUT percentage
@@ -3422,6 +3421,35 @@ private void Inicializa_config()
                 return;
             }
 
+            /*try{
+
+                RandomCrossValidation pre = new RandomCrossValidation();
+                MultiLabelInstances [] folds = pre.split(dataset, nFolds);
+                  
+                train = new Instances(dataset.getDataSet(), 1);
+                test = new Instances(dataset.getDataSet(), 1);
+                for(int i=0; i<nFolds; i++){
+                    for(int j=0; j<nFolds; j++){
+                        if(i != j){
+                            train.addAll(folds[j].getDataSet());   
+                        }
+                    }
+                    test.addAll(folds[i].getDataSet());
+
+                    list_dataset_train.add(new MultiLabelInstances(train, dataset.getLabelsMetaData()));
+                    list_dataset_test.add(new MultiLabelInstances(test, dataset.getLabelsMetaData()));  
+                }
+
+                holdout_random =false;
+                cv_ramdon =true;
+                holdout_iterative_stratified =false;
+                cv_iterative_stratified =false;
+                holdout_LP_stratified =false;
+                cv_LP_stratified =false;
+                feature_selection_br = false;
+                feature_selection_random = false;
+            }*/            
+            
             try{
                 MultiLabelInstances temp = dataset.clone();
                 Instances dataset_temp = temp.getDataSet();
@@ -3440,15 +3468,20 @@ private void Inicializa_config()
                     foldsCV[i%nFolds].add(dataset_temp.get(i));
                 }
                   
-                train = new Instances(dataset.getDataSet(), 1);
-                test = new Instances(dataset.getDataSet(), 1);
+                train = new Instances(dataset.getDataSet(), 0);
+                test = new Instances(dataset.getDataSet(), 0);
                 for(int i=0; i<nFolds; i++){
+                    train.clear();
+                    test.clear();
                     for(int j=0; j<nFolds; j++){
                         if(i != j){
                             train.addAll(foldsCV[j]);   
                         }
                     }
                     test.addAll(foldsCV[i]);
+                    
+                    System.out.println("train: " + train.numInstances());
+                    System.out.println("test: " + test.numInstances());
 
                     list_dataset_train.add(new MultiLabelInstances(train, dataset.getLabelsMetaData()));
                     list_dataset_test.add(new MultiLabelInstances(test, dataset.getLabelsMetaData()));  
@@ -3460,8 +3493,8 @@ private void Inicializa_config()
                 cv_iterative_stratified =false;
                 holdout_LP_stratified =false;
                 cv_LP_stratified =false;
-                feature_selection_1 = false;
-                feature_selection_2 = false;
+                feature_selection_br = false;
+                feature_selection_random = false;
             }
 
             catch (Exception ex) {
@@ -3470,7 +3503,35 @@ private void Inicializa_config()
         }
         //Iterative stratified holdout
         else if(radioIterativeStratifiedHoldout.isSelected()){
+            String split = textIterativeStratifiedHoldout.getText();
+            double percent_split = Double.parseDouble(split);
+            if((percent_split <= 0) || (percent_split >= 100)){
+                JOptionPane.showMessageDialog(null, "The percentage must be a number between 0 and 100", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
+            try{
+                IterativeTrainTest pre = new IterativeTrainTest();
+                MultiLabelInstances [] partitions = pre.split(dataset, percent_split);
+
+                dataset_train = partitions[0];
+                dataset_test = partitions[1];
+                
+                holdout_random =false;
+                cv_ramdon =false;
+                holdout_iterative_stratified =true;
+                cv_iterative_stratified =false;
+                holdout_LP_stratified =false;
+                cv_LP_stratified =false;
+                feature_selection_br = false;
+                feature_selection_random = false;
+                //calculte metric selected
+
+                //button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7);// HOLDOUT percentage
+            }
+            catch (Exception ex) {
+                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         //Iterative stratified CV
         else if(radioIterativeStratifiedCV.isSelected()){
@@ -3531,7 +3592,35 @@ private void Inicializa_config()
         }
         //LP stratified holdout
         else if(radioLPStratifiedHoldout.isSelected()){
-            
+            String split = textLPStratifiedHoldout.getText();
+            double percent_split = Double.parseDouble(split);
+            if((percent_split <= 0) || (percent_split >= 100)){
+                JOptionPane.showMessageDialog(null, "The percentage must be a number between 0 and 100", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try{
+                IterativeTrainTest pre = new IterativeTrainTest();
+                MultiLabelInstances [] partitions = pre.split(dataset, percent_split);
+
+                dataset_train = partitions[0];
+                dataset_test = partitions[1];
+                
+                holdout_random =false;
+                cv_ramdon =false;
+                holdout_iterative_stratified =false;
+                cv_iterative_stratified =false;
+                holdout_LP_stratified =true;
+                cv_LP_stratified =false;
+                feature_selection_br = false;
+                feature_selection_random = false;
+                //calculte metric selected
+
+                //button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7);// HOLDOUT percentage
+            }
+            catch (Exception ex) {
+                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         //LP stratified CV
         else if(radioLPStratifiedCV.isSelected()){
@@ -3559,22 +3648,14 @@ private void Inicializa_config()
                 return;
             }
             
-            LabelPowersetStratification strat = new LabelPowersetStratification();
+            LabelPowersetTrainTest strat = new LabelPowersetTrainTest();
             MultiLabelInstances folds [] = strat.stratify(dataset, nFolds);
             
             
             for(int i=0; i<nFolds; i++){
-                try {
-                    int trainSize = 0, testSize = 0;
-                    for(int j=0; j<nFolds; j++){
-                        if(i != j){
-                            trainSize += folds[j].getNumInstances();
-                        }
-                    }
-                    testSize += folds[i].getNumInstances();
-                    
-                    train = new Instances(dataset.getDataSet(), trainSize);
-                    test = new Instances(dataset.getDataSet(), testSize);
+                try {                    
+                    train = new Instances(dataset.getDataSet(), 0);
+                    test = new Instances(dataset.getDataSet(), 0);
                     
                     for(int j=0; j<nFolds; j++){
                         if(i != j){
@@ -3630,8 +3711,8 @@ private void Inicializa_config()
                 cv_iterative_stratified =false;
                 holdout_LP_stratified =true;
                 cv_LP_stratified =false;
-                feature_selection_1 = false;
-                feature_selection_2 = false;
+                feature_selection_br = false;
+                feature_selection_random = false;
 
                 //calculte metric selected
                 // button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7);// HOLDOUT WITH STRATIFICATION
@@ -3690,8 +3771,8 @@ private void Inicializa_config()
                 cv_iterative_stratified =false;
                 holdout_LP_stratified =false;
                 cv_LP_stratified =false;
-                feature_selection_1 = false;
-                feature_selection_2 = false;
+                feature_selection_br = false;
+                feature_selection_random = false;
                 //calculte metric selected
 
                 //button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7);// HOLDOUT percentage
@@ -3776,8 +3857,8 @@ private void Inicializa_config()
                 cv_iterative_stratified =false;
                 holdout_LP_stratified =false;
                 cv_LP_stratified =false;
-                feature_selection_1 = false;
-                feature_selection_2 = false;
+                feature_selection_br = false;
+                feature_selection_random = false;
 
                 //calculte metric selected
                 // button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7,list_dataset_train,list_dataset_test );// RAMDON CROSS VALIDATION
@@ -3807,7 +3888,7 @@ private void Inicializa_config()
             {
                 Stratification stratification;
 
-                if(radio<=0.1)    stratification =new LabelPowersetStratification();
+                if(radio<=0.1)    stratification =new LabelPowersetTrainTest();
                 else   stratification =new IterativeStratification();
 
                 MultiLabelInstances [] mldatasets= stratification.stratify(dataset.clone(), folds);
@@ -3828,8 +3909,8 @@ private void Inicializa_config()
                 cv_iterative_stratified =true;
                 holdout_LP_stratified =false;
                 cv_LP_stratified =false;
-                feature_selection_1 = false;
-                feature_selection_2 = false;
+                feature_selection_br = false;
+                feature_selection_random = false;
                     // return;
                     //calculte metric selected
                     //button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7,list_dataset_train,list_dataset_test );  // CV STRATIFIED
