@@ -3985,9 +3985,11 @@ public class util {
             return("NaN");
         }
         else{
-            NumberFormat formatter = new DecimalFormat("#0.000"); 
+            //NumberFormat formatter = new DecimalFormat("#0.000"); 
+            //return(formatter.format(value));
             //System.out.println("formatter: " + formatter.format(value) + "  value: " + value);
-           return(formatter.format(value)); 
+            
+            return(Double.toString(value));
         }
         
         

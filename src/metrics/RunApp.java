@@ -5840,7 +5840,7 @@ private void Inicializa_config()
                 
         atributo[] imbalanced_data = util.Get_data_imbalanced_x_label_inter_class(dataset,label_frenquency);
         
-        String value;
+        String value = new String();
         
         System.out.println(metric_list);
         
@@ -5848,11 +5848,12 @@ private void Inicializa_config()
         {
             //If metric value exists, don't calculate
            if((tableMetrics.get(metric) == null) || (tableMetrics.get(metric).equals("-"))){
-               value= util.get_value_metric(metric, dataset, es_de_tipo_meka);
-                if(value.equals("-1.000") || value.equals("-1,000")){
+               value = util.get_value_metric(metric, dataset, es_de_tipo_meka);
+                if(value.equals("-1.0") || value.equals("-1,0")){
                     value = util.get_value_metric_imbalanced(metric, dataset, imbalanced_data);
                 } 	
 
+                System.out.println(metric + " --- " + value + " --> " + value.replace(",", "."));
                 tableMetrics.put(metric, value.replace(",", "."));
                 //jTextArea1.append(metric + util.get_tabs_multi_datasets(metric) + value + "\n"); 
            }     
@@ -5861,21 +5862,53 @@ private void Inicializa_config()
         TableModel model = jtable.getModel();
         
         for(int i=0; i<model.getRowCount(); i++){
-            if(! (tableMetrics.get(model.getValueAt(i, 0).toString())).equals("-") ){
-                if((Math.abs(Double.parseDouble(tableMetrics.get(model.getValueAt(i, 0).toString()))*1000) < 0) ||
-                        (Math.abs(Double.parseDouble(tableMetrics.get(model.getValueAt(i, 0).toString()))/1000.0) > 10)){
+            /*if(! (tableMetrics.get(model.getValueAt(i, 0).toString())).equals("-") ){
+                if( (((Math.abs(Double.parseDouble(tableMetrics.get(model.getValueAt(i, 0).toString()))*1000) < 1.0)) && 
+                            ((Math.abs(Double.parseDouble(tableMetrics.get(model.getValueAt(i, 0).toString()))*1000) > 0.0))) ||
+                       (Math.abs(Double.parseDouble(tableMetrics.get(model.getValueAt(i, 0).toString()))/1000.0) > 10)){
                     NumberFormat formatter = new DecimalFormat("0.###E0");
                     value = formatter.format(Double.parseDouble(tableMetrics.get(model.getValueAt(i, 0).toString())));
                     model.setValueAt(value.replace(",", "."), i, 1);
                 }
+                else if((tableMetrics.get(model.getValueAt(i, 0).toString())).equals("NaN")){
+                    model.setValueAt("NaN", i, 1);
+                }
                 else{
-                    model.setValueAt(tableMetrics.get(model.getValueAt(i, 0).toString()), i, 1);
+                    NumberFormat formatter = new DecimalFormat("#0.000"); 
+                    String val = tableMetrics.get(model.getValueAt(i, 0).toString());
+                    model.setValueAt(formatter.format(Double.parseDouble(val)), i, 1);
                 } 
-            }
+            }*/
+            model.setValueAt(getValueFormatted(tableMetrics.get(model.getValueAt(i, 0).toString())), i, 1);
+            
         }
         
         jtable.repaint();
     }   
+      
+      
+    private String getValueFormatted(String value){
+        String formattedValue = new String();
+        
+        if(value.equals("-") || value.equals("NaN")){
+            return value;
+        }
+        
+        //Scientific notation numbers
+        if( (((Math.abs(Double.parseDouble(value)*1000) < 1.0)) && 
+                    ((Math.abs(Double.parseDouble(value)*1000) > 0.0))) ||
+                (Math.abs(Double.parseDouble(value)/1000.0) > 10)){
+            NumberFormat formatter = new DecimalFormat("0.###E0");
+            formattedValue = formatter.format(Double.parseDouble(value));
+        }
+        //Decimal numbers
+        else{
+            NumberFormat formatter = new DecimalFormat("#0.000"); 
+            formattedValue = formatter.format(Double.parseDouble(value));
+        } 
+        
+        return formattedValue;
+    }
       
       
     private void clearTable_metrics_principal()
@@ -7381,9 +7414,9 @@ private void Inicializa_config()
        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
        tcm.getColumn(1).setCellRenderer(rightRenderer);
 
-       tcm.getColumn(2).setPreferredWidth(30);
-       tcm.getColumn(2).setMaxWidth(30);
-       tcm.getColumn(2).setMinWidth(30);
+       tcm.getColumn(2).setPreferredWidth(50);
+       tcm.getColumn(2).setMaxWidth(50);
+       tcm.getColumn(2).setMinWidth(50);
         
        JScrollPane scrollPane = new JScrollPane(table);
         

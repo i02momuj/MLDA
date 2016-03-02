@@ -45,7 +45,13 @@ public class metrics
             double bound = Bound(dataset);
             double labelsets = DistincLabelset(stat);
             
-            return labelsets/bound;
+            System.out.println("bound: " + bound);
+            System.out.println("labelsets: " + labelsets);
+            
+            double diversity = labelsets/bound;
+            System.out.println("diversity: " + diversity);
+            
+            return(diversity);
             
         }
     
