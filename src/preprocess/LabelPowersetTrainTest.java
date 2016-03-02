@@ -102,7 +102,7 @@ public class LabelPowersetTrainTest{
             Random rand = new Random();
             int r, swap;
             for(int i=0; i<100; i++){
-                r = rand.nextInt();
+                r = rand.nextInt(100);
                 swap = v[r];
                 v[r] = v[i];
                 v[i] = swap;

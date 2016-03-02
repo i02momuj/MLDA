@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.nio.channels.FileChannel;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,13 +39,19 @@ public class FeatureSelector {
         this.nFeatures = nFeatures;
     }
     
-    public MultiLabelInstances select(){
+    public MultiLabelInstances select(String combination, String normalization, String output){
         
         MultiLabelInstances modifiedDataset = null;
         
+        if( (!combination.equals("max")) && (!combination.equals("min")) && (!combination.equals("avg")) 
+                && (!normalization.equals("dl")) && (!normalization.equals("dm")) && (!normalization.equals("none"))
+                && (!output.equals("eval")) && (!output.equals("rank")) ){
+            return null;
+        }
+        
         try {
             ASEvaluation ase = new ChiSquaredAttributeEval();
-            BinaryRelevanceAttributeEvaluator ae = new BinaryRelevanceAttributeEvaluator(ase, dataset, "max", "dl", "eval");
+            BinaryRelevanceAttributeEvaluator ae = new BinaryRelevanceAttributeEvaluator(ase, dataset, combination, normalization, output);
             
             Ranker r = new Ranker();
             int[] result = r.search(ae, dataset);
@@ -71,93 +78,48 @@ public class FeatureSelector {
     }
     
     
-	public static void main(String[] args) throws Exception {
-		// TODO Auto-generated method stub
-				// String path = Utils.getOption("path", args);
-			    // String filestem = Utils.getOption("filestem", args);
-			    // int nKeep = new Integer(Utils.getOption("nKeep", args)).intValue();
-		
-                            String path = new String("data\\emotions\\");
-			    String filestem = new String("emotions"); 
-			    int nKeep = new Integer("10").intValue();
-			    
-			     MultiLabelInstances mlData = new MultiLabelInstances(path + filestem + ".arff", path + filestem + ".xml");
-				 System.out.println("Number of attributes after: " + mlData.getFeatureAttributes().size());
-			     System.out.println("Number of instances after: " + mlData.getNumInstances());
-			     System.out.println("Number of classes after: " + mlData.getNumLabels());
-			     			        
-			     //ASEvaluation ase = new GainRatioAttributeEval();
-			     ASEvaluation ase = new ChiSquaredAttributeEval();
-			     
-			     //MultiClassTransformation mt = new Copy();
-			     //MultiClassAttributeEvaluator ae = new MultiClassAttributeEvaluator(ase, mt, mlData);
-			     //LabelPowersetAttributeEvaluator ae = new LabelPowersetAttributeEvaluator(ase, mlData);
-			     
-			     BinaryRelevanceAttributeEvaluator ae = new BinaryRelevanceAttributeEvaluator(ase, mlData, "max", "dl", "eval");
-			     //metodo de combinacion max, min, avg (mayor, menor, o media de las puntuaciones)
-			     //normalizacion: dl (divide by length), dm (divide by maximum), none
-			     //salida: eval (puntuacion), rank (ranking) 
-			     
+    public MultiLabelInstances randomSelect(){
+        
+        MultiLabelInstances modifiedDataset = null;
 
-			     Ranker r = new Ranker();
-			     int[] result = r.search(ae, mlData);
-			     System.out.println(Arrays.toString(result));
-			  
-			     int[] toKeep = new int[nKeep + mlData.getNumLabels()];
-			     System.arraycopy(result, 0, toKeep, 0, nKeep);
-			     int[] labelIndices = mlData.getLabelIndices();
-			     for (int i = 0; i < mlData.getNumLabels(); i++) {
-			           toKeep[nKeep + i] = labelIndices[i];
-			     }			     
-		     
-			     Remove filterRemove = new Remove();
-			     filterRemove.setAttributeIndicesArray(toKeep);
-			     filterRemove.setInvertSelection(true);
-			     filterRemove.setInputFormat(mlData.getDataSet());
-				
-			    Instances filtered;
-				filtered = Filter.useFilter(mlData.getDataSet(), filterRemove);
-				MultiLabelInstances mlFiltered = new MultiLabelInstances(filtered, mlData.getLabelsMetaData());
-			      		
-				//Copiamos el xml para que tenga el mismo nombre del nuevo arff
-			    System.out.println("Constructing XML file... ");
-			    copyFile(new File(path + filestem + ".xml"), new File(path + filestem+nKeep+".xml"));
-			        
-				//FORMA 1 DE ESCRIBIR EL DATASET
-				//ArffSaver saver = new ArffSaver();
-				//saver.setInstances(mlFiltered.getDataSet());
-		        //saver.setFile(new File(path + filestem+nKeep+".arff"));
-		        //saver.writeBatch();
-				
-				//FORMA 2 DE ESCRIBIR EL DATASET
-				BufferedWriter writer = new BufferedWriter(new FileWriter(path + filestem+nKeep+".arff"));
-		    	writer.write(mlFiltered.getDataSet().toString());
-				writer.close();
-				
-		        	        
-		        //Comprobacion:
-				MultiLabelInstances mlDataSet = new MultiLabelInstances(path+filestem+nKeep+".arff", path+filestem+".xml");
-				
-				System.out.println("Number of attributes before: " + mlDataSet.getFeatureAttributes().size());
-		        System.out.println("Number of instances before: " + mlDataSet.getNumInstances());
-		        System.out.println("Number of classes before: " + mlDataSet.getNumLabels());
-				
-	}
-	
-	
-	public static void copyFile(File s, File t)
-    {
-        try{
-              FileChannel in = (new FileInputStream(s)).getChannel();
-              FileChannel out = (new FileOutputStream(t)).getChannel();
-              in.transferTo(0, s.length(), out);
-              in.close();
-              out.close();
+        try {
+
+            int [] attIndices = dataset.getFeatureIndices();
+            int r, swap;
+            Random rand = new Random();
+            
+            for(int i=0; i<attIndices.length; i++){
+                r = rand.nextInt(attIndices.length);
+                swap = attIndices[r];
+                attIndices[r] = attIndices[i];
+                attIndices[i] = swap;
+            }
+            
+            
+            int[] toKeep = new int[nFeatures + dataset.getNumLabels()];
+            
+            System.arraycopy(attIndices, 0, toKeep, 0, nFeatures);
+            System.out.println("toKeep1: " + Arrays.toString(toKeep));
+
+            int[] labelIndices = dataset.getLabelIndices();
+            System.arraycopy(labelIndices, 0, toKeep, nFeatures, dataset.getNumLabels());
+            
+            System.out.println("nFeatures: " + nFeatures);
+            System.out.println("toKeep2: " + Arrays.toString(toKeep));
+            
+            Remove filterRemove = new Remove();
+            filterRemove.setAttributeIndicesArray(toKeep);
+            filterRemove.setInvertSelection(true);
+            filterRemove.setInputFormat(dataset.getDataSet());
+
+            modifiedDataset = new MultiLabelInstances( Filter.useFilter(dataset.getDataSet(), filterRemove), dataset.getLabelsMetaData());
+
+        } catch (Exception ex) {
+            Logger.getLogger(FeatureSelector.class.getName()).log(Level.SEVERE, null, ex);
         }
-        catch(Exception e)
-        {
-            System.out.println(e);
-        }
+        
+        return modifiedDataset;
     }
+
 
 }

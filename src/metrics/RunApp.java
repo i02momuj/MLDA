@@ -71,6 +71,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.DefaultXYDataset;
 import org.jfree.data.xy.XYDataset;
 import org.tc33.jheatchart.HeatChart;
+import preprocess.FeatureSelector;
 import preprocess.RandomTrainTest;
 import preprocess.IterativeTrainTest;
 import preprocess.LabelPowersetTrainTest;
@@ -150,6 +151,7 @@ public class RunApp extends javax.swing.JFrame {
      
     //JPanel container;
     MultiLabelInstances dataset,dataset_train, dataset_test;
+    MultiLabelInstances FSdataset;
     String filename_database_xml=null,filename_database_xml_path="";
     String filename_database_arff_test;
              
@@ -1552,7 +1554,7 @@ private void Inicializa_config()
             }
         });
 
-        labelBRFS_Out.setText("Output");
+        labelBRFS_Out.setText("Scoring");
         labelBRFS_Out.setEnabled(false);
 
         jComboBox_BRFS_Out.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "eval", "rank" }));
@@ -3239,7 +3241,7 @@ private void Inicializa_config()
             JOptionPane.showMessageDialog(null, "You must click Start before", "alert", JOptionPane.ERROR_MESSAGE); 
             return;
         }
-        if((false) && (radioBRFS.isSelected() || radioRandomFS.isSelected())){
+        if((FSdataset == null) && (radioBRFS.isSelected() || radioRandomFS.isSelected())){
            JOptionPane.showMessageDialog(null, "You must click Start before", "alert", JOptionPane.ERROR_MESSAGE); 
            return; 
         }
@@ -3333,6 +3335,43 @@ private void Inicializa_config()
                         e1.printStackTrace();
                     }
 
+                }
+                else if(radioBRFS.isSelected() || radioRandomFS.isSelected())//Feature selection
+                {
+                    BufferedWriter bw_train = null;
+                    try {
+
+                        String name_dataset= dataset_name1.substring(0,dataset_name1.length()-5);
+                        
+                        //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+                        //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+                        //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+
+                        String dataPath = file.getAbsolutePath()+"/"+name_dataset+"-FS.arff";
+                        path_xml = file.getAbsolutePath()+"/"+name_dataset+".xml";
+
+                        bw_train = new BufferedWriter(new FileWriter(dataPath));
+                        PrintWriter wr_train = new PrintWriter(bw_train);
+
+                        //System.out.println("longitud del train es "+dataset_train.getNumInstances());
+                        util.Save_dataset_in_the_file(wr_train, FSdataset, name_dataset+"_FS");
+
+                        wr_train.close();
+                        bw_train.close();
+
+                        BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
+                        PrintWriter wr_xml = new PrintWriter(bw_xml);
+
+                        util.Save_xml_in_the_file(wr_xml,filename_database_xml_path);
+
+                        wr_xml.close();
+                        bw_xml.close();
+
+                        JOptionPane.showMessageDialog(null, "All Files are saved", "Successful", JOptionPane.INFORMATION_MESSAGE);
+
+                    } catch (IOException ex) {
+                        Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
                 Toolkit.getDefaultToolkit().beep();
             }
@@ -3670,10 +3709,55 @@ private void Inicializa_config()
                     Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        }
-        //FS1
-        else if(radioBRFS.isSelected()){
             
+            holdout_random =false;
+            cv_ramdon =false;
+            holdout_iterative_stratified =false;
+            cv_iterative_stratified =false;
+            holdout_LP_stratified =false;
+            cv_LP_stratified =true;
+            feature_selection_br = false;
+            feature_selection_random = false;
+        }
+        //FS_BR
+        else if(radioBRFS.isSelected()){
+            int nFeatures = Integer.parseInt(textBRFS.getText());
+            String combination = jComboBox_BRFS_Comb.getSelectedItem().toString();
+            String normalization = jComboBox_BRFS_Norm.getSelectedItem().toString();
+            String output = jComboBox_BRFS_Out.getSelectedItem().toString();
+            
+            FeatureSelector fs = new FeatureSelector(dataset, nFeatures);
+            FSdataset = fs.select(combination, normalization, output);
+            
+            if(FSdataset == null)
+            {
+                JOptionPane.showMessageDialog(null, "Error when selecting features.", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            holdout_random =false;
+            cv_ramdon =false;
+            holdout_iterative_stratified =false;
+            cv_iterative_stratified =false;
+            holdout_LP_stratified =false;
+            cv_LP_stratified =false;
+            feature_selection_br = true;
+            feature_selection_random = false;
+        }
+        else if(radioRandomFS.isSelected()){
+            int nFeatures = Integer.parseInt(textRandomFS.getText());
+            
+            FeatureSelector fs = new FeatureSelector(dataset, nFeatures);
+            FSdataset = fs.randomSelect();
+
+            holdout_random =false;
+            cv_ramdon =false;
+            holdout_iterative_stratified =false;
+            cv_iterative_stratified =false;
+            holdout_LP_stratified =false;
+            cv_LP_stratified =false;
+            feature_selection_br = false;
+            feature_selection_random = true;
         }
         else{
             System.out.println("No radio button is selected.");

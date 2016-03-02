@@ -2334,7 +2334,12 @@ public class util {
     
     public static void Save_dataset_in_the_file(PrintWriter wr, MultiLabelInstances dataset)
     {
-       wr.write("@relation "+dataset.getDataSet().relationName());
+        Save_dataset_in_the_file(wr, dataset, dataset.getDataSet().relationName());   
+    }
+    
+    public static void Save_dataset_in_the_file(PrintWriter wr, MultiLabelInstances dataset, String relationName)
+    {
+       wr.write("@relation " + relationName);
        wr.write(System.getProperty("line.separator"));  
        //wr.write(System.getProperty("line.separator"));  
         
