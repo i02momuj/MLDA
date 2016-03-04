@@ -4,6 +4,7 @@ import com.mxgraph.view.mxGraph;
 import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -166,7 +167,7 @@ public class RunApp extends javax.swing.JFrame {
     //PERTENECE A LA PESTAÑA CHOOSE DATASETS
     JButton button_all_2,button_none_2,button_invert_2, button_calculate_2,button_save2;
     
-    JButton button_all_1,button_none_1,button_invert_1, button_calculate_1,button_save;
+    JButton button_all_1,button_none_1,button_invert_1, button_calculate_1,button_save, button_clear;
     JButton button_all_3,button_none_3,button_invert_3, button_calculate_3,button_save3;
     JButton export1,export2,export3,export4,export5,export6,export7;
     
@@ -230,7 +231,6 @@ public class RunApp extends javax.swing.JFrame {
     Hashtable<String, String> tableMetrics_test = new Hashtable<String, String>();
     
     
-    
     public RunApp() 
     {
         jTable5 = new JTable();
@@ -251,8 +251,7 @@ public class RunApp extends javax.swing.JFrame {
         this.setBounds(300,0, 780, 500);
         
         
-        
-        initComponents();        
+        initComponents();   
 
         Inicializa_config(); //add jradionbutton
      
@@ -378,7 +377,7 @@ private void Inicializa_config()
       
       create_jtable_metrics_jpanel1(jTable9,panelImbalanceDataMetrics,button_all_3,button_none_3,button_invert_3,button_calculate_3,button_save3,30,50,500,200,"imbalanced"); //imbalanced class
       
-      create_jtable_metrics_jpanel1_principal(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save,30,190,780,280,"database"); //tab Database //35,155,500,355
+      create_jtable_metrics_jpanel1_principal(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save, button_clear, 30,190,780,280,"database"); //tab Database //35,155,500,355
       create_jtable_metrics_jpanel14(jTable8,panelMultipleDatasets,button_all_2,button_none_2,button_invert_2,button_calculate_2,button_save2,290,35,565,400); //
       
       //create_jtable_metrics_jpanel2();
@@ -801,7 +800,7 @@ private void Inicializa_config()
     }
     
     
-    private void create_jtable_metrics_jpanel1_principal(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_calculate,JButton button_save, int posx,int posy, int width, int heigh,String info)
+    private void create_jtable_metrics_jpanel1_principal(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_calculate,JButton button_save, JButton button_clear, int posx,int posy, int width, int heigh,String info)
     {
         if(info.equals("imbalanced"))
         create_jtable_metric(jtable,jpanel, util.Get_row_data_imbalanced(),posx,posy,width,heigh);  
@@ -843,6 +842,17 @@ private void Inicializa_config()
                             }
         });
       jpanel.add(button_invert);
+      
+      //button CLEAR
+      button_clear = new JButton("Clear");
+      button_clear.setBounds(posx+270, posy+heigh+5, 80, 20);
+            
+      button_clear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_clearActionPerformed_principal(evt,jtable);
+                            }
+        });
+      jpanel.add(button_clear);
       
          //button CALCULATE
       button_calculate = new JButton("Calculate");
@@ -1053,6 +1063,7 @@ private void Inicializa_config()
         jPanel15 = new javax.swing.JPanel();
         radioExamplesPerLabel = new javax.swing.JRadioButton();
         radioExamplesPerLabelset = new javax.swing.JRadioButton();
+        jComboLabelInformation = new javax.swing.JComboBox();
         jPanel21 = new javax.swing.JPanel();
         tabsDependences = new javax.swing.JTabbedPane();
         panelChiFi = new javax.swing.JPanel();
@@ -1696,7 +1707,7 @@ private void Inicializa_config()
         );
         panelExamplesPerLabelLayout.setVerticalGroup(
             panelExamplesPerLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
+            .addGap(0, 419, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("# Examples per label", panelExamplesPerLabel);
@@ -1709,7 +1720,7 @@ private void Inicializa_config()
         );
         panelExamplesPerLabelsetLayout.setVerticalGroup(
             panelExamplesPerLabelsetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
+            .addGap(0, 419, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("# Examples per labelset", panelExamplesPerLabelset);
@@ -1722,7 +1733,7 @@ private void Inicializa_config()
         );
         panelLabelsPerExampleLayout.setVerticalGroup(
             panelLabelsPerExampleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
+            .addGap(0, 419, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("# Labels per example ", panelLabelsPerExample);
@@ -1735,7 +1746,7 @@ private void Inicializa_config()
         );
         panelLabelsIRperLabelIntraClassLayout.setVerticalGroup(
             panelLabelsIRperLabelIntraClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
+            .addGap(0, 419, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("#Labels/IR per label intra class", panelLabelsIRperLabelIntraClass);
@@ -1748,7 +1759,7 @@ private void Inicializa_config()
         );
         panelIRperLabelIntraClassLayout.setVerticalGroup(
             panelIRperLabelIntraClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
+            .addGap(0, 419, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("IR per label intra class", panelIRperLabelIntraClass);
@@ -1761,7 +1772,7 @@ private void Inicializa_config()
         );
         panelIRperLabelsetLayout.setVerticalGroup(
             panelIRperLabelsetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
+            .addGap(0, 419, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("IR per labelset", panelIRperLabelset);
@@ -1774,7 +1785,7 @@ private void Inicializa_config()
         );
         panelImbalanceDataMetricsLayout.setVerticalGroup(
             panelImbalanceDataMetricsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
+            .addGap(0, 419, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("Imbalance data metrics ", panelImbalanceDataMetrics);
@@ -1787,7 +1798,7 @@ private void Inicializa_config()
         );
         panelBoxDiagramLayout.setVerticalGroup(
             panelBoxDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
+            .addGap(0, 419, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("Box diagram", panelBoxDiagram);
@@ -1800,7 +1811,7 @@ private void Inicializa_config()
         );
         panelIRperLabelInterClassLayout.setVerticalGroup(
             panelIRperLabelInterClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
+            .addGap(0, 419, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("IR per label inter class", panelIRperLabelInterClass);
@@ -1813,7 +1824,7 @@ private void Inicializa_config()
         );
         panelLabelsIRperLabelInterClassLayout.setVerticalGroup(
             panelLabelsIRperLabelInterClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
+            .addGap(0, 419, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
@@ -1919,6 +1930,8 @@ private void Inicializa_config()
                 .addComponent(radioExamplesPerLabelset, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jComboLabelInformation.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "# Examples per label", "# Examples per labelset", "# Labels per example", "# Labels/IR per label intra class", "IR per label intra class", "IR per label inter class", "#Labels/IR per label inter class", "IR per labelset", "Imbalance data metrics", "Box diagram" }));
+
         javax.swing.GroupLayout panelImbalanceLayout = new javax.swing.GroupLayout(panelImbalance);
         panelImbalance.setLayout(panelImbalanceLayout);
         panelImbalanceLayout.setHorizontalGroup(
@@ -1928,16 +1941,21 @@ private void Inicializa_config()
                 .addGroup(panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelImbalanceLeft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tabsImbalance, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(tabsImbalance)
+                    .addComponent(jComboLabelInformation, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         panelImbalanceLayout.setVerticalGroup(
             panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelImbalanceLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelImbalanceLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tabsImbalance, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGroup(panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panelImbalanceLayout.createSequentialGroup()
+                        .addComponent(jComboLabelInformation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(tabsImbalance, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                     .addGroup(panelImbalanceLayout.createSequentialGroup()
                         .addComponent(panelImbalanceLeft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -2431,9 +2449,12 @@ private void Inicializa_config()
     private void tableImbalanceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableImbalanceMouseClicked
         // evento cuando se da un click en el jtable de la pestaña class imbalance
         
+        for(int i=0; i<tabsImbalance.getTabCount(); i++){
+            System.out.println("i: " + i + " - " + tabsImbalance.getTitleAt(i));
+        }
         
-        
-        if(tabsImbalance.getSelectedIndex()==1) // si esta activado el panel de los labelcoumb
+        //#Examples per labelset
+        if(tabsImbalance.getSelectedIndex()==1 || jComboLabelInformation.getSelectedIndex()==1) // si esta activado el panel de los labelcoumb
         {
             //System.out.println("Se ha tocado");
             int seleccionada = tableImbalance.getSelectedRow();
@@ -2459,7 +2480,7 @@ private void Inicializa_config()
             mo.setVisible(true);
         }
         
-        else if(tabsImbalance.getSelectedIndex()==7) // si esta activado el panel de los BOX DIAGRAM
+        else if(tabsImbalance.getSelectedIndex()==7 || jComboLabelInformation.getSelectedIndex()==7) // si esta activado el panel de los BOX DIAGRAM
         {
             //BUTTON GROUP
             jRadioButton8.setSelected(true);
@@ -2486,7 +2507,7 @@ private void Inicializa_config()
          
         }
         
-           else if(tabsImbalance.getSelectedIndex()==5) // si esta activado el panel del IR per Labelset
+           else if(tabsImbalance.getSelectedIndex()==5 || jComboLabelInformation.getSelectedIndex()==5) // si esta activado el panel del IR per Labelset
         {
              
                //System.out.println("Se ha tocado");
@@ -2513,7 +2534,7 @@ private void Inicializa_config()
             mo.setVisible(true);
         }
         
-         else if(tabsImbalance.getSelectedIndex()==3) // si esta activado el panel del IR per Label intra class
+         else if(tabsImbalance.getSelectedIndex()==3 || jComboLabelInformation.getSelectedIndex()==3) // si esta activado el panel del IR per Label intra class
         {
              
                //System.out.println("Se ha tocado");
@@ -2539,7 +2560,7 @@ private void Inicializa_config()
     
         }
         
-         else if(tabsImbalance.getSelectedIndex()==9) // si esta activado el panel del IR per Label inter class
+         else if(tabsImbalance.getSelectedIndex()==9 || jComboLabelInformation.getSelectedIndex()==9) // si esta activado el panel del IR per Label inter class
         {
              
                //System.out.println("Se ha tocado");
@@ -2574,7 +2595,7 @@ private void Inicializa_config()
                         
             System.out.println(" id "+ tabsImbalance.getSelectedIndex());
             
-            if(tabsImbalance.getSelectedIndex()==1)
+            if(tabsImbalance.getSelectedIndex()==1 || jComboLabelInformation.getSelectedIndex()==1)
             {
                 tableImbalance.setModel(tm_LP1);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Frequency per labelset"));
@@ -2585,7 +2606,7 @@ private void Inicializa_config()
                 labelIR2.setVisible(false);
             }
             
-            else if (tabsImbalance.getSelectedIndex()==5)
+            else if (tabsImbalance.getSelectedIndex()==5 || jComboLabelInformation.getSelectedIndex()==5)
             {
                 tableImbalance.setModel(tm_ir_per_labelset);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset id per IR"));
@@ -2599,7 +2620,7 @@ private void Inicializa_config()
                 labelIR1.setVisible(true);
                 labelIR2.setVisible(true);
             }
-            else if (tabsImbalance.getSelectedIndex()==0)
+            else if (tabsImbalance.getSelectedIndex()==0 || jComboLabelInformation.getSelectedIndex()==0)
             {
                 tableImbalance.setModel(tm_BR1);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Frequency per label"));
@@ -2614,7 +2635,7 @@ private void Inicializa_config()
                 labelIR2.setVisible(false);
 
             }
-             else if (tabsImbalance.getSelectedIndex()==6) // imbalance data metric
+             else if (tabsImbalance.getSelectedIndex()==6 || jComboLabelInformation.getSelectedIndex()==6) // imbalance data metric
             {
                  tableImbalance.setModel(tm_IR);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imabalance ratio per label"));
@@ -2630,7 +2651,7 @@ private void Inicializa_config()
                 labelIR1.setVisible(true);
                 labelIR2.setVisible(true);
             }
-            else if (tabsImbalance.getSelectedIndex()==3)
+            else if (tabsImbalance.getSelectedIndex()==3 || jComboLabelInformation.getSelectedIndex()==3)
             {
                 tableImbalance.setModel(tm_ir_per_label_intra_class);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Number of labels intra class per IR"));
@@ -2645,7 +2666,7 @@ private void Inicializa_config()
                 labelIR2.setVisible(true);
 
             }
-            else if (tabsImbalance.getSelectedIndex()==2)
+            else if (tabsImbalance.getSelectedIndex()==2 || jComboLabelInformation.getSelectedIndex()==2)
             {
                 tableImbalance.setModel(tm_labelxExamples);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels per example"));
@@ -2674,7 +2695,7 @@ private void Inicializa_config()
 
             }
             
-            else if (tabsImbalance.getSelectedIndex()==8)
+            else if (tabsImbalance.getSelectedIndex()==8 || jComboLabelInformation.getSelectedIndex()==8)
             {
                tableImbalance.setModel(tm_ir_per_label_inter_class_only);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Label per IR values inter class"));
@@ -2691,7 +2712,7 @@ private void Inicializa_config()
                 
             }
             
-            else if (tabsImbalance.getSelectedIndex()==9)
+            else if (tabsImbalance.getSelectedIndex()==9 || jComboLabelInformation.getSelectedIndex()==9)
             {
                 tableImbalance.setModel(tm_ir_per_label_inter_class);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Number of labels inter class per IR"));
@@ -2720,7 +2741,7 @@ private void Inicializa_config()
                 */
             }
             
-            else if (tabsImbalance.getSelectedIndex()==4)
+            else if (tabsImbalance.getSelectedIndex()==4 || jComboLabelInformation.getSelectedIndex()==4)
             {
                // jTable4.setModel(tm_ir_per_labelset);
                // jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset id per IR"));
@@ -2740,7 +2761,7 @@ private void Inicializa_config()
 
             }
             
-            else if (tabsImbalance.getSelectedIndex()==7)
+            else if (tabsImbalance.getSelectedIndex()==7 || jComboLabelInformation.getSelectedIndex()==7)
             {
                 tableImbalance.setModel(tm_attr);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Numeric attributes"));
@@ -4520,8 +4541,7 @@ private void Inicializa_config()
         
         
                
-        try {            
-            
+        try {        
              export2.setVisible(true); //boton salvar de la tabla de la izquierda en class imbalance
             
              
@@ -4530,10 +4550,17 @@ private void Inicializa_config()
             
              
              //para el box diagram
-             if(tabsImbalance.getSelectedIndex()==7)jPanel15.setVisible(true);
-             else jPanel15.setVisible(false);
+             if(tabsImbalance.getSelectedIndex()==7 || jComboLabelInformation.getSelectedIndex()==7){
+                 jPanel15.setVisible(true);
+             }
+             else {
+                 jPanel15.setVisible(false);
+             }
             
-             if(tabsImbalance.getSelectedIndex()==3 || tabsImbalance.getSelectedIndex()==4 || tabsImbalance.getSelectedIndex()==5|| tabsImbalance.getSelectedIndex()==6) 
+             if(tabsImbalance.getSelectedIndex()==3  || jComboLabelInformation.getSelectedIndex()==3
+                     || tabsImbalance.getSelectedIndex()==4  || jComboLabelInformation.getSelectedIndex()==4
+                     || tabsImbalance.getSelectedIndex()==5 || jComboLabelInformation.getSelectedIndex()==5
+                     || tabsImbalance.getSelectedIndex()==6 || jComboLabelInformation.getSelectedIndex()==6) 
              {
                  labelIR1.setVisible(true);
                  labelIR2.setVisible(true);
@@ -4642,7 +4669,7 @@ private void Inicializa_config()
             if(tm_BR1 !=null && tm_LP1!=null)
             {               
                 
-            if(tabsImbalance.getSelectedIndex()==1)
+            if(tabsImbalance.getSelectedIndex()==1 || jComboLabelInformation.getSelectedIndex()==1)
             {
                 tableImbalance.setModel(tm_LP1);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Frequency per labelset"));
@@ -4652,7 +4679,7 @@ private void Inicializa_config()
                 panelImbalanceLeft.validate();
 
             }
-            else if (tabsImbalance.getSelectedIndex()==5) // ir per labelset
+            else if (tabsImbalance.getSelectedIndex()==5 || jComboLabelInformation.getSelectedIndex()==5) // ir per labelset
             {
                 tableImbalance.setModel(tm_ir_per_labelset);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset id per IR"));
@@ -4671,7 +4698,7 @@ private void Inicializa_config()
                 */
             }
             
-            else if (tabsImbalance.getSelectedIndex()==0)
+            else if (tabsImbalance.getSelectedIndex()==0 || jComboLabelInformation.getSelectedIndex()==0)
             {
                 tableImbalance.setModel(tm_BR1);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Frequency per label"));
@@ -4680,7 +4707,7 @@ private void Inicializa_config()
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
             }
-            else if (tabsImbalance.getSelectedIndex()==6)//imbalance data metric
+            else if (tabsImbalance.getSelectedIndex()==6 || jComboLabelInformation.getSelectedIndex()==6)//imbalance data metric
             {
                 tableImbalance.setModel(tm_IR);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imabalance ratio per label"));
@@ -4695,7 +4722,7 @@ private void Inicializa_config()
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
             }
-            else if (tabsImbalance.getSelectedIndex()==3)
+            else if (tabsImbalance.getSelectedIndex()==3 || jComboLabelInformation.getSelectedIndex()==3)
             {
                 tableImbalance.setModel(tm_ir_per_label_intra_class);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Number of labels intra class per IR"));
@@ -4705,7 +4732,7 @@ private void Inicializa_config()
                 panelImbalanceLeft.validate();
             }
             
-            else if (tabsImbalance.getSelectedIndex()==2)
+            else if (tabsImbalance.getSelectedIndex()==2 || jComboLabelInformation.getSelectedIndex()==2)
             {
                 tableImbalance.setModel(tm_labelxExamples);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels per example"));
@@ -4722,7 +4749,7 @@ private void Inicializa_config()
                 jPanel17.validate();*/
             }
             
-            else if (tabsImbalance.getSelectedIndex()==8)
+            else if (tabsImbalance.getSelectedIndex()==8 || jComboLabelInformation.getSelectedIndex()==8)
             {
                 tableImbalance.setModel(tm_ir_per_label_inter_class_only);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Label per IR values inter class"));
@@ -4732,7 +4759,7 @@ private void Inicializa_config()
                 panelImbalanceLeft.validate();
             }
             
-            else if (tabsImbalance.getSelectedIndex()==9)
+            else if (tabsImbalance.getSelectedIndex()==9 || jComboLabelInformation.getSelectedIndex()==9)
             {
                 tableImbalance.setModel(tm_ir_per_label_inter_class);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Number of labels inter class per IR"));
@@ -4748,7 +4775,7 @@ private void Inicializa_config()
                 panelImbalanceLeft.validate();
             }
             
-            else if (tabsImbalance.getSelectedIndex()==4)
+            else if (tabsImbalance.getSelectedIndex()==4 || jComboLabelInformation.getSelectedIndex()==4)
             {
                               
                 tableImbalance.setModel(tm_ir_per_label_intra_class_only);
@@ -4761,7 +4788,7 @@ private void Inicializa_config()
             }
             
             
-            else if (tabsImbalance.getSelectedIndex()==7)
+            else if (tabsImbalance.getSelectedIndex()==7 || jComboLabelInformation.getSelectedIndex()==7)
             {
                 tableImbalance.setModel(tm_attr);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Numeric attributes"));
@@ -4901,43 +4928,43 @@ private void Inicializa_config()
             Instances i1= dataset.getDataSet();
 
                      
-            //relation
+            //Relation
             labelRelationValue.setText(dataset_current_name);
             
-            //cantidad de instancias
-            int num_instancias = i1.size();
-            labelInstancesValue.setText(Integer.toString(num_instancias));
+            //Instances
+            String num_instancias = util.get_value_metric("Instances", dataset, es_de_tipo_meka);
+            labelInstancesValue.setText(util.getValueFormatted("Instances", num_instancias));
             
-            //cant de atributos
-            int num_atributos= i1.numAttributes();
+            //Attributes
+            String num_atributos = util.get_value_metric("Attributes", dataset, es_de_tipo_meka);
+            labelAttributesValue.setText(util.getValueFormatted("Attributes", num_atributos));
             
-            int numero_etiquetas = dataset.getNumLabels();
-            labelAttributesValue.setText(Integer.toString(num_atributos-numero_etiquetas));
+            //Labels
+            labelLabelsValue.setText(util.getValueFormatted("Labels", util.get_value_metric("Labels", dataset, es_de_tipo_meka)));
             
-            //cant de etiquetas
-            labelLabelsValue.setText(Integer.toString(numero_etiquetas));
-            
-            //densidad
-            labelDensityValue.setText(util.Truncate_value(stat1.density(), 4));
+            //Density
+            String density = util.get_value_metric("Density", dataset, es_de_tipo_meka);
+            labelDensityValue.setText(util.getValueFormatted("Density", density));
                       
-            //cardinalidad
-            labelCardinalityValue.setText(util.Truncate_value(stat1.cardinality(), 4));
+            //Cardinality
+            String cardinality = util.get_value_metric("Cardinality", dataset, es_de_tipo_meka);
+            labelCardinalityValue.setText(util.getValueFormatted("Cardinality", cardinality));
             
-            // distinc labelset           
-            int DL = stat1.labelCombCount().size();
-            labelDistinctValue.setText(Integer.toString(DL));
+            //Diversity      
+            String diversity = util.get_value_metric("Diversity", dataset, es_de_tipo_meka);
+            labelDiversityValue.setText(util.getValueFormatted("Diversity", diversity));
             
-            //bound
-            int bound = (int)metrics.Bound(dataset);
-            labelBoundValue.setText(Integer.toString(bound));
+            //Bound
+            String bound = util.get_value_metric("Bound", dataset, es_de_tipo_meka);
+            labelBoundValue.setText(util.getValueFormatted("Bound", bound));
             
-            //diversity          
-            stat1.calculateStats(dataset);
-            double diversity = metrics.Diversity(dataset, stat1);
-            labelDiversityValue.setText(util.Truncate_values_aprox_zero(Double.toString(diversity), 4));
+            //Distinct labelset     
+            String distinct_labelset = util.get_value_metric("Distinct Labelset", dataset, es_de_tipo_meka);
+            labelDistinctValue.setText(util.getValueFormatted("Distinct Labelset", distinct_labelset));
             
-            int value = (int) metrics.labelsxinstancesxfeatures(dataset);
-            labelLxIxFValue.setText(Integer.toString(value));
+            //LxIxF
+            String LIF = util.get_value_metric("Labels x instances x features", dataset, es_de_tipo_meka);
+            labelLxIxFValue.setText(util.getValueFormatted("Labels x instances x features", LIF));
     }
   
     
@@ -5826,10 +5853,10 @@ private void Inicializa_config()
     }   
      
 
-      private void button_calculateActionPerformed_principal(java.awt.event.ActionEvent evt, JTable jtable)
+    private void button_calculateActionPerformed_principal(java.awt.event.ActionEvent evt, JTable jtable)
     {
        ArrayList<String> metric_list = Get_metrics_selected_principal(jtable);
-        
+
        if(dataset == null) {
            JOptionPane.showMessageDialog(null, "you must load a dataset ", "Warning", JOptionPane.ERROR_MESSAGE);
            return; 
@@ -5856,59 +5883,18 @@ private void Inicializa_config()
                 System.out.println(metric + " --- " + value + " --> " + value.replace(",", "."));
                 tableMetrics.put(metric, value.replace(",", "."));
                 //jTextArea1.append(metric + util.get_tabs_multi_datasets(metric) + value + "\n"); 
-           }     
+           }   
         }
        
         TableModel model = jtable.getModel();
         
         for(int i=0; i<model.getRowCount(); i++){
-            /*if(! (tableMetrics.get(model.getValueAt(i, 0).toString())).equals("-") ){
-                if( (((Math.abs(Double.parseDouble(tableMetrics.get(model.getValueAt(i, 0).toString()))*1000) < 1.0)) && 
-                            ((Math.abs(Double.parseDouble(tableMetrics.get(model.getValueAt(i, 0).toString()))*1000) > 0.0))) ||
-                       (Math.abs(Double.parseDouble(tableMetrics.get(model.getValueAt(i, 0).toString()))/1000.0) > 10)){
-                    NumberFormat formatter = new DecimalFormat("0.###E0");
-                    value = formatter.format(Double.parseDouble(tableMetrics.get(model.getValueAt(i, 0).toString())));
-                    model.setValueAt(value.replace(",", "."), i, 1);
-                }
-                else if((tableMetrics.get(model.getValueAt(i, 0).toString())).equals("NaN")){
-                    model.setValueAt("NaN", i, 1);
-                }
-                else{
-                    NumberFormat formatter = new DecimalFormat("#0.000"); 
-                    String val = tableMetrics.get(model.getValueAt(i, 0).toString());
-                    model.setValueAt(formatter.format(Double.parseDouble(val)), i, 1);
-                } 
-            }*/
-            model.setValueAt(getValueFormatted(tableMetrics.get(model.getValueAt(i, 0).toString())), i, 1);
-            
+            model.setValueAt(util.getValueFormatted(model.getValueAt(i, 0).toString(), tableMetrics.get(model.getValueAt(i, 0).toString())), i, 1);
         }
-        
-        jtable.repaint();
+
+       jtable.repaint();
     }   
       
-      
-    private String getValueFormatted(String value){
-        String formattedValue = new String();
-        
-        if(value.equals("-") || value.equals("NaN")){
-            return value;
-        }
-        
-        //Scientific notation numbers
-        if( (((Math.abs(Double.parseDouble(value)*1000) < 1.0)) && 
-                    ((Math.abs(Double.parseDouble(value)*1000) > 0.0))) ||
-                (Math.abs(Double.parseDouble(value)/1000.0) > 10)){
-            NumberFormat formatter = new DecimalFormat("0.###E0");
-            formattedValue = formatter.format(Double.parseDouble(value));
-        }
-        //Decimal numbers
-        else{
-            NumberFormat formatter = new DecimalFormat("#0.000"); 
-            formattedValue = formatter.format(Double.parseDouble(value));
-        } 
-        
-        return formattedValue;
-    }
       
       
     private void clearTable_metrics_principal()
@@ -6111,13 +6097,21 @@ private void Inicializa_config()
     
     private void button_noneActionPerformed_principal(java.awt.event.ActionEvent evt,JTable jtable)
     {
+
       TableModel tmodel = jtable.getModel();
        
        for(int i=0; i<tmodel.getRowCount();i++)
            tmodel.setValueAt(Boolean.FALSE, i, 2);
+       
+          try {
+              Thread.currentThread().sleep(2000);
+          } catch (InterruptedException ex) {
+              Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+          }
              
        jtable.setModel(tmodel);
        jtable.repaint();
+       //frame.setVisible(false);
     }      
     
         private void button_noneActionPerformed2(java.awt.event.ActionEvent evt,JTable jtable,JTable jtable1,JTable jtable2)
@@ -6168,6 +6162,38 @@ private void Inicializa_config()
              
        jtable.setModel(tmodel);
        jtable.repaint();
+    }
+    
+    
+    private void button_clearActionPerformed_principal(java.awt.event.ActionEvent evt ,JTable jtable)
+    {
+       TableModel tmodel = jtable.getModel();
+       //frame.setBounds(this.getBounds().x + this.getBounds().width/2 - 150, this.getBounds().y + this.getBounds().height/2 - 10, 300, 20);
+
+
+       
+       
+       for(int i=0; i<tmodel.getRowCount();i++)
+       {
+           tmodel.setValueAt(Boolean.FALSE, i, 2);
+           try {
+               Thread.currentThread().sleep(20);
+           } catch (InterruptedException ex) {
+               Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+           }
+       }
+             
+       clearTable_metrics_principal();
+       
+       
+       try {
+               Thread.currentThread().sleep(1000);
+           } catch (InterruptedException ex) {
+               Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+           }
+      // progress.setValue(65);
+       //frame.setVisible(false);
+      // jtable.repaint();
     }
     
 
@@ -7491,6 +7517,7 @@ private void Inicializa_config()
     private javax.swing.JComboBox jComboBox_BRFS_Comb;
     private javax.swing.JComboBox jComboBox_BRFS_Norm;
     private javax.swing.JComboBox jComboBox_BRFS_Out;
+    private javax.swing.JComboBox jComboLabelInformation;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel21;

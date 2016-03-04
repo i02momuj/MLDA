@@ -3559,6 +3559,7 @@ public class util {
                 wr.write(" ");
             }
             
+            /*
             //System.out.println("parseDouble: " + Double.parseDouble(tableMetrics.get(metric)));
             if((Math.abs(Double.parseDouble(tableMetrics.get(metric))*1000) < 0) ||
                     (Math.abs(Double.parseDouble(tableMetrics.get(metric))/1000.0) > 10)){
@@ -3568,7 +3569,9 @@ public class util {
             }
             else{
                 wr.write(tableMetrics.get(metric));
-            }
+            }*/
+            
+            wr.write(getValueFormatted(metric, tableMetrics.get(metric)));
             
             
             wr.write(System.getProperty("line.separator"));  
@@ -3608,15 +3611,14 @@ public class util {
           String value = new String();
         for(String metric : metric_list)
         {
-            if((Math.abs(Double.parseDouble(tableMetrics.get(metric))*1000) < 0) ||
-                    (Math.abs(Double.parseDouble(tableMetrics.get(metric))/1000.0) > 10)){
-                NumberFormat formatter = new DecimalFormat("0.###E0");
-                value = formatter.format(Double.parseDouble(tableMetrics.get(metric)));
-                wr.write(metric + ";" + value.replace(",", "."));
+            value = getValueFormatted(metric, tableMetrics.get(metric));
+            if(value.equals("---")){
+               wr.write(metric + ";" + "NaN"); 
             }
             else{
-                wr.write(metric + ";" + tableMetrics.get(metric));
+                wr.write(metric + ";" + value);
             }
+            
             wr.write(System.getProperty("line.separator"));  
         }
  
@@ -3679,15 +3681,15 @@ public class util {
         line += Integer.toString(numero_etiquetas) + ", ";
         line += Integer.toString(num_instances) + ", ";
         
+        String value = new String();
         for(String metric : metric_list)
-        {            
-            if((Math.abs(Double.parseDouble(tableMetrics.get(metric))*1000) < 0) ||
-                    (Math.abs(Double.parseDouble(tableMetrics.get(metric))/1000.0) > 10)){
-                NumberFormat formatter = new DecimalFormat("0.###E0");
-                line += formatter.format(Double.parseDouble(tableMetrics.get(metric)));
+        {         
+            value=getValueFormatted(metric, tableMetrics.get(metric));
+            if(value.equals("---")){
+                line += "NaN";
             }
             else{
-                line += tableMetrics.get(metric);
+                line += getValueFormatted(metric, tableMetrics.get(metric));
             }
             line += ", ";
         }
@@ -5109,6 +5111,55 @@ public class util {
             return true;
         }
         
+        
+        
+        public static String getValueFormatted(String name, String value){
+            String formattedValue = new String();
 
+            value = value.replace(",", ".");
+
+            if(value.equals("-")){
+                return value;
+            }
+
+            if(value.equals("NaN")){
+                return "---";
+            }
+
+
+            //Scientific notation numbers
+            if( (((Math.abs(Double.parseDouble(value)*1000) < 1.0)) && 
+                        ((Math.abs(Double.parseDouble(value)*1000) > 0.0))) ||
+                    (Math.abs(Double.parseDouble(value)/1000.0) > 10)){
+                NumberFormat formatter = new DecimalFormat("0.###E0");
+                formattedValue = formatter.format(Double.parseDouble(value));
+            }
+            //Integer numbers
+            else if( (name.toLowerCase().equals("attributes")) 
+                    || (name.toLowerCase().equals("bound")) 
+                    || (name.toLowerCase().equals("distinct labelset"))
+                    || (name.toLowerCase().equals("instances"))
+                    || (name.toLowerCase().equals("labels x instances x features"))
+                    || (name.toLowerCase().equals("labels")) 
+                    || (name.toLowerCase().equals("number of binary attributes"))
+                    || (name.toLowerCase().equals("number of labelsets up to 2 examples"))
+                    || (name.toLowerCase().equals("number of labelsets up to 5 examples"))
+                    || (name.toLowerCase().equals("number of labelsets up to 10 examples"))
+                    || (name.toLowerCase().equals("number of labelsets up to 50 examples"))
+                    || (name.toLowerCase().equals("number of nominal attributes"))
+                    || (name.toLowerCase().equals("number of unconditionally dependent label pairs by chi-square test"))){
+
+                NumberFormat formatter = new DecimalFormat("#0"); 
+                formattedValue = formatter.format(Double.parseDouble(value));
+            }
+            //Decimal numbers
+            else{
+                NumberFormat formatter = new DecimalFormat("#0.000"); 
+                formattedValue = formatter.format(Double.parseDouble(value));
+            } 
+
+            formattedValue = formattedValue.replace(",", ".");
+            return formattedValue;
+        }
         
 }
