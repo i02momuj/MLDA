@@ -208,6 +208,8 @@ public class RunApp extends javax.swing.JFrame {
     
     //variables chi and fi
     double[][] chi_fi_coefficient;
+    double [][] coocurrence_coefficients;
+    double [][] heatmap_coefficients;
      Object[][] data; 
      Object[] column;
      
@@ -272,7 +274,7 @@ public class RunApp extends javax.swing.JFrame {
        jPanel15.setVisible(false);
        labelIR1.setVisible(false); // comentario de IR>1.5
        labelIR2.setVisible(false); // comentario de IR>1.5
-       jLabel30.setVisible(false); // comentario de valores dependientes chi- coefficient
+       jLabelChiFi_text.setVisible(false); // comentario de valores dependientes chi- coefficient
        
        buttonGroup5.add(jRadioButton8);
        buttonGroup5.add(radioExamplesPerLabel);
@@ -320,21 +322,23 @@ public class RunApp extends javax.swing.JFrame {
     jPanel24.add(scroll, BorderLayout.CENTER);  
    */
    
-      chi = new JLabel("Chi");
-      chi.setBounds(0,80, 20,20);
+      chi = new JLabel("Chi coefficients", SwingConstants.CENTER);
+      chi.setBounds(25,420, 120,20);
       chi.setBackground(Color.white);
       chi.setForeground(Color.black);
+      chi.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
       chi.setOpaque(true);
            
-      panelChiFi.add(chi);
+      panelChiPhi.add(chi);
     
-      fi = new JLabel("Fi");
-      fi.setBounds(300,0, 20,20);
+      fi = new JLabel("Phi coefficients", SwingConstants.CENTER);
+      fi.setBounds(165,420, 120, 20);
       fi.setBackground(Color.gray);
       fi.setForeground(Color.white);
+      fi.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
       fi.setOpaque(true);
       
-      panelChiFi.add(fi);
+      panelChiPhi.add(fi);
     
     }
     
@@ -396,8 +400,9 @@ private void Inicializa_config()
       
       jTable11.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
       JScrollPane scrollPane = new JScrollPane(jTable11, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            
-      scrollPane.setBounds(20, 20, 760, 350);
+         
+      
+      scrollPane.setBounds(20, 20, 780, 390);
       jTable11.setBorder(BorderFactory.createLineBorder(Color.black));
       panelCoOcurrenceValues.add(scrollPane, BorderLayout.CENTER);
       
@@ -406,7 +411,7 @@ private void Inicializa_config()
       jTable12.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
       scrollPane = new JScrollPane(jTable12, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             
-      scrollPane.setBounds(20, 20, 760, 350);
+      scrollPane.setBounds(20, 20, 780, 390);
       jTable12.setBorder(BorderFactory.createLineBorder(Color.black));
       panelHeatmapValues.add(scrollPane, BorderLayout.CENTER);
       
@@ -423,12 +428,12 @@ private void Inicializa_config()
      
       
       
-      create_button_export(jTable10,fixedTable ,panelChiFi ,export3,350,370); // chi and fi values
-      create_button_export(jTable11,fixedTable1,panelCoOcurrenceValues ,export4,350,370);//graph values
-      create_button_export(jTable12,fixedTable2,panelHeatmapValues ,export5,350,370);//heatmap values
+      create_button_export(jTable10,fixedTable ,panelChiPhi ,export3,710,415, "ChiPhi"); // chi and fi values
+      create_button_export(jTable11,fixedTable1,panelCoOcurrenceValues ,export4,710,415, "Coocurrence");//graph values
+      create_button_export(jTable12,fixedTable2,panelHeatmapValues ,export5,710,415, "Heatmap");//heatmap values
       
-      create_button_export(panelCoOcurrence ,export6,450,405); //graph- dependences
-      create_button_export(panelHeatmapGraph,export7,450,370);
+      create_button_export(panelCoOcurrence ,export6,740,445); //graph- dependences
+      create_button_export(panelHeatmapGraph,export7,450,425);
       
       //create_button_export(jPanel21 ,export6,5,50);
       Border border = BorderFactory.createLineBorder(Color.gray, 1);
@@ -572,7 +577,7 @@ private void Inicializa_config()
     if(cant_labels >250 && cant_labels < 500)chart.setCellSize(new Dimension(2,1));
     if(cant_labels >500)
     {
-        JOptionPane.showMessageDialog(null, "Can´t represent the heapmap", "Warning", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "The heatmap can not be represented.", "Warning", JOptionPane.ERROR_MESSAGE);
         return null;
     }   
     
@@ -617,7 +622,7 @@ private void Inicializa_config()
     if(cant_labels >250 && cant_labels < 500)chart.setCellSize(new Dimension(2,1));
     if(cant_labels >500)
     {
-        JOptionPane.showMessageDialog(null, "Can´t represent the heapmap", "Warning", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "The heatmap can not be represented.", "Warning", JOptionPane.ERROR_MESSAGE);
         return null;
     }   
     
@@ -646,7 +651,7 @@ private void Inicializa_config()
       jpanel.add(jbutton_export);
     }
         
-         private JButton create_button_export_jtable4(final JTable jtable, JPanel jpanel, JButton jbutton_export, int posx,int posy)
+    private JButton create_button_export_jtable4(final JTable jtable, JPanel jpanel, JButton jbutton_export, int posx,int posy)
     {
       //button export table
       jbutton_export = new JButton("Save");
@@ -661,15 +666,15 @@ private void Inicializa_config()
       return jbutton_export;
     }
         
-            private void create_button_export(final JTable jtable,final JTable columns, JPanel jpanel, JButton jbutton_export, int posx,int posy)
+    private void create_button_export(final JTable jtable,final JTable columns, JPanel jpanel, JButton jbutton_export, int posx,int posy, final String table)
     {
       //button export table
       jbutton_export = new JButton("Save");
-      jbutton_export.setBounds(posx, posy, 80, 20);
+      jbutton_export.setBounds(posx, posy, 80, 25);
             
       jbutton_export.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_export_ActionPerformed(evt,jtable,columns );
+                button_export_ActionPerformed(evt,jtable,columns, table);
                             }
         });
       jpanel.add(jbutton_export);
@@ -679,7 +684,7 @@ private void Inicializa_config()
     {
       //button export table
       jbutton_export = new JButton("Save");
-      jbutton_export.setBounds(posx, posy, 80, 20);
+      jbutton_export.setBounds(posx, posy, 80, 25);
             
       jbutton_export.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -856,7 +861,7 @@ private void Inicializa_config()
       
          //button CALCULATE
       button_calculate = new JButton("Calculate");
-      button_calculate.setBounds(posx+595, posy+heigh+5, 90, 25);
+      button_calculate.setBounds(posx+590, posy+heigh+5, 95, 25);
             
       button_calculate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1063,17 +1068,15 @@ private void Inicializa_config()
         jPanel15 = new javax.swing.JPanel();
         radioExamplesPerLabel = new javax.swing.JRadioButton();
         radioExamplesPerLabelset = new javax.swing.JRadioButton();
-        jComboLabelInformation = new javax.swing.JComboBox();
         jPanel21 = new javax.swing.JPanel();
         tabsDependences = new javax.swing.JTabbedPane();
-        panelChiFi = new javax.swing.JPanel();
-        jLabel30 = new javax.swing.JLabel();
+        panelChiPhi = new javax.swing.JPanel();
+        jLabelChiFi_text = new javax.swing.JLabel();
         panelCoOcurrence = new javax.swing.JPanel();
         panelCoOcurrenceRight = new javax.swing.JPanel();
-        panelCoOcurrenceLeft = new javax.swing.JPanel();
+        buttonShowCoOcurrence = new javax.swing.JButton();
         jScrollPane7 = new javax.swing.JScrollPane();
         tableCoOcurrenceLeft = new javax.swing.JTable();
-        buttonShowCoOcurrence = new javax.swing.JButton();
         panelCoOcurrenceValues = new javax.swing.JPanel();
         panelHeatmapGraph = new javax.swing.JPanel();
         labelHeatmapGraph = new javax.swing.JLabel();
@@ -1693,6 +1696,7 @@ private void Inicializa_config()
 
         TabPrincipal.addTab("Preprocess", panelPreprocess);
 
+        tabsImbalance.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         tabsImbalance.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 tabsImbalanceStateChanged(evt);
@@ -1707,7 +1711,7 @@ private void Inicializa_config()
         );
         panelExamplesPerLabelLayout.setVerticalGroup(
             panelExamplesPerLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 419, Short.MAX_VALUE)
+            .addGap(0, 482, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("# Examples per label", panelExamplesPerLabel);
@@ -1720,7 +1724,7 @@ private void Inicializa_config()
         );
         panelExamplesPerLabelsetLayout.setVerticalGroup(
             panelExamplesPerLabelsetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 419, Short.MAX_VALUE)
+            .addGap(0, 482, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("# Examples per labelset", panelExamplesPerLabelset);
@@ -1733,7 +1737,7 @@ private void Inicializa_config()
         );
         panelLabelsPerExampleLayout.setVerticalGroup(
             panelLabelsPerExampleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 419, Short.MAX_VALUE)
+            .addGap(0, 482, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("# Labels per example ", panelLabelsPerExample);
@@ -1746,7 +1750,7 @@ private void Inicializa_config()
         );
         panelLabelsIRperLabelIntraClassLayout.setVerticalGroup(
             panelLabelsIRperLabelIntraClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 419, Short.MAX_VALUE)
+            .addGap(0, 482, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("#Labels/IR per label intra class", panelLabelsIRperLabelIntraClass);
@@ -1759,7 +1763,7 @@ private void Inicializa_config()
         );
         panelIRperLabelIntraClassLayout.setVerticalGroup(
             panelIRperLabelIntraClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 419, Short.MAX_VALUE)
+            .addGap(0, 482, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("IR per label intra class", panelIRperLabelIntraClass);
@@ -1772,7 +1776,7 @@ private void Inicializa_config()
         );
         panelIRperLabelsetLayout.setVerticalGroup(
             panelIRperLabelsetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 419, Short.MAX_VALUE)
+            .addGap(0, 482, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("IR per labelset", panelIRperLabelset);
@@ -1785,7 +1789,7 @@ private void Inicializa_config()
         );
         panelImbalanceDataMetricsLayout.setVerticalGroup(
             panelImbalanceDataMetricsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 419, Short.MAX_VALUE)
+            .addGap(0, 482, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("Imbalance data metrics ", panelImbalanceDataMetrics);
@@ -1798,7 +1802,7 @@ private void Inicializa_config()
         );
         panelBoxDiagramLayout.setVerticalGroup(
             panelBoxDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 419, Short.MAX_VALUE)
+            .addGap(0, 482, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("Box diagram", panelBoxDiagram);
@@ -1811,7 +1815,7 @@ private void Inicializa_config()
         );
         panelIRperLabelInterClassLayout.setVerticalGroup(
             panelIRperLabelInterClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 419, Short.MAX_VALUE)
+            .addGap(0, 482, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("IR per label inter class", panelIRperLabelInterClass);
@@ -1824,7 +1828,7 @@ private void Inicializa_config()
         );
         panelLabelsIRperLabelInterClassLayout.setVerticalGroup(
             panelLabelsIRperLabelInterClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 419, Short.MAX_VALUE)
+            .addGap(0, 482, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
@@ -1930,8 +1934,6 @@ private void Inicializa_config()
                 .addComponent(radioExamplesPerLabelset, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jComboLabelInformation.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "# Examples per label", "# Examples per labelset", "# Labels per example", "# Labels/IR per label intra class", "IR per label intra class", "IR per label inter class", "#Labels/IR per label inter class", "IR per labelset", "Imbalance data metrics", "Box diagram" }));
-
         javax.swing.GroupLayout panelImbalanceLayout = new javax.swing.GroupLayout(panelImbalance);
         panelImbalance.setLayout(panelImbalanceLayout);
         panelImbalanceLayout.setHorizontalGroup(
@@ -1942,9 +1944,7 @@ private void Inicializa_config()
                     .addComponent(panelImbalanceLeft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addGroup(panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(tabsImbalance)
-                    .addComponent(jComboLabelInformation, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(tabsImbalance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         panelImbalanceLayout.setVerticalGroup(
@@ -1952,10 +1952,7 @@ private void Inicializa_config()
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelImbalanceLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(panelImbalanceLayout.createSequentialGroup()
-                        .addComponent(jComboLabelInformation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(tabsImbalance, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(tabsImbalance)
                     .addGroup(panelImbalanceLayout.createSequentialGroup()
                         .addComponent(panelImbalanceLeft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1978,26 +1975,26 @@ private void Inicializa_config()
             }
         });
 
-        jLabel30.setText("When the values pair of Chi coefficient is > 6.635, then  it´s marked with a red color because they are dependents");
+        jLabelChiFi_text.setText("When the Chi coefficient is > 6.635 the labels are dependent at 99% confidence (marked in red)");
 
-        javax.swing.GroupLayout panelChiFiLayout = new javax.swing.GroupLayout(panelChiFi);
-        panelChiFi.setLayout(panelChiFiLayout);
-        panelChiFiLayout.setHorizontalGroup(
-            panelChiFiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelChiFiLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel30)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        javax.swing.GroupLayout panelChiPhiLayout = new javax.swing.GroupLayout(panelChiPhi);
+        panelChiPhi.setLayout(panelChiPhiLayout);
+        panelChiPhiLayout.setHorizontalGroup(
+            panelChiPhiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelChiPhiLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jLabelChiFi_text)
+                .addContainerGap(147, Short.MAX_VALUE))
         );
-        panelChiFiLayout.setVerticalGroup(
-            panelChiFiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelChiFiLayout.createSequentialGroup()
-                .addContainerGap(444, Short.MAX_VALUE)
-                .addComponent(jLabel30)
-                .addContainerGap())
+        panelChiPhiLayout.setVerticalGroup(
+            panelChiPhiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelChiPhiLayout.createSequentialGroup()
+                .addContainerGap(429, Short.MAX_VALUE)
+                .addComponent(jLabelChiFi_text)
+                .addGap(27, 27, 27))
         );
 
-        tabsDependences.addTab("Chi & Fi coefficient", panelChiFi);
+        tabsDependences.addTab("Chi & Phi coefficient", panelChiPhi);
 
         panelCoOcurrence.setName("jpanel25"); // NOI18N
         panelCoOcurrence.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -2013,14 +2010,19 @@ private void Inicializa_config()
         panelCoOcurrenceRight.setLayout(panelCoOcurrenceRightLayout);
         panelCoOcurrenceRightLayout.setHorizontalGroup(
             panelCoOcurrenceRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 539, Short.MAX_VALUE)
+            .addGap(0, 556, Short.MAX_VALUE)
         );
         panelCoOcurrenceRightLayout.setVerticalGroup(
             panelCoOcurrenceRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 379, Short.MAX_VALUE)
+            .addGap(0, 405, Short.MAX_VALUE)
         );
 
-        panelCoOcurrenceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        buttonShowCoOcurrence.setText("Show");
+        buttonShowCoOcurrence.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonShowCoOcurrenceActionPerformed(evt);
+            }
+        });
 
         tableCoOcurrenceLeft.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -2040,54 +2042,33 @@ private void Inicializa_config()
         });
         jScrollPane7.setViewportView(tableCoOcurrenceLeft);
 
-        buttonShowCoOcurrence.setText("Show");
-        buttonShowCoOcurrence.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonShowCoOcurrenceActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout panelCoOcurrenceLeftLayout = new javax.swing.GroupLayout(panelCoOcurrenceLeft);
-        panelCoOcurrenceLeft.setLayout(panelCoOcurrenceLeftLayout);
-        panelCoOcurrenceLeftLayout.setHorizontalGroup(
-            panelCoOcurrenceLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCoOcurrenceLeftLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(panelCoOcurrenceLeftLayout.createSequentialGroup()
-                .addGap(68, 68, 68)
-                .addComponent(buttonShowCoOcurrence)
-                .addContainerGap(67, Short.MAX_VALUE))
-        );
-        panelCoOcurrenceLeftLayout.setVerticalGroup(
-            panelCoOcurrenceLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelCoOcurrenceLeftLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buttonShowCoOcurrence, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5))
-        );
-
         javax.swing.GroupLayout panelCoOcurrenceLayout = new javax.swing.GroupLayout(panelCoOcurrence);
         panelCoOcurrence.setLayout(panelCoOcurrenceLayout);
         panelCoOcurrenceLayout.setHorizontalGroup(
             panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCoOcurrenceLayout.createSequentialGroup()
-                .addComponent(panelCoOcurrenceLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                .addComponent(panelCoOcurrenceRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGroup(panelCoOcurrenceLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelCoOcurrenceLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(buttonShowCoOcurrence, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panelCoOcurrenceLayout.createSequentialGroup()
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(panelCoOcurrenceRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         panelCoOcurrenceLayout.setVerticalGroup(
             panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCoOcurrenceLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelCoOcurrenceLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(panelCoOcurrenceRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(61, Short.MAX_VALUE))
+                    .addComponent(panelCoOcurrenceRight, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buttonShowCoOcurrence, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22))
         );
 
         tabsDependences.addTab("Co-occurrence graph", panelCoOcurrence);
@@ -2096,7 +2077,7 @@ private void Inicializa_config()
         panelCoOcurrenceValues.setLayout(panelCoOcurrenceValuesLayout);
         panelCoOcurrenceValuesLayout.setHorizontalGroup(
             panelCoOcurrenceValuesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 786, Short.MAX_VALUE)
+            .addGap(0, 822, Short.MAX_VALUE)
         );
         panelCoOcurrenceValuesLayout.setVerticalGroup(
             panelCoOcurrenceValuesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2172,8 +2153,8 @@ private void Inicializa_config()
                 .addContainerGap()
                 .addComponent(panelHeatmapLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(labelHeatmapGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 547, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(labelHeatmapGraph, javax.swing.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
+                .addContainerGap())
         );
         panelHeatmapGraphLayout.setVerticalGroup(
             panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2191,7 +2172,7 @@ private void Inicializa_config()
         panelHeatmapValues.setLayout(panelHeatmapValuesLayout);
         panelHeatmapValuesLayout.setHorizontalGroup(
             panelHeatmapValuesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 786, Short.MAX_VALUE)
+            .addGap(0, 822, Short.MAX_VALUE)
         );
         panelHeatmapValuesLayout.setVerticalGroup(
             panelHeatmapValuesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2206,8 +2187,7 @@ private void Inicializa_config()
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel21Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tabsDependences, javax.swing.GroupLayout.PREFERRED_SIZE, 791, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(tabsDependences))
         );
         jPanel21Layout.setVerticalGroup(
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2313,7 +2293,6 @@ private void Inicializa_config()
         */
 
         lista.remove(current);
-
     }//GEN-LAST:event_buttonRemoveMultipleDatasetsActionPerformed
 
     //AGREGAR LOS DATASETS EN LA PESTAÑA MULTIPLES DATASET
@@ -2338,78 +2317,75 @@ private void Inicializa_config()
             String filename_database_arff = f1.getAbsolutePath();
             filename_database_xml = util.Get_xml_string(filename_database_arff);
             filename_database_xml = util.Get_file_name_xml(filename_database_xml);
-            
+
             boolean es_meka=false;
-            
-           String filename_database_xml_path1=  filename_database_arff.substring(0,filename_database_arff.length()-5)+".xml";
+
+            String filename_database_xml_path1=  filename_database_arff.substring(0,filename_database_arff.length()-5)+".xml";
             //-------------------------------------------------------------------------------------------------------
             FileReader fr;
-            try 
+            try
             {
                 fr = new FileReader(filename_database_arff);
                 BufferedReader bf = new BufferedReader(fr);
-                
-                 String sCadena = bf.readLine();
-                 int label_found=0;
-                 String label_name;
-                 String[] label_names_found;
-                 
-                 es_meka = util.Es_de_tipo_MEKA(sCadena);
-                 lista_son_meka.add(es_meka);
-                 
-                 if(es_meka)
-                 {
-                         System.out.println("el dataset es de tipo MEKA");
-                         es_de_tipo_meka = true;
-                         
-                         int label_count = util.Extract_labels_from_arff(sCadena);
-                         label_names_found = new String[label_count];
-                         
-                         while(label_found < label_count)
-                         {
-                             sCadena = bf.readLine();
-                             label_name = util.Extract_label_name_from_String(sCadena);
-                             
-                             if(label_name!= null)
-                             {
-                                 label_names_found[label_found]=label_name;
-                                 label_found++;
-                                 
-                             }                             
-                             
-                         }
-                         //util.Recorre_Arreglo(label_names_found);
-                         
-                         BufferedWriter bw_xml= new BufferedWriter(new FileWriter(filename_database_xml_path1));
-                         PrintWriter wr_xml = new PrintWriter(bw_xml);
- 
-                         util.Write_into_xml_file(wr_xml, label_names_found); //crea el xml para el caso de MEKA
-                         
-                         bw_xml.close();
-                         wr_xml.close();
- 
-                         filename_database_xml = util.Get_file_name_xml(filename_database_xml_path1); //carga el xml creado...
-                         
-                 }
-                 
-                 else 
-                 {
-                     System.out.println("el dataset NO es de tipo MEKA");
-                     es_de_tipo_meka= false;
-                 }
+
+                String sCadena = bf.readLine();
+                int label_found=0;
+                String label_name;
+                String[] label_names_found;
+
+                es_meka = util.Es_de_tipo_MEKA(sCadena);
+                lista_son_meka.add(es_meka);
+
+                if(es_meka)
+                {
+                    System.out.println("el dataset es de tipo MEKA");
+                    es_de_tipo_meka = true;
+
+                    int label_count = util.Extract_labels_from_arff(sCadena);
+                    label_names_found = new String[label_count];
+
+                    while(label_found < label_count)
+                    {
+                        sCadena = bf.readLine();
+                        label_name = util.Extract_label_name_from_String(sCadena);
+
+                        if(label_name!= null)
+                        {
+                            label_names_found[label_found]=label_name;
+                            label_found++;
+
+                        }
+
+                    }
+                    //util.Recorre_Arreglo(label_names_found);
+
+                    BufferedWriter bw_xml= new BufferedWriter(new FileWriter(filename_database_xml_path1));
+                    PrintWriter wr_xml = new PrintWriter(bw_xml);
+
+                    util.Write_into_xml_file(wr_xml, label_names_found); //crea el xml para el caso de MEKA
+
+                    bw_xml.close();
+                    wr_xml.close();
+
+                    filename_database_xml = util.Get_file_name_xml(filename_database_xml_path1); //carga el xml creado...
+
+                }
+
+                else
+                {
+                    System.out.println("el dataset NO es de tipo MEKA");
+                    es_de_tipo_meka= false;
+                }
             }
             catch (FileNotFoundException ex) {
                 Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             //-------------------------------------------------------------------------------------------------------
-            
+
             //-------------------------------------------------------------------------------------------------------
-            
-            
-            
 
             try {
 
@@ -2417,15 +2393,13 @@ private void Inicializa_config()
 
                 if(util.Esta_dataset(list_dataset, current.getDataSet().relationName()))
                 {
-                    JOptionPane.showMessageDialog(null, "Dataset duplicated", "alert", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Duplicate dataset.", "alert", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                
+
                 list_dataset.add(current);
                 Dataset_names.add(dataset_name);
                 lista.addElement(dataset_name );
-                
-                
 
             }
             catch (InvalidDataFormatException ex) {
@@ -2435,26 +2409,144 @@ private void Inicializa_config()
     }//GEN-LAST:event_buttonAddMultipleDatasetsActionPerformed
 
     private void tabsDependencesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabsDependencesStateChanged
-        
+
         //System.out.println(jTabbedPane4.getSelectedIndex());
-        if(tabsDependences.getSelectedIndex() == 0) {jLabel30.setVisible(true);}
-        else {jLabel30.setVisible(false);}
-        
+        if(tabsDependences.getSelectedIndex() == 0) {jLabelChiFi_text.setVisible(true);}
+        else {jLabelChiFi_text.setVisible(false);}
+
     }//GEN-LAST:event_tabsDependencesStateChanged
 
     private void tabsDependencesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabsDependencesMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_tabsDependencesMouseClicked
 
+    private void panelCoOcurrenceMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelCoOcurrenceMouseReleased
+        // TODO add your handling code here:
+
+        if(evt.getButton() == MouseEvent.BUTTON3 )
+        {
+            //  System.out.println("se dio el clic derecho");
+
+            jPopupMenu1.removeAll();
+
+            JMenuItem salvar = new JMenuItem("Save as...");
+
+            salvar.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    try {
+                        save_as_ActionPerformed(evt);
+                    } catch (AWTException ex) {
+                        Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+
+            jPopupMenu1.add(salvar);
+            jPopupMenu1.show(evt.getComponent(), evt.getX(), evt.getY());
+        }
+    }//GEN-LAST:event_panelCoOcurrenceMouseReleased
+
+    private void buttonShowCoOcurrenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowCoOcurrenceActionPerformed
+        // TODO add your handling code here:
+
+        if(lista_pares== null) 
+        {
+            JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+
+        ArrayList<String> seleccionados= new  ArrayList();
+        int[] selecteds=tableCoOcurrenceLeft.getSelectedRows();
+
+        if(selecteds.length<= 1) {
+            JOptionPane.showMessageDialog(null, "You must choose two or more labels.", "alert", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+
+        for(int i=0;i<selecteds.length; i++)
+        {
+            seleccionados.add((tableCoOcurrenceLeft.getValueAt(selecteds[i], 0).toString()));
+        }
+        
+        System.out.println("seleccionados: " + seleccionados.toString());
+
+        ArrayList<pares_atributos> pares_seleccionados =  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
+
+        String[] labelname=util.pasa_valores_al_arreglo(seleccionados);//solo cambia el tipo de estructura de datos.
+
+        graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
+
+        //LANZAR LA VENTANA EMERGENTE CON LOS PARE SELECCIONADOS
+
+        double[][] pares_freq= util.Get_pares_seleccionados(labelname, pares_seleccionados, num_instancias);
+
+        int posx = this.getBounds().x;
+        int posy = this.getBounds().y;
+
+        jframe_temp mo = new jframe_temp(pares_freq, labelname,posx,posy);
+        mo.setVisible(true);
+        //util.Recorre_Arreglo(labelname);
+        // util.Recorre_Arreglo_2_dimensiones(pares_freq);
+
+    }//GEN-LAST:event_buttonShowCoOcurrenceActionPerformed
+
+    private void tableCoOcurrenceLeftMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableCoOcurrenceLeftMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tableCoOcurrenceLeftMouseClicked
+
+    private void radioExamplesPerLabelsetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioExamplesPerLabelsetActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_radioExamplesPerLabelsetActionPerformed
+
+    private void radioExamplesPerLabelsetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioExamplesPerLabelsetMouseClicked
+        // TODO add your handling code here:
+        tableImbalance.clearSelection();
+
+        if(labelset_frequency == null) return;
+
+        util.Recorre_Arreglo(labelset_frequency);
+
+        HeapSort.sort(labelset_frequency);
+
+        cp_box.getChart().setTitle("# Examples per Labelset");//cambia el titulo del charpanel
+        cp_box.getChart().getXYPlot().clearAnnotations();
+
+        util.update_values_xydataset(cp_box, HeapSort.get_array_sorted());
+    }//GEN-LAST:event_radioExamplesPerLabelsetMouseClicked
+
+    private void radioExamplesPerLabelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioExamplesPerLabelActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_radioExamplesPerLabelActionPerformed
+
+    private void radioExamplesPerLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioExamplesPerLabelMouseClicked
+        // TODO add your handling code here:
+        tableImbalance.clearSelection();
+        if(label_frenquency == null) return;
+
+        double [] label_frenquency_values = util.get_label_frequency(label_frenquency);
+
+        util.Recorre_Arreglo(label_frenquency_values);
+
+        HeapSort.sort(label_frenquency_values);
+
+        cp_box.getChart().setTitle("# Examples per Label");//cambia el titulo del charpanel
+        cp_box.getChart().getXYPlot().clearAnnotations();
+
+        util.update_values_xydataset(cp_box, HeapSort.get_array_sorted());
+
+    }//GEN-LAST:event_radioExamplesPerLabelMouseClicked
+
     private void tableImbalanceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableImbalanceMouseClicked
         // evento cuando se da un click en el jtable de la pestaña class imbalance
-        
+
         for(int i=0; i<tabsImbalance.getTabCount(); i++){
             System.out.println("i: " + i + " - " + tabsImbalance.getTitleAt(i));
         }
-        
+
         //#Examples per labelset
-        if(tabsImbalance.getSelectedIndex()==1 || jComboLabelInformation.getSelectedIndex()==1) // si esta activado el panel de los labelcoumb
+        if(tabsImbalance.getSelectedIndex()==1) // si esta activado el panel de los labelcoumb
         {
             //System.out.println("Se ha tocado");
             int seleccionada = tableImbalance.getSelectedRow();
@@ -2479,38 +2571,36 @@ private void Inicializa_config()
 
             mo.setVisible(true);
         }
-        
-        else if(tabsImbalance.getSelectedIndex()==7 || jComboLabelInformation.getSelectedIndex()==7) // si esta activado el panel de los BOX DIAGRAM
+
+        else if(tabsImbalance.getSelectedIndex()==7) // si esta activado el panel de los BOX DIAGRAM
         {
             //BUTTON GROUP
             jRadioButton8.setSelected(true);
-            
+
             int seleccionada = tableImbalance.getSelectedRow();
-            
+
             String attr= tableImbalance.getValueAt(seleccionada, 0).toString();
-           
+
             Instances instancias = dataset.getDataSet();
-            
+
             Attribute attr_current = instancias.attribute(attr);
-            
-           double[] valores_attr= instancias.attributeToDoubleArray(attr_current.index());
-                   
-          
+
+            double[] valores_attr= instancias.attributeToDoubleArray(attr_current.index());
+
             HeapSort.sort(valores_attr);
 
             cp_box.getChart().setTitle(attr_current.name());//cambia el titulo del charpanel
-            
+
             cp_box.getChart().getXYPlot().clearAnnotations();
-            
+
             util.update_values_xydataset(cp_box, HeapSort.get_array_sorted());
-            
-         
+
         }
-        
-           else if(tabsImbalance.getSelectedIndex()==5 || jComboLabelInformation.getSelectedIndex()==5) // si esta activado el panel del IR per Labelset
+
+        else if(tabsImbalance.getSelectedIndex()==5) // si esta activado el panel del IR per Labelset
         {
-             
-               //System.out.println("Se ha tocado");
+
+            //System.out.println("Se ha tocado");
             int seleccionada = tableImbalance.getSelectedRow();
 
             if(labelsets_sorted_IR == null) return;
@@ -2533,262 +2623,258 @@ private void Inicializa_config()
 
             mo.setVisible(true);
         }
-        
-         else if(tabsImbalance.getSelectedIndex()==3 || jComboLabelInformation.getSelectedIndex()==3) // si esta activado el panel del IR per Label intra class
+
+        else if(tabsImbalance.getSelectedIndex()==3) // si esta activado el panel del IR per Label intra class
         {
-             
-               //System.out.println("Se ha tocado");
+
+            //System.out.println("Se ha tocado");
             int seleccionada = tableImbalance.getSelectedRow();
-            
+
             if(id_x_IR == null) return;
-            
+
             int cant_labels =(int)tableImbalance.getValueAt(seleccionada, 1);
-          //  System.out.println(" hay "+cant_labels +" etiquetas");
-            
+            //  System.out.println(" hay "+cant_labels +" etiquetas");
+
             double ir = Double.parseDouble(tableImbalance.getValueAt(seleccionada, 2).toString());
-          //  System.out.println(" el ir es de "+ir +" ");
-            
+            //  System.out.println(" el ir es de "+ir +" ");
+
             ArrayList<String> label_names= util.Get_labelnames_x_IR_intra_class(ir,cant_labels,label_imbalanced);
-            
+
             int posx = this.getBounds().x;
             int posy = this.getBounds().y;
 
             metric_output mo = new metric_output(dataset, posx, posy+50,label_names,label_x_frequency, es_de_tipo_meka);
 
             mo.setVisible(true);
-            
-    
+
         }
-        
-         else if(tabsImbalance.getSelectedIndex()==9 || jComboLabelInformation.getSelectedIndex()==9) // si esta activado el panel del IR per Label inter class
+
+        else if(tabsImbalance.getSelectedIndex()==9) // si esta activado el panel del IR per Label inter class
         {
-             
-               //System.out.println("Se ha tocado");
+
+            //System.out.println("Se ha tocado");
             int seleccionada = tableImbalance.getSelectedRow();
-            
+
             if(id_x_IR == null) return;
-            
+
             int cant_labels =(int)tableImbalance.getValueAt(seleccionada, 1);
-          //  System.out.println(" hay "+cant_labels +" etiquetas");
-            
+            //  System.out.println(" hay "+cant_labels +" etiquetas");
+
             double ir = Double.parseDouble(tableImbalance.getValueAt(seleccionada, 2).toString());
-          //  System.out.println(" el ir es de "+ir +" ");
-            
+            //  System.out.println(" el ir es de "+ir +" ");
+
             ArrayList<String> label_names= util.Get_labelnames_x_IR_inter_class(ir,cant_labels,label_imbalanced);
-            
+
             int posx = this.getBounds().x;
             int posy = this.getBounds().y;
 
             metric_output mo = new metric_output(dataset, posx, posy+50,label_names,label_x_frequency, es_de_tipo_meka);
 
             mo.setVisible(true);
-            
-    
+
         }
-        
 
     }//GEN-LAST:event_tableImbalanceMouseClicked
 
     private void tabsImbalanceStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabsImbalanceStateChanged
         // jtabbpane de la pestaña class imbalance
         if(tm_BR1 !=null && tm_LP1!=null){
-                        
+
             System.out.println(" id "+ tabsImbalance.getSelectedIndex());
-            
-            if(tabsImbalance.getSelectedIndex()==1 || jComboLabelInformation.getSelectedIndex()==1)
+
+            if(tabsImbalance.getSelectedIndex()==1)
             {
                 tableImbalance.setModel(tm_LP1);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Frequency per labelset"));
-                
+
                 jPanel15.setVisible(false);
-                
+
                 labelIR1.setVisible(false);
                 labelIR2.setVisible(false);
             }
-            
-            else if (tabsImbalance.getSelectedIndex()==5 || jComboLabelInformation.getSelectedIndex()==5)
+
+            else if (tabsImbalance.getSelectedIndex()==5)
             {
                 tableImbalance.setModel(tm_ir_per_labelset);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset id per IR"));
-                
+
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
 
                 jPanel15.setVisible(false);
-                
+
                 labelIR1.setVisible(true);
                 labelIR2.setVisible(true);
             }
-            else if (tabsImbalance.getSelectedIndex()==0 || jComboLabelInformation.getSelectedIndex()==0)
+            else if (tabsImbalance.getSelectedIndex()==0)
             {
                 tableImbalance.setModel(tm_BR1);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Frequency per label"));
-                
+
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
 
                 jPanel15.setVisible(false);
-                
+
                 labelIR1.setVisible(false);
                 labelIR2.setVisible(false);
 
             }
-             else if (tabsImbalance.getSelectedIndex()==6 || jComboLabelInformation.getSelectedIndex()==6) // imbalance data metric
+            else if (tabsImbalance.getSelectedIndex()==6) // imbalance data metric
             {
-                 tableImbalance.setModel(tm_IR);
+                tableImbalance.setModel(tm_IR);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imabalance ratio per label"));
-		
+
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1,2));
-                
+
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
                 //jRadioButton6.setVisible(true);
                 //jRadioButton7.setVisible(true);
                 jPanel15.setVisible(false);//es el panel del los botones del diagram box
-                
+
                 labelIR1.setVisible(true);
                 labelIR2.setVisible(true);
             }
-            else if (tabsImbalance.getSelectedIndex()==3 || jComboLabelInformation.getSelectedIndex()==3)
+            else if (tabsImbalance.getSelectedIndex()==3)
             {
                 tableImbalance.setModel(tm_ir_per_label_intra_class);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Number of labels intra class per IR"));
-                
+
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(2));
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
 
                 jPanel15.setVisible(false);
-                
+
                 labelIR1.setVisible(true);
                 labelIR2.setVisible(true);
 
             }
-            else if (tabsImbalance.getSelectedIndex()==2 || jComboLabelInformation.getSelectedIndex()==2)
+            else if (tabsImbalance.getSelectedIndex()==2)
             {
                 tableImbalance.setModel(tm_labelxExamples);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels per example"));
-                
+
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
 
                 jPanel15.setVisible(false);
-                
+
                 labelIR1.setVisible(false);
                 labelIR2.setVisible(false);
                 /*
                 jTable4.setModel(tm_ir_per_label_inter_class);
                 jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder("Number of labels inter class per IR"));
-                
+
                 jTable4.setDefaultRenderer(Object.class, new Mi_Render_IR(2));
                 jPanel17.repaint();
                 jPanel17.validate();
 
                 jPanel15.setVisible(false);
-                
+
                 jLabel27.setVisible(true);
                 jLabel28.setVisible(true);
-                 */
+                */
 
             }
-            
-            else if (tabsImbalance.getSelectedIndex()==8 || jComboLabelInformation.getSelectedIndex()==8)
+
+            else if (tabsImbalance.getSelectedIndex()==8)
             {
-               tableImbalance.setModel(tm_ir_per_label_inter_class_only);
+                tableImbalance.setModel(tm_ir_per_label_inter_class_only);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Label per IR values inter class"));
-                
+
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
 
                 jPanel15.setVisible(false);
-                
+
                 labelIR1.setVisible(true);
                 labelIR2.setVisible(true);
-            
-                
+
             }
-            
-            else if (tabsImbalance.getSelectedIndex()==9 || jComboLabelInformation.getSelectedIndex()==9)
+
+            else if (tabsImbalance.getSelectedIndex()==9)
             {
                 tableImbalance.setModel(tm_ir_per_label_inter_class);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Number of labels inter class per IR"));
-                
+
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(2));
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
-                
+
                 jPanel15.setVisible(false);
-                
+
                 labelIR1.setVisible(true);
                 labelIR2.setVisible(true);
-                
+
                 /*
                 jTable4.setModel(tm_ir_per_label_intra_class_only);
                 jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder("Label per IR values intra class"));
-                
+
                 jTable4.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
                 jPanel17.repaint();
                 jPanel17.validate();
 
                 jPanel15.setVisible(false);
-                
+
                 jLabel27.setVisible(true);
                 jLabel28.setVisible(true);
                 */
             }
-            
-            else if (tabsImbalance.getSelectedIndex()==4 || jComboLabelInformation.getSelectedIndex()==4)
+
+            else if (tabsImbalance.getSelectedIndex()==4)
             {
-               // jTable4.setModel(tm_ir_per_labelset);
-               // jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset id per IR"));
-                
+                // jTable4.setModel(tm_ir_per_labelset);
+                // jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset id per IR"));
+
                 tableImbalance.setModel(tm_ir_per_label_intra_class_only);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Label per IR values intra class"));
-                
+
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
-                                
+
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
 
                 jPanel15.setVisible(false);
-                
+
                 labelIR1.setVisible(true);
                 labelIR2.setVisible(true);
 
             }
-            
-            else if (tabsImbalance.getSelectedIndex()==7 || jComboLabelInformation.getSelectedIndex()==7)
+
+            else if (tabsImbalance.getSelectedIndex()==7)
             {
                 tableImbalance.setModel(tm_attr);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Numeric attributes"));
-                
+
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
                 //jRadioButton6.setVisible(true);
                 //jRadioButton7.setVisible(true);
                 jPanel15.setVisible(true);
-                
+
                 labelIR1.setVisible(false);
                 labelIR2.setVisible(false);
 
             }
-            
+
             else
             {
                 tableImbalance.setModel(tm_labelxExamples);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels per example"));
-                
+
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
 
                 jPanel15.setVisible(false);
-                
+
                 labelIR1.setVisible(false);
                 labelIR2.setVisible(false);
 
@@ -2798,473 +2884,98 @@ private void Inicializa_config()
             tableImbalance.validate();
             //  System.out.println("SE HA PRESIONADO el "+jTabbedPane2.getSelectedIndex() );
         }
-
     }//GEN-LAST:event_tabsImbalanceStateChanged
 
-    private void initializeTableMetrics(){
-        ArrayList<String> metricsList = util.Get_all_metrics();
-        
-        tableMetrics.clear();
-        
-        for(int i=0; i<metricsList.size(); i++){
-            tableMetrics.put(metricsList.get(i), "-");
-        }
-    }
-    
-    private void initializeTableMetricsCommon(){
-        ArrayList<String> metricsList = util.Get_common_metrics();
-        
-        tableMetrics_common.clear();
-        
-        for(int i=0; i<metricsList.size(); i++){
-            tableMetrics_common.put(metricsList.get(i), "-");
-        }
-    }
-    
-    private void initializeTableMetricsTrainTest(){
-        ArrayList<String> metricsList = util.Get_test_metrics();
-        
-        tableMetrics_train.clear();
-        tableMetrics_test.clear();
-        
-        for(int i=0; i<metricsList.size(); i++){
-            tableMetrics_train.put(metricsList.get(i), "-");
-            tableMetrics_test.put(metricsList.get(i), "-");
-        }
-    }
-    
-    private void panelCoOcurrenceMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelCoOcurrenceMouseReleased
+    private void textRandomFSKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textRandomFSKeyTyped
         // TODO add your handling code here:
-        
-        if(evt.getButton() == MouseEvent.BUTTON3 )
-        {
-          //  System.out.println("se dio el clic derecho");
-            
-            jPopupMenu1.removeAll();
-               
-           JMenuItem salvar = new JMenuItem("Save as...");
-          
-           salvar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    save_as_ActionPerformed(evt);
-                } catch (AWTException ex) {
-                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-          
-           jPopupMenu1.add(salvar);
-            jPopupMenu1.show(evt.getComponent(), evt.getX(), evt.getY());
-        }
-    }//GEN-LAST:event_panelCoOcurrenceMouseReleased
+    }//GEN-LAST:event_textRandomFSKeyTyped
 
-    private void labelHeatmapGraphMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelHeatmapGraphMouseReleased
+    private void textRandomFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textRandomFSActionPerformed
         // TODO add your handling code here:
-        
-       if(evt.getButton() == MouseEvent.BUTTON1)  
-       {
-            int pos_inicial_x = (labelHeatmapGraph.getBounds().width/2) - jheat_chart.getChartSize().width/2 ;
-            int pos_incial_y = (labelHeatmapGraph.getBounds().height/2- jheat_chart.getChartSize().height/2);
-           
-            int pos_actual_x=evt.getPoint().x;
-            int pos_actual_y=evt.getPoint().y;
-                        
-            int cant_celdas_x = jheat_chart.getChartSize().width/jheat_chart.getCellSize().width;
-            int cant_celdas_y = jheat_chart.getChartSize().height/jheat_chart.getCellSize().height;
-            
-            int ancho_celdas_x = jheat_chart.getCellSize().width;
-            int ancho_celdas_y = jheat_chart.getCellSize().height;
-            
-            int celda_actual_x = util.Devuelve_num_celda(pos_inicial_x, pos_actual_x, ancho_celdas_x, cant_celdas_x);
-            int celda_actual_y = util.Devuelve_num_celda(pos_incial_y, pos_actual_y, ancho_celdas_y, cant_celdas_y);
-            
-            if(celda_actual_x ==-1 || celda_actual_y ==-1)
-            {
-               // System.out.println("fuera del borde");
-                return;
-            }
-            
-            int invierte_eje_y = cant_celdas_y-celda_actual_y+1;
-            
-            String[] seleccionados =util.devuelve_etiquetas_seleccionadas(dataset, label_indices_seleccionados);
-            
-                        
-           int posx = this.getBounds().x;
-           int posy = this.getBounds().y;
-           
-           metric_output mo = new metric_output(dataset,seleccionados[celda_actual_x-1],seleccionados[invierte_eje_y-1],posx,posy,es_de_tipo_meka);
-           mo.setVisible(true);
-           
-       }
-        
-        
-        
-       if(evt.getButton() == MouseEvent.BUTTON3 )
-        {
-            //System.out.println("se dio el clic derecho");
-            
-            jPopupMenu1.removeAll();
-               
-           JMenuItem salvar = new JMenuItem("Save as...");
-          
-           salvar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    save_as_ActionPerformed1(evt);
-                } catch (AWTException ex) {
-                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-          
-           jPopupMenu1.add(salvar);
-            jPopupMenu1.show(evt.getComponent(), evt.getX(), evt.getY());
-        }
-        
-    }//GEN-LAST:event_labelHeatmapGraphMouseReleased
+    }//GEN-LAST:event_textRandomFSActionPerformed
 
-    private void tableCoOcurrenceLeftMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableCoOcurrenceLeftMouseClicked
+    private void radioRandomFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomFSActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tableCoOcurrenceLeftMouseClicked
+        textRandomHoldout.setEnabled(false);
+        textIterativeStratifiedHoldout.setEnabled(false);
+        // buttonChooseSuppliedTest.setEnabled(false);
+        textRandomCV.setEnabled(false);
+        textIterativeStratifiedCV.setEnabled(false);
+        textLPStratifiedHoldout.setEnabled(false);
+        textLPStratifiedCV.setEnabled(false);
+        textBRFS.setEnabled(false);
+        labelBRFS_Comb.setEnabled(false);
+        jComboBox_BRFS_Comb.setEnabled(false);
+        labelBRFS_Norm.setEnabled(false);
+        jComboBox_BRFS_Norm.setEnabled(false);
+        labelBRFS_Out.setEnabled(false);
+        jComboBox_BRFS_Out.setEnabled(false);
+        textRandomFS.setEnabled(true);
 
-    private void buttonShowCoOcurrenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowCoOcurrenceActionPerformed
+        jButtonSaveDatasets.setEnabled(false);
+    }//GEN-LAST:event_radioRandomFSActionPerformed
+
+    private void jComboBox_BRFS_OutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_BRFS_OutActionPerformed
         // TODO add your handling code here:
-        
-        if(lista_pares== null) {JOptionPane.showMessageDialog(null, "You must load a dataset", "alert", JOptionPane.ERROR_MESSAGE); return;}
-         
-        
-        ArrayList<String> seleccionados= new  ArrayList();
-        int[] selecteds=tableCoOcurrenceLeft.getSelectedRows();
-        
-        if(selecteds.length<= 1) {JOptionPane.showMessageDialog(null, "You must choose two or more labels", "alert", JOptionPane.ERROR_MESSAGE); return;}
-        
-        for(int i=0;i<selecteds.length; i++)
-        {
-            seleccionados.add((tableCoOcurrenceLeft.getValueAt(selecteds[i], 0).toString()));
-        }
+    }//GEN-LAST:event_jComboBox_BRFS_OutActionPerformed
 
-       ArrayList<pares_atributos> pares_seleccionados=  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
-        
-       String[] labelname=util.pasa_valores_al_arreglo(seleccionados);//solo cambia el tipo de estructura de datos.
-       
-       graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
-        
-       
-       //LANZAR LA VENTANA EMERGENTE CON LOS PARE SELECCIONADOS
-       
-       double[][] pares_freq= util.Get_pares_seleccionados(labelname, pares_seleccionados, num_instancias);
-       
-       int posx = this.getBounds().x;
-       int posy = this.getBounds().y;
-       
-       jframe_temp mo = new jframe_temp(pares_freq, labelname,posx,posy);
-       mo.setVisible(true);
-       //util.Recorre_Arreglo(labelname);
-      // util.Recorre_Arreglo_2_dimensiones(pares_freq);
-       
-       
-    }//GEN-LAST:event_buttonShowCoOcurrenceActionPerformed
-
-    private void tableHeatmapLeftMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableHeatmapLeftMouseClicked
+    private void jComboBox_BRFS_NormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_BRFS_NormActionPerformed
         // TODO add your handling code here:
-        
-          
-      
-        
-        
-    }//GEN-LAST:event_tableHeatmapLeftMouseClicked
+    }//GEN-LAST:event_jComboBox_BRFS_NormActionPerformed
 
-    private void buttonShowHeatmapLeftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowHeatmapLeftActionPerformed
+    private void jComboBox_BRFS_CombActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_BRFS_CombActionPerformed
         // TODO add your handling code here:
-        
-          if(dataset== null) {JOptionPane.showMessageDialog(null, "You must load a dataset", "alert", JOptionPane.ERROR_MESSAGE); return;}
-         
-        
-        ArrayList<String> seleccionados= new  ArrayList();
-        int[] selecteds=tableHeatmapLeft.getSelectedRows();
-        
-        if(selecteds.length< 1) {JOptionPane.showMessageDialog(null, "You must choose one or more labels", "alert", JOptionPane.ERROR_MESSAGE); return;}
-        
-        for(int i=0;i<selecteds.length; i++)
-        {
-            seleccionados.add((tableHeatmapLeft.getValueAt(selecteds[i], 0).toString()));
-        }
+    }//GEN-LAST:event_jComboBox_BRFS_CombActionPerformed
 
-       //ArrayList<pares_atributos> pares_seleccionados=  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
-        
-       String[] labelname=util.pasa_valores_al_arreglo(seleccionados);
-       
-       int[] label_indices =util.get_label_indices(labelname, dataset);
-       
-       //graphComponent  =  Create_jgraphx(jPanel10,pares_seleccionados,labelname,graphComponent);
-       
-       HeapSort1.sort(label_indices);
-       //util.Recorre_Arreglo(HeapSort1.get_array_sorted());
-       label_indices_seleccionados = label_indices;
-       
-       jheat_chart= create_heapmap(labelHeatmapGraph,dataset,label_indices);
-       
-       ArrayList<pares_atributos> pares_seleccionados=  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
-       
-       double[][] pares_freq= util.get_heatmap_values(pares_seleccionados, num_instancias,labelname);
-       
-       int posx = this.getBounds().x;
-       int posy = this.getBounds().y;
-        
-       jframe_temp mo = new jframe_temp(pares_freq, labelname,posx,posy);
-       mo.setVisible(true);      
-       
-       
-    }//GEN-LAST:event_buttonShowHeatmapLeftActionPerformed
-
-    private void radioExamplesPerLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioExamplesPerLabelMouseClicked
+    private void textBRFSKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textBRFSKeyTyped
         // TODO add your handling code here:
-        tableImbalance.clearSelection();
-        if(label_frenquency == null) return;
-        
-        double [] label_frenquency_values = util.get_label_frequency(label_frenquency);
-        
-        util.Recorre_Arreglo(label_frenquency_values);
-        
-        HeapSort.sort(label_frenquency_values);
-        
-        cp_box.getChart().setTitle("# Examples per Label");//cambia el titulo del charpanel
-        cp_box.getChart().getXYPlot().clearAnnotations();
-            
-        util.update_values_xydataset(cp_box, HeapSort.get_array_sorted());
-        
-        
-    }//GEN-LAST:event_radioExamplesPerLabelMouseClicked
+    }//GEN-LAST:event_textBRFSKeyTyped
 
-    private void radioExamplesPerLabelsetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioExamplesPerLabelsetMouseClicked
+    private void textBRFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textBRFSActionPerformed
         // TODO add your handling code here:
-        tableImbalance.clearSelection();
-        
-        if(labelset_frequency == null) return;
-        
-        util.Recorre_Arreglo(labelset_frequency);
-        
-        HeapSort.sort(labelset_frequency);
-        
-        cp_box.getChart().setTitle("# Examples per Labelset");//cambia el titulo del charpanel
-        cp_box.getChart().getXYPlot().clearAnnotations();
-            
-        util.update_values_xydataset(cp_box, HeapSort.get_array_sorted());
-    }//GEN-LAST:event_radioExamplesPerLabelsetMouseClicked
+    }//GEN-LAST:event_textBRFSActionPerformed
 
-    private void radioExamplesPerLabelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioExamplesPerLabelActionPerformed
+    private void radioBRFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioBRFSActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_radioExamplesPerLabelActionPerformed
+        textRandomHoldout.setEnabled(false);
+        textIterativeStratifiedHoldout.setEnabled(false);
+        // buttonChooseSuppliedTest.setEnabled(false);
+        textRandomCV.setEnabled(false);
+        textIterativeStratifiedCV.setEnabled(false);
+        textLPStratifiedHoldout.setEnabled(false);
+        textLPStratifiedCV.setEnabled(false);
+        textBRFS.setEnabled(true);
+        labelBRFS_Comb.setEnabled(true);
+        jComboBox_BRFS_Comb.setEnabled(true);
+        labelBRFS_Norm.setEnabled(true);
+        jComboBox_BRFS_Norm.setEnabled(true);
+        labelBRFS_Out.setEnabled(true);
+        jComboBox_BRFS_Out.setEnabled(true);
+        textRandomFS.setEnabled(false);
 
-    private void radioExamplesPerLabelsetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioExamplesPerLabelsetActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_radioExamplesPerLabelsetActionPerformed
-
-    // CAPTURA LA DIRECCION DEL XML EN EL JTEXTFIELD DE LA 1ra pestaña para cargar el dataset.
-    private void textChooseFileKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textChooseFileKeyPressed
-
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER)
-        {
-            //--------------------------------------------------------------
-            //INVOCAR EL PROGRESS BAR
-            /*
-            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
-            progress_bar new_progress = new progress_bar();
-            task = new Task(new_progress);
-            new_progress.setVisible(true);
-
-            task.addPropertyChangeListener(new_progress);
-            task.execute();
-            //--------------------------------------------------------------
-            */
-
-            String filename_database_arff = textChooseFile.getText();
-
-            filename_database_xml = util.Get_xml_string(filename_database_arff);
-
-            filename_database_xml = util.Get_file_name_xml(filename_database_xml);
-
-            Load_dataset(filename_database_arff, filename_database_xml);
-        }
-    }//GEN-LAST:event_textChooseFileKeyPressed
-
-    private void textChooseFileFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textChooseFileFocusLost
-
-        // CUANDO EL TEXTFIELD PIERDE EL FOCUS
-        /*
-        String filename_database_arff = jTextField2.getText();
-
-        filename_database_xml = filename_database_arff.substring(0,filename_database_arff.length()-5)+".xml";
-
-        filename_database_xml = util.Get_file_name_xml(filename_database_xml);
-
-        Load_dataset(filename_database_arff, filename_database_xml);
-
-        */
-    }//GEN-LAST:event_textChooseFileFocusLost
-
-    private void textChooseFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textChooseFileActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textChooseFileActionPerformed
-
-    // carga el dataset buscandolo por el filechooser
-    private void buttonChooseFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonChooseFileActionPerformed
-        // TODO add your handling code here:
-
-        // ESCOGER EL DATASET
-        JFileChooser jfile1 = new JFileChooser();
-        FileNameExtensionFilter fname = new FileNameExtensionFilter(".arff", "arff");
-        jfile1.setFileFilter(fname);
-        //int returnVal =
-
-        int returnVal = jfile1.showOpenDialog(this);
-
-        if (returnVal == JFileChooser.OPEN_DIALOG)
-        {
-
-            File f1 = jfile1.getSelectedFile();
-            dataset_name1 = f1.getName();
-            dataset_current_name = dataset_name1.substring(0,dataset_name1.length()-5);
-
-            String filename_database_arff = f1.getAbsolutePath();
-
-            filename_database_xml_path=  filename_database_arff.substring(0,filename_database_arff.length()-5)+".xml";
-            filename_database_xml = util.Get_file_name_xml1(filename_database_xml_path);
-
-            File  file_temp = new File(filename_database_xml_path);
-
-            int velocidad=5;
-
-            //-------------------------------------------------------------------------------------------------------
-            FileReader fr;
-            try
-            {
-                fr = new FileReader(filename_database_arff);
-                BufferedReader bf = new BufferedReader(fr);
-
-                String sCadena = bf.readLine();
-                int label_found=0;
-                String label_name;
-                String[] label_names_found;
-
-                if(util.Es_de_tipo_MEKA(sCadena))
-                {
-                    System.out.println("el dataset es de tipo MEKA");
-                    es_de_tipo_meka = true;
-
-                    int label_count = util.Extract_labels_from_arff(sCadena);
-                    label_names_found = new String[label_count];
-
-                    while(label_found < label_count)
-                    {
-                        sCadena = bf.readLine();
-                        label_name = util.Extract_label_name_from_String(sCadena);
-
-                        if(label_name!= null)
-                        {
-                            label_names_found[label_found]=label_name;
-                            label_found++;
-
-                        }
-
-                    }
-                    //util.Recorre_Arreglo(label_names_found);
-
-                    BufferedWriter bw_xml= new BufferedWriter(new FileWriter(filename_database_xml_path));
-                    PrintWriter wr_xml = new PrintWriter(bw_xml);
-
-                    util.Write_into_xml_file(wr_xml, label_names_found); //crea el xml para el caso de MEKA
-
-                    bw_xml.close();
-                    wr_xml.close();
-
-                    filename_database_xml = util.Get_file_name_xml(filename_database_xml_path); //carga el xml creado...
-                    file_temp = new File(filename_database_xml_path);
-                }
-
-                else
-                {
-                    System.out.println("el dataset NO es de tipo MEKA");
-                    es_de_tipo_meka= false;
-
-                }
-            }
-            catch (FileNotFoundException ex) {
-                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            //-------------------------------------------------------------------------------------------------------
-
-            //-------------------------------------------------------------------------------------------------------
-
-            if(!file_temp.exists()) //SI NO EXISTE EL XML
-            {
-                filename_database_xml_path = util.Get_xml_string(filename_database_arff);
-                filename_database_xml = util.Get_file_name_xml(filename_database_xml_path);
-            }
-            
-            System.out.println("Choosefilename_database_xml_path: " + filename_database_xml_path);
-            
-            try {
-                MultiLabelInstances dataset_temp = new MultiLabelInstances(filename_database_arff, filename_database_xml);
-                //System.out.println("prueba xml "+filename_database_xml);
-                velocidad =util.get_velocidad(dataset_temp);
-            } catch (InvalidDataFormatException ex) {
-                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            //--------------------------------------------------------------
-            //INVOCAR EL PROGRESS BAR
-
-            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
-            progress_bar new_progress = new progress_bar();
-            task = new Task(new_progress,velocidad);
-            new_progress.setVisible(true);
-
-            task.addPropertyChangeListener(new_progress);
-            task.execute();
-
-            //--------------------------------------------------------------
-
-            initializeTableMetrics();
-            initializeTableMetricsCommon();
-            initializeTableMetricsTrainTest();
-            clearTable_metrics_principal();
-            clearTable_metrics_traintest();
-
-            Load_dataset(filename_database_arff, filename_database_xml);
-
-            textChooseFile.setText(filename_database_arff);
-        }
-    }//GEN-LAST:event_buttonChooseFileActionPerformed
+        jButtonSaveDatasets.setEnabled(false);
+        //button_calculate2_train.setEnabled(false);
+        //button_save_train.setEnabled(false);
+    }//GEN-LAST:event_radioBRFSActionPerformed
 
     private void jButtonSaveDatasetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveDatasetsActionPerformed
         // TODO add your handling code here:
 
         if(dataset == null){
-            JOptionPane.showMessageDialog(null, "You must load a dataset", "alert", JOptionPane.ERROR_MESSAGE); 
+            JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
             return;
         }
         if((list_dataset_train.isEmpty() && list_dataset_test.isEmpty()) && (radioRandomCV.isSelected() || radioIterativeStratifiedCV.isSelected() || radioLPStratifiedCV.isSelected())){
-            JOptionPane.showMessageDialog(null, "You must click Start before", "alert", JOptionPane.ERROR_MESSAGE); 
+            JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
             return;
         }
         if((dataset_train ==null && dataset_test==null) && (radioIterativeStratifiedHoldout.isSelected()|| radioRandomHoldout.isSelected() || radioLPStratifiedHoldout.isSelected())){
-            JOptionPane.showMessageDialog(null, "You must click Start before", "alert", JOptionPane.ERROR_MESSAGE); 
+            JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
             return;
         }
         if((FSdataset == null) && (radioBRFS.isSelected() || radioRandomFS.isSelected())){
-           JOptionPane.showMessageDialog(null, "You must click Start before", "alert", JOptionPane.ERROR_MESSAGE); 
-           return; 
+            JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
         // JFILECHOOSER SAVE
@@ -3288,7 +2999,7 @@ private void Inicializa_config()
                     try {
 
                         String name_dataset= dataset_name1.substring(0,dataset_name1.length()-5);
-                        
+
                         //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
                         //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
                         //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
@@ -3323,7 +3034,7 @@ private void Inicializa_config()
                         wr_xml.close();
                         bw_xml.close();
 
-                        JOptionPane.showMessageDialog(null, "All Files are saved", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
 
                     } catch (IOException ex) {
                         Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -3349,7 +3060,7 @@ private void Inicializa_config()
                         wr_xml.close();
                         bw_xml.close();
 
-                        JOptionPane.showMessageDialog(null, "All Files are saved", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
 
                     }
                     catch(Exception e1){
@@ -3363,7 +3074,7 @@ private void Inicializa_config()
                     try {
 
                         String name_dataset= dataset_name1.substring(0,dataset_name1.length()-5);
-                        
+
                         //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
                         //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
                         //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
@@ -3388,7 +3099,7 @@ private void Inicializa_config()
                         wr_xml.close();
                         bw_xml.close();
 
-                        JOptionPane.showMessageDialog(null, "All Files are saved", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
 
                     } catch (IOException ex) {
                         Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -3398,7 +3109,6 @@ private void Inicializa_config()
             }
 
         }
-
     }//GEN-LAST:event_jButtonSaveDatasetsActionPerformed
 
     // COMIENZA A CALCULAR LAS METRICAS SEGUN LA OPCION DEL train/TEST (BOTON "start")
@@ -3411,31 +3121,30 @@ private void Inicializa_config()
         MultiLabelInstances train_ml=null,test_ml=null;
 
         if(dataset == null){
-            JOptionPane.showMessageDialog(null, "You must load a dataset", "alert", JOptionPane.ERROR_MESSAGE); 
+            JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
-        
+
         //Random Holdout
         if(radioRandomHoldout.isSelected()){
             String split = textRandomHoldout.getText();
             double percent_split = Double.parseDouble(split);
             if((percent_split <= 0) || (percent_split >= 100)){
-                JOptionPane.showMessageDialog(null, "The percentage must be a number between 0 and 100", "alert", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "The percentage must be a number in the range (0, 100).", "alert", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             try{
-                
+
                 RandomTrainTest pre = new RandomTrainTest();
                 MultiLabelInstances [] partitions = pre.split(dataset, percent_split);
-                
+
                 //dataset_train = new MultiLabelInstances(trainDataSet, dataset.getLabelsMetaData());
                 //dataset_test = new MultiLabelInstances(testDataSet, dataset.getLabelsMetaData());
 
                 dataset_train = partitions[0];
                 dataset_test = partitions[1];
-                
+
                 holdout_random =true;
                 cv_ramdon =false;
                 holdout_iterative_stratified =false;
@@ -3461,23 +3170,27 @@ private void Inicializa_config()
 
             if(split.equals(""))
             {
-                JOptionPane.showMessageDialog(null, "You must give a number of folds", "alert", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "You must enter a number of folds.", "alert", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             int nFolds = 0;
-            
+
             try{
                 nFolds = Integer.parseInt(split);
             }
             catch(Exception e){
-                JOptionPane.showMessageDialog(null, "Introduce a correct number of folds", "alert", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Introduce a correct number of folds.", "alert", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+
             if(nFolds < 2)
             {
-                JOptionPane.showMessageDialog(null, "The number of folds must be greater than 2", "alert", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "The number of folds must be greater or equal to 2.", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            else if(nFolds > dataset.getNumInstances()){
+                JOptionPane.showMessageDialog(null, "The number of folds can not be greater than the number of instances.", "alert", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -3485,19 +3198,19 @@ private void Inicializa_config()
 
                 RandomCrossValidation pre = new RandomCrossValidation();
                 MultiLabelInstances [] folds = pre.split(dataset, nFolds);
-                  
+
                 train = new Instances(dataset.getDataSet(), 1);
                 test = new Instances(dataset.getDataSet(), 1);
                 for(int i=0; i<nFolds; i++){
                     for(int j=0; j<nFolds; j++){
                         if(i != j){
-                            train.addAll(folds[j].getDataSet());   
+                            train.addAll(folds[j].getDataSet());
                         }
                     }
                     test.addAll(folds[i].getDataSet());
 
                     list_dataset_train.add(new MultiLabelInstances(train, dataset.getLabelsMetaData()));
-                    list_dataset_test.add(new MultiLabelInstances(test, dataset.getLabelsMetaData()));  
+                    list_dataset_test.add(new MultiLabelInstances(test, dataset.getLabelsMetaData()));
                 }
 
                 holdout_random =false;
@@ -3508,8 +3221,8 @@ private void Inicializa_config()
                 cv_LP_stratified =false;
                 feature_selection_br = false;
                 feature_selection_random = false;
-            }*/            
-            
+            }*/
+
             try{
                 MultiLabelInstances temp = dataset.clone();
                 Instances dataset_temp = temp.getDataSet();
@@ -3527,7 +3240,7 @@ private void Inicializa_config()
                 for(int i=0; i<dataset_temp.numInstances(); i++){
                     foldsCV[i%nFolds].add(dataset_temp.get(i));
                 }
-                  
+
                 train = new Instances(dataset.getDataSet(), 0);
                 test = new Instances(dataset.getDataSet(), 0);
                 for(int i=0; i<nFolds; i++){
@@ -3535,16 +3248,16 @@ private void Inicializa_config()
                     test.clear();
                     for(int j=0; j<nFolds; j++){
                         if(i != j){
-                            train.addAll(foldsCV[j]);   
+                            train.addAll(foldsCV[j]);
                         }
                     }
                     test.addAll(foldsCV[i]);
-                    
+
                     System.out.println("train: " + train.numInstances());
                     System.out.println("test: " + test.numInstances());
 
                     list_dataset_train.add(new MultiLabelInstances(train, dataset.getLabelsMetaData()));
-                    list_dataset_test.add(new MultiLabelInstances(test, dataset.getLabelsMetaData()));  
+                    list_dataset_test.add(new MultiLabelInstances(test, dataset.getLabelsMetaData()));
                 }
 
                 holdout_random =false;
@@ -3566,7 +3279,7 @@ private void Inicializa_config()
             String split = textIterativeStratifiedHoldout.getText();
             double percent_split = Double.parseDouble(split);
             if((percent_split <= 0) || (percent_split >= 100)){
-                JOptionPane.showMessageDialog(null, "The percentage must be a number between 0 and 100", "alert", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "The percentage must be a number in the range (0, 100).", "alert", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -3576,7 +3289,7 @@ private void Inicializa_config()
 
                 dataset_train = partitions[0];
                 dataset_test = partitions[1];
-                
+
                 holdout_random =false;
                 cv_ramdon =false;
                 holdout_iterative_stratified =true;
@@ -3599,32 +3312,36 @@ private void Inicializa_config()
 
             if(split.equals(""))
             {
-                JOptionPane.showMessageDialog(null, "You must give a number of folds", "alert", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "You must enter a number of folds.", "alert", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             int nFolds = 0;
-            
+
             try{
                 nFolds = Integer.parseInt(split);
             }
             catch(Exception e){
-                JOptionPane.showMessageDialog(null, "Introduce a correct number of folds", "alert", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Introduce a correct number of folds.", "alert", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+
             if(nFolds < 2)
             {
-                JOptionPane.showMessageDialog(null, "The number of folds must be greater than 2", "alert", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "The number of folds must be greater or equal to 2.", "alert", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+            else if(nFolds > dataset.getNumInstances()){
+                JOptionPane.showMessageDialog(null, "The number of folds can not be greater than the number of instances.", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             IterativeStratification strat = new IterativeStratification();
             MultiLabelInstances folds [] = strat.stratify(dataset, nFolds);
-            
+
             for(int i=0; i<nFolds; i++){
                 try {
-                    
+
                     int trainSize = 0, testSize = 0;
                     for(int j=0; j<nFolds; j++){
                         if(i != j){
@@ -3632,7 +3349,7 @@ private void Inicializa_config()
                         }
                     }
                     testSize += folds[i].getNumInstances();
-                    
+
                     train = new Instances(dataset.getDataSet(), trainSize);
                     test = new Instances(dataset.getDataSet(), testSize);
                     for(int j=0; j<nFolds; j++){
@@ -3641,21 +3358,21 @@ private void Inicializa_config()
                         }
                     }
                     test.addAll(folds[i].getDataSet());
-                    
+
                     list_dataset_train.add(new MultiLabelInstances(train, dataset.getLabelsMetaData()));
                     list_dataset_test.add(new MultiLabelInstances(test, dataset.getLabelsMetaData()));
                 } catch (InvalidDataFormatException ex) {
                     Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-  
+
         }
         //LP stratified holdout
         else if(radioLPStratifiedHoldout.isSelected()){
             String split = textLPStratifiedHoldout.getText();
             double percent_split = Double.parseDouble(split);
             if((percent_split <= 0) || (percent_split >= 100)){
-                JOptionPane.showMessageDialog(null, "The percentage must be a number between 0 and 100", "alert", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "The percentage must be a number in the range (0, 100).", "alert", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -3665,7 +3382,7 @@ private void Inicializa_config()
 
                 dataset_train = partitions[0];
                 dataset_test = partitions[1];
-                
+
                 holdout_random =false;
                 cv_ramdon =false;
                 holdout_iterative_stratified =false;
@@ -3688,49 +3405,52 @@ private void Inicializa_config()
 
             if(split.equals(""))
             {
-                JOptionPane.showMessageDialog(null, "You must give a number of folds", "alert", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "You must enter a number of folds.", "alert", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             int nFolds = 0;
-            
+
             try{
                 nFolds = Integer.parseInt(split);
             }
             catch(Exception e){
-                JOptionPane.showMessageDialog(null, "Introduce a correct number of folds", "alert", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Introduce a correct number of folds.", "alert", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+
             if(nFolds < 2)
             {
-                JOptionPane.showMessageDialog(null, "The number of folds must be greater than 2", "alert", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "The number of folds must be greater or equal to 2.", "alert", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+            else if(nFolds > dataset.getNumInstances()){
+                JOptionPane.showMessageDialog(null, "The number of folds can not be greater than the number of instances.", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             LabelPowersetTrainTest strat = new LabelPowersetTrainTest();
             MultiLabelInstances folds [] = strat.stratify(dataset, nFolds);
-            
-            
+
             for(int i=0; i<nFolds; i++){
-                try {                    
+                try {
                     train = new Instances(dataset.getDataSet(), 0);
                     test = new Instances(dataset.getDataSet(), 0);
-                    
+
                     for(int j=0; j<nFolds; j++){
                         if(i != j){
                             train.addAll(folds[j].getDataSet());
                         }
                     }
                     test.addAll(folds[i].getDataSet());
-                    
+
                     list_dataset_train.add(new MultiLabelInstances(train, dataset.getLabelsMetaData()));
                     list_dataset_test.add(new MultiLabelInstances(test, dataset.getLabelsMetaData()));
                 } catch (InvalidDataFormatException ex) {
                     Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            
+
             holdout_random =false;
             cv_ramdon =false;
             holdout_iterative_stratified =false;
@@ -3743,24 +3463,28 @@ private void Inicializa_config()
         //FS_BR
         else if(radioBRFS.isSelected()){
             int nFeatures = Integer.parseInt(textBRFS.getText());
-            if(nFeatures > dataset.getFeatureIndices().length){
+            if(nFeatures < 1){
+                JOptionPane.showMessageDialog(null, "The number of features must be a positive natural number.", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            else if(nFeatures > dataset.getFeatureIndices().length){
                 JOptionPane.showMessageDialog(null, "The number of features to select must be less than the original.", "alert", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+
             String combination = jComboBox_BRFS_Comb.getSelectedItem().toString();
             String normalization = jComboBox_BRFS_Norm.getSelectedItem().toString();
             String output = jComboBox_BRFS_Out.getSelectedItem().toString();
-            
+
             FeatureSelector fs = new FeatureSelector(dataset, nFeatures);
             FSdataset = fs.select(combination, normalization, output);
-            
+
             if(FSdataset == null)
             {
                 JOptionPane.showMessageDialog(null, "Error when selecting features.", "alert", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+
             holdout_random =false;
             cv_ramdon =false;
             holdout_iterative_stratified =false;
@@ -3772,12 +3496,16 @@ private void Inicializa_config()
         }
         else if(radioRandomFS.isSelected()){
             int nFeatures = Integer.parseInt(textRandomFS.getText());
-            
-            if(nFeatures > dataset.getFeatureIndices().length){
+
+            if(nFeatures < 1){
+                JOptionPane.showMessageDialog(null, "The number of features must be a positive natural number.", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            else if(nFeatures > dataset.getFeatureIndices().length){
                 JOptionPane.showMessageDialog(null, "The number of features to select must be less than the original.", "alert", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+
             FeatureSelector fs = new FeatureSelector(dataset, nFeatures);
             FSdataset = fs.randomSelect();
 
@@ -3793,8 +3521,8 @@ private void Inicializa_config()
         else{
             System.out.println("No radio button is selected.");
         }
-        
-/*
+
+        /*
         if(radioIterativeStratifiedHoldout.isSelected())
         {
             //Holdout with iterative stratification
@@ -3850,7 +3578,7 @@ private void Inicializa_config()
             //int num_instance = dataset.getNumInstances();
 
             try{
-                
+
                 Instances dataset_temp = dataset.clone().getDataSet();
 
                 int seed = (int)(Math.random()*100)+100;
@@ -3859,7 +3587,6 @@ private void Inicializa_config()
 
                 dataset_temp.randomize(rand);
 
-                
                 //RemovePercentage rmvp = new RemovePercentage();
                 //rmvp.setPercentage(percent_split);
                 //rmvp.setInputFormat(dataSet);
@@ -3870,7 +3597,6 @@ private void Inicializa_config()
                 //rmvp.setPercentage(percent_split);
                 //rmvp.setInputFormat(dataSet);
                 //Instances trainDataSet = Filter.useFilter(dataSet, rmvp);
-                
 
                 int trainInstances = (int) Math.round(dataset.getNumInstances()*(percent_split/100.0));
                 System.out.println("train instances: " + trainInstances);
@@ -3913,13 +3639,13 @@ private void Inicializa_config()
             }
 
             int nFolds = Integer.parseInt(split);
-            
+
             if(nFolds < 2)
             {
                 JOptionPane.showMessageDialog(null, "The number of folds must be greater than 2", "alert", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+
             try{
                 MultiLabelInstances temp = dataset.clone();
                 Instances dataset_temp = temp.getDataSet();
@@ -3929,13 +3655,13 @@ private void Inicializa_config()
                 Random rand = new Random(seed);
 
                 dataset_temp.randomize(rand);
-                
+
                 Instances [] foldsCV = new Instances[nFolds];
-                
+
                 for(int i=0; i<dataset_temp.numInstances(); i++){
                     foldsCV[i%nFolds].add(dataset_temp.get(i));
                 }
-                
+
                 train.clear();
                 test.clear();
                 for(int i=0; i<nFolds; i++){
@@ -3945,25 +3671,24 @@ private void Inicializa_config()
                         }
                     }
                     test.addAll(foldsCV[i]);
-                    
+
                     list_dataset_train.add(new MultiLabelInstances(train, dataset.getLabelsMetaData()));
                     list_dataset_test.add(new MultiLabelInstances(test, dataset.getLabelsMetaData()));
                 }
-                
 
                 // aplica cross validation
                 //for (int n = 0; n < nFolds; n++)
                 //{
-                 //   train = dataset_temp.trainCV(nFolds, n, rand);
-                   // test = dataset_temp.testCV(nFolds, n);
+                    //   train = dataset_temp.trainCV(nFolds, n, rand);
+                    // test = dataset_temp.testCV(nFolds, n);
 
                     //train_ml = new MultiLabelInstances(train, dataset.getLabelsMetaData());
                     //test_ml = new MultiLabelInstances(test, dataset.getLabelsMetaData());
 
                     //list_dataset_train.add(train_ml);
                     //list_dataset_test.add(test_ml);
-                //}
-                  
+                    //}
+
                 //System.out.println("numero generado "+seed);
 
                 holdout_random =false;
@@ -4018,14 +3743,14 @@ private void Inicializa_config()
                         list_dataset_test.add(current[1]);
                     }
 
-                holdout_random =false;
-                holdout_iterative_stratified =true;
-                cv_ramdon =false;
-                cv_iterative_stratified =true;
-                holdout_LP_stratified =false;
-                cv_LP_stratified =false;
-                feature_selection_br = false;
-                feature_selection_random = false;
+                    holdout_random =false;
+                    holdout_iterative_stratified =true;
+                    cv_ramdon =false;
+                    cv_iterative_stratified =true;
+                    holdout_LP_stratified =false;
+                    cv_LP_stratified =false;
+                    feature_selection_br = false;
+                    feature_selection_random = false;
                     // return;
                     //calculte metric selected
                     //button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7,list_dataset_train,list_dataset_test );  // CV STRATIFIED
@@ -4036,7 +3761,7 @@ private void Inicializa_config()
                 }
 
             }
-        */
+            */
 
             //initializeTableMetricsCommon();
             //initializeTableMetricsTrainTest();
@@ -4046,81 +3771,9 @@ private void Inicializa_config()
             //button_calculate2_train.setEnabled(true);
             //button_save_train.setEnabled(false);
 
-            JOptionPane.showMessageDialog(null, "Datasets generated succesfully", "Successful", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Datasets have been generated succesfully.", "Successful", JOptionPane.INFORMATION_MESSAGE);
             Toolkit.getDefaultToolkit().beep();
     }//GEN-LAST:event_jButtonStartPreprocessActionPerformed
-
-    private void textBRFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textBRFSActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textBRFSActionPerformed
-
-    private void textBRFSKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textBRFSKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textBRFSKeyTyped
-
-    private void radioBRFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioBRFSActionPerformed
-        // TODO add your handling code here:
-        textRandomHoldout.setEnabled(false);
-        textIterativeStratifiedHoldout.setEnabled(false);
-        // buttonChooseSuppliedTest.setEnabled(false);
-        textRandomCV.setEnabled(false);
-        textIterativeStratifiedCV.setEnabled(false);
-        textLPStratifiedHoldout.setEnabled(false);
-        textLPStratifiedCV.setEnabled(false);
-        textBRFS.setEnabled(true);
-        labelBRFS_Comb.setEnabled(true);
-        jComboBox_BRFS_Comb.setEnabled(true);
-        labelBRFS_Norm.setEnabled(true);
-        jComboBox_BRFS_Norm.setEnabled(true);
-        labelBRFS_Out.setEnabled(true);
-        jComboBox_BRFS_Out.setEnabled(true);
-        textRandomFS.setEnabled(false);
-
-        jButtonSaveDatasets.setEnabled(false);
-        //button_calculate2_train.setEnabled(false);
-        //button_save_train.setEnabled(false);
-    }//GEN-LAST:event_radioBRFSActionPerformed
-
-    private void jComboBox_BRFS_CombActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_BRFS_CombActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox_BRFS_CombActionPerformed
-
-    private void jComboBox_BRFS_NormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_BRFS_NormActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox_BRFS_NormActionPerformed
-
-    private void jComboBox_BRFS_OutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_BRFS_OutActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox_BRFS_OutActionPerformed
-
-    private void radioRandomFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomFSActionPerformed
-        // TODO add your handling code here:
-        textRandomHoldout.setEnabled(false);
-        textIterativeStratifiedHoldout.setEnabled(false);
-        // buttonChooseSuppliedTest.setEnabled(false);
-        textRandomCV.setEnabled(false);
-        textIterativeStratifiedCV.setEnabled(false);
-        textLPStratifiedHoldout.setEnabled(false);
-        textLPStratifiedCV.setEnabled(false);
-        textBRFS.setEnabled(false);
-        labelBRFS_Comb.setEnabled(false);
-        jComboBox_BRFS_Comb.setEnabled(false);
-        labelBRFS_Norm.setEnabled(false);
-        jComboBox_BRFS_Norm.setEnabled(false);
-        labelBRFS_Out.setEnabled(false);
-        jComboBox_BRFS_Out.setEnabled(false);
-        textRandomFS.setEnabled(true);
-
-        jButtonSaveDatasets.setEnabled(false);
-    }//GEN-LAST:event_radioRandomFSActionPerformed
-
-    private void textRandomFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textRandomFSActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textRandomFSActionPerformed
-
-    private void textRandomFSKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textRandomFSKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textRandomFSKeyTyped
 
     private void textLPStratifiedCVKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textLPStratifiedCVKeyTyped
         // TODO add your handling code here:
@@ -4332,6 +3985,327 @@ private void Inicializa_config()
         //button_save_train.setEnabled(false);
     }//GEN-LAST:event_radioRandomHoldoutActionPerformed
 
+    // CAPTURA LA DIRECCION DEL XML EN EL JTEXTFIELD DE LA 1ra pestaña para cargar el dataset.
+    private void textChooseFileKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textChooseFileKeyPressed
+
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            //--------------------------------------------------------------
+            //INVOCAR EL PROGRESS BAR
+            /*
+            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
+            progress_bar new_progress = new progress_bar();
+            task = new Task(new_progress);
+            new_progress.setVisible(true);
+
+            task.addPropertyChangeListener(new_progress);
+            task.execute();
+            //--------------------------------------------------------------
+            */
+
+            String filename_database_arff = textChooseFile.getText();
+
+            filename_database_xml = util.Get_xml_string(filename_database_arff);
+
+            filename_database_xml = util.Get_file_name_xml(filename_database_xml);
+
+            Load_dataset(filename_database_arff, filename_database_xml);
+        }
+    }//GEN-LAST:event_textChooseFileKeyPressed
+
+    private void textChooseFileFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textChooseFileFocusLost
+
+        // CUANDO EL TEXTFIELD PIERDE EL FOCUS
+        /*
+        String filename_database_arff = jTextField2.getText();
+
+        filename_database_xml = filename_database_arff.substring(0,filename_database_arff.length()-5)+".xml";
+
+        filename_database_xml = util.Get_file_name_xml(filename_database_xml);
+
+        Load_dataset(filename_database_arff, filename_database_xml);
+
+        */
+    }//GEN-LAST:event_textChooseFileFocusLost
+
+    private void textChooseFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textChooseFileActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textChooseFileActionPerformed
+
+    // carga el dataset buscandolo por el filechooser
+    private void buttonChooseFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonChooseFileActionPerformed
+        // TODO add your handling code here:
+
+        // ESCOGER EL DATASET
+        JFileChooser jfile1 = new JFileChooser();
+        FileNameExtensionFilter fname = new FileNameExtensionFilter(".arff", "arff");
+        jfile1.setFileFilter(fname);
+        //int returnVal =
+
+        int returnVal = jfile1.showOpenDialog(this);
+
+        if (returnVal == JFileChooser.OPEN_DIALOG)
+        {
+
+            File f1 = jfile1.getSelectedFile();
+            dataset_name1 = f1.getName();
+            dataset_current_name = dataset_name1.substring(0,dataset_name1.length()-5);
+
+            String filename_database_arff = f1.getAbsolutePath();
+
+            filename_database_xml_path=  filename_database_arff.substring(0,filename_database_arff.length()-5)+".xml";
+            filename_database_xml = util.Get_file_name_xml1(filename_database_xml_path);
+
+            File  file_temp = new File(filename_database_xml_path);
+
+            int velocidad=5;
+
+            //-------------------------------------------------------------------------------------------------------
+            FileReader fr;
+            try
+            {
+                fr = new FileReader(filename_database_arff);
+                BufferedReader bf = new BufferedReader(fr);
+
+                String sCadena = bf.readLine();
+                int label_found=0;
+                String label_name;
+                String[] label_names_found;
+
+                if(util.Es_de_tipo_MEKA(sCadena))
+                {
+                    System.out.println("el dataset es de tipo MEKA");
+                    es_de_tipo_meka = true;
+
+                    int label_count = util.Extract_labels_from_arff(sCadena);
+                    label_names_found = new String[label_count];
+
+                    while(label_found < label_count)
+                    {
+                        sCadena = bf.readLine();
+                        label_name = util.Extract_label_name_from_String(sCadena);
+
+                        if(label_name!= null)
+                        {
+                            label_names_found[label_found]=label_name;
+                            label_found++;
+
+                        }
+
+                    }
+                    //util.Recorre_Arreglo(label_names_found);
+
+                    BufferedWriter bw_xml= new BufferedWriter(new FileWriter(filename_database_xml_path));
+                    PrintWriter wr_xml = new PrintWriter(bw_xml);
+
+                    util.Write_into_xml_file(wr_xml, label_names_found); //crea el xml para el caso de MEKA
+
+                    bw_xml.close();
+                    wr_xml.close();
+
+                    filename_database_xml = util.Get_file_name_xml(filename_database_xml_path); //carga el xml creado...
+                    file_temp = new File(filename_database_xml_path);
+                }
+
+                else
+                {
+                    System.out.println("el dataset NO es de tipo MEKA");
+                    es_de_tipo_meka= false;
+
+                }
+            }
+            catch (FileNotFoundException ex) {
+                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            //-------------------------------------------------------------------------------------------------------
+
+            //-------------------------------------------------------------------------------------------------------
+
+            if(!file_temp.exists()) //SI NO EXISTE EL XML
+            {
+                filename_database_xml_path = util.Get_xml_string(filename_database_arff);
+                filename_database_xml = util.Get_file_name_xml(filename_database_xml_path);
+            }
+
+            System.out.println("Choosefilename_database_xml_path: " + filename_database_xml_path);
+
+            try {
+                MultiLabelInstances dataset_temp = new MultiLabelInstances(filename_database_arff, filename_database_xml);
+                //System.out.println("prueba xml "+filename_database_xml);
+                velocidad =util.get_velocidad(dataset_temp);
+            } catch (InvalidDataFormatException ex) {
+                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            //--------------------------------------------------------------
+            //INVOCAR EL PROGRESS BAR
+
+            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
+            progress_bar new_progress = new progress_bar();
+            task = new Task(new_progress,velocidad);
+            new_progress.setVisible(true);
+
+            task.addPropertyChangeListener(new_progress);
+            task.execute();
+
+            //--------------------------------------------------------------
+
+            initializeTableMetrics();
+            initializeTableMetricsCommon();
+            initializeTableMetricsTrainTest();
+            clearTable_metrics_principal();
+            clearTable_metrics_traintest();
+
+            Load_dataset(filename_database_arff, filename_database_xml);
+
+            textChooseFile.setText(filename_database_arff);
+        }
+    }//GEN-LAST:event_buttonChooseFileActionPerformed
+
+    private void buttonShowHeatmapLeftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowHeatmapLeftActionPerformed
+        // TODO add your handling code here:
+
+        if(dataset== null) {JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); return;}
+
+        ArrayList<String> seleccionados= new  ArrayList();
+        int[] selecteds=tableHeatmapLeft.getSelectedRows();
+
+        if(selecteds.length< 1) {JOptionPane.showMessageDialog(null, "You must choose one or more labels.", "alert", JOptionPane.ERROR_MESSAGE); return;}
+
+        for(int i=0;i<selecteds.length; i++)
+        {
+            seleccionados.add((tableHeatmapLeft.getValueAt(selecteds[i], 0).toString()));
+        }
+
+        //ArrayList<pares_atributos> pares_seleccionados=  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
+
+        String[] labelname=util.pasa_valores_al_arreglo(seleccionados);
+
+        int[] label_indices =util.get_label_indices(labelname, dataset);
+
+        //graphComponent  =  Create_jgraphx(jPanel10,pares_seleccionados,labelname,graphComponent);
+
+        HeapSort1.sort(label_indices);
+        //util.Recorre_Arreglo(HeapSort1.get_array_sorted());
+        label_indices_seleccionados = label_indices;
+
+        jheat_chart= create_heapmap(labelHeatmapGraph,dataset,label_indices);
+
+        ArrayList<pares_atributos> pares_seleccionados=  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
+
+        double[][] pares_freq= util.get_heatmap_values(pares_seleccionados, num_instancias,labelname);
+
+        int posx = this.getBounds().x;
+        int posy = this.getBounds().y;
+
+        jframe_temp mo = new jframe_temp(pares_freq, labelname,posx,posy);
+        mo.setVisible(true);
+    }//GEN-LAST:event_buttonShowHeatmapLeftActionPerformed
+
+    private void labelHeatmapGraphMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelHeatmapGraphMouseReleased
+        // TODO add your handling code here:
+
+        if(evt.getButton() == MouseEvent.BUTTON1)
+        {
+            int pos_inicial_x = (labelHeatmapGraph.getBounds().width/2) - jheat_chart.getChartSize().width/2 ;
+            int pos_incial_y = (labelHeatmapGraph.getBounds().height/2- jheat_chart.getChartSize().height/2);
+
+            int pos_actual_x=evt.getPoint().x;
+            int pos_actual_y=evt.getPoint().y;
+
+            int cant_celdas_x = jheat_chart.getChartSize().width/jheat_chart.getCellSize().width;
+            int cant_celdas_y = jheat_chart.getChartSize().height/jheat_chart.getCellSize().height;
+
+            int ancho_celdas_x = jheat_chart.getCellSize().width;
+            int ancho_celdas_y = jheat_chart.getCellSize().height;
+
+            int celda_actual_x = util.Devuelve_num_celda(pos_inicial_x, pos_actual_x, ancho_celdas_x, cant_celdas_x);
+            int celda_actual_y = util.Devuelve_num_celda(pos_incial_y, pos_actual_y, ancho_celdas_y, cant_celdas_y);
+
+            if(celda_actual_x ==-1 || celda_actual_y ==-1)
+            {
+                // System.out.println("fuera del borde");
+                return;
+            }
+
+            int invierte_eje_y = cant_celdas_y-celda_actual_y+1;
+
+            String[] seleccionados =util.devuelve_etiquetas_seleccionadas(dataset, label_indices_seleccionados);
+
+            int posx = this.getBounds().x;
+            int posy = this.getBounds().y;
+
+            metric_output mo = new metric_output(dataset,seleccionados[celda_actual_x-1],seleccionados[invierte_eje_y-1],posx,posy,es_de_tipo_meka);
+            mo.setVisible(true);
+
+        }
+
+        if(evt.getButton() == MouseEvent.BUTTON3 )
+        {
+            //System.out.println("se dio el clic derecho");
+
+            jPopupMenu1.removeAll();
+
+            JMenuItem salvar = new JMenuItem("Save as...");
+
+            salvar.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    try {
+                        save_as_ActionPerformed1(evt);
+                    } catch (AWTException ex) {
+                        Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+
+            jPopupMenu1.add(salvar);
+            jPopupMenu1.show(evt.getComponent(), evt.getX(), evt.getY());
+        }
+    }//GEN-LAST:event_labelHeatmapGraphMouseReleased
+
+    private void tableHeatmapLeftMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableHeatmapLeftMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tableHeatmapLeftMouseClicked
+
+    private void initializeTableMetrics(){
+        ArrayList<String> metricsList = util.Get_all_metrics();
+        
+        tableMetrics.clear();
+        
+        for(int i=0; i<metricsList.size(); i++){
+            tableMetrics.put(metricsList.get(i), "-");
+        }
+    }
+    
+    private void initializeTableMetricsCommon(){
+        ArrayList<String> metricsList = util.Get_common_metrics();
+        
+        tableMetrics_common.clear();
+        
+        for(int i=0; i<metricsList.size(); i++){
+            tableMetrics_common.put(metricsList.get(i), "-");
+        }
+    }
+    
+    private void initializeTableMetricsTrainTest(){
+        ArrayList<String> metricsList = util.Get_test_metrics();
+        
+        tableMetrics_train.clear();
+        tableMetrics_test.clear();
+        
+        for(int i=0; i<metricsList.size(); i++){
+            tableMetrics_train.put(metricsList.get(i), "-");
+            tableMetrics_test.put(metricsList.get(i), "-");
+        }
+    }
+    
        private void save_as_ActionPerformed1(java.awt.event.ActionEvent evt) throws AWTException, IOException
     {
         BufferedImage image = new Robot().createScreenCapture(new Rectangle(labelHeatmapGraph.getLocationOnScreen().x, labelHeatmapGraph.getLocationOnScreen().y, labelHeatmapGraph.getWidth(), labelHeatmapGraph.getHeight()));
@@ -4351,21 +4325,16 @@ private void Inicializa_config()
          
         if (returnVal == JFileChooser.APPROVE_OPTION)
         {                               
-              
-                  File file =new File(fc.getSelectedFile().getAbsolutePath()+".png");
+            File file =new File(fc.getSelectedFile().getAbsolutePath()+".png");
                   
-              // TODO add your handling code here:
-              //jpanel25
+            // TODO add your handling code here:
+            //jpanel25
                 
-                ImageIO.write(image, "png", file);
+            ImageIO.write(image, "png", file);
                 
-                JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                Toolkit.getDefaultToolkit().beep();
-     
-          } 
-       
-        
-        
+            JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+            Toolkit.getDefaultToolkit().beep();
+        } 
     }
     
     private void save_as_ActionPerformed(java.awt.event.ActionEvent evt) throws AWTException, IOException
@@ -4396,7 +4365,7 @@ private void Inicializa_config()
                
                 ImageIO.write(image, "png", file);
                 
-                JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                 Toolkit.getDefaultToolkit().beep();
             
               
@@ -4520,9 +4489,10 @@ private void Inicializa_config()
         graphComponent.getGraph().getModel().endUpdate();
                 
  
-         jpanel.setLayout(new BorderLayout());
-         jpanel.setPreferredSize(new Dimension(584, 399));//POR FIN!!
-         jpanel.add(graphComponent,BorderLayout.CENTER);
+        jpanel.setLayout(new BorderLayout());
+        //jpanel.setPreferredSize(new Dimension(584, 399));//POR FIN!!
+        jpanel.setPreferredSize(new Dimension(560, 399));
+        jpanel.add(graphComponent,BorderLayout.CENTER);
         
         jpanel.validate();
         jpanel.repaint();
@@ -4538,29 +4508,27 @@ private void Inicializa_config()
     private void Load_dataset(String filename_database_arff, String filename_database_xml )
     {
         //System.out.println(filename_database_arff);
-        
-        
-               
+ 
         try {        
              export2.setVisible(true); //boton salvar de la tabla de la izquierda en class imbalance
             
              
-             if(tabsDependences.getSelectedIndex()==0)jLabel30.setVisible(true);
-             else jLabel30.setVisible(false);
+             if(tabsDependences.getSelectedIndex()==0)jLabelChiFi_text.setVisible(true);
+             else jLabelChiFi_text.setVisible(false);
             
              
              //para el box diagram
-             if(tabsImbalance.getSelectedIndex()==7 || jComboLabelInformation.getSelectedIndex()==7){
+             if(tabsImbalance.getSelectedIndex()==7){
                  jPanel15.setVisible(true);
              }
              else {
                  jPanel15.setVisible(false);
              }
             
-             if(tabsImbalance.getSelectedIndex()==3  || jComboLabelInformation.getSelectedIndex()==3
-                     || tabsImbalance.getSelectedIndex()==4  || jComboLabelInformation.getSelectedIndex()==4
-                     || tabsImbalance.getSelectedIndex()==5 || jComboLabelInformation.getSelectedIndex()==5
-                     || tabsImbalance.getSelectedIndex()==6 || jComboLabelInformation.getSelectedIndex()==6) 
+             if(tabsImbalance.getSelectedIndex()==3
+                     || tabsImbalance.getSelectedIndex()==4
+                     || tabsImbalance.getSelectedIndex()==5
+                     || tabsImbalance.getSelectedIndex()==6) 
              {
                  labelIR1.setVisible(true);
                  labelIR2.setVisible(true);
@@ -4669,7 +4637,7 @@ private void Inicializa_config()
             if(tm_BR1 !=null && tm_LP1!=null)
             {               
                 
-            if(tabsImbalance.getSelectedIndex()==1 || jComboLabelInformation.getSelectedIndex()==1)
+            if(tabsImbalance.getSelectedIndex()==1)
             {
                 tableImbalance.setModel(tm_LP1);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Frequency per labelset"));
@@ -4679,7 +4647,7 @@ private void Inicializa_config()
                 panelImbalanceLeft.validate();
 
             }
-            else if (tabsImbalance.getSelectedIndex()==5 || jComboLabelInformation.getSelectedIndex()==5) // ir per labelset
+            else if (tabsImbalance.getSelectedIndex()==5) // ir per labelset
             {
                 tableImbalance.setModel(tm_ir_per_labelset);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset id per IR"));
@@ -4698,7 +4666,7 @@ private void Inicializa_config()
                 */
             }
             
-            else if (tabsImbalance.getSelectedIndex()==0 || jComboLabelInformation.getSelectedIndex()==0)
+            else if (tabsImbalance.getSelectedIndex()==0)
             {
                 tableImbalance.setModel(tm_BR1);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Frequency per label"));
@@ -4707,7 +4675,7 @@ private void Inicializa_config()
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
             }
-            else if (tabsImbalance.getSelectedIndex()==6 || jComboLabelInformation.getSelectedIndex()==6)//imbalance data metric
+            else if (tabsImbalance.getSelectedIndex()==6)//imbalance data metric
             {
                 tableImbalance.setModel(tm_IR);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imabalance ratio per label"));
@@ -4722,7 +4690,7 @@ private void Inicializa_config()
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
             }
-            else if (tabsImbalance.getSelectedIndex()==3 || jComboLabelInformation.getSelectedIndex()==3)
+            else if (tabsImbalance.getSelectedIndex()==3)
             {
                 tableImbalance.setModel(tm_ir_per_label_intra_class);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Number of labels intra class per IR"));
@@ -4732,7 +4700,7 @@ private void Inicializa_config()
                 panelImbalanceLeft.validate();
             }
             
-            else if (tabsImbalance.getSelectedIndex()==2 || jComboLabelInformation.getSelectedIndex()==2)
+            else if (tabsImbalance.getSelectedIndex()==2)
             {
                 tableImbalance.setModel(tm_labelxExamples);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels per example"));
@@ -4749,7 +4717,7 @@ private void Inicializa_config()
                 jPanel17.validate();*/
             }
             
-            else if (tabsImbalance.getSelectedIndex()==8 || jComboLabelInformation.getSelectedIndex()==8)
+            else if (tabsImbalance.getSelectedIndex()==8)
             {
                 tableImbalance.setModel(tm_ir_per_label_inter_class_only);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Label per IR values inter class"));
@@ -4759,7 +4727,7 @@ private void Inicializa_config()
                 panelImbalanceLeft.validate();
             }
             
-            else if (tabsImbalance.getSelectedIndex()==9 || jComboLabelInformation.getSelectedIndex()==9)
+            else if (tabsImbalance.getSelectedIndex()==9)
             {
                 tableImbalance.setModel(tm_ir_per_label_inter_class);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Number of labels inter class per IR"));
@@ -4775,7 +4743,7 @@ private void Inicializa_config()
                 panelImbalanceLeft.validate();
             }
             
-            else if (tabsImbalance.getSelectedIndex()==4 || jComboLabelInformation.getSelectedIndex()==4)
+            else if (tabsImbalance.getSelectedIndex()==4)
             {
                               
                 tableImbalance.setModel(tm_ir_per_label_intra_class_only);
@@ -4788,7 +4756,7 @@ private void Inicializa_config()
             }
             
             
-            else if (tabsImbalance.getSelectedIndex()==7 || jComboLabelInformation.getSelectedIndex()==7)
+            else if (tabsImbalance.getSelectedIndex()==7)
             {
                 tableImbalance.setModel(tm_attr);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Numeric attributes"));
@@ -4826,8 +4794,8 @@ private void Inicializa_config()
             fixedTable.setDefaultRenderer(Object.class, new MiRender("chi_fi_fixed", critical_value));
             
             
-            panelChiFi.repaint();
-            panelChiFi.validate();
+            panelChiPhi.repaint();
+            panelChiPhi.validate();
            
             
              //tm_coocurrences   
@@ -4837,8 +4805,8 @@ private void Inicializa_config()
             // jTable11.setModel(tm_coocurrences);
               
              jtable_coefficient_values(dataset, lista_pares,"coocurrence");
-             jTable11.setDefaultRenderer(Object.class, new MiRender("estandar",critical_value));
-             fixedTable1.setDefaultRenderer(Object.class, new MiRender("chi_fi_fixed",critical_value));
+             jTable11.setDefaultRenderer(Object.class, new MiRender("estandar",Double.MAX_VALUE));
+             fixedTable1.setDefaultRenderer(Object.class, new MiRender("chi_fi_fixed",Double.MAX_VALUE));
            
              panelCoOcurrenceValues.repaint();
              panelCoOcurrenceValues.validate();
@@ -4848,8 +4816,8 @@ private void Inicializa_config()
              //jTable12.setModel(tm_heapmap_values);
              
              jtable_coefficient_values(dataset, lista_pares,"heapmap");
-             jTable12.setDefaultRenderer(Object.class, new MiRender("estandar",critical_value));
-             fixedTable2.setDefaultRenderer(Object.class, new MiRender("chi_fi_fixed",critical_value));
+             jTable12.setDefaultRenderer(Object.class, new MiRender("estandar",Double.MAX_VALUE));
+             fixedTable2.setDefaultRenderer(Object.class, new MiRender("chi_fi_fixed",Double.MAX_VALUE));
              
              panelHeatmapValues.repaint();
              panelHeatmapValues.validate();
@@ -4918,7 +4886,7 @@ private void Inicializa_config()
         }
         catch (Exception ex) {
             JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.INFORMATION_MESSAGE);
-            System.out.println("Este es el mensaje "+ ex);
+            System.out.println("Error: " + ex);
             Logger.getLogger(CrossValidationExperiment.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -4982,7 +4950,7 @@ private void Inicializa_config()
        ArrayList<String> metric_list_test = Get_metrics_selected_test(jtable2);
        
        if(dataset == null) {
-           JOptionPane.showMessageDialog(null, "You must load a dataset", "alert", JOptionPane.ERROR_MESSAGE); 
+           JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
             return; 
        }
 
@@ -4994,14 +4962,14 @@ private void Inicializa_config()
        
        
        if((dataset_train ==null || dataset_test == null) && flag ){
-            JOptionPane.showMessageDialog(null, "You must to click Start", "alert", JOptionPane.ERROR_MESSAGE); 
+            JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE); 
             return;
        }
        
        
        if((dataset_train ==null || dataset_test == null))
        {
-            JOptionPane.showMessageDialog(null, "You must to click Start", "alert", JOptionPane.ERROR_MESSAGE); 
+            JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE); 
             return;
        }
          
@@ -5100,7 +5068,7 @@ private void Inicializa_config()
        ArrayList<String> metric_list_test = Get_metrics_selected_test(jtable2);
        
        if(dataset == null) {
-           JOptionPane.showMessageDialog(null, "You must load a dataset", "alert", JOptionPane.ERROR_MESSAGE); 
+           JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
            return; 
        }
        
@@ -5275,11 +5243,11 @@ private void Inicializa_config()
        String dataset_name11;
       
        if(dataset == null ) {
-           JOptionPane.showMessageDialog(null, "You must load a dataset", "alert", JOptionPane.ERROR_MESSAGE); 
+           JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
            return; }
        
        if((dataset_train ==null || dataset_test == null )&& list_dataset_train.isEmpty()){
-            JOptionPane.showMessageDialog(null, "You must to click Start", "alert", JOptionPane.ERROR_MESSAGE); 
+            JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE); 
             return;}
        
        
@@ -5333,7 +5301,7 @@ private void Inicializa_config()
                 util.Save_in_the_file(wr, metric_list_commun, metric_list_train, metric_list_test, dataset_train, dataset_test, es_de_tipo_meka);
                 }
                 
-                JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                 wr.close();
                 bw.close();      
                 }
@@ -5352,14 +5320,14 @@ private void Inicializa_config()
                      
                              if(exp.exporta(list_dataset_train,list_dataset_test,dataset_name11,es_de_tipo_meka))
                                  {
-                                    JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                                  }
                         }
 
                       catch(Exception e1)
                         {
-                            System.out.println("este es el mensaje"+ e1.getMessage());
-                            JOptionPane.showMessageDialog(null, "File NOT Saved correctly", "Error", JOptionPane.ERROR_MESSAGE); 
+                            System.out.println("Error: " +  e1.getMessage());
+                            JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
                         }   
                         
                       //util.Save_in_the_file_csv(wr,metric_list_commun,metric_list_train,metric_list_test,list_dataset_train,list_dataset_test,dataset_current_name);
@@ -5376,14 +5344,14 @@ private void Inicializa_config()
                      
                              if(exp.exporta(dataset_train,dataset_test,dataset_name11,es_de_tipo_meka))
                                  {
-                                    JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                                  }
                         }
 
                       catch(Exception e1)
                         {
                             System.out.println("este es el mensaje "+e1.getMessage());
-                            JOptionPane.showMessageDialog(null, "File NOT Saved correctly", "Error", JOptionPane.ERROR_MESSAGE); 
+                            JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
                         }   
                       //util.Save_in_the_file_csv(wr, metric_list_commun, metric_list_train, metric_list_test, dataset_train, dataset_test,dataset_current_name);
                   }
@@ -5419,7 +5387,7 @@ private void Inicializa_config()
                     wr.close();
                     bw.close();      
                     
-                   JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                   JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                    
                 }
               
@@ -5452,7 +5420,7 @@ private void Inicializa_config()
                     wr.close();
                     bw.close();      
                     
-                   JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                   JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                    
                 }
                 
@@ -5466,7 +5434,7 @@ private void Inicializa_config()
          
            
        if(list_dataset.isEmpty()) {
-           JOptionPane.showMessageDialog(null, "you must load a dataset ", "Warning", JOptionPane.ERROR_MESSAGE);
+           JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
            return; 
        }
                     
@@ -5481,7 +5449,7 @@ private void Inicializa_config()
         
         
        if(list_dataset.isEmpty()) {
-           JOptionPane.showMessageDialog(null, "you must load a dataset ", "Warning", JOptionPane.ERROR_MESSAGE);
+           JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
            return; 
        }
                  
@@ -5572,7 +5540,7 @@ private void Inicializa_config()
                 
                 }
                 
-           JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE);
+           JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
            Toolkit.getDefaultToolkit().beep();
                 
         } 
@@ -5589,7 +5557,7 @@ private void Inicializa_config()
         
         
          if(dataset == null) {
-           JOptionPane.showMessageDialog(null, "you must load a dataset ", "Warning", JOptionPane.ERROR_MESSAGE);
+           JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
            return; 
        }
              
@@ -5631,7 +5599,7 @@ private void Inicializa_config()
                     wr.close();
                     bw.close(); 
                     
-                    JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                     
                 }
                 
@@ -5646,12 +5614,12 @@ private void Inicializa_config()
                      
                      if(exp.exporta(metric_list,dataset,es_de_tipo_meka))
                      {
-                         JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                         JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                      }
                  }
                  catch(Exception e1)
                  {
-                     JOptionPane.showMessageDialog(null, "File NOT Saved correctly", "Error", JOptionPane.ERROR_MESSAGE); 
+                     JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
                  }   
                 
                }
@@ -5673,7 +5641,7 @@ private void Inicializa_config()
                     wr.close();
                     bw.close();      
                     
-                  JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE);     
+                  JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);     
                 }
                 
            Toolkit.getDefaultToolkit().beep();
@@ -5690,7 +5658,7 @@ private void Inicializa_config()
         
         
          if(dataset == null) {
-           JOptionPane.showMessageDialog(null, "you must load a dataset ", "Warning", JOptionPane.ERROR_MESSAGE);
+           JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
            return; 
        }
              
@@ -5732,7 +5700,7 @@ private void Inicializa_config()
                     wr.close();
                     bw.close(); 
                     
-                    JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                     
                 }
                 
@@ -5749,7 +5717,7 @@ private void Inicializa_config()
                     wr.close();
                     bw.close(); 
                     
-                    JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                 /*
                 try
                  {
@@ -5783,7 +5751,7 @@ private void Inicializa_config()
                     wr.close();
                     bw.close(); 
                     
-                    JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                     
                     /*
                     String path = file.getAbsolutePath() +".arff";
@@ -5818,7 +5786,7 @@ private void Inicializa_config()
         
        
        if(list_dataset.isEmpty()) {
-           JOptionPane.showMessageDialog(null, "you must load a dataset ", "Warning", JOptionPane.ERROR_MESSAGE);
+           JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
            return; 
        }
               
@@ -5837,7 +5805,7 @@ private void Inicializa_config()
        ArrayList<String> metric_list = Get_metrics_selected(jtable);
         
        if(dataset == null) {
-           JOptionPane.showMessageDialog(null, "you must load a dataset ", "Warning", JOptionPane.ERROR_MESSAGE);
+           JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
            return; 
        }
        
@@ -5858,7 +5826,11 @@ private void Inicializa_config()
        ArrayList<String> metric_list = Get_metrics_selected_principal(jtable);
 
        if(dataset == null) {
-           JOptionPane.showMessageDialog(null, "you must load a dataset ", "Warning", JOptionPane.ERROR_MESSAGE);
+           JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
+           return; 
+       }
+       else if(metric_list.size()==0){
+           JOptionPane.showMessageDialog(null, "You must select any metric.", "Warning", JOptionPane.ERROR_MESSAGE);
            return; 
        }
 
@@ -5868,9 +5840,7 @@ private void Inicializa_config()
         atributo[] imbalanced_data = util.Get_data_imbalanced_x_label_inter_class(dataset,label_frenquency);
         
         String value = new String();
-        
-        System.out.println(metric_list);
-        
+
         for(String metric : metric_list)
         {
             //If metric value exists, don't calculate
@@ -6101,13 +6071,9 @@ private void Inicializa_config()
       TableModel tmodel = jtable.getModel();
        
        for(int i=0; i<tmodel.getRowCount();i++)
+       {
            tmodel.setValueAt(Boolean.FALSE, i, 2);
-       
-          try {
-              Thread.currentThread().sleep(2000);
-          } catch (InterruptedException ex) {
-              Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-          }
+       }
              
        jtable.setModel(tmodel);
        jtable.repaint();
@@ -6168,32 +6134,14 @@ private void Inicializa_config()
     private void button_clearActionPerformed_principal(java.awt.event.ActionEvent evt ,JTable jtable)
     {
        TableModel tmodel = jtable.getModel();
-       //frame.setBounds(this.getBounds().x + this.getBounds().width/2 - 150, this.getBounds().y + this.getBounds().height/2 - 10, 300, 20);
-
-
-       
        
        for(int i=0; i<tmodel.getRowCount();i++)
        {
            tmodel.setValueAt(Boolean.FALSE, i, 2);
-           try {
-               Thread.currentThread().sleep(20);
-           } catch (InterruptedException ex) {
-               Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-           }
        }
              
        clearTable_metrics_principal();
-       
-       
-       try {
-               Thread.currentThread().sleep(1000);
-           } catch (InterruptedException ex) {
-               Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-           }
-      // progress.setValue(65);
-       //frame.setVisible(false);
-      // jtable.repaint();
+
     }
     
 
@@ -6202,7 +6150,7 @@ private void Inicializa_config()
     {
           if(jtable.getRowCount()==0 || dataset == null)
           {
-              JOptionPane.showMessageDialog(null, "the table is empty ", "Error", JOptionPane.ERROR_MESSAGE); 
+              JOptionPane.showMessageDialog(null, "The table is empty.", "Error", JOptionPane.ERROR_MESSAGE); 
               return;
           }
         
@@ -6237,12 +6185,12 @@ private void Inicializa_config()
                      
                      if(exp.exporta())
                      {
-                         JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                         JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                      }
                  }
                  catch(Exception e1)
                  {
-                     JOptionPane.showMessageDialog(null, "File NOT Saved correctly", "Error", JOptionPane.ERROR_MESSAGE); 
+                     JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
                  }   
                              
                 }
@@ -6257,12 +6205,12 @@ private void Inicializa_config()
                      
                      if(exp.exporta())
                      {
-                         JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                         JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                      }
                  }
                  catch(Exception e1)
                  {
-                     JOptionPane.showMessageDialog(null, "File NOT Saved correctly", "Error", JOptionPane.ERROR_MESSAGE); 
+                     JOptionPane.showMessageDialog(null, "File not Saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
                  }
                
                }
@@ -6272,11 +6220,11 @@ private void Inicializa_config()
         
     }
     
-     private void button_export_ActionPerformed(java.awt.event.ActionEvent evt ,JTable jtable, JTable columns)
+     private void button_export_ActionPerformed(java.awt.event.ActionEvent evt ,JTable jtable, JTable columns, String table)
     {
           if(jtable.getRowCount()==0 || dataset == null)
           {
-              JOptionPane.showMessageDialog(null, "the table is empty ", "Error", JOptionPane.ERROR_MESSAGE); 
+              JOptionPane.showMessageDialog(null, "The table is empty.", "Error", JOptionPane.ERROR_MESSAGE); 
               return;
           }
         
@@ -6298,33 +6246,49 @@ private void Inicializa_config()
          
         if (returnVal == JFileChooser.APPROVE_OPTION)
         {
-               File file = fc.getSelectedFile();
-                FileFilter f1 = fc.getFileFilter();
+            File file = fc.getSelectedFile();
+            FileFilter f1 = fc.getFileFilter();
                 
-              if(f1.getDescription().equals(".csv"))
-                {
-               
+            //Saving csv chi_phi
+            if(f1.getDescription().equals(".csv"))
+            {
+                BufferedWriter bw = null;
+                PrintWriter wr = null;
+                
                 try
                  {
-                     String path = file.getAbsolutePath() +".csv";
-                     Exporter exp = new Exporter(new File(path), jtable, "prueba");
-                     
-                     if(exp.exporta(columns))
-                     {
-                         JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                     }
+                    String path = file.getAbsolutePath() +".csv";
+                    bw = new BufferedWriter(new FileWriter(path));
+                    wr = new PrintWriter(bw);
+                    
+                    if(table.equals("ChiPhi")){
+                        util.Save_chi_phi_csv_file(wr, chi_fi_coefficient, dataset.getLabelNames());
+                    }
+                    else if(table.equals("Coocurrence")){
+                        util.Save_coocurrence_csv_file(wr, coocurrence_coefficients, dataset.getLabelNames());
+                    }
+                    else if(table.equals("Heatmap")){
+                        util.Save_heatmap_csv_file(wr, heatmap_coefficients, dataset.getLabelNames());
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
+                    }
+                    
+                    
+                    wr.close();
+                    bw.close();  
+                    
+                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                  }
                  catch(Exception e1)
                  {
                      System.out.println("otro mensaje "+e1.toString());
-                     JOptionPane.showMessageDialog(null, "File NOT Saved correctly", "Error", JOptionPane.ERROR_MESSAGE); 
+                     JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
                  }   
                              
-                }
-              
-              else if(f1.getDescription().equals(".xls"))
-               {                             
-                               
+             }              
+             else if(f1.getDescription().equals(".xls"))
+             {                                        
                  try
                  {
                      String path = file.getAbsolutePath() +".xls";
@@ -6332,12 +6296,12 @@ private void Inicializa_config()
                      
                      if(exp.exporta(columns))
                      {
-                         JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                         JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                      }
                  }
                  catch(Exception e1)
                  {
-                     JOptionPane.showMessageDialog(null, "File NOT Saved correctly", "Error", JOptionPane.ERROR_MESSAGE); 
+                     JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
                  }
                
                }
@@ -6729,26 +6693,94 @@ private void Inicializa_config()
          double[][] pair_label_values;
          
         //si la tabla es coocurrence values
-         if(tipo_tabla.equals("coocurrence"))         
-         pair_label_values =util.get_pair_label_values(dataset, lista_pares);
-         
+         if(tipo_tabla.equals("coocurrence")) {
+             pair_label_values =util.get_pair_label_values(dataset, lista_pares);
+             coocurrence_coefficients = pair_label_values;
+         }
          //si la tabla es heatmap values "heatmap"
-         else pair_label_values =util.get_heatmap_values(dataset, lista_pares);
+         else {
+             pair_label_values =util.get_heatmap_values(dataset, lista_pares);
+             heatmap_coefficients = pair_label_values;
+             /*
+             System.out.println("HEATMAP");
+             for(int i=0; i<heatmap_coefficients.length; i++){
+                 System.out.println(Arrays.toString(heatmap_coefficients[i]));
+             }
+             */
+             
+         }
       
    //-----------------------------------------------------------------------------------
    //-----------------------------------------------------------------------------------
          data = new Object[pair_label_values.length][pair_label_values.length+1];
          column = new Object[data.length+1];
          
-          for(int num_fila=0;  num_fila< pair_label_values.length;num_fila++)
-        {            
-              data[num_fila]  = util.Get_values_x_fila(num_fila, pair_label_values,dataset.getLabelNames()[num_fila]);
-        }
+         if(tipo_tabla.equals("coocurrence")) {
+            for(int num_fila=0;  num_fila< pair_label_values.length;num_fila++)
+            {            
+                for(int num_col=0; num_col < pair_label_values.length; num_col++){
+                    
+                    if(num_col == 0){
+                        data[num_fila][num_col] = dataset.getLabelNames()[num_fila];
+                    }
+                    else if(num_fila == num_col-1){
+                        data[num_fila][num_col] = "---";
+                    }
+                    else if(num_col > num_fila){
+                        data[num_fila][num_col] = "";
+                    }
+                    else{
+                        //data[num_fila][num_col] = pair_label_values[num_fila][num_col];                        
+                        if(pair_label_values[num_col-1][num_fila] <= 0.0){
+                            data[num_fila][num_col] = "";
+                        }
+                        else{
+                            data[num_fila][num_col] = (int) pair_label_values[num_col-1][num_fila];
+                        }
+                    }
+                }
+                //data[num_fila]  = util.Get_values_x_fila(num_fila, pair_label_values,dataset.getLabelNames()[num_fila]);
+            }
+         }
+         else{
+            for(int num_fila=0;  num_fila< pair_label_values.length;num_fila++)
+            {            
+                //data[num_fila]  = util.Get_values_x_fila(num_fila, pair_label_values,dataset.getLabelNames()[num_fila]);
+            
+                for(int num_col=0; num_col < pair_label_values.length+1; num_col++){
+                    
+                    if(num_col == 0){
+                        data[num_fila][num_col] = dataset.getLabelNames()[num_fila];
+                    }
+                    else if(num_fila == num_col-1){
+                        data[num_fila][num_col] = "---";
+                    }
+                    else{
+                        //data[num_fila][num_col] = pair_label_values[num_fila][num_col];                        
+                        if(pair_label_values[num_col-1][num_fila] <= 0.0){
+                            data[num_fila][num_col] = "";
+                        }
+                        else{
+                            NumberFormat formatter = new DecimalFormat("#0.000"); 
+                            data[num_fila][num_col] = formatter.format(pair_label_values[num_col-1][num_fila]).replace(",", ".");
+                    
+                        }
+                    }
+                }
+            
+            } 
+            
+         }
+         
        
            for(int i = 0; i< column.length;i++)
          {
-             if(i==0) column[i]="Labels"; //table_model1.addColumn("Labels");
-             else column[i]=(dataset.getLabelNames()[i-1]);
+             if(i==0) {
+                 column[i]="Labels";
+             }
+             else {
+                 column[i]=(dataset.getLabelNames()[i-1]);
+             }
          } 
           
         AbstractTableModel1 fixedModel = new AbstractTableModel1(data, column);
@@ -6758,8 +6790,16 @@ private void Inicializa_config()
        JTable temp,fixedTable_temp;
        JPanel jpanel_temp;
        
-       if(tipo_tabla.equals("coocurrence")){temp=jTable11; jpanel_temp=panelCoOcurrenceValues; fixedTable_temp=fixedTable1;}
-       else {temp=jTable12;jpanel_temp=panelHeatmapValues; fixedTable_temp=fixedTable2;}
+       if(tipo_tabla.equals("coocurrence")){
+           temp=jTable11; 
+           jpanel_temp=panelCoOcurrenceValues; 
+           fixedTable_temp=fixedTable1;
+       }
+       else {
+           temp=jTable12;
+           jpanel_temp=panelHeatmapValues; 
+           fixedTable_temp=fixedTable2;
+       }
 
        fixedTable_temp.setModel(fixedModel);
        temp.setModel(model);
@@ -6770,7 +6810,7 @@ private void Inicializa_config()
     viewport.setPreferredSize(fixedTable_temp.getPreferredSize());
     scroll.setRowHeaderView(viewport);
     
-    scroll.setBounds(20, 20, 760, 350);
+    scroll.setBounds(20, 20, 780, 390);
     
     scroll.setCorner(JScrollPane.UPPER_LEFT_CORNER, fixedTable_temp
         .getTableHeader());
@@ -6801,7 +6841,8 @@ private void Inicializa_config()
         {            
               data[num_fila]  = util.Get_values_x_fila(num_fila, chi_fi_coefficient,dataset.getLabelNames()[num_fila]);
         }
-      
+        
+        
       for(int i = 0; i< column.length;i++)//se le agrega 1 pq realmente se emieza en 1 y no en 0.
          {
              if(i==0) column[i]="Labels"; //table_model1.addColumn("Labels");
@@ -6821,18 +6862,18 @@ private void Inicializa_config()
     viewport.setPreferredSize(fixedTable.getPreferredSize());
     scroll.setRowHeaderView(viewport);
     
-    scroll.setBounds(20, 20, 760, 350);
+    scroll.setBounds(20, 20, 780, 390);
     
     scroll.setCorner(JScrollPane.UPPER_LEFT_CORNER, fixedTable
         .getTableHeader());
     
     jTable10.setBorder(BorderFactory.createLineBorder(Color.black));
     
-    if(first_time_chi){panelChiFi.add(scroll, BorderLayout.CENTER, 0); first_time_chi=false; return; }
+    if(first_time_chi){panelChiPhi.add(scroll, BorderLayout.CENTER, 0); first_time_chi=false; return; }
         
         
-    panelChiFi.remove(0); //una curiosa manera de resolver el problema
-    panelChiFi.add(scroll, BorderLayout.CENTER, 0);
+    panelChiPhi.remove(0); //una curiosa manera de resolver el problema
+    panelChiPhi.add(scroll, BorderLayout.CENTER, 0);
        
     }
   
@@ -7458,6 +7499,7 @@ private void Inicializa_config()
 
   
     }
+     
     
     
      
@@ -7517,8 +7559,7 @@ private void Inicializa_config()
     private javax.swing.JComboBox jComboBox_BRFS_Comb;
     private javax.swing.JComboBox jComboBox_BRFS_Norm;
     private javax.swing.JComboBox jComboBox_BRFS_Out;
-    private javax.swing.JComboBox jComboLabelInformation;
-    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabelChiFi_text;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPopupMenu jPopupMenu1;
@@ -7565,9 +7606,8 @@ private void Inicializa_config()
     private javax.swing.JList listMultipleDatasetsLeft;
     private java.awt.Panel panel1;
     private javax.swing.JPanel panelBoxDiagram;
-    private javax.swing.JPanel panelChiFi;
+    private javax.swing.JPanel panelChiPhi;
     private javax.swing.JPanel panelCoOcurrence;
-    private javax.swing.JPanel panelCoOcurrenceLeft;
     private javax.swing.JPanel panelCoOcurrenceRight;
     private javax.swing.JPanel panelCoOcurrenceValues;
     private javax.swing.JPanel panelCurrentDataset;

@@ -3579,13 +3579,13 @@ public class util {
  
      }
    
-   public static void Save_csv_file(PrintWriter wr,ArrayList<String> metric_list, MultiLabelInstances dataset, atributo[] imbalanced_data, boolean  es_de_tipo_meka, Hashtable<String, String> tableMetrics)
-     {
+    public static void Save_csv_file(PrintWriter wr,ArrayList<String> metric_list, MultiLabelInstances dataset, atributo[] imbalanced_data, boolean  es_de_tipo_meka, Hashtable<String, String> tableMetrics)
+    {
          
-         Instances i1= dataset.getDataSet();
+        Instances i1= dataset.getDataSet();
                  
-          wr.write("Relation Name"+ ";" + i1.relationName());
-          wr.write(System.getProperty("line.separator"));  
+        wr.write("Relation Name"+ ";" + i1.relationName());
+        wr.write(System.getProperty("line.separator"));  
     
           //cant de atributos
           int num_atributos= i1.numAttributes();
@@ -3608,7 +3608,7 @@ public class util {
             
         //atributo[] imbalanced_data =  util.Get_data_imbalanced_x_label(dataset);
         
-          String value = new String();
+        String value = new String();
         for(String metric : metric_list)
         {
             value = getValueFormatted(metric, tableMetrics.get(metric));
@@ -3623,9 +3623,116 @@ public class util {
         }
  
      }
+    
+    
+    public static void Save_chi_phi_csv_file(PrintWriter wr, double [][] coefficients, String[] labelNames)
+    {
+        //Save label names row
+        String line = new String();
+        line += "Chi/Phi;";
+        
+        for (String labelName : labelNames) {
+            line += labelName + ";";
+        }
+        
+                 
+        wr.write(line);
+        wr.write(System.getProperty("line.separator"));  
+        System.out.println("line: " + line);
+        
+        for(int i=0; i<labelNames.length; i++){
+            line = "";
+            line += labelNames[i] + ";";
+            
+            for(int j=0; j<coefficients[i].length; j++){
+                if(coefficients[j][i] == 0.0){
+                    line += "" + ";";
+                }
+                else{
+                    line += coefficients[j][i] + ";";
+                } 
+            }
+            wr.write(line);
+            wr.write(System.getProperty("line.separator"));  
+            System.out.println("line: " + line);
+        }
+    
+     }
+    
+    public static void Save_coocurrence_csv_file(PrintWriter wr, double [][] coefficients, String[] labelNames)
+    {
+        //Save label names row
+        String line = new String();
+        line += " ;";
+        
+        for (String labelName : labelNames) {
+            line += labelName + ";";
+        }
+        
+                 
+        wr.write(line);
+        wr.write(System.getProperty("line.separator"));  
+        System.out.println("line: " + line);
+        
+        for(int i=0; i<labelNames.length; i++){
+            line = "";
+            line += labelNames[i] + ";";
+            
+            for(int j=0; j<coefficients[i].length; j++){
+                if(i == j){
+                    line += "" + ";";
+                }
+                else if(i < j){
+                    line += (int) coefficients[i][j] + ";";
+                }
+                else{
+                    line += (int) coefficients[j][i] + ";";
+                } 
+            }
+            wr.write(line);
+            wr.write(System.getProperty("line.separator"));  
+            System.out.println("line: " + line);
+        }
+    
+     }
+    
+    public static void Save_heatmap_csv_file(PrintWriter wr, double [][] coefficients, String[] labelNames)
+    {
+        //Save label names row
+        String line = new String();
+        line += " ;";
+        
+        for (String labelName : labelNames) {
+            line += labelName + ";";
+        }
+
+        
+        wr.write(line);
+        wr.write(System.getProperty("line.separator"));  
+        System.out.println("line: " + line);
+        
+        for(int i=0; i<labelNames.length; i++){
+            line = "";
+            line += labelNames[i] + ";";
+            
+            for(int j=0; j<coefficients[i].length; j++){
+                if(i == j || coefficients[j][i]==-1){
+                    line += "" + ";";
+                }
+                else{
+                    line += coefficients[j][i] + ";";
+                } 
+            }
+            wr.write(line);
+            wr.write(System.getProperty("line.separator"));  
+            System.out.println("line: " + line);
+        }
+    
+     }
+    
    
     public static void Save_meka_file(PrintWriter wr,ArrayList<String> metric_list, MultiLabelInstances dataset, atributo[] imbalanced_data, boolean  es_de_tipo_meka, Hashtable<String, String> tableMetrics)
-     {
+    {
          
          Instances i1= dataset.getDataSet();
                  
@@ -3686,7 +3793,7 @@ public class util {
         {         
             value=getValueFormatted(metric, tableMetrics.get(metric));
             if(value.equals("---")){
-                line += "NaN";
+                line += "?";
             }
             else{
                 line += getValueFormatted(metric, tableMetrics.get(metric));
@@ -4513,14 +4620,14 @@ public class util {
      
      public static double[][] get_pair_label_values (MultiLabelInstances dataset, ArrayList<pares_atributos> lista_pares)
      {
-         int[] label_indices= dataset.getLabelIndices();
+         /*int[] label_indices= dataset.getLabelIndices();
          
          //double[][] get_pair_label = new double[label_indices.length][label_indices.length];
          double[][] get_pair_label = inicializa_arreglo_val_neg(label_indices.length);
                  
-         int i,j;
+         int i, j;
          
-         for( pares_atributos current : lista_pares)
+         for(pares_atributos current : lista_pares)
          {
              i= current.get_ind_att1();
              j= current.get_ind_att2();
@@ -4529,41 +4636,41 @@ public class util {
             // get_pair_label[j][i]=-1.0;
          }
          
-         return get_pair_label;
+         return get_pair_label;*/
+         
+         Statistics stat = new Statistics();
+         return(stat.calculateCoocurrence(dataset));
      
      }
     
      public static double[][] get_chi_fi_coefficient (MultiLabelInstances dataset)
      {
         double[][] chi_fi_coefficient = new double[dataset.getNumLabels()][dataset.getNumLabels()];
-        double fi,chi;
+        double phi, chi;
+
         
-           try {
+        try {
                 
-                UnconditionalChiSquareIdentifier depid = new UnconditionalChiSquareIdentifier();
-                LabelsPair[] pairs = depid.calculateDependence(dataset);
+            UnconditionalChiSquareIdentifier depid = new UnconditionalChiSquareIdentifier();
+            LabelsPair[] pairs = depid.calculateDependence(dataset);
+            Statistics stat = new Statistics();
+            double [][] phiMatrix = stat.calculatePhi(dataset);
                 
-                for(int i=0; i<pairs.length;i++)
-                {
-                    chi = pairs[i].getScore();
-                    fi = Math.sqrt((chi/dataset.getNumLabels()));
-                    
-                   // System.out.println("chi:"+pairs[i].getPair()[0]+" , "+ pairs[i].getPair()[1]+"= "+ chi);
-                   // System.out.println("fi:"+pairs[i].getPair()[1]+" , "+ pairs[i].getPair()[0]+"= "+ fi);
-                    
-                    chi_fi_coefficient[pairs[i].getPair()[0]][pairs[i].getPair()[1]] = chi;
-                    chi_fi_coefficient[pairs[i].getPair()[1]][pairs[i].getPair()[0]] = fi;
-                    
-                }
-                
-                }
-           catch (Exception e) {
-                e.printStackTrace();
+            for (LabelsPair pair : pairs) {
+                chi = pair.getScore();
+                phi = phiMatrix[pair.getPair()[0]][pair.getPair()[1]];
+                // System.out.println("chi:"+pairs[i].getPair()[0]+" , "+ pairs[i].getPair()[1]+"= "+ chi);
+                // System.out.println("fi:"+pairs[i].getPair()[1]+" , "+ pairs[i].getPair()[0]+"= "+ fi);
+                chi_fi_coefficient[pair.getPair()[0]][pair.getPair()[1]] = chi;
+                chi_fi_coefficient[pair.getPair()[1]][pair.getPair()[0]] = phi;
             }
-           
-           
-           
-           return chi_fi_coefficient;
+                
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return chi_fi_coefficient;
             
      }
     
@@ -4894,7 +5001,9 @@ public class util {
            for(int j=i+1; j<labels.size(); j++)
            {
                current = Devuelve_el_par(labels.get(i), labels.get(j), pares_label);
-               if(current!=null) result.add(current);
+               if(current!=null){
+                   result.add(current);
+               }
            }
        }    
        

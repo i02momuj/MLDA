@@ -91,9 +91,6 @@ public class MiRender extends DefaultTableCellRenderer
                  this.setBackground(Color.lightGray); 
                  this.setForeground(Color.black);
              }
-
-             System.out.println("phi "+table.getValueAt(row, column));
-             System.out.println("chi "+table.getValueAt(column, row));
          }
 
          else if(column <= row)
