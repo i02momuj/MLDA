@@ -8,6 +8,8 @@ import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
@@ -27,8 +29,11 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
  
@@ -232,6 +237,8 @@ public class RunApp extends javax.swing.JFrame {
     Hashtable<String, String> tableMetrics_train = new Hashtable<String, String>();
     Hashtable<String, String> tableMetrics_test = new Hashtable<String, String>();
     
+    HeatMap heatMap = null; 
+    
     
     public RunApp() 
     {
@@ -432,15 +439,15 @@ private void Inicializa_config()
       create_button_export(jTable11,fixedTable1,panelCoOcurrenceValues ,export4,710,415, "Coocurrence");//graph values
       create_button_export(jTable12,fixedTable2,panelHeatmapValues ,export5,710,415, "Heatmap");//heatmap values
       
-      create_button_export(panelCoOcurrence ,export6,740,445); //graph- dependences
-      create_button_export(panelHeatmapGraph,export7,450,425);
+      create_button_export(panelCoOcurrence ,export6,720,440); //graph- dependences
+      create_button_export(panelHeatmapGraph,export7,720,440);
       
       //create_button_export(jPanel21 ,export6,5,50);
       Border border = BorderFactory.createLineBorder(Color.gray, 1);
    
       
       
-      labelHeatmapGraph.setBorder(border); 
+      panelHeatmap.setBorder(border); 
       jTable10.setBorder(border);
       jTable11.setBorder(border);
       jTable12.setBorder(border);
@@ -570,7 +577,7 @@ private void Inicializa_config()
     
     int cant_labels=labels_names.length;
     
-    if(cant_labels<30)chart.setCellSize(new Dimension(15,15));
+    if(cant_labels<30)chart.setCellSize(new Dimension(10,10));
     if(cant_labels>30 && cant_labels <60 ) chart.setCellSize(new Dimension(9,6));
     if(cant_labels >60 && cant_labels < 102)chart.setCellSize(new Dimension(4,3));
     if(cant_labels >102 && cant_labels < 250)chart.setCellSize(new Dimension(3,2));
@@ -591,7 +598,7 @@ private void Inicializa_config()
     
         return chart;
     }     
-    
+        
     
     private HeatChart create_heapmap(JLabel jlabel, MultiLabelInstances dataset)
     {
@@ -630,7 +637,6 @@ private void Inicializa_config()
     
     jlabel.setIcon(temp);
     jlabel.setHorizontalAlignment(JLabel.CENTER);
-   
     
     return chart;
     
@@ -896,7 +902,7 @@ private void Inicializa_config()
         
         create_jtable_metric(jtable,jpanel, util.Get_row_data_multi_datasets(),posx,posy,width,heigh);  
        //button ALL
-      button_all = new JButton("All");
+     /* button_all = new JButton("All");
       button_all.setBounds(posx, posy+405, 80, 20);
             
       button_all.addActionListener(new java.awt.event.ActionListener() {
@@ -904,9 +910,9 @@ private void Inicializa_config()
                 button_allActionPerformed(evt,jtable );
                             }
         });
-      jpanel.add(button_all);
+      jpanel.add(button_all);*/
       
-      
+      /*
      //button NONE
       button_none = new JButton("None");
       button_none.setBounds(posx+100, posy+405, 80, 20);
@@ -970,7 +976,7 @@ private void Inicializa_config()
                 }
                             }
         });
-      jpanel.add(button_save);
+      jpanel.add(button_save);*/
       
     }
 
@@ -1077,13 +1083,16 @@ private void Inicializa_config()
         buttonShowCoOcurrence = new javax.swing.JButton();
         jScrollPane7 = new javax.swing.JScrollPane();
         tableCoOcurrenceLeft = new javax.swing.JTable();
+        buttonShowMostFrequent = new javax.swing.JButton();
+        textMostFrequent = new javax.swing.JTextField();
+        buttonShowMostRelated = new javax.swing.JButton();
+        textMostRelated = new javax.swing.JTextField();
         panelCoOcurrenceValues = new javax.swing.JPanel();
         panelHeatmapGraph = new javax.swing.JPanel();
-        labelHeatmapGraph = new javax.swing.JLabel();
-        panelHeatmapLeft = new javax.swing.JPanel();
         jScrollPane8 = new javax.swing.JScrollPane();
         tableHeatmapLeft = new javax.swing.JTable();
         buttonShowHeatmapLeft = new javax.swing.JButton();
+        panelHeatmap = new javax.swing.JPanel();
         panelHeatmapValues = new javax.swing.JPanel();
         panelMultipleDatasets = new javax.swing.JPanel();
         panelMultipleDatasetsLeft = new javax.swing.JPanel();
@@ -1984,7 +1993,7 @@ private void Inicializa_config()
             .addGroup(panelChiPhiLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jLabelChiFi_text)
-                .addContainerGap(147, Short.MAX_VALUE))
+                .addContainerGap(153, Short.MAX_VALUE))
         );
         panelChiPhiLayout.setVerticalGroup(
             panelChiPhiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2003,18 +2012,17 @@ private void Inicializa_config()
             }
         });
 
-        panelCoOcurrenceRight.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         panelCoOcurrenceRight.setName("jpanel10"); // NOI18N
 
         javax.swing.GroupLayout panelCoOcurrenceRightLayout = new javax.swing.GroupLayout(panelCoOcurrenceRight);
         panelCoOcurrenceRight.setLayout(panelCoOcurrenceRightLayout);
         panelCoOcurrenceRightLayout.setHorizontalGroup(
             panelCoOcurrenceRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 556, Short.MAX_VALUE)
+            .addGap(0, 540, Short.MAX_VALUE)
         );
         panelCoOcurrenceRightLayout.setVerticalGroup(
             panelCoOcurrenceRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 405, Short.MAX_VALUE)
+            .addGap(0, 415, Short.MAX_VALUE)
         );
 
         buttonShowCoOcurrence.setText("Show");
@@ -2042,6 +2050,44 @@ private void Inicializa_config()
         });
         jScrollPane7.setViewportView(tableCoOcurrenceLeft);
 
+        buttonShowMostFrequent.setText("Show most frequent");
+        buttonShowMostFrequent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonShowMostFrequentActionPerformed(evt);
+            }
+        });
+
+        textMostFrequent.setText("10");
+        textMostFrequent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textMostFrequentActionPerformed(evt);
+            }
+        });
+        textMostFrequent.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                textMostFrequentKeyTyped(evt);
+            }
+        });
+
+        buttonShowMostRelated.setText("Show most related");
+        buttonShowMostRelated.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonShowMostRelatedActionPerformed(evt);
+            }
+        });
+
+        textMostRelated.setText("10");
+        textMostRelated.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textMostRelatedActionPerformed(evt);
+            }
+        });
+        textMostRelated.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                textMostRelatedKeyTyped(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelCoOcurrenceLayout = new javax.swing.GroupLayout(panelCoOcurrence);
         panelCoOcurrence.setLayout(panelCoOcurrenceLayout);
         panelCoOcurrenceLayout.setHorizontalGroup(
@@ -2049,26 +2095,41 @@ private void Inicializa_config()
             .addGroup(panelCoOcurrenceLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(buttonShowCoOcurrence, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panelCoOcurrenceLayout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(buttonShowCoOcurrence, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(buttonShowMostFrequent, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(textMostFrequent, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelCoOcurrenceLayout.createSequentialGroup()
-                        .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(panelCoOcurrenceRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addComponent(buttonShowMostRelated, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(textMostRelated, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(panelCoOcurrenceRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelCoOcurrenceLayout.setVerticalGroup(
             panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCoOcurrenceLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelCoOcurrenceRight, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buttonShowCoOcurrence, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
+                    .addGroup(panelCoOcurrenceLayout.createSequentialGroup()
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(buttonShowCoOcurrence, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(buttonShowMostFrequent)
+                            .addComponent(textMostFrequent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(buttonShowMostRelated)
+                            .addComponent(textMostRelated, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(28, 28, 28))
+                    .addGroup(panelCoOcurrenceLayout.createSequentialGroup()
+                        .addComponent(panelCoOcurrenceRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20))))
         );
 
         tabsDependences.addTab("Co-occurrence graph", panelCoOcurrence);
@@ -2077,7 +2138,7 @@ private void Inicializa_config()
         panelCoOcurrenceValues.setLayout(panelCoOcurrenceValuesLayout);
         panelCoOcurrenceValuesLayout.setHorizontalGroup(
             panelCoOcurrenceValuesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 822, Short.MAX_VALUE)
+            .addGap(0, 828, Short.MAX_VALUE)
         );
         panelCoOcurrenceValuesLayout.setVerticalGroup(
             panelCoOcurrenceValuesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2087,15 +2148,6 @@ private void Inicializa_config()
         tabsDependences.addTab("Co-occurrence values", panelCoOcurrenceValues);
 
         panelHeatmapGraph.setName("jpanel26"); // NOI18N
-
-        labelHeatmapGraph.setText(" ");
-        labelHeatmapGraph.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                labelHeatmapGraphMouseReleased(evt);
-            }
-        });
-
-        panelHeatmapLeft.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         tableHeatmapLeft.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -2122,48 +2174,45 @@ private void Inicializa_config()
             }
         });
 
-        javax.swing.GroupLayout panelHeatmapLeftLayout = new javax.swing.GroupLayout(panelHeatmapLeft);
-        panelHeatmapLeft.setLayout(panelHeatmapLeftLayout);
-        panelHeatmapLeftLayout.setHorizontalGroup(
-            panelHeatmapLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelHeatmapLeftLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(panelHeatmapLeftLayout.createSequentialGroup()
-                .addGap(67, 67, 67)
-                .addComponent(buttonShowHeatmapLeft)
-                .addContainerGap(70, Short.MAX_VALUE))
+        panelHeatmap.setName("jpanel10"); // NOI18N
+
+        javax.swing.GroupLayout panelHeatmapLayout = new javax.swing.GroupLayout(panelHeatmap);
+        panelHeatmap.setLayout(panelHeatmapLayout);
+        panelHeatmapLayout.setHorizontalGroup(
+            panelHeatmapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 540, Short.MAX_VALUE)
         );
-        panelHeatmapLeftLayout.setVerticalGroup(
-            panelHeatmapLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelHeatmapLeftLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buttonShowHeatmapLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5))
+        panelHeatmapLayout.setVerticalGroup(
+            panelHeatmapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout panelHeatmapGraphLayout = new javax.swing.GroupLayout(panelHeatmapGraph);
         panelHeatmapGraph.setLayout(panelHeatmapGraphLayout);
         panelHeatmapGraphLayout.setHorizontalGroup(
             panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelHeatmapGraphLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelHeatmapLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(labelHeatmapGraph, javax.swing.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGroup(panelHeatmapGraphLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelHeatmapGraphLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(buttonShowHeatmapLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelHeatmapGraphLayout.createSequentialGroup()
+                        .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(panelHeatmap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         panelHeatmapGraphLayout.setVerticalGroup(
             panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelHeatmapGraphLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelHeatmapLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelHeatmapGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(61, Short.MAX_VALUE))
+                    .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panelHeatmap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buttonShowHeatmapLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         tabsDependences.addTab(" Heatmap graph", panelHeatmapGraph);
@@ -2172,7 +2221,7 @@ private void Inicializa_config()
         panelHeatmapValues.setLayout(panelHeatmapValuesLayout);
         panelHeatmapValuesLayout.setHorizontalGroup(
             panelHeatmapValuesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 822, Short.MAX_VALUE)
+            .addGap(0, 828, Short.MAX_VALUE)
         );
         panelHeatmapValuesLayout.setVerticalGroup(
             panelHeatmapValuesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2471,6 +2520,8 @@ private void Inicializa_config()
         }
         
         System.out.println("seleccionados: " + seleccionados.toString());
+        
+        
 
         ArrayList<pares_atributos> pares_seleccionados =  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
 
@@ -4194,9 +4245,13 @@ private void Inicializa_config()
         //util.Recorre_Arreglo(HeapSort1.get_array_sorted());
         label_indices_seleccionados = label_indices;
 
-        jheat_chart= create_heapmap(labelHeatmapGraph,dataset,label_indices);
+        //jheat_chart= create_heapmap(labelHeatmapGraph,dataset,label_indices);
+        
+        
 
         ArrayList<pares_atributos> pares_seleccionados=  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
+        
+        heatMap = Create_heatmap_graph(panelHeatmap, getHeatMapCoefficients(), pares_seleccionados, heatMap);
 
         double[][] pares_freq= util.get_heatmap_values(pares_seleccionados, num_instancias,labelname);
 
@@ -4207,72 +4262,109 @@ private void Inicializa_config()
         mo.setVisible(true);
     }//GEN-LAST:event_buttonShowHeatmapLeftActionPerformed
 
-    private void labelHeatmapGraphMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelHeatmapGraphMouseReleased
-        // TODO add your handling code here:
-
-        if(evt.getButton() == MouseEvent.BUTTON1)
-        {
-            int pos_inicial_x = (labelHeatmapGraph.getBounds().width/2) - jheat_chart.getChartSize().width/2 ;
-            int pos_incial_y = (labelHeatmapGraph.getBounds().height/2- jheat_chart.getChartSize().height/2);
-
-            int pos_actual_x=evt.getPoint().x;
-            int pos_actual_y=evt.getPoint().y;
-
-            int cant_celdas_x = jheat_chart.getChartSize().width/jheat_chart.getCellSize().width;
-            int cant_celdas_y = jheat_chart.getChartSize().height/jheat_chart.getCellSize().height;
-
-            int ancho_celdas_x = jheat_chart.getCellSize().width;
-            int ancho_celdas_y = jheat_chart.getCellSize().height;
-
-            int celda_actual_x = util.Devuelve_num_celda(pos_inicial_x, pos_actual_x, ancho_celdas_x, cant_celdas_x);
-            int celda_actual_y = util.Devuelve_num_celda(pos_incial_y, pos_actual_y, ancho_celdas_y, cant_celdas_y);
-
-            if(celda_actual_x ==-1 || celda_actual_y ==-1)
-            {
-                // System.out.println("fuera del borde");
-                return;
-            }
-
-            int invierte_eje_y = cant_celdas_y-celda_actual_y+1;
-
-            String[] seleccionados =util.devuelve_etiquetas_seleccionadas(dataset, label_indices_seleccionados);
-
-            int posx = this.getBounds().x;
-            int posy = this.getBounds().y;
-
-            metric_output mo = new metric_output(dataset,seleccionados[celda_actual_x-1],seleccionados[invierte_eje_y-1],posx,posy,es_de_tipo_meka);
-            mo.setVisible(true);
-
-        }
-
-        if(evt.getButton() == MouseEvent.BUTTON3 )
-        {
-            //System.out.println("se dio el clic derecho");
-
-            jPopupMenu1.removeAll();
-
-            JMenuItem salvar = new JMenuItem("Save as...");
-
-            salvar.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    try {
-                        save_as_ActionPerformed1(evt);
-                    } catch (AWTException ex) {
-                        Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
-                        Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            });
-
-            jPopupMenu1.add(salvar);
-            jPopupMenu1.show(evt.getComponent(), evt.getX(), evt.getY());
-        }
-    }//GEN-LAST:event_labelHeatmapGraphMouseReleased
-
     private void tableHeatmapLeftMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableHeatmapLeftMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_tableHeatmapLeftMouseClicked
+
+    private void buttonShowMostFrequentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostFrequentActionPerformed
+        
+        int n = Integer.parseInt(textMostFrequent.getText());
+        
+        if(n > dataset.getNumLabels()){
+            JOptionPane.showMessageDialog(null, "The number of labels to show must be less than the number of labels in the dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+        
+        if(lista_pares== null) 
+        {
+            JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+
+        ArrayList<String> seleccionados= new  ArrayList();
+        
+        String current = new String();
+        for(int i=0;i<n; i++)
+        {
+            current = (tableCoOcurrenceLeft.getValueAt(i, 0).toString());
+            if(current != null){
+                seleccionados.add(current);
+            }
+            else break;
+        }
+        
+
+        ArrayList<pares_atributos> pares_seleccionados =  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
+
+        String[] labelname=util.pasa_valores_al_arreglo(seleccionados);//solo cambia el tipo de estructura de datos.
+
+        graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
+
+        //LANZAR LA VENTANA EMERGENTE CON LOS PARE SELECCIONADOS
+
+        double[][] pares_freq= util.Get_pares_seleccionados(labelname, pares_seleccionados, num_instancias);
+
+        int posx = this.getBounds().x;
+        int posy = this.getBounds().y;
+
+        jframe_temp mo = new jframe_temp(pares_freq, labelname,posx,posy);
+        mo.setVisible(true);
+        //util.Recorre_Arreglo(labelname);
+        // util.Recorre_Arreglo_2_dimensiones(pares_freq);
+
+    }//GEN-LAST:event_buttonShowMostFrequentActionPerformed
+
+    private void textMostFrequentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textMostFrequentActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textMostFrequentActionPerformed
+
+    private void textMostFrequentKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textMostFrequentKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textMostFrequentKeyTyped
+
+    private void textMostRelatedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textMostRelatedActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textMostRelatedActionPerformed
+
+    private void textMostRelatedKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textMostRelatedKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textMostRelatedKeyTyped
+
+    private void buttonShowMostRelatedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostRelatedActionPerformed
+
+        int n = Integer.parseInt(textMostRelated.getText());
+        
+        if(n > dataset.getNumLabels()){
+            JOptionPane.showMessageDialog(null, "The number of labels to show must be less than the number of labels in the dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+        
+        if(lista_pares== null) 
+        {
+            JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+
+        ArrayList<String> seleccionados= new  ArrayList();
+        
+        seleccionados = getTopCoocurrenceLabels(n);        
+
+        ArrayList<pares_atributos> pares_seleccionados =  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
+
+        String[] labelname=util.pasa_valores_al_arreglo(seleccionados);//solo cambia el tipo de estructura de datos.
+
+        graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
+
+        //LANZAR LA VENTANA EMERGENTE CON LOS PARE SELECCIONADOS
+
+        double[][] pares_freq= util.Get_pares_seleccionados(labelname, pares_seleccionados, num_instancias);
+
+        int posx = this.getBounds().x;
+        int posy = this.getBounds().y;
+
+        jframe_temp mo = new jframe_temp(pares_freq, labelname,posx,posy);
+        mo.setVisible(true);
+    }//GEN-LAST:event_buttonShowMostRelatedActionPerformed
 
     private void initializeTableMetrics(){
         ArrayList<String> metricsList = util.Get_all_metrics();
@@ -4308,8 +4400,8 @@ private void Inicializa_config()
     
        private void save_as_ActionPerformed1(java.awt.event.ActionEvent evt) throws AWTException, IOException
     {
-        BufferedImage image = new Robot().createScreenCapture(new Rectangle(labelHeatmapGraph.getLocationOnScreen().x, labelHeatmapGraph.getLocationOnScreen().y, labelHeatmapGraph.getWidth(), labelHeatmapGraph.getHeight()));
-        
+        BufferedImage image = new Robot().createScreenCapture(new Rectangle(panelHeatmap.getLocationOnScreen().x, panelHeatmap.getLocationOnScreen().y, panelHeatmap.getWidth(), panelHeatmap.getHeight()));
+
        // JFILECHOOSER SAVE
          JFileChooser fc= new JFileChooser();
         
@@ -4386,7 +4478,6 @@ private void Inicializa_config()
     //CREA EL GRAFO EN LA PESTAÑA "vISUALIZE"/"GRAPH CO-OCURRENCE"
     private mxGraphComponent Create_jgraphx(JPanel jpanel , ArrayList<pares_atributos> mi_lista, String[] Label_name,mxGraphComponent graphComponent_viejo )
     {
-        
         mxGraph graph = new mxGraph();
         Object parent = graph.getDefaultParent();
 
@@ -4496,10 +4587,75 @@ private void Inicializa_config()
         
         jpanel.validate();
         jpanel.repaint();
+        
    
         return graphComponent;
         
  
+    }
+    
+    
+    private HeatMap Create_heatmap_graph(JPanel jpanel, double [][] coefficients, ArrayList<pares_atributos> mi_lista, HeatMap old_heatmap)
+    {
+        Color [] colors = new Color[256];
+        
+        for(int i=0; i<colors.length; i++){
+            colors[i] = new Color(i, i, i);
+        }
+        
+        
+        HeatMap heatMap = null;
+        
+        double [][] newCoefs = coefficients.clone();
+        
+        for(int i=0; i<newCoefs.length; i++){
+            for(int j=0; j<newCoefs.length; j++){
+                if(newCoefs[i][j] < 0){
+                    newCoefs[i][j] = 0;
+                }
+            }
+        }
+        
+        if((mi_lista != null) && (mi_lista.size() > 0)){
+            HashSet<Integer> selected = new HashSet<Integer>();
+            
+            for(int i=0; i<mi_lista.size(); i++){
+                selected.add(mi_lista.get(i).get_ind_att1());
+                selected.add(mi_lista.get(i).get_ind_att2());
+            }
+            
+            newCoefs = new double[selected.size()][selected.size()];
+            
+            List sortedSelected = new ArrayList(selected);
+            Collections.sort(sortedSelected);
+            
+            for(int i=0; i<sortedSelected.size(); i++){
+                for(int j=0; j<sortedSelected.size(); j++){
+                    newCoefs[i][j] = coefficients[(int)sortedSelected.get(i)][(int)sortedSelected.get(j)];
+                }
+            }
+            
+            System.out.println("NEWCOEFS");
+            for(int i=0; i<sortedSelected.size(); i++){
+                System.out.println(Arrays.toString(newCoefs[i]));
+            }
+        }
+        
+        heatMap = new HeatMap(newCoefs, false, colors);
+        
+        if(old_heatmap != null){
+            jpanel.remove(old_heatmap);
+        }
+            
+        jpanel.setLayout(new BorderLayout());
+        //jpanel.setPreferredSize(new Dimension(584, 399));//POR FIN!!
+        jpanel.setPreferredSize(new Dimension(560, 399));
+        jpanel.add(heatMap,BorderLayout.CENTER);
+
+        jpanel.validate();
+        jpanel.repaint();
+
+        return heatMap;
     }
     
     
@@ -4836,23 +4992,30 @@ private void Inicializa_config()
          ArrayList<String> seleccionados= new  ArrayList();
 
          int primeros_seleccionados=10;
-        if(primeros_seleccionados> dataset.getNumLabels()) primeros_seleccionados = dataset.getNumLabels();
+        if(primeros_seleccionados> dataset.getNumLabels()) {
+            primeros_seleccionados = dataset.getNumLabels();
+        }
          
         String current=null; 
                
         for(int i=0;i<primeros_seleccionados; i++)
         {
             current = (tableCoOcurrenceLeft.getValueAt(i, 0).toString());
-            if(current != null)seleccionados.add(current);
+            if(current != null){
+                seleccionados.add(current);
+            }
             else break;
         }
+        
+        seleccionados = getTopCoocurrenceLabels(10);
 
-       ArrayList<pares_atributos> pares_seleccionados=  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
+       ArrayList<pares_atributos> pares_seleccionados = util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
         
        String[] labelname1=util.pasa_valores_al_arreglo(seleccionados);
        
-       graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname1,graphComponent);
-             
+
+      graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname1,graphComponent);
+
             
             // System.out.println("dimensiones del panel jpanel25 "+jPanel25.getBounds().width+ " , "+ jPanel25.getBounds().height);
         //    graphComponent  =  Create_jgraphx(jPanel10,lista_pares,labelname,graphComponent);// balanced
@@ -4862,8 +5025,11 @@ private void Inicializa_config()
             //System.out.println("dimensiones son "+ jLabel20.getBounds().width+" ancho ,"+ jLabel20.getBounds().height+" alto ");
             
             label_indices_seleccionados = dataset.getLabelIndices();
-            jheat_chart= create_heapmap(labelHeatmapGraph, dataset); // balanced
-              
+            //jheat_chart= create_heapmap(labelHeatmapGraph, dataset); // balanced
+            //create_heatmap(panelHeatmap);
+            heatMap = Create_heatmap_graph(panelHeatmap, getHeatMapCoefficients(), null, heatMap);
+            
+            
              //util.get_chi_fi_coefficient(dataset);
         
              // jpanel8 box diagram
@@ -4890,6 +5056,50 @@ private void Inicializa_config()
             Logger.getLogger(CrossValidationExperiment.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public ArrayList<String> getTopCoocurrenceLabels(int n){
+            
+            LabelsPairValue p = new LabelsPairValue();
+            
+            ArrayList<String> pares = new ArrayList<String>();
+            
+            ArrayList<LabelsPairValue> pairs = new ArrayList<LabelsPairValue>();
+            for(int i=0; i<coocurrence_coefficients.length; i++){
+                for(int j=0; j<coocurrence_coefficients.length; j++){
+                    if(coocurrence_coefficients[i][j] > 0){
+                        pairs.add(new LabelsPairValue(i, j, coocurrence_coefficients[i][j]));
+                    }
+                }
+            }
+            Collections.sort(pairs, Collections.reverseOrder());
+
+            int numLabels = n;
+            int currentSelectedLabels = 0;
+
+            HashSet<Integer> selectedLabels = new HashSet<Integer>();
+
+            do{
+                if(!selectedLabels.contains(pairs.get(0).label1)){
+                    selectedLabels.add(pairs.get(0).label1);
+                    currentSelectedLabels++;
+                }
+                if(!selectedLabels.contains(pairs.get(0).label2)){
+                    selectedLabels.add(pairs.get(0).label2);
+                    currentSelectedLabels++;
+                }
+                pairs.remove(pairs.get(0));
+            }while((pairs.size() > 0) && (currentSelectedLabels < numLabels));
+
+            String s = new String();
+            for(int i=0; i<selectedLabels.size(); i++){
+                s = tableCoOcurrenceLeft.getValueAt(selectedLabels.toArray(new Integer[selectedLabels.size()])[i], 0).toString();
+                if(s != null){
+                    pares.add(s);
+                }
+            }
+             
+             return pares;
+        }
     
     private void Print_main_metric_dataset(MultiLabelInstances dataset, Statistics stat1 )
     {
@@ -5668,18 +5878,20 @@ private void Inicializa_config()
         
          // extension txt
         FileNameExtensionFilter fname = new FileNameExtensionFilter(".txt", "txt");
-        FileNameExtensionFilter fname1 = new FileNameExtensionFilter(".csv", "csv");
+        FileNameExtensionFilter fname2 = new FileNameExtensionFilter(".csv", "csv");
         FileNameExtensionFilter fname3 = new FileNameExtensionFilter(".arff (Meka)", ".arff (Meka)");
+        FileNameExtensionFilter fname4 = new FileNameExtensionFilter(".tex", ".tex");
         
         //eliminar el que tiene por defecto
         fc.removeChoosableFileFilter(fc.getChoosableFileFilters()[0]);
+
+        fc.addChoosableFileFilter(fname);
+        fc.addChoosableFileFilter(fname2);
+        fc.addChoosableFileFilter(fname3);
+        fc.addChoosableFileFilter(fname4);
         
         fc.setFileFilter(fname);
-        fc.setFileFilter(fname3);
-        fc.setFileFilter(fname1);
-        
-        
-        fc.addChoosableFileFilter(fname);
+
         
         int returnVal = fc.showSaveDialog(this);
          
@@ -5696,6 +5908,22 @@ private void Inicializa_config()
                     PrintWriter wr = new PrintWriter(bw);
                 
                     util.Save_text_file(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
+                
+                    wr.close();
+                    bw.close(); 
+                    
+                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                    
+                }
+                
+                else if(f1.getDescription().equals(".tex"))
+                {
+                    String path = file.getAbsolutePath() +".tex";
+                
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+                    PrintWriter wr = new PrintWriter(bw);
+                
+                    util.Save_tex_file(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
                 
                     wr.close();
                     bw.close(); 
@@ -5738,7 +5966,7 @@ private void Inicializa_config()
                 
                }
                 
-                //COMPROBAR SI TIENE SENTIDO SALVAR UNA SOLA LINEA.
+               
                else if (f1.getDescription().equals(".arff (Meka)"))
                 {
                     String path = file.getAbsolutePath() +".arff";
@@ -6699,16 +6927,17 @@ private void Inicializa_config()
          }
          //si la tabla es heatmap values "heatmap"
          else {
-             pair_label_values =util.get_heatmap_values(dataset, lista_pares);
-             heatmap_coefficients = pair_label_values;
+            //pair_label_values =util.get_heatmap_values(dataset, lista_pares);
+            pair_label_values = getHeatMapCoefficients();
+             heatmap_coefficients = pair_label_values.clone();
+             
              /*
              System.out.println("HEATMAP");
              for(int i=0; i<heatmap_coefficients.length; i++){
                  System.out.println(Arrays.toString(heatmap_coefficients[i]));
              }
              */
-             
-         }
+        }
       
    //-----------------------------------------------------------------------------------
    //-----------------------------------------------------------------------------------
@@ -6810,7 +7039,7 @@ private void Inicializa_config()
     viewport.setPreferredSize(fixedTable_temp.getPreferredSize());
     scroll.setRowHeaderView(viewport);
     
-    scroll.setBounds(20, 20, 780, 390);
+    scroll.setBounds(20, 20, 780, 425);
     
     scroll.setCorner(JScrollPane.UPPER_LEFT_CORNER, fixedTable_temp
         .getTableHeader());
@@ -7417,10 +7646,11 @@ private void Inicializa_config()
         
         table.setBorder(BorderFactory.createLineBorder(Color.black));
         
-        jpanel.add(scrollPane, BorderLayout.CENTER);
-        jpanel.repaint();
+        //jpanel.add(scrollPane, BorderLayout.CENTER);
+        
+        /*jpanel.repaint();
         jpanel.validate();
-
+*/
   
     }
      
@@ -7500,6 +7730,42 @@ private void Inicializa_config()
   
     }
      
+     
+     private double[][] getHeatMapCoefficients(){
+         
+         Statistics stat = new Statistics();
+         
+         atributo [] label_frenquency = util.Get_Frequency_x_label(dataset);;
+         double [] label_frenquency_values = util.get_label_frequency(label_frenquency);
+         
+         double [][] coeffs = new double[dataset.getNumLabels()][dataset.getNumLabels()];
+         
+         System.out.println("COOCURRENCE");
+         for(int i=0; i<dataset.getNumLabels(); i++){
+             System.out.println(Arrays.toString(coocurrence_coefficients[i]));
+         }
+         
+        for(int i=0; i<dataset.getNumLabels(); i++){
+            for(int j=0; j<dataset.getNumLabels(); j++){
+                if(coocurrence_coefficients[i][j] > 0){
+                    coeffs[i][j] = coocurrence_coefficients[i][j] / label_frenquency_values[j];
+                    System.out.println("1. coocurrence[" + i + "][" + j + "]: " + coocurrence_coefficients[i][j] + " ; frequency[" + i + "]: " + label_frenquency_values[j]);
+                }
+                else{
+                    if(coocurrence_coefficients[j][i] > 0){
+                        coeffs[i][j] = coocurrence_coefficients[j][i] / label_frenquency_values[j];
+                        System.out.println("2. coocurrence[" + j + "][" + i + "]: " + coocurrence_coefficients[j][i] + " ; frequency[" + i + "]: " + label_frenquency_values[j]);
+                    }
+                    else{
+                       coeffs[i][j] = 0; 
+                    }
+                }
+            }
+        }
+         
+         return coeffs;
+     }
+     
     
     
      
@@ -7554,6 +7820,8 @@ private void Inicializa_config()
     private javax.swing.JButton buttonRemoveMultipleDatasets;
     private javax.swing.JButton buttonShowCoOcurrence;
     private javax.swing.JButton buttonShowHeatmapLeft;
+    private javax.swing.JButton buttonShowMostFrequent;
+    private javax.swing.JButton buttonShowMostRelated;
     private javax.swing.JButton jButtonSaveDatasets;
     private javax.swing.JButton jButtonStartPreprocess;
     private javax.swing.JComboBox jComboBox_BRFS_Comb;
@@ -7587,7 +7855,6 @@ private void Inicializa_config()
     private javax.swing.JLabel labelFoldsIterativeStratified;
     private javax.swing.JLabel labelFoldsLPStratified;
     private javax.swing.JLabel labelFoldsRandom;
-    private javax.swing.JLabel labelHeatmapGraph;
     private javax.swing.JLabel labelHoldout;
     private javax.swing.JLabel labelIR1;
     private javax.swing.JLabel labelIR2;
@@ -7614,8 +7881,8 @@ private void Inicializa_config()
     private javax.swing.JPanel panelDataset;
     private javax.swing.JPanel panelExamplesPerLabel;
     private javax.swing.JPanel panelExamplesPerLabelset;
+    private javax.swing.JPanel panelHeatmap;
     private javax.swing.JPanel panelHeatmapGraph;
-    private javax.swing.JPanel panelHeatmapLeft;
     private javax.swing.JPanel panelHeatmapValues;
     private javax.swing.JPanel panelIRperLabelInterClass;
     private javax.swing.JPanel panelIRperLabelIntraClass;
@@ -7652,6 +7919,8 @@ private void Inicializa_config()
     private javax.swing.JTextField textIterativeStratifiedHoldout;
     private javax.swing.JTextField textLPStratifiedCV;
     private javax.swing.JTextField textLPStratifiedHoldout;
+    private javax.swing.JTextField textMostFrequent;
+    private javax.swing.JTextField textMostRelated;
     private javax.swing.JTextField textRandomCV;
     private javax.swing.JTextField textRandomFS;
     private javax.swing.JTextField textRandomHoldout;

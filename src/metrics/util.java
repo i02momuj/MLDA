@@ -21,7 +21,9 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -3558,24 +3560,69 @@ public class util {
             for(int i=0; i<(maxLength-metric.length()); i++){
                 wr.write(" ");
             }
-            
-            /*
-            //System.out.println("parseDouble: " + Double.parseDouble(tableMetrics.get(metric)));
-            if((Math.abs(Double.parseDouble(tableMetrics.get(metric))*1000) < 0) ||
-                    (Math.abs(Double.parseDouble(tableMetrics.get(metric))/1000.0) > 10)){
-                NumberFormat formatter = new DecimalFormat("0.###E0");
-                value = formatter.format(Double.parseDouble(tableMetrics.get(metric)));
-                wr.write(value.replace(",", "."));
+
+            wr.write(getValueFormatted(metric, tableMetrics.get(metric)));
+
+            wr.write(System.getProperty("line.separator"));  
+        }
+ 
+     }
+   
+   
+    public static void Save_tex_file(PrintWriter wr,ArrayList<String> metric_list, MultiLabelInstances dataset, atributo[] imbalanced_data, boolean  es_de_tipo_meka, Hashtable<String, String> tableMetrics)
+    {
+        Instances i1= dataset.getDataSet();
+        
+        //LaTeX article header
+        wr.write("\\documentclass[a4paper,11pt]{article}");
+        wr.write(System.getProperty("line.separator"));
+        wr.write("\\usepackage[T1]{fontenc}");
+        wr.write(System.getProperty("line.separator"));
+        wr.write("\\usepackage[utf8]{inputenc}");
+        wr.write(System.getProperty("line.separator"));
+        wr.write("\\usepackage{lmodern}");
+        wr.write(System.getProperty("line.separator"));
+        wr.write("\\usepackage[spanish]{babel}");
+        wr.write(System.getProperty("line.separator"));
+        
+        wr.write("");
+        wr.write(System.getProperty("line.separator"));
+        
+        wr.write("\\begin{document}");
+        wr.write(System.getProperty("line.separator"));
+        
+        wr.write("");
+        wr.write(System.getProperty("line.separator"));
+        
+        wr.write("\\begin{tabular}{|l|r|}");
+        wr.write(System.getProperty("line.separator"));
+        
+        wr.write("\\hline");
+        wr.write(System.getProperty("line.separator"));
+        
+        //Metrics
+        String value = new String();
+        for(String metric : metric_list)
+        {
+            value = getValueFormatted(metric, tableMetrics.get(metric));
+            if(value.equals("---")){
+               wr.write(metric + " & " + "NaN" + " \\\\"); 
             }
             else{
-                wr.write(tableMetrics.get(metric));
-            }*/
-            
-            wr.write(getValueFormatted(metric, tableMetrics.get(metric)));
-            
+                wr.write(metric + " & " + value + " \\\\"); 
+            }
             
             wr.write(System.getProperty("line.separator"));  
         }
+        
+        wr.write("\\hline");
+        wr.write(System.getProperty("line.separator"));
+        
+        wr.write("\\end{tabular}");
+        wr.write(System.getProperty("line.separator"));
+        
+        wr.write("\\end{document}");
+        wr.write(System.getProperty("line.separator"));
  
      }
    
@@ -4556,6 +4603,7 @@ public class util {
          return get_pair_label;
      }
      
+     
      public static double[][] get_heatmap_values (ArrayList<pares_atributos> lista_pares, int cant_instancias, String[] labelname)
      {
           double[][] get_pair_label = inicializa_arreglo_val_neg(labelname.length);
@@ -5270,5 +5318,10 @@ public class util {
             formattedValue = formattedValue.replace(",", ".");
             return formattedValue;
         }
+        
+        
+        
+        
+        
         
 }
