@@ -28,6 +28,9 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 import mulan.data.InvalidDataFormatException;
 import mulan.data.LabelSet;
 import mulan.data.LabelsPair;
@@ -173,19 +176,17 @@ public class util {
         int labels;
         String current, value="";
         
-        boolean flag=false;
-        for(int i=2; i< cadena.length(); i++)
-        {
-            current= cadena.substring(i-2,i);
-                    
-            if(current.equals("-C")){ flag = true; continue;}
-            
-            if(flag && es_numero(cadena.charAt(i))) value+=cadena.charAt(i);
-            
-            if(flag && !es_numero(cadena.charAt(i))) break;
+        System.out.println("cadena: " + cadena);
+        String [] words = cadena.split("-C");
+        String c = words[1].trim();
+        Matcher matcher = Pattern.compile("\\d+").matcher(c);
+        matcher.find();
+        labels = Integer.valueOf(matcher.group());
+        if(c.charAt(0) == '-'){
+            labels = labels * -1;
         }
-        
-         labels =Integer.parseInt(value);
+        System.out.println("labels: " + labels);
+
         
         return labels;
     }
@@ -2291,18 +2292,22 @@ public class util {
         return result;
     }
     
-    public static void Save_xml_in_the_file(PrintWriter wr, String path) throws IOException
-    {
-       FileReader fr = new FileReader(path);
-       BufferedReader bf = new BufferedReader(fr);
+    public static void Save_xml_in_the_file(PrintWriter wr, MultiLabelInstances dataset) throws IOException
+    {       
+       wr.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+       wr.write(System.getProperty("line.separator")); 
+       wr.write("<labels xmlns=\"http://mulan.sourceforge.net/labels\">");
+       wr.write(System.getProperty("line.separator")); 
        
-       String sCadena = "";
+       String [] labelNames = dataset.getLabelNames();
        
-        while ((sCadena = bf.readLine())!=null) 
-       	{
-            wr.write(sCadena);
-            wr.write(System.getProperty("line.separator")); 
-        }
+       for(int i=0; i<labelNames.length; i++){
+           wr.write("<label name=\"" + labelNames[i] + "\"></label>");
+           wr.write(System.getProperty("line.separator")); 
+       }
+       
+       wr.write("</labels>");
+       wr.write(System.getProperty("line.separator")); 
         
     
     }
@@ -2334,14 +2339,56 @@ public class util {
         
     }
     
+    
+    public static void Save_dataset_Meka_in_the_file(ArrayList<MultiLabelInstances> dataset, String path,String dataset_name, String type) throws IOException
+    {
+      BufferedWriter  bw_current;
+      PrintWriter wr;        
+              
+       // new BufferedWriter(new FileWriter(path));
+       // new PrintWriter(bw_train);
+      int index=1;
+      String current_path;
+      
+      for(MultiLabelInstances dataset_current : dataset)
+      {
+          current_path = path + "/"+dataset_name+"-"+type+index+".arff";
+          
+          bw_current = new BufferedWriter(new FileWriter(current_path));
+          wr = new PrintWriter(bw_current);
+          
+          Save_dataset_Meka_in_the_file(wr,dataset_current);
+          
+          wr.close();
+          bw_current.close();
+          
+          index++;
+      }
+        
+    }
+    
     public static void Save_dataset_in_the_file(PrintWriter wr, MultiLabelInstances dataset)
     {
         Save_dataset_in_the_file(wr, dataset, dataset.getDataSet().relationName());   
     }
     
+    public static void Save_dataset_Meka_in_the_file(PrintWriter wr, MultiLabelInstances dataset)
+    {
+        Save_dataset_Meka_in_the_file(wr, dataset, dataset.getDataSet().relationName());   
+    }
+    
     public static void Save_dataset_in_the_file(PrintWriter wr, MultiLabelInstances dataset, String relationName)
     {
+        if(relationName.contains("-")){
+            relationName = relationName.split("-")[0];
+        }
+        if(relationName.contains(":")){
+            relationName = relationName.split("-")[0];
+        }
+        relationName.replaceAll(" ", "_");
+        
        wr.write("@relation " + relationName);
+        System.out.println("relationName: " + relationName);
        wr.write(System.getProperty("line.separator"));  
        //wr.write(System.getProperty("line.separator"));  
         
@@ -2370,6 +2417,110 @@ public class util {
         }
         
     }
+    
+    
+    public static int getMaxFromIntArray(int [] v){
+        
+        int max = Integer.MIN_VALUE;
+        
+        for(int i=0; i<v.length; i++){
+            if(v[i] > max){
+                max = v[i];
+            }
+        }
+        
+        return max;
+    }
+    
+    public static int getMinFromIntArray(int [] v){
+        
+        int min = Integer.MAX_VALUE;
+        
+        for(int i=0; i<v.length; i++){
+            if(v[i] < min){
+                min = v[i];
+            }
+        }
+        
+        return min;
+    }
+    
+    
+    public static void Save_dataset_Meka_in_the_file(PrintWriter wr, MultiLabelInstances dataset, String relationName)
+    {
+        int maxAttIndex = Integer.MIN_VALUE;
+        int minAttIndex = Integer.MAX_VALUE;
+        
+        String c = new String();
+        c = "-C ";
+        
+        int [] attIndex = dataset.getFeatureIndices();
+        
+        maxAttIndex = getMaxFromIntArray(attIndex);
+        minAttIndex = getMinFromIntArray(attIndex);
+        
+        int [] labelIndices = dataset.getLabelIndices();
+        
+        boolean areLabelMaxIndices = true;
+        boolean areLabelMinIndices = false;
+        
+        for(int i=0; i<labelIndices.length && areLabelMaxIndices; i++){
+            if(labelIndices[i] < maxAttIndex){
+                areLabelMaxIndices = false;
+            }
+        }
+        
+        if(!areLabelMaxIndices){
+            areLabelMinIndices = true;
+            for(int i=0; i<labelIndices.length && areLabelMinIndices; i++){
+                if(labelIndices[i] > minAttIndex){
+                    areLabelMinIndices = false;
+                }
+            }
+        }
+        
+        if((!areLabelMaxIndices) && (!areLabelMinIndices)){
+            JOptionPane.showMessageDialog(null, "Cannot save as meka.", "alert", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if(areLabelMaxIndices){
+            c = c + "-" + labelIndices.length;
+        }
+        else{
+            c = c + labelIndices.length;
+        }
+        
+        
+        wr.write("@relation " + "\"" + relationName + ": " + c + "\"");
+        wr.write(System.getProperty("line.separator"));  
+        //wr.write(System.getProperty("line.separator"));  
+        
+        //Set<Attribute> attributeSet = dataset.getFeatureAttributes();
+        Instances instancias = dataset.getDataSet();
+       
+        Attribute att;
+       for (int i=0; i< instancias.numAttributes();i++)
+       {
+             att = instancias.attribute(i);
+             wr.write(att.toString());
+             wr.write(System.getProperty("line.separator")); 
+       }   
+       
+       //wr.write(System.getProperty("line.separator")); 
+        
+        String current ;
+        
+        wr.write("@data");
+        wr.write(System.getProperty("line.separator"));  
+        for(int i=0; i<dataset.getNumInstances();i++)
+        {
+          current = dataset.getDataSet().get(i).toString();
+          wr.write(current);
+          wr.write(System.getProperty("line.separator"));  
+        }
+        
+    }
+    
     
     public static void Save_in_the_file_arff_mulan(PrintWriter wr,ArrayList<String> metric_list, MultiLabelInstances dataset_train, MultiLabelInstances dataset_test , String relation_name, boolean es_de_tipo_meka)
      {
