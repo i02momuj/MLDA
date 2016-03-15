@@ -112,6 +112,10 @@ public class RunApp extends javax.swing.JFrame {
       
      class Task extends SwingWorker<Void, Void> {
          
+         //SEE THAT TO CREATE A GOOD PROGRESS BAR
+         //http://felinfo.blogspot.com.es/2010/06/crear-una-barra-de-progreso-en-java.html
+         
+         
          progress_bar new_progress;
          int velocidad;
         /*
@@ -339,6 +343,7 @@ public class RunApp extends javax.swing.JFrame {
       chi.setForeground(Color.black);
       chi.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
       chi.setOpaque(true);
+      chi.setToolTipText("White cells corresponds to chi coefficients");
            
       panelChiPhi.add(chi);
     
@@ -348,6 +353,7 @@ public class RunApp extends javax.swing.JFrame {
       fi.setForeground(Color.white);
       fi.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
       fi.setOpaque(true);
+      fi.setToolTipText("Gray cells corresponds to phi coefficients");
       
       panelChiPhi.add(fi);
     
@@ -359,17 +365,65 @@ private void Inicializa_config()
         
      //radiobutton to group
       buttonGroup1.add(radioRandomHoldout);
-      //buttonGroup1.add(radioSuppliedTest);
+      radioRandomHoldout.setToolTipText("Split the dataset into random train and test files");
+      textRandomHoldout.setToolTipText("Percentage of train instances");
+      
       buttonGroup1.add(radioIterativeStratifiedHoldout);
+      radioIterativeStratifiedHoldout.setToolTipText("Split the dataset into train and test files by Iterative stratified method");
+      textIterativeStratifiedHoldout.setToolTipText("Percentage of train instances");
+      
       buttonGroup1.add(radioLPStratifiedHoldout);
+      radioLPStratifiedHoldout.setToolTipText("Split the dataset into train and test files by Label Powerset stratified method");
+      textLPStratifiedHoldout.setToolTipText("Percentage of train instances");
+      
       buttonGroup1.add(radioRandomCV);
+      radioRandomCV.setToolTipText("Generates random cross-validation files for selected number of folds");
+      textRandomCV.setToolTipText("Number of folds for cross-validation");
+      
       buttonGroup1.add(radioIterativeStratifiedCV);
+      radioIterativeStratifiedCV.setToolTipText("Generates Iterative stratified cross-validation files for selected number of folds");
+      textIterativeStratifiedCV.setToolTipText("Number of folds for cross-validation");
+      
       buttonGroup1.add(radioLPStratifiedCV);
+      radioLPStratifiedCV.setToolTipText("Generates Label Powerset stratified cross-validation files for selected number of folds");
+      textLPStratifiedCV.setToolTipText("Number of folds for cross-validation");
+      
       buttonGroup1.add(radioNoSplit);
+      radioNoSplit.setToolTipText("Not generate any partition of the dataset");
+      
       buttonGroup2.add(radioBRFS);
+      radioBRFS.setToolTipText("Feature selection by Binary Relevance Feature Selection method");
+      textBRFS.setToolTipText("Number of features to select");
+      
+      labelBRFS_Comb.setToolTipText("Combiantion approach mode");
+      jComboBox_BRFS_Comb.setToolTipText("<html>Combiantion approach mode: <br>"
+                                        + "max: maximum <br>"
+                                        + "avg: average <br>"
+                                        + "min: minumum </html>");
+      
+      labelBRFS_Norm.setToolTipText("Normalization mode");
+      jComboBox_BRFS_Norm.setToolTipText("<html>Normalization mode: <br>"
+                                        + "dl: divide by length <br>"
+                                        + "dm: divide by maximum <br>"
+                                        + "none: no normalization </html>");
+      
+      labelBRFS_Out.setToolTipText("Scoring mode");
+      jComboBox_BRFS_Out.setToolTipText("<html>Scoring mode: <br>"
+                                        + "eval: evaluation score <br>"
+                                        + "rank: ranking score </html>");
+      
+      
       buttonGroup2.add(radioRandomFS);
+      radioRandomFS.setToolTipText("Random selection of the features");
+      textRandomFS.setToolTipText("Number of features to select");
+      
       buttonGroup2.add(radioNoFS);
-      //buttonGroup1.add(radioFS2);
+      radioNoFS.setToolTipText("No feature selection is done");
+      
+      jButtonStartPreprocess.setToolTipText("Start preprocessing");
+      jButtonSaveDatasets.setToolTipText("Save dataset files in a folder");
+      jComboBox_SaveFormat.setToolTipText("Select Mulan or Meka format to save datasets");
+            
       
       radioRandomHoldout.setSelected(true);
       radioNoFS.setSelected(true);
@@ -378,6 +432,22 @@ private void Inicializa_config()
       //buttonChooseSuppliedTest.setEnabled(false);
       
      // jTable1.setVisible(true);        
+      
+      
+      buttonShowCoOcurrence.setToolTipText("Show graph with labels selected in table");
+      buttonShowMostFrequent.setToolTipText("Show graph with most frequent labels");
+      textMostFrequent.setToolTipText("Number of most frequent labels to show");
+      buttonShowMostRelated.setToolTipText("Show graph with most related labels");
+      textMostRelated.setToolTipText("Number of most related labels to show");
+      
+      buttonShowHeatMap.setToolTipText("Show heatmap with labels selected in table");
+      buttonShowMostFrequentHeatMap.setToolTipText("Show heatmap with most frequent labels");
+      textMostFrequentHeatMap.setToolTipText("Number of most frequent labels to show");
+      buttonShowMostRelatedHeatMap.setToolTipText("Show heatmap with most related labels");
+      textMostRelatedHeatMap.setToolTipText("Number of most related labels to show");
+      
+      
+      
        
        cp3 = create_jchart(panelExamplesPerLabel,"bar","# Examples/label", "Relative frequency",false);
        cp11 =  create_jchart(panelLabelsPerExample,"line", "# Labels/example","Relative frequency",false);
@@ -448,7 +518,9 @@ private void Inicializa_config()
       create_button_export(jTable12,fixedTable2,panelHeatmapValues ,export5,710,415, "Heatmap");//heatmap values
       
       create_button_export(panelCoOcurrence ,export6,720,440); //graph- dependences
+      //export6.setToolTipText("Save co-ocurrence graph as image");
       create_button_export(panelHeatmapGraph,export7,720,440);
+      //export7.setToolTipText("Save heatmap as image");
       
       //create_button_export(jPanel21 ,export6,5,50);
       Border border = BorderFactory.createLineBorder(Color.gray, 1);
@@ -685,6 +757,16 @@ private void Inicializa_config()
       //button export table
       jbutton_export = new JButton("Save");
       jbutton_export.setBounds(posx, posy, 80, 25);
+      
+      if(table.equals("ChiPhi")){
+          jbutton_export.setToolTipText("Save table with Chi and Phi coefficients");
+      }
+      else if(table.equals("Coocurrence")){
+          jbutton_export.setToolTipText("Save table with co-ocurrence values");
+      }
+      else if(table.equals("Heatmap")){
+          jbutton_export.setToolTipText("Save table with heatmap values");
+      }
             
       jbutton_export.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -699,6 +781,7 @@ private void Inicializa_config()
       //button export table
       jbutton_export = new JButton("Save");
       jbutton_export.setBounds(posx, posy, 80, 25);
+      jbutton_export.setToolTipText("Save graph as image");
             
       jbutton_export.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -831,6 +914,7 @@ private void Inicializa_config()
        //button ALL
       button_all = new JButton("All");
       button_all.setBounds(posx, posy+heigh+5, 80, 20);
+      button_all.setToolTipText("Select all metrics");
             //PRINCIPAL_ALL
       button_all.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -842,6 +926,7 @@ private void Inicializa_config()
       
      //button NONE
       button_none = new JButton("None");
+      button_none.setToolTipText("Deselect all metrics");
       button_none.setBounds(posx+90, posy+heigh+5, 80, 20);
             
       button_none.addActionListener(new java.awt.event.ActionListener() {
@@ -853,6 +938,7 @@ private void Inicializa_config()
       
       //button INVERT
       button_invert = new JButton("Invert");
+      button_invert.setToolTipText("Invert selection");
       button_invert.setBounds(posx+180, posy+heigh+5, 80, 20);
             
       button_invert.addActionListener(new java.awt.event.ActionListener() {
@@ -864,6 +950,7 @@ private void Inicializa_config()
       
       //button CLEAR
       button_clear = new JButton("Clear");
+      button_clear.setToolTipText("Clear selection an metric values");
       button_clear.setBounds(posx+270, posy+heigh+5, 80, 20);
             
       button_clear.addActionListener(new java.awt.event.ActionListener() {
@@ -876,6 +963,7 @@ private void Inicializa_config()
          //button CALCULATE
       button_calculate = new JButton("Calculate");
       button_calculate.setBounds(posx+590, posy+heigh+5, 95, 25);
+      button_calculate.setToolTipText("Calculate selected metrics");
             
       button_calculate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -888,6 +976,7 @@ private void Inicializa_config()
        //button SAVE
       button_save = new JButton("Save");
       button_save.setBounds(posx+695, posy+heigh+5, 80, 25);
+      button_save.setToolTipText("Save selected metrics in a file");
             
       button_save.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1248,7 +1337,7 @@ private void Inicializa_config()
                         .addComponent(labelLxIxF)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelLxIxFValue)))
-                .addContainerGap(144, Short.MAX_VALUE))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
         panelCurrentDatasetLayout.setVerticalGroup(
             panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1410,7 +1499,6 @@ private void Inicializa_config()
         });
 
         textLPStratifiedHoldout.setText("70");
-        textLPStratifiedHoldout.setEnabled(false);
         textLPStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textLPStratifiedHoldoutActionPerformed(evt);
@@ -1432,7 +1520,6 @@ private void Inicializa_config()
         });
 
         textLPStratifiedCV.setText("5");
-        textLPStratifiedCV.setEnabled(false);
         textLPStratifiedCV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textLPStratifiedCVActionPerformed(evt);
@@ -1548,6 +1635,11 @@ private void Inicializa_config()
         );
 
         jButtonStartPreprocess.setText("Start");
+        jButtonStartPreprocess.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButtonStartPreprocessMouseEntered(evt);
+            }
+        });
         jButtonStartPreprocess.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonStartPreprocessActionPerformed(evt);
@@ -4379,6 +4471,10 @@ private void Inicializa_config()
         showMostFrequentsHeatMap(n);
     }//GEN-LAST:event_buttonShowMostFrequentHeatMapActionPerformed
 
+    private void jButtonStartPreprocessMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonStartPreprocessMouseEntered
+
+    }//GEN-LAST:event_jButtonStartPreprocessMouseEntered
+
     private void showHeatMap(){
         if(lista_pares== null) 
         {
@@ -6618,15 +6714,15 @@ private void Inicializa_config()
          JFileChooser fc= new JFileChooser();
         
          // extension 
-        FileNameExtensionFilter fname = new FileNameExtensionFilter(".xls", "xls"); 
+        //FileNameExtensionFilter fname = new FileNameExtensionFilter(".xls", "xls"); 
         FileNameExtensionFilter fname1 =  new FileNameExtensionFilter(".csv", "csv");
         
         //eliminar el que tiene por defecto
         fc.removeChoosableFileFilter(fc.getChoosableFileFilters()[0]);
         
-        fc.setFileFilter(fname);
+        //fc.setFileFilter(fname);
         fc.setFileFilter(fname1);
-        fc.addChoosableFileFilter(fname);
+        //fc.addChoosableFileFilter(fname);
         
         int returnVal = fc.showSaveDialog(this);
          
