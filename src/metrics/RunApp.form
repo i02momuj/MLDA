@@ -1414,7 +1414,7 @@
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace pref="447" max="32767" attributes="0"/>
+                              <EmptySpace pref="429" max="32767" attributes="0"/>
                               <Component id="jLabelChiFi_text" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                           </Group>
@@ -1477,8 +1477,8 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Component id="jScrollPane7" pref="313" max="32767" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="jScrollPane7" min="-2" pref="307" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="buttonShowCoOcurrence" min="-2" pref="25" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
@@ -1490,13 +1490,10 @@
                                           <Component id="buttonShowMostRelated" alignment="3" min="-2" max="-2" attributes="0"/>
                                           <Component id="textMostRelated" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                                   </Group>
-                                  <Group type="102" attributes="0">
-                                      <Component id="panelCoOcurrenceRight" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="panelCoOcurrenceRight" min="-2" max="-2" attributes="0"/>
                               </Group>
+                              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1626,16 +1623,26 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Component id="jScrollPane8" min="-2" pref="246" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="panelHeatmap" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jScrollPane8" min="-2" pref="246" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="buttonShowMostRelatedHeatMap" min="-2" pref="186" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="textMostRelatedHeatMap" min="-2" pref="30" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="buttonShowHeatmapLeft" alignment="0" min="-2" pref="186" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                          <Component id="buttonShowHeatMap" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="buttonShowMostFrequentHeatMap" alignment="0" min="-2" pref="186" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="textMostFrequentHeatMap" min="-2" pref="30" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="panelHeatmap" min="-2" max="-2" attributes="0"/>
                               <EmptySpace pref="20" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -1645,12 +1652,24 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="panelHeatmap" max="32767" attributes="0"/>
-                                  <Component id="jScrollPane8" min="-2" pref="409" max="-2" attributes="0"/>
+                                  <Component id="panelHeatmap" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Component id="jScrollPane8" min="-2" pref="307" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="buttonShowHeatMap" min="-2" pref="25" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="buttonShowMostFrequentHeatMap" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="textMostFrequentHeatMap" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="buttonShowMostRelatedHeatMap" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="textMostRelatedHeatMap" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="buttonShowHeatmapLeft" min="-2" pref="25" max="-2" attributes="0"/>
-                              <EmptySpace pref="20" max="32767" attributes="0"/>
+                              <EmptySpace pref="28" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1681,14 +1700,6 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Component class="javax.swing.JButton" name="buttonShowHeatmapLeft">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Show selected"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonShowHeatmapLeftActionPerformed"/>
-                      </Events>
-                    </Component>
                     <Container class="javax.swing.JPanel" name="panelHeatmap">
                       <Properties>
                         <Property name="name" type="java.lang.String" value="jpanel10" noResource="true"/>
@@ -1702,11 +1713,53 @@
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="411" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="415" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                       </Layout>
                     </Container>
+                    <Component class="javax.swing.JButton" name="buttonShowHeatMap">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Show selected"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonShowHeatMapActionPerformed"/>
+                      </Events>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="buttonShowMostFrequentHeatMap">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Show most frequent"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonShowMostFrequentHeatMapActionPerformed"/>
+                      </Events>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="buttonShowMostRelatedHeatMap">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Show most related"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonShowMostRelatedHeatMapActionPerformed"/>
+                      </Events>
+                    </Component>
+                    <Component class="javax.swing.JTextField" name="textMostRelatedHeatMap">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="10"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textMostRelatedHeatMapActionPerformed"/>
+                        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="textMostRelatedHeatMapKeyTyped"/>
+                      </Events>
+                    </Component>
+                    <Component class="javax.swing.JTextField" name="textMostFrequentHeatMap">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="10"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textMostFrequentHeatMapActionPerformed"/>
+                        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="textMostFrequentHeatMapKeyTyped"/>
+                      </Events>
+                    </Component>
                   </SubComponents>
                 </Container>
                 <Container class="javax.swing.JPanel" name="panelHeatmapValues">
