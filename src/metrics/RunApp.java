@@ -4323,8 +4323,6 @@ private void Inicializa_config()
         
         tableCoOcurrenceLeft.setRowSelectionInterval(0, n-1);
         
-        int [] freqSorted = getFrequencySortedLabels(n);
-        
         ArrayList<String> seleccionados= new  ArrayList();
         
         String current = new String();
@@ -4533,6 +4531,7 @@ private void Inicializa_config()
 
         ArrayList<String> seleccionados= new  ArrayList();
         Vector<Integer> selectedIndex = new Vector<Integer>();
+
         int[] selecteds=tableHeatmapLeft.getSelectedRows();
 
         if(selecteds.length<= 1) {
@@ -4552,6 +4551,7 @@ private void Inicializa_config()
         }
           
         Collections.sort(selectedIndex);
+        System.out.println("Show Heatmap selected: " + Arrays.toString(selectedIndex.toArray()));
         
         double [][] newCoeffs = new double[selectedIndex.size()][selectedIndex.size()];
 
@@ -4580,23 +4580,41 @@ private void Inicializa_config()
             JOptionPane.showMessageDialog(null, "The number of labels to show must be less than the number of labels in the dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
             return;
         }
-
-        Vector<Integer> selectedIndex = new Vector<Integer>();
+        
         tableHeatmapLeft.setRowSelectionInterval(0, n-1);
-        int[] selecteds=tableHeatmapLeft.getSelectedRows();
-
-         
-        for(int i=0;i<selecteds.length; i++)
+        
+        ArrayList<String> seleccionados= new  ArrayList();
+        
+        String current = new String();
+        for(int i=0;i<n; i++)
         {
-            selectedIndex.add(selecteds[i]);
+            current = (tableHeatmapLeft.getValueAt(i, 0).toString());
+            if(current != null){
+                seleccionados.add(current);
+            }
+            else break;
         }
+
+        int [] selectedIndex = new int[n];
+        
+        for(int i=0; i<n; i++){
+            for(int j=0; j<tableHeatmapLeft.getRowCount(); j++){
+                if(tableHeatmapLeft.getValueAt(j, 0).equals(seleccionados.get(i))){
+                    selectedIndex[i] = getLabelIndex(tableHeatmapLeft.getValueAt(j, 0).toString());
+                }
+            }
+        }
+        
+        Arrays.sort(selectedIndex);
+        
+        System.out.println("HEatmap selectedindex: " + Arrays.toString(selectedIndex));
           
-        double [][] newCoeffs = new double[selectedIndex.size()][selectedIndex.size()];
+        double [][] newCoeffs = new double[n][n];
 
         
-        for(int i=0; i<selectedIndex.size(); i++){
-            for(int j=0; j<selectedIndex.size(); j++){
-                newCoeffs[i][j] = heatmap_coefficients[selectedIndex.get(i)][selectedIndex.get(j)];
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                newCoeffs[i][j] = heatmap_coefficients[selectedIndex[i]][selectedIndex[j]];
             }
         }
         
@@ -5363,7 +5381,7 @@ private void Inicializa_config()
             ArrayList<LabelsPairValue> pairs = new ArrayList<LabelsPairValue>();
             for(int i=0; i<coocurrence_coefficients.length; i++){
                 for(int j=0; j<coocurrence_coefficients.length; j++){
-                    if(coocurrence_coefficients[i][j] > 0){
+                    if(coocurrence_coefficients[i][j] >= 0){
                         pairs.add(new LabelsPairValue(i, j, coocurrence_coefficients[i][j]));
                     }
                 }
@@ -5424,6 +5442,7 @@ private void Inicializa_config()
              return pares;
         }
     
+    
     public ArrayList<String> selectTopHeatmapLabels(int n, boolean selectInTable){
             
             LabelsPairValue p = new LabelsPairValue();
@@ -5433,14 +5452,14 @@ private void Inicializa_config()
             ArrayList<LabelsPairValue> pairs = new ArrayList<LabelsPairValue>();
             for(int i=0; i<heatmap_coefficients.length; i++){
                 for(int j=0; j<heatmap_coefficients.length; j++){
-                    if(heatmap_coefficients[i][j] > 0){
+                    if(heatmap_coefficients[i][j] >= 0){
                         pairs.add(new LabelsPairValue(i, j, heatmap_coefficients[i][j]));
                     }
                 }
             }
             Collections.sort(pairs, Collections.reverseOrder());
             
-            System.out.println("HeatMap pairs: " + Arrays.toString(pairs.toArray()));
+            System.out.println("HEATMAP-> " + Arrays.toString(pairs.toArray()));
 
             int numLabels = n;
             int currentSelectedLabels = 0;
@@ -5467,7 +5486,6 @@ private void Inicializa_config()
 
             String s = new String();
             
-            Collections.sort(selectedLabels);
             for(int i=0; i<selectedLabels.size(); i++){
                 s = jTable12.getColumnName(selectedLabels.get(i));
 
@@ -5479,9 +5497,16 @@ private void Inicializa_config()
             if(selectInTable){
                 tableHeatmapLeft.clearSelection();
                 
+                String labelName;
                 for(int i=0; i<selectedLabels.size(); i++){
-                    System.out.println("Select in table " + selectedLabels.get(i));
-                    tableHeatmapLeft.addRowSelectionInterval(selectedLabels.get(i), selectedLabels.get(i));
+                    //Get label name
+                    labelName = dataset.getLabelNames()[selectedLabels.get(i)];
+                    for(int r=0; r<tableHeatmapLeft.getRowCount(); r++){
+                        if(tableHeatmapLeft.getValueAt(r, 0).equals(labelName)){
+                            tableHeatmapLeft.addRowSelectionInterval(r, r);
+                        }
+                    }
+                    //tableCoOcurrenceLeft.addRowSelectionInterval(selectedLabels.get(i), selectedLabels.get(i));
                 }
             }
 
