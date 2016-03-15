@@ -1337,7 +1337,7 @@ private void Inicializa_config()
                         .addComponent(labelLxIxF)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelLxIxFValue)))
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addContainerGap(144, Short.MAX_VALUE))
         );
         panelCurrentDatasetLayout.setVerticalGroup(
             panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1450,6 +1450,7 @@ private void Inicializa_config()
         });
 
         textIterativeStratifiedCV.setText("5");
+        textIterativeStratifiedCV.setEnabled(false);
         textIterativeStratifiedCV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textIterativeStratifiedCVActionPerformed(evt);
@@ -1464,6 +1465,7 @@ private void Inicializa_config()
         labelFoldsRandom.setText("Folds");
 
         textRandomCV.setText("5");
+        textRandomCV.setEnabled(false);
         textRandomCV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textRandomCVActionPerformed(evt);
@@ -1480,6 +1482,7 @@ private void Inicializa_config()
         labelPercRandom.setText("%");
 
         textIterativeStratifiedHoldout.setText("70");
+        textIterativeStratifiedHoldout.setEnabled(false);
         textIterativeStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textIterativeStratifiedHoldoutActionPerformed(evt);
@@ -1499,6 +1502,7 @@ private void Inicializa_config()
         });
 
         textLPStratifiedHoldout.setText("70");
+        textLPStratifiedHoldout.setEnabled(false);
         textLPStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textLPStratifiedHoldoutActionPerformed(evt);
@@ -1520,6 +1524,7 @@ private void Inicializa_config()
         });
 
         textLPStratifiedCV.setText("5");
+        textLPStratifiedCV.setEnabled(false);
         textLPStratifiedCV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textLPStratifiedCVActionPerformed(evt);
@@ -2706,7 +2711,7 @@ private void Inicializa_config()
         }
 
         ArrayList<String> seleccionados= new  ArrayList();
-        int[] selecteds=tableCoOcurrenceLeft.getSelectedRows();
+        int[] selecteds = tableCoOcurrenceLeft.getSelectedRows();
         
 
         if(selecteds.length<= 1) {
@@ -4297,7 +4302,7 @@ private void Inicializa_config()
     }//GEN-LAST:event_tableHeatmapLeftMouseClicked
 
     private void buttonShowMostFrequentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostFrequentActionPerformed
-        
+
         int n = Integer.parseInt(textMostFrequent.getText());
         
         if(n > dataset.getNumLabels()){
@@ -4308,13 +4313,18 @@ private void Inicializa_config()
             JOptionPane.showMessageDialog(null, "Select at least 2 labels.", "alert", JOptionPane.ERROR_MESSAGE); 
             return;
         }
-        
+
         if(lista_pares== null) 
         {
             JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
             return;
         }
-
+        
+        
+        tableCoOcurrenceLeft.setRowSelectionInterval(0, n-1);
+        
+        int [] freqSorted = getFrequencySortedLabels(n);
+        
         ArrayList<String> seleccionados= new  ArrayList();
         
         String current = new String();
@@ -4348,6 +4358,45 @@ private void Inicializa_config()
 
     }//GEN-LAST:event_buttonShowMostFrequentActionPerformed
 
+    
+    private int[] getFrequencySortedLabels(int n){
+        
+        int nLabels = dataset.getNumLabels();
+        
+        int [] freqSorted = new int[n];
+        
+        for(int i=0; i<n; i++){
+            freqSorted[i] = -1;
+        }
+        
+        String labelName;
+        for(int i=0; i<n; i++){
+            labelName = tableCoOcurrenceLeft.getValueAt(i, 0).toString();
+            freqSorted[i] = getLabelIndex(labelName);
+        }
+        
+        //System.out.println("freqSorted: " + Arrays.toString(freqSorted));
+                
+        return freqSorted;
+    }
+    
+    private int[] getFrequencySortedLabels(){
+
+        return getFrequencySortedLabels(dataset.getNumLabels());
+    }
+    
+    
+    private int getLabelIndex(String name){
+     
+        for(int i=0; i<jTable11.getColumnCount(); i++){
+            if(jTable11.getColumnName(i).equals(name)){
+                return(i);
+            }
+        }
+        
+        return(-1);
+    }
+    
     private void textMostFrequentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textMostFrequentActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textMostFrequentActionPerformed
@@ -4385,7 +4434,7 @@ private void Inicializa_config()
 
         ArrayList<String> seleccionados= new  ArrayList();
         
-        seleccionados = getTopCoocurrenceLabels(n);        
+        seleccionados = selectTopCoocurrenceLabels(n, true);      
 
         ArrayList<pares_atributos> pares_seleccionados =  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
 
@@ -4555,6 +4604,8 @@ private void Inicializa_config()
     }
     
     private void showMostRelatedHeatMap(int n){
+        selectTopHeatmapLabels(n ,true);
+        
         if(lista_pares== null) 
         {
             JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
@@ -4574,7 +4625,7 @@ private void Inicializa_config()
         //tableHeatmapLeft.setRowSelectionInterval(0, n-1);
         int[] selecteds = getTopRelatedHeatmap(n);
         Arrays.sort(selecteds);
-        tableHeatmapLeft.setRowSelectionInterval(selecteds[0], selecteds[n-1]);
+        //tableHeatmapLeft.setRowSelectionInterval(selecteds[0], selecteds[n-1]);
         System.out.println("selecteds: " + Arrays.toString(selecteds));
 
         
@@ -5252,7 +5303,7 @@ private void Inicializa_config()
             else break;
         }
         
-        seleccionados = getTopCoocurrenceLabels(10);
+        seleccionados = selectTopCoocurrenceLabels(10, true);
 
        ArrayList<pares_atributos> pares_seleccionados = util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
         
@@ -5303,7 +5354,7 @@ private void Inicializa_config()
         }
     }
     
-    public ArrayList<String> getTopCoocurrenceLabels(int n){
+    public ArrayList<String> selectTopCoocurrenceLabels(int n, boolean selectInTable){
             
             LabelsPairValue p = new LabelsPairValue();
             
@@ -5319,7 +5370,7 @@ private void Inicializa_config()
             }
             Collections.sort(pairs, Collections.reverseOrder());
             
-            System.out.println(Arrays.toString(pairs.toArray()));
+            System.out.println("COCURRENCE-> " + Arrays.toString(pairs.toArray()));
 
             int numLabels = n;
             int currentSelectedLabels = 0;
@@ -5345,13 +5396,95 @@ private void Inicializa_config()
             }while((pairs.size() > 0) && (currentSelectedLabels < numLabels));
 
             String s = new String();
+            
             for(int i=0; i<selectedLabels.size(); i++){
                 s = jTable11.getColumnName(selectedLabels.get(i));
+
                 if(s != null){
                     pares.add(s);
                 }
             }
-             
+            
+            if(selectInTable){
+                tableCoOcurrenceLeft.clearSelection();
+                
+                String labelName;
+                for(int i=0; i<selectedLabels.size(); i++){
+                    //Get label name
+                    labelName = dataset.getLabelNames()[selectedLabels.get(i)];
+                    for(int r=0; r<tableCoOcurrenceLeft.getRowCount(); r++){
+                        if(tableCoOcurrenceLeft.getValueAt(r, 0).equals(labelName)){
+                            tableCoOcurrenceLeft.addRowSelectionInterval(r, r);
+                        }
+                    }
+                    //tableCoOcurrenceLeft.addRowSelectionInterval(selectedLabels.get(i), selectedLabels.get(i));
+                }
+            }
+
+             return pares;
+        }
+    
+    public ArrayList<String> selectTopHeatmapLabels(int n, boolean selectInTable){
+            
+            LabelsPairValue p = new LabelsPairValue();
+            
+            ArrayList<String> pares = new ArrayList<String>();
+            
+            ArrayList<LabelsPairValue> pairs = new ArrayList<LabelsPairValue>();
+            for(int i=0; i<heatmap_coefficients.length; i++){
+                for(int j=0; j<heatmap_coefficients.length; j++){
+                    if(heatmap_coefficients[i][j] > 0){
+                        pairs.add(new LabelsPairValue(i, j, heatmap_coefficients[i][j]));
+                    }
+                }
+            }
+            Collections.sort(pairs, Collections.reverseOrder());
+            
+            System.out.println("HeatMap pairs: " + Arrays.toString(pairs.toArray()));
+
+            int numLabels = n;
+            int currentSelectedLabels = 0;
+
+            Vector<Integer> selectedLabels = new Vector<Integer>();
+
+            do{
+                if(!selectedLabels.contains(pairs.get(0).label1)){
+                    selectedLabels.add(pairs.get(0).label1);
+                    System.out.println("Add " + pairs.get(0).label1);
+                    currentSelectedLabels++;
+                }
+                
+                if(currentSelectedLabels < numLabels){
+                    if(!selectedLabels.contains(pairs.get(0).label2)){
+                        selectedLabels.add(pairs.get(0).label2);
+                        System.out.println("Add " + pairs.get(0).label2);
+                        currentSelectedLabels++;
+                    }
+                }
+                
+                pairs.remove(pairs.get(0));
+            }while((pairs.size() > 0) && (currentSelectedLabels < numLabels));
+
+            String s = new String();
+            
+            Collections.sort(selectedLabels);
+            for(int i=0; i<selectedLabels.size(); i++){
+                s = jTable12.getColumnName(selectedLabels.get(i));
+
+                if(s != null){
+                    pares.add(s);
+                }
+            }
+            
+            if(selectInTable){
+                tableHeatmapLeft.clearSelection();
+                
+                for(int i=0; i<selectedLabels.size(); i++){
+                    System.out.println("Select in table " + selectedLabels.get(i));
+                    tableHeatmapLeft.addRowSelectionInterval(selectedLabels.get(i), selectedLabels.get(i));
+                }
+            }
+
              return pares;
         }
     
@@ -8106,21 +8239,6 @@ private void Inicializa_config()
         }
      
      
-     public int getLabelIndex(String labelName){
-         
-         
-         String [] labelNames = dataset.getLabelNames();
-         
-         for(int i=0; i<dataset.getNumLabels(); i++){
-             if(labelNames[i].equals(labelName)){
-                 System.out.println("labelName: " + labelName + " -> " + i);
-                 return(i);
-             }
-         }
-         
-         System.out.println("labelName: " + labelName + " -> -1");
-         return(-1);
-     }
     
      
      

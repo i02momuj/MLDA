@@ -216,7 +216,7 @@
                                   <Component id="labelLxIxFValue" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace pref="68" max="32767" attributes="0"/>
+                          <EmptySpace pref="144" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -612,6 +612,7 @@
                 <Component class="javax.swing.JTextField" name="textIterativeStratifiedCV">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="5"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textIterativeStratifiedCVActionPerformed"/>
@@ -626,6 +627,7 @@
                 <Component class="javax.swing.JTextField" name="textRandomCV">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="5"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textRandomCVActionPerformed"/>
@@ -645,6 +647,7 @@
                 <Component class="javax.swing.JTextField" name="textIterativeStratifiedHoldout">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="70"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textIterativeStratifiedHoldoutActionPerformed"/>
@@ -662,6 +665,7 @@
                 <Component class="javax.swing.JTextField" name="textLPStratifiedHoldout">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="70"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textLPStratifiedHoldoutActionPerformed"/>
@@ -684,6 +688,7 @@
                 <Component class="javax.swing.JTextField" name="textLPStratifiedCV">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="5"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textLPStratifiedCVActionPerformed"/>

@@ -79,7 +79,7 @@ public class jframe_temp extends javax.swing.JFrame {
         
         jtable_coefficient_values(jTable1,fixedTable,jPanel1,ancho,alto);
         
-        double critical_value = 6.635; //CAMBIAR
+        double critical_value = Double.MAX_VALUE; //CAMBIAR
         
         jTable1.setDefaultRenderer(Object.class, new MiRender("estandar",critical_value));
         fixedTable.setDefaultRenderer(Object.class, new MiRender("chi_fi_fixed",critical_value));
