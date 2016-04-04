@@ -27,14 +27,31 @@ String columnNames[] = {"Metric","Value", ""};
  {
      this.rowData = rowData;
      
-     if(type.equals("train-test")){
-         columnNames = new String[4];
+     if(type.equals("multi")){
+         columnNames = new String[2];
          columnNames[0] = "Metric";
-         columnNames[1] = "Train";
-         columnNames[2] = "Test";
-         columnNames[3] = "";
+         columnNames[1] = "";
      }
  }
+ 
+  public Table_model_metrics(Object rowData[][], String type, int ncol)
+ {
+     this.rowData = rowData;
+     
+     if(type.equals("multi")){
+         columnNames = new String[ncol];
+         columnNames[0] = "Metric";
+         columnNames[1] = "";
+         
+         System.out.println("ncol: " + ncol);
+         if(ncol > 2){
+             for(int i=2; i<ncol; i++){
+                 columnNames[i] = "";
+             }
+         }
+     }
+ }
+
 
 
   public int getColumnCount() {

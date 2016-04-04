@@ -185,7 +185,7 @@ public class RunApp extends javax.swing.JFrame {
     JButton export1,export2,export3,export4,export5,export6,export7;
     
     final JTable jTable5,jTable6,jTable7, jTable8,jTable9;
-    final JTable jTable1;
+    final JTable jTable1, jTableMulti;
     JTable jTable10,jTable11,jTable12,fixedTable,fixedTable1,fixedTable2;
     
     TableModel tm_BR,tm_BR1,tm_LP,tm_LP1,tm_IR,tm_coefficient,tm_labelxExamples, tm_coocurrences, tm_heapmap_values, tm_attr, tm_jgraph, tm_heapmap_graph, tm_ir_per_label_intra_class,tm_ir_per_label_inter_class,tm_ir_per_labelset, tm_ir_per_label_inter_class_only, tm_ir_per_label_intra_class_only;
@@ -245,6 +245,8 @@ public class RunApp extends javax.swing.JFrame {
     Hashtable<String, String> tableMetrics_train = new Hashtable<String, String>();
     Hashtable<String, String> tableMetrics_test = new Hashtable<String, String>();
     
+    Hashtable<String, Hashtable<String, String>> tableMetricsMulti = new Hashtable<String, Hashtable<String, String>>();
+    
     HeatMap heatMap = null; 
     
     
@@ -262,8 +264,9 @@ public class RunApp extends javax.swing.JFrame {
         fixedTable2 = new JTable();
         jTable11= new JTable();
         jTable12= new JTable();
+        jTableMulti = new JTable();
         
-        this.setTitle("Multilabel Dataset GUI (MUDA-GUI)");
+        this.setTitle("Multi-Label Dataset Analyzer (MLDA)");
         this.setMinimumSize(new Dimension(780,500));       
         this.setBounds(300,0, 780, 500);
         
@@ -467,6 +470,8 @@ private void Inicializa_config()
       
       create_jtable_metrics_jpanel1_principal(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save, button_clear, 30,190,780,280,"database"); //tab Database //35,155,500,355
       create_jtable_metrics_jpanel14(jTable8,panelMultipleDatasets,button_all_2,button_none_2,button_invert_2,button_calculate_2,button_save2,290,35,565,400); //
+      
+      create_jtable_metrics_multi(jTableMulti,jPanelMulti,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save, 25,15,510,420); //tab Multi
       
       //create_jtable_metrics_jpanel2();
       
@@ -990,6 +995,82 @@ private void Inicializa_config()
       jpanel.add(button_save);
       
     }
+    
+    
+    
+    private void create_jtable_metrics_multi(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_calculate,JButton button_save, int posx,int posy, int width, int heigh)
+    {
+
+      create_jtable_metric_multi(jtable,jpanel, util.Get_row_data_multi(),posx,posy,width,heigh);  
+        
+       //button ALL
+      button_all = new JButton("All");
+      button_all.setBounds(posx, posy+heigh+5, 80, 20);
+      button_all.setToolTipText("Select all metrics");
+            //PRINCIPAL_ALL
+      button_all.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_allActionPerformed_multi(evt,jtable );
+                            }
+        });
+      jpanel.add(button_all);
+      
+      
+     //button NONE
+      button_none = new JButton("None");
+      button_none.setToolTipText("Deselect all metrics");
+      button_none.setBounds(posx+90, posy+heigh+5, 80, 20);
+            
+      button_none.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_noneActionPerformed_multi(evt,jtable);
+                            }
+        });
+      jpanel.add(button_none);
+      
+      //button INVERT
+      button_invert = new JButton("Invert");
+      button_invert.setToolTipText("Invert selection");
+      button_invert.setBounds(posx+180, posy+heigh+5, 80, 20);
+            
+      button_invert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_invertActionPerformed_multi(evt,jtable);
+                            }
+        });
+      jpanel.add(button_invert);
+      
+      
+         //button CALCULATE
+      button_calculate = new JButton("Calculate");
+      button_calculate.setBounds(posx+320, posy+heigh+5, 95, 20);
+      button_calculate.setToolTipText("Calculate selected metrics");
+            
+      button_calculate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_calculateActionPerformed_multi(evt,jtable);
+                            }
+        });
+      jpanel.add(button_calculate);
+      
+      
+       //button SAVE
+      button_save = new JButton("Save");
+      button_save.setBounds(posx+425, posy+heigh+5, 80, 20);
+      button_save.setToolTipText("Save selected metrics in a file");
+            
+      button_save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                try {
+                    button_saveActionPerformed_multi(evt,jtable);
+                } catch (IOException ex) {
+                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                            }
+        });
+      jpanel.add(button_save);
+      
+    }
 
 
   //"choose datasets" PESTAÑA
@@ -1204,6 +1285,7 @@ private void Inicializa_config()
         listMultipleDatasetsLeft = new javax.swing.JList();
         buttonAddMultipleDatasets = new javax.swing.JButton();
         buttonRemoveMultipleDatasets = new javax.swing.JButton();
+        jPanelMulti = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -1233,7 +1315,7 @@ private void Inicializa_config()
             }
         });
 
-        panelCurrentDataset.setBorder(javax.swing.BorderFactory.createTitledBorder("Current dataset"));
+        panelCurrentDataset.setBorder(javax.swing.BorderFactory.createTitledBorder("Summary"));
         panelCurrentDataset.setPreferredSize(new java.awt.Dimension(845, 134));
 
         labelRelation.setText("Relation:");
@@ -1337,7 +1419,7 @@ private void Inicializa_config()
                         .addComponent(labelLxIxF)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelLxIxFValue)))
-                .addContainerGap(144, Short.MAX_VALUE))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
         panelCurrentDatasetLayout.setVerticalGroup(
             panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2469,23 +2551,35 @@ private void Inicializa_config()
         panelMultipleDatasetsLeftLayout.setHorizontalGroup(
             panelMultipleDatasetsLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelMultipleDatasetsLeftLayout.createSequentialGroup()
-                .addGroup(panelMultipleDatasetsLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(panelMultipleDatasetsLeftLayout.createSequentialGroup()
-                        .addComponent(buttonAddMultipleDatasets, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
-                        .addComponent(buttonRemoveMultipleDatasets, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(panelMultipleDatasetsLeftLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(buttonAddMultipleDatasets, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(buttonRemoveMultipleDatasets, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         panelMultipleDatasetsLeftLayout.setVerticalGroup(
             panelMultipleDatasetsLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelMultipleDatasetsLeftLayout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelMultipleDatasetsLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(buttonRemoveMultipleDatasets, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonAddMultipleDatasets, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(11, 11, 11))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelMultipleDatasetsLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(buttonAddMultipleDatasets, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonRemoveMultipleDatasets, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout jPanelMultiLayout = new javax.swing.GroupLayout(jPanelMulti);
+        jPanelMulti.setLayout(jPanelMultiLayout);
+        jPanelMultiLayout.setHorizontalGroup(
+            jPanelMultiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 554, Short.MAX_VALUE)
+        );
+        jPanelMultiLayout.setVerticalGroup(
+            jPanelMultiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout panelMultipleDatasetsLayout = new javax.swing.GroupLayout(panelMultipleDatasets);
@@ -2495,14 +2589,18 @@ private void Inicializa_config()
             .addGroup(panelMultipleDatasetsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panelMultipleDatasetsLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(585, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanelMulti, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         panelMultipleDatasetsLayout.setVerticalGroup(
             panelMultipleDatasetsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelMultipleDatasetsLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(panelMultipleDatasetsLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(156, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(panelMultipleDatasetsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanelMulti, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelMultipleDatasetsLeft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         TabPrincipal.addTab("Multiple datasets", panelMultipleDatasets);
@@ -2531,6 +2629,12 @@ private void Inicializa_config()
     private void buttonRemoveMultipleDatasetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRemoveMultipleDatasetsActionPerformed
         // TODO add your handling code here:
         int current = listMultipleDatasetsLeft.getSelectedIndex();
+        
+        if(current < 0){
+            JOptionPane.showMessageDialog(null, "Select a dataset to remove.", "alert", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
         list_dataset.remove(current);
         Dataset_names.remove(current);
         lista_son_meka.remove(current);
@@ -2562,6 +2666,12 @@ private void Inicializa_config()
 
             String dataset_name = f1.getName();
             dataset_name = dataset_name.substring(0,dataset_name.length()-5);
+            
+            if(Dataset_names.contains(dataset_name))
+            {
+                JOptionPane.showMessageDialog(null, "The dataset is duplicated.", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             String filename_database_arff = f1.getAbsolutePath();
             filename_database_xml = util.Get_xml_string(filename_database_arff);
@@ -2647,13 +2757,15 @@ private void Inicializa_config()
                 
                 if(util.Esta_dataset(list_dataset, current.getDataSet().relationName()))
                 {
-                    JOptionPane.showMessageDialog(null, "Duplicate dataset.", "alert", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "The dataset is duplicated.", "alert", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 list_dataset.add(current);
                 Dataset_names.add(dataset_name);
                 lista.addElement(dataset_name );
+                
+                System.out.println("current: " + current + " ; dataset_name: " + dataset_name);
 
             }
             catch (InvalidDataFormatException ex) {
@@ -2741,8 +2853,8 @@ private void Inicializa_config()
         int posx = this.getBounds().x;
         int posy = this.getBounds().y;
 
-        jframe_temp mo = new jframe_temp(pares_freq, labelname,posx,posy);
-        mo.setVisible(true);
+        //jframe_temp mo = new jframe_temp(pares_freq, labelname,posx,posy);
+        //mo.setVisible(true);
         //util.Recorre_Arreglo(labelname);
         // util.Recorre_Arreglo_2_dimensiones(pares_freq);
 
@@ -4349,8 +4461,8 @@ private void Inicializa_config()
         int posx = this.getBounds().x;
         int posy = this.getBounds().y;
 
-        jframe_temp mo = new jframe_temp(pares_freq, labelname,posx,posy);
-        mo.setVisible(true);
+        //jframe_temp mo = new jframe_temp(pares_freq, labelname,posx,posy);
+        //mo.setVisible(true);
         //util.Recorre_Arreglo(labelname);
         // util.Recorre_Arreglo_2_dimensiones(pares_freq);
 
@@ -4447,8 +4559,8 @@ private void Inicializa_config()
         int posx = this.getBounds().x;
         int posy = this.getBounds().y;
 
-        jframe_temp mo = new jframe_temp(pares_freq, labelname,posx,posy);
-        mo.setVisible(true);
+        //jframe_temp mo = new jframe_temp(pares_freq, labelname,posx,posy);
+        //mo.setVisible(true);
     }//GEN-LAST:event_buttonShowMostRelatedActionPerformed
 
     private void radioNoSplitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioNoSplitActionPerformed
@@ -4671,6 +4783,16 @@ private void Inicializa_config()
         
         for(int i=0; i<metricsList.size(); i++){
             tableMetrics.put(metricsList.get(i), "-");
+        }
+    }
+    
+    private void initializeTableMetricsMulti(String dataName){
+        ArrayList<String> metricsList = util.Get_metrics_multi();
+        
+        tableMetricsMulti.get(dataName).clear();
+        
+        for(int i=0; i<metricsList.size(); i++){
+            tableMetricsMulti.get(dataName).put(metricsList.get(i), "-");
         }
     }
     
@@ -6417,6 +6539,153 @@ private void Inicializa_config()
             
         
     }
+      
+      
+      
+      
+      private void button_saveActionPerformed_multi(java.awt.event.ActionEvent evt, JTable jtable) throws IOException
+    {
+        ArrayList<String> metric_list = Get_metrics_selected_multi(jtable);
+        
+        
+         if(list_dataset == null || list_dataset.isEmpty() || Dataset_names.isEmpty()) {
+           JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
+           return; 
+       }
+             
+        
+       // JFILECHOOSER SAVE
+         JFileChooser fc= new JFileChooser();
+        
+         // extension txt
+        FileNameExtensionFilter fname = new FileNameExtensionFilter(".txt", "txt");
+        FileNameExtensionFilter fname2 = new FileNameExtensionFilter(".csv", "csv");
+        FileNameExtensionFilter fname3 = new FileNameExtensionFilter(".arff (Meka)", ".arff (Meka)");
+        FileNameExtensionFilter fname4 = new FileNameExtensionFilter(".tex", ".tex");
+        
+        //eliminar el que tiene por defecto
+        fc.removeChoosableFileFilter(fc.getChoosableFileFilters()[0]);
+
+        fc.addChoosableFileFilter(fname);
+        fc.addChoosableFileFilter(fname2);
+        fc.addChoosableFileFilter(fname3);
+        fc.addChoosableFileFilter(fname4);
+        
+        fc.setFileFilter(fname);
+
+        
+        int returnVal = fc.showSaveDialog(this);
+         
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+        {
+                File file = fc.getSelectedFile();
+                FileFilter f1 = fc.getFileFilter();
+                
+                if(f1.getDescription().equals(".txt"))
+                {
+                    String path = file.getAbsolutePath() +".txt";
+                
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+                    PrintWriter wr = new PrintWriter(bw);
+                
+                    util.Save_text_file_multi(wr, metric_list, Dataset_names, tableMetricsMulti);
+                
+                    wr.close();
+                    bw.close(); 
+                    
+                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                    
+                }
+                
+                else if(f1.getDescription().equals(".tex"))
+                {
+                    String path = file.getAbsolutePath() +".tex";
+                
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+                    PrintWriter wr = new PrintWriter(bw);
+                
+                    util.Save_tex_file_multi(wr, metric_list, Dataset_names, tableMetricsMulti);
+                
+                    wr.close();
+                    bw.close(); 
+                    
+                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                    
+                }
+                
+               else if(f1.getDescription().equals(".csv"))
+               {
+              
+                   String path = file.getAbsolutePath() +".csv";
+                
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+                    PrintWriter wr = new PrintWriter(bw);
+                
+                    util.Save_csv_file_multi(wr, metric_list, Dataset_names, tableMetricsMulti);
+                
+                    wr.close();
+                    bw.close(); 
+                    
+                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                /*
+                try
+                 {
+                     dataset_name1 = dataset_name1.substring(0,dataset_name1.length()-5);
+                     String path = file.getAbsolutePath() +".csv";
+                      Exporter exp = new Exporter(new File(path), dataset_name1);
+                     
+                     if(exp.exporta(metric_list,dataset,es_de_tipo_meka))
+                     {
+                         JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                     }
+                 }
+                 catch(Exception e1)
+                 {
+                     JOptionPane.showMessageDialog(null, "File NOT Saved correctly", "Error", JOptionPane.ERROR_MESSAGE); 
+                 }   
+                   */
+                
+               }
+                
+               
+               else if (f1.getDescription().equals(".arff (Meka)"))
+                {
+                    String path = file.getAbsolutePath() +".arff";
+                
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+                    PrintWriter wr = new PrintWriter(bw);
+                
+                    util.Save_meka_file_multi(wr, metric_list, Dataset_names, tableMetricsMulti);
+                
+                    wr.close();
+                    bw.close(); 
+                    
+                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                    
+                    /*
+                    String path = file.getAbsolutePath() +".arff";
+                
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+                    PrintWriter wr = new PrintWriter(bw);
+                    
+                    ArrayList<MultiLabelInstances> list_dataset1 = new ArrayList();
+                    list_dataset1.add(dataset);
+                                   
+                    util.Save_in_the_file_arff_meka(wr, metric_list, list_dataset1,file.getName(), es_de_tipo_meka);
+                    
+                    wr.close();
+                    bw.close();      
+                    
+                  JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE);   
+                    */
+                }
+                
+           Toolkit.getDefaultToolkit().beep();
+        } 
+
+            
+        
+    }
      
      
      //CALCULA LAS METRICAS ESPECIFICADAS
@@ -6501,6 +6770,82 @@ private void Inicializa_config()
         for(int i=0; i<model.getRowCount(); i++){
             model.setValueAt(util.getValueFormatted(model.getValueAt(i, 0).toString(), tableMetrics.get(model.getValueAt(i, 0).toString())), i, 1);
         }
+
+       jtable.repaint();
+    }   
+    
+    
+    private void button_calculateActionPerformed_multi(java.awt.event.ActionEvent evt, JTable jtable)
+    {
+       ArrayList<String> metric_list = Get_metrics_selected_multi(jtable);
+
+       if(list_dataset == null || list_dataset.size() < 1) {
+           JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
+           return; 
+       }
+       else if(metric_list.isEmpty()){
+           JOptionPane.showMessageDialog(null, "You must select any metric.", "Warning", JOptionPane.ERROR_MESSAGE);
+           return; 
+       }
+
+       atributo[] label_frenquency;
+                
+        atributo[] imbalanced_data;
+        
+        String value = new String();
+
+        int d = 0;
+        for(String dataName : Dataset_names){
+            
+            label_frenquency = util.Get_Frequency_x_label(list_dataset.get(d));
+            label_frenquency = util.Ordenar_freq_x_attr(label_frenquency);
+            imbalanced_data = util.Get_data_imbalanced_x_label_inter_class(list_dataset.get(d), label_frenquency);
+            
+            
+            if(!tableMetricsMulti.contains(dataName)){
+                
+                tableMetricsMulti.put(dataName, new Hashtable<String, String>());
+                initializeTableMetricsMulti(dataName);
+            }
+            
+            for(String metric : metric_list)
+            {
+                //If metric value exists, don't calculate
+               if((tableMetricsMulti.get(dataName).get(metric) == null) || (tableMetricsMulti.get(dataName).get(metric).equals("-"))){
+                   value = util.get_value_metric(metric, list_dataset.get(d), es_de_tipo_meka);
+                    if(value.equals("-1.0") || value.equals("-1,0")){
+                        value = util.get_value_metric_imbalanced(metric, list_dataset.get(d), imbalanced_data);
+                    } 	
+
+                    System.out.println(metric + " --- " + value + " --> " + value.replace(",", "."));
+                    tableMetricsMulti.get(dataName).put(metric, value.replace(",", "."));
+                    //jTextArea1.append(metric + util.get_tabs_multi_datasets(metric) + value + "\n"); 
+               }   
+            }
+            
+            d++;
+        }
+
+        for(int i=0; i<Dataset_names.size(); i++){
+            System.out.println("DATASET: " + Dataset_names.get(i));
+            for(int m=0; m<metric_list.size(); m++){
+                System.out.println("\t" + metric_list.get(m) + tableMetricsMulti.get(Dataset_names.get(i)).get(metric_list.get(m)));
+            }
+        }
+        
+        //TableModel model = jtable.getModel();
+        
+        /*
+        TableModel model = new Table_model_metrics(util.Get_row_data_multi(Dataset_names.size()), "multi", Dataset_names.size()+2);
+        System.out.println("model columns: " + model.getColumnCount());
+        
+        for(int i=0; i<metric_list.size(); i++){
+            //model.setValueAt(util.getValueFormatted(model.getValueAt(i, 0).toString(), tableMetrics.get(model.getValueAt(i, 0).toString())), i, 1);
+            for(int j=0; j<Dataset_names.size(); j++){
+                model.setValueAt(tableMetricsMulti.get(Dataset_names.get(i)).get(metric_list.get(i)), i, j+2);
+            }
+        }
+        */
 
        jtable.repaint();
     }   
@@ -6616,6 +6961,23 @@ private void Inicializa_config()
      }
      
      
+     private ArrayList<String> Get_metrics_selected_multi(JTable jtable)
+     {
+       ArrayList<String> result= new ArrayList();
+       TableModel tmodel = jtable.getModel();
+       
+       for(int i=0; i<tmodel.getRowCount();i++)
+       {
+           if((Boolean)tmodel.getValueAt(i, 1))
+           {
+               String selected =(String)tmodel.getValueAt(i, 0);
+               result.add(selected);                      
+           }                
+       }   
+       return result;
+     }
+     
+     
      private void button_invertActionPerformed(java.awt.event.ActionEvent evt,JTable jtable )
     {
        TableModel tmodel = jtable.getModel();
@@ -6642,6 +7004,26 @@ private void Inicializa_config()
            }
            else  {
                tmodel.setValueAt(Boolean.TRUE, i, 2);
+           }          
+       }      
+       
+       jtable.setModel(tmodel);
+       jtable.repaint();
+       
+    }     
+     
+     
+     private void button_invertActionPerformed_multi(java.awt.event.ActionEvent evt,JTable jtable )
+    {
+       TableModel tmodel = jtable.getModel();
+       
+       for(int i=0; i<tmodel.getRowCount();i++)
+       {
+           if((Boolean)tmodel.getValueAt(i, 1)) {
+               tmodel.setValueAt(Boolean.FALSE, i, 1);
+           }
+           else  {
+               tmodel.setValueAt(Boolean.TRUE, i, 1);
            }          
        }      
        
@@ -6720,6 +7102,21 @@ private void Inicializa_config()
        //frame.setVisible(false);
     }      
     
+    private void button_noneActionPerformed_multi(java.awt.event.ActionEvent evt,JTable jtable)
+    {
+
+      TableModel tmodel = jtable.getModel();
+       
+       for(int i=0; i<tmodel.getRowCount();i++)
+       {
+           tmodel.setValueAt(Boolean.FALSE, i, 1);
+       }
+             
+       jtable.setModel(tmodel);
+       jtable.repaint();
+       //frame.setVisible(false);
+    }      
+    
         private void button_noneActionPerformed2(java.awt.event.ActionEvent evt,JTable jtable,JTable jtable1,JTable jtable2)
     {
       TableModel tmodel = jtable.getModel();
@@ -6765,6 +7162,17 @@ private void Inicializa_config()
        
        for(int i=0; i<tmodel.getRowCount();i++)
            tmodel.setValueAt(Boolean.TRUE, i, 2);
+             
+       jtable.setModel(tmodel);
+       jtable.repaint();
+    }
+    
+    private void button_allActionPerformed_multi(java.awt.event.ActionEvent evt ,JTable jtable)
+    {
+       TableModel tmodel = jtable.getModel();
+       
+       for(int i=0; i<tmodel.getRowCount();i++)
+           tmodel.setValueAt(Boolean.TRUE, i, 1);
              
        jtable.setModel(tmodel);
        jtable.repaint();
@@ -8143,6 +8551,37 @@ private void Inicializa_config()
     }
      
      
+     public void create_jtable_metric_multi(JTable table,JPanel jpanel , Object rowData[][], int posx, int posy, int width,int height)
+     {
+            
+       TableModel model = new Table_model_metrics(rowData, "multi");
+        
+       table.setModel(model);
+        
+       TableColumnModel tcm = table.getColumnModel();
+            
+       tcm.getColumn(0).setPreferredWidth(320);
+
+       tcm.getColumn(1).setPreferredWidth(40);
+       tcm.getColumn(1).setMaxWidth(40);
+       tcm.getColumn(1).setMinWidth(40);
+        
+       JScrollPane scrollPane = new JScrollPane(table);
+        
+        //table.setBounds(20, 100, 200, 100);
+       
+        scrollPane.setBounds(posx, posy, width, height);
+        
+        table.setBorder(BorderFactory.createLineBorder(Color.black));
+        
+        jpanel.add(scrollPane, BorderLayout.CENTER);
+        jpanel.repaint();
+        jpanel.validate();
+
+  
+    }
+     
+     
      private double[][] getHeatMapCoefficients(){
          
          Statistics stat = new Statistics();
@@ -8330,6 +8769,7 @@ private void Inicializa_config()
     private javax.swing.JLabel jLabelChiFi_text;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel21;
+    private javax.swing.JPanel jPanelMulti;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane5;

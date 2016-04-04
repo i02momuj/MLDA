@@ -3720,6 +3720,77 @@ public class util {
      }
    
    
+   
+   public static void Save_text_file_multi(PrintWriter wr,ArrayList<String> metric_list, ArrayList<String> dataNames, Hashtable<String, Hashtable<String, String>> tableMetrics)
+     {
+        String maxString = "Average of unconditionally dependent label pairs by chi-square test:";
+        double maxLength = maxString.length();
+        
+        
+        String value = new String();
+        
+        String maxName = new String();
+        for(int i=0; i<dataNames.size(); i++){
+            if(dataNames.get(i).length() > maxName.length()){
+                maxName = dataNames.get(i);
+            }
+        }
+        
+        String line = new String();
+        
+        for(int i=0; i<maxLength; i++){ 
+            line += " ";
+        }
+        
+        line += " ";
+        
+        for(int i=0; i<dataNames.size(); i++){
+            line += "   ";
+            
+            for(int j=0; j<(maxName.length()-dataNames.get(i).length()); j++){ 
+                line += " ";
+            }
+            
+            line += dataNames.get(i);
+        }
+        
+        wr.write(line);
+        wr.write(System.getProperty("line.separator"));  
+        
+        
+        for(String metric : metric_list)
+        {
+            line = "";
+            //wr.write(metric + ":" + get_tabs(metric) + tableMetrics.get(metric).replace(",", "."));
+            line = line + metric + ":";
+            
+            for(int j=0; j<(maxLength-metric.length()); j++){
+                line += " ";
+            }
+            
+            for(int i=0; i<dataNames.size(); i++){
+                line += "   ";
+                
+                for(int j=0; j<maxName.length()-dataNames.get(i).length(); j++){ 
+                    line += " ";
+                }
+                
+                value = getValueFormatted(metric, tableMetrics.get(dataNames.get(i)).get(metric));
+                
+                line += value;
+                
+                for(int j=0; j<maxName.length()-value.length(); j++){ 
+                    line += " ";
+                }
+            }
+            
+            wr.write(line);
+            wr.write(System.getProperty("line.separator"));  
+        }
+ 
+     }
+   
+   
     public static void Save_tex_file(PrintWriter wr,ArrayList<String> metric_list, MultiLabelInstances dataset, atributo[] imbalanced_data, boolean  es_de_tipo_meka, Hashtable<String, String> tableMetrics)
     {
         Instances i1= dataset.getDataSet();
@@ -3776,6 +3847,78 @@ public class util {
         wr.write(System.getProperty("line.separator"));
  
      }
+    
+    
+    public static void Save_tex_file_multi(PrintWriter wr,ArrayList<String> metric_list, ArrayList<String> dataNames, Hashtable<String, Hashtable<String, String>> tableMetrics)
+    {
+        String s = new String();
+        
+        //LaTeX article header
+        wr.write("\\documentclass[a4paper,11pt]{article}");
+        wr.write(System.getProperty("line.separator"));
+        wr.write("\\usepackage[T1]{fontenc}");
+        wr.write(System.getProperty("line.separator"));
+        wr.write("\\usepackage[utf8]{inputenc}");
+        wr.write(System.getProperty("line.separator"));
+        wr.write("\\usepackage{lmodern}");
+        wr.write(System.getProperty("line.separator"));
+        wr.write("\\usepackage[spanish]{babel}");
+        wr.write(System.getProperty("line.separator"));
+        
+        wr.write("");
+        wr.write(System.getProperty("line.separator"));
+        
+        wr.write("\\begin{document}");
+        wr.write(System.getProperty("line.separator"));
+        
+        wr.write("");
+        wr.write(System.getProperty("line.separator"));
+        
+        s = "\\begin{tabular}{|l|";
+        for(int i=0; i<dataNames.size(); i++){
+            s += "r|";
+        }
+        s += "}";
+        wr.write(s);
+        wr.write(System.getProperty("line.separator"));
+        
+        wr.write("\\hline");
+        wr.write(System.getProperty("line.separator"));
+        
+        //Metrics
+        String value = new String();
+        for(String metric : metric_list)
+        {
+            s = metric;
+            
+            for(int i=0; i<dataNames.size(); i++){
+                value = getValueFormatted(metric, tableMetrics.get(dataNames.get(i)).get(metric));
+            
+                if(value.equals("---")){
+                    s = s + " & " + "NaN";
+                }
+                else{
+                    s = s + " & " + value;
+                }                
+            }
+            
+            s += " \\\\";
+            
+            wr.write(s); 
+            wr.write(System.getProperty("line.separator"));  
+        }
+        
+        wr.write("\\hline");
+        wr.write(System.getProperty("line.separator"));
+        
+        wr.write("\\end{tabular}");
+        wr.write(System.getProperty("line.separator"));
+        
+        wr.write("\\end{document}");
+        wr.write(System.getProperty("line.separator"));
+ 
+     }
+    
    
     public static void Save_csv_file(PrintWriter wr,ArrayList<String> metric_list, MultiLabelInstances dataset, atributo[] imbalanced_data, boolean  es_de_tipo_meka, Hashtable<String, String> tableMetrics)
     {
@@ -3823,36 +3966,131 @@ public class util {
      }
     
     
+    
+    public static void Save_csv_file_multi(PrintWriter wr,ArrayList<String> metric_list, ArrayList<String> dataNames, Hashtable<String, Hashtable<String, String>> tableMetrics)
+    {
+        String value = new String();
+         
+        value = ";";
+        for(int i=0; i<tableMetrics.size(); i++){
+            value += dataNames.get(i) + ";";
+        }
+        wr.write(value);
+        wr.write(System.getProperty("line.separator"));  
+        
+        
+        String temp;
+        //for(int i=0; i<tableMetrics.size(); i++){
+        for(String metric : metric_list)
+        {   value = metric + ";";
+        
+            for(int i=0; i<tableMetrics.size(); i++){
+                temp = getValueFormatted(metric, tableMetrics.get(dataNames.get(i)).get(metric));
+                
+                if(temp.equals("---")){
+                    value = value + "NaN" + ";";
+                }
+                else{
+                    value = value + temp + ";";
+                }
+            }
+            
+            wr.write(value);
+            wr.write(System.getProperty("line.separator"));
+        } 
+        
+ 
+     }
+    
+    
     public static void Save_chi_phi_csv_file(PrintWriter wr, double [][] coefficients, String[] labelNames)
     {
+        for(int i=0; i<coefficients.length; i++){
+            System.out.println(Arrays.toString(coefficients[i]));
+        }
+        
         //Save label names row
         String line = new String();
-        line += "Chi/Phi;";
+        
+        line = "Chi;";
         
         for (String labelName : labelNames) {
             line += labelName + ";";
         }
         
-                 
         wr.write(line);
         wr.write(System.getProperty("line.separator"));  
-        System.out.println("line: " + line);
+       // System.out.println("line: " + line);
         
         for(int i=0; i<labelNames.length; i++){
             line = "";
             line += labelNames[i] + ";";
             
             for(int j=0; j<coefficients[i].length; j++){
-                if(coefficients[j][i] == 0.0){
-                    line += "" + ";";
+                
+                if(i >= j){
+                    if(coefficients[j][i] == 0.0){
+                        line += "" + ";";
+                    }
+                    else{
+                        line += coefficients[j][i] + ";";
+                    } 
                 }
                 else{
-                    line += coefficients[j][i] + ";";
-                } 
+                    if(coefficients[i][j] == 0.0){
+                        line += "" + ";";
+                    }
+                    else{
+                        line += coefficients[i][j] + ";";
+                    } 
+                }
+                
+                
             }
             wr.write(line);
             wr.write(System.getProperty("line.separator"));  
-            System.out.println("line: " + line);
+            //System.out.println("line: " + line);
+        }
+        
+        wr.write(System.getProperty("line.separator"));  
+        wr.write(System.getProperty("line.separator"));  
+        line = "Phi;";
+        
+        for (String labelName : labelNames) {
+            line += labelName + ";";
+        }
+        
+        wr.write(line);
+        wr.write(System.getProperty("line.separator"));  
+        //System.out.println("line: " + line);
+        
+        for(int i=0; i<labelNames.length; i++){
+            line = "";
+            line += labelNames[i] + ";";
+            
+            for(int j=0; j<coefficients[i].length; j++){
+                if(j >= i){
+                    if(coefficients[j][i] == 0.0){
+                        line += "" + ";";
+                    }
+                    else{
+                        line += coefficients[j][i] + ";";
+                    } 
+                }
+                else{
+                    if(coefficients[i][j] == 0.0){
+                        line += "" + ";";
+                    }
+                    else{
+                        line += coefficients[i][j] + ";";
+                    } 
+                }
+                
+                
+            }
+            wr.write(line);
+            wr.write(System.getProperty("line.separator"));  
+            //System.out.println("line: " + line);
         }
     
      }
@@ -3951,23 +4189,7 @@ public class util {
           wr.write(System.getProperty("line.separator"));  
           wr.write("@attribute Instances numeric");
           wr.write(System.getProperty("line.separator"));  
-          
-          /*
-          wr.write("@attribute:"+"\t"+"\t"+Integer.toString(num_atributos-numero_etiquetas));
-          wr.write(System.getProperty("line.separator"));   
-                  
-         //cant de etiquetas
-          wr.write("Labels:"+"\t"+"\t"+"\t"+Integer.toString(numero_etiquetas));
-          wr.write(System.getProperty("line.separator"));   
-          
-          wr.write("Instances:"+"\t"+"\t"+Integer.toString(num_instances));
-          wr.write(System.getProperty("line.separator"));   
-          
-          wr.write("--------------------------------------------------------------------------------");
-          wr.write(System.getProperty("line.separator"));   
-          */
-            
-        //atributo[] imbalanced_data =  util.Get_data_imbalanced_x_label(dataset);
+
         
         for(String metric : metric_list)
         {
@@ -4002,6 +4224,55 @@ public class util {
         line = line.substring(0, line.length()-2);
         wr.write(line);
         wr.write(System.getProperty("line.separator")); 
+ 
+     }
+    
+    
+    public static void Save_meka_file_multi(PrintWriter wr,ArrayList<String> metric_list, ArrayList<String> dataNames, Hashtable<String, Hashtable<String, String>> tableMetrics)
+    {
+        wr.write("@relation" + " \'" + "relationMUDA" + ": -C 0\'");
+        wr.write(System.getProperty("line.separator"));  
+          
+        wr.write(System.getProperty("line.separator")); 
+
+        for(String metric : metric_list)
+        {
+            wr.write("@attribute " + metric.replace(" ", "_") + " numeric");
+            wr.write(System.getProperty("line.separator"));  
+        }
+        
+        wr.write(System.getProperty("line.separator")); 
+        
+        wr.write("@data");
+        wr.write(System.getProperty("line.separator")); 
+        
+        
+        String value = new String();
+        String line = new String();
+        
+        for(int i=0; i<dataNames.size(); i++){
+            line = dataNames.get(i) + ", ";
+            
+            for(String metric : metric_list)
+            {         
+                value=getValueFormatted(metric, tableMetrics.get(dataNames.get(i)).get(metric));
+                if(value.equals("---")){
+                    line += "?";
+                }
+                else{
+                    line += getValueFormatted(metric, tableMetrics.get(dataNames.get(i)).get(metric));
+                }
+                line += ", ";
+            }
+            
+            //Delete last ", "
+            line = line.substring(0, line.length()-2);
+            wr.write(line);
+            wr.write(System.getProperty("line.separator")); 
+        }           
+        
+        
+        
  
      }
     
@@ -4579,11 +4850,44 @@ public class util {
         return rowData;
     }
     
+    public static Object[][] Get_row_data_multi()
+    {
+        ArrayList metrics = Get_metrics_multi();
+        
+        Object rowData[][] = new Object[metrics.size()][2];
+        
+        for(int i=0; i<metrics.size(); i++){
+            rowData[i][0] = metrics.get(i);
+            rowData[i][1]= Boolean.FALSE;
+        }
+        
+        return rowData;
+    }
+    
+    
+    public static Object[][] Get_row_data_multi(int nDatasets)
+    {
+        ArrayList metrics = Get_metrics_multi();
+        
+        Object rowData[][] = new Object[metrics.size()][2+nDatasets];
+        
+        for(int i=0; i<metrics.size(); i++){
+            rowData[i][0] = metrics.get(i);
+            rowData[i][1]= Boolean.FALSE;
+            for(int d=0; d<nDatasets; d++){
+                rowData[i][d+2] = "";
+            }
+        }
+        
+        return rowData;
+    }
+    
     
     public static ArrayList<String> Get_all_metrics()
      {
        ArrayList<String> result= new ArrayList();
 
+       result.add("Attributes");
        result.add("Average absolute correlation between numeric attributes");
        result.add("Average examples per labelset");
        result.add("Average gain ratio");
@@ -4595,10 +4899,82 @@ public class util {
        result.add("Density");
        result.add("Distinct Labelset");
        result.add("Diversity");
-       //result.add("Instances");
+       result.add("Instances");
        
        result.add("Kurtosis cardinality");
        
+       result.add("Labels");
+       result.add("Labels x instances x features");
+       
+       result.add("Maximal entropy of labels");
+       result.add("Mean of entropy of nominal attributes");
+       result.add("Mean of standard deviation IR per label intra class");
+       
+       result.add("Mean of IR per label intra class");
+       result.add("Mean of IR per label inter class");
+       result.add("Mean of IR per labelset");
+       
+       result.add("Mean of mean of numeric attributes");
+       result.add("Mean of standar deviation of numeric attributes");
+       result.add("Mean of skewness of numeric attributes");
+       result.add("Mean of kurtosis");
+       
+       result.add("Minimal entropy of labels");
+       
+       result.add("Number of binary attributes");
+       result.add("Number of labelsets up to 2 examples");
+       result.add("Number of labelsets up to 5 examples");
+       result.add("Number of labelsets up to 10 examples");
+       result.add("Number of labelsets up to 50 examples");
+       
+       result.add("Number of nominal attributes");
+       
+       result.add("Number of unconditionally dependent label pairs by chi-square test");
+       
+       result.add("Proportion of Distinct Labelset");
+       result.add("Proportion of maxim label combination (PMax)");
+       result.add("Proportion of numeric attributes with outliers");
+       result.add("Proportion of binary attributes");
+       result.add("Proportion of nominal attributes");
+       result.add("Proportion of unique label combination (PUniq)");
+       
+       result.add("Ratio of labelsets with number of examples < half of the attributes");
+       
+       result.add("Ratio of number of instances to the number of attributes");
+       result.add("Ratio of number of labelsets up to 2 examples");
+       result.add("Ratio of number of labelsets up to 5 examples");
+       result.add("Ratio of number of labelsets up to 10 examples");
+       result.add("Ratio of number of labelsets up to 50 examples");
+       result.add("Ratio of unconditionally dependent label pairs by chi-square test");
+       result.add("Skewness cardinality");
+       result.add("Standard desviation of the label cardinality");
+       result.add("Standard desviation of examples per labelset");
+
+       return result;
+     }
+    
+    
+    public static ArrayList<String> Get_metrics_multi()
+     {
+       ArrayList<String> result= new ArrayList();
+
+       result.add("Attributes");
+       result.add("Average absolute correlation between numeric attributes");
+       result.add("Average examples per labelset");
+       result.add("Average gain ratio");
+       result.add("Average of unconditionally dependent label pairs by chi-square test");
+       result.add("Bound");
+       result.add("Cardinality");
+       result.add("CVIR inter class");
+       
+       result.add("Density");
+       result.add("Distinct Labelset");
+       result.add("Diversity");
+       result.add("Instances");
+       
+       result.add("Kurtosis cardinality");
+       
+       result.add("Labels");
        result.add("Labels x instances x features");
        
        result.add("Maximal entropy of labels");
@@ -4819,25 +5195,8 @@ public class util {
      
      public static double[][] get_pair_label_values (MultiLabelInstances dataset, ArrayList<pares_atributos> lista_pares)
      {
-         /*int[] label_indices= dataset.getLabelIndices();
-         
-         //double[][] get_pair_label = new double[label_indices.length][label_indices.length];
-         double[][] get_pair_label = inicializa_arreglo_val_neg(label_indices.length);
-                 
-         int i, j;
-         
-         for(pares_atributos current : lista_pares)
-         {
-             i= current.get_ind_att1();
-             j= current.get_ind_att2();
-             
-             get_pair_label[i][j]=current.get_cant_veces()/dataset.getNumInstances();
-            // get_pair_label[j][i]=-1.0;
-         }
-         
-         return get_pair_label;*/
-         
          Statistics stat = new Statistics();
+         System.out.println("dataLabels: " + dataset.getNumLabels());
          return(stat.calculateCoocurrence(dataset));
      
      }
