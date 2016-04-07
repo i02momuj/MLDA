@@ -52,6 +52,7 @@ import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import weka.core.Attribute;
+import weka.core.Instance;
 import weka.core.Instances;
 
 /**
@@ -1050,7 +1051,7 @@ public class util {
         //    result+=arff_text.charAt(i);
         //}     
         
-        String [] words = arff_text.split("-");
+        String [] words = arff_text.split("-t");
         if(words.length > 1){
             System.out.println("words: " + Arrays.toString(words));
             for(int i=0; i<words.length-1; i++){
@@ -4234,6 +4235,9 @@ public class util {
         wr.write(System.getProperty("line.separator"));  
           
         wr.write(System.getProperty("line.separator")); 
+        
+        wr.write("@attribute relation_name String");
+        wr.write(System.getProperty("line.separator")); 
 
         for(String metric : metric_list)
         {
@@ -5127,6 +5131,9 @@ public class util {
              get_pair_label[j][i]= probabilidad_att1_att2/probabilidad_att1;
          }
          
+         
+         
+         
          return get_pair_label;
      }
      
@@ -5195,11 +5202,14 @@ public class util {
      
      public static double[][] get_pair_label_values (MultiLabelInstances dataset, ArrayList<pares_atributos> lista_pares)
      {
-         Statistics stat = new Statistics();
+         //Statistics stat = new Statistics();
          System.out.println("dataLabels: " + dataset.getNumLabels());
-         return(stat.calculateCoocurrence(dataset));
-     
+         double [][] coocurrences = new double[dataset.getNumLabels()][dataset.getNumLabels()];
+         coocurrences = calculateCoocurrences(dataset);
+         return(coocurrences);
      }
+     
+     
     
      public static double[][] get_chi_fi_coefficient (MultiLabelInstances dataset)
      {
@@ -5829,6 +5839,34 @@ public class util {
             return formattedValue;
         }
         
+        public static double[][] calculateCoocurrences(MultiLabelInstances mldata){
+            
+            int nLabels = mldata.getNumLabels();
+            Instances data = mldata.getDataSet();
+            
+            double [][] coocurrenceMatrix = new double[nLabels][nLabels];
+            
+            int nFeatures = data.numAttributes() - nLabels;
+            
+            int [] labelIndices = mldata.getLabelIndices();
+            
+            Instance temp = null;
+            for(int k=0; k<data.numInstances(); k++){   
+                temp = data.instance(k);
+                
+                for(int i=0; i<nLabels; i++){
+                    for(int j=i+1; j<nLabels; j++){
+                        //if(i!=j){
+                          if((temp.value(labelIndices[i]) == 1.0) && (temp.value(labelIndices[j]) == 1.0)){
+                            coocurrenceMatrix[i][j]++;
+                          }  
+                        //}
+                    }
+                }
+            }
+            
+            return coocurrenceMatrix;
+        }
         
         
         

@@ -8577,14 +8577,10 @@ private void Inicializa_config()
         jpanel.add(scrollPane, BorderLayout.CENTER);
         jpanel.repaint();
         jpanel.validate();
-
-  
     }
      
      
      private double[][] getHeatMapCoefficients(){
-         
-         Statistics stat = new Statistics();
          
          atributo [] label_frenquency = util.Get_Frequency_x_label(dataset);;
          double [] label_frenquency_values = util.get_label_frequency(label_frenquency);
@@ -8598,21 +8594,37 @@ private void Inicializa_config()
          
         for(int i=0; i<dataset.getNumLabels(); i++){
             for(int j=0; j<dataset.getNumLabels(); j++){
-                if(coocurrence_coefficients[i][j] > 0){
-                    coeffs[i][j] = coocurrence_coefficients[i][j] / label_frenquency_values[j];
-                    System.out.println("1. coocurrence[" + i + "][" + j + "]: " + coocurrence_coefficients[i][j] + " ; frequency[" + i + "]: " + label_frenquency_values[j]);
+                
+                if(label_frenquency_values[j] <= 0){
+                    coeffs[i][j] = 0;
+                }
+                else if (i==j){
+                    coeffs[i][j] = label_frenquency_values[i] / dataset.getNumInstances();
                 }
                 else{
-                    if(coocurrence_coefficients[j][i] > 0){
-                        coeffs[i][j] = coocurrence_coefficients[j][i] / label_frenquency_values[j];
-                        System.out.println("2. coocurrence[" + j + "][" + i + "]: " + coocurrence_coefficients[j][i] + " ; frequency[" + i + "]: " + label_frenquency_values[j]);
+                    if(coocurrence_coefficients[i][j] > 0){
+                        coeffs[i][j] = coocurrence_coefficients[i][j] / label_frenquency_values[j];
+                        System.out.println("1. coocurrence[" + i + "][" + j + "]: " + coocurrence_coefficients[i][j] + " ; frequency[" + i + "]: " + label_frenquency_values[j]);
                     }
                     else{
-                       coeffs[i][j] = 0; 
+                        if(coocurrence_coefficients[j][i] > 0){
+                            coeffs[i][j] = coocurrence_coefficients[j][i] / label_frenquency_values[j];
+                            System.out.println("2. coocurrence[" + j + "][" + i + "]: " + coocurrence_coefficients[j][i] + " ; frequency[" + i + "]: " + label_frenquency_values[j]);
+                        }
+                        else{
+                           coeffs[i][j] = 0; 
+                        }
                     }
                 }
+                
+                
             }
         }
+        
+        System.out.println("HEATMAP TABLE");
+         for(int p=0; p<coeffs.length; p++){
+             System.out.println(Arrays.toString(coeffs[p]));
+         }
          
          return coeffs;
      }
