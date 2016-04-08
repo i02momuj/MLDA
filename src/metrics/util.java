@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import mulan.data.InvalidDataFormatException;
 import mulan.data.LabelSet;
 import mulan.data.LabelsPair;
@@ -966,7 +967,7 @@ public class util {
 
             int max = Maxim_key(labelset_x_frequency);
                      
-           for(int i=0; i<=max+1 ; i++)
+           for(int i=0; i<=max ; i++)
            {
                int freq_current=0;
                if(labelset_x_frequency.get(i)!=null) freq_current=labelset_x_frequency.get(i);
@@ -3964,6 +3965,30 @@ public class util {
             wr.write(System.getProperty("line.separator"));  
         }
  
+     }
+    
+    public static void Save_table_csv(PrintWriter wr, JTable table)
+    {                 
+        //wr.write("Label frequency");
+        //wr.write(System.getProperty("line.separator"));  
+    
+        String line = new String();
+        
+        line = "";
+        for(int j=0; j<table.getColumnCount(); j++){
+            line += table.getColumnName(j) + "; ";
+        }
+        wr.write(line);
+        wr.write(System.getProperty("line.separator"));  
+                
+        for(int i=0; i<table.getRowCount(); i++){
+            line = "";
+            for(int j=0; j<table.getColumnCount(); j++){
+                line += table.getValueAt(i, j) + "; ";
+            }
+            wr.write(line);
+            wr.write(System.getProperty("line.separator"));  
+        }
      }
     
     
