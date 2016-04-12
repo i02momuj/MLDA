@@ -31,11 +31,18 @@ public class Mi_Render_IR extends DefaultTableCellRenderer
    {
        super.getTableCellRendererComponent (table, value, isSelected, hasFocus, row, column);
        
+        System.out.println("row: " + row);
+        System.out.println("posicion_IR: " + posicion_IR);
+        System.out.println("posicion_IR_2: " + posicion_IR_2);
+        System.out.println("table.getValueAt(row, posicion_IR).toString(): " + table.getValueAt(row, posicion_IR).toString());
+       
        double ir_current = Double.parseDouble(table.getValueAt(row, posicion_IR).toString());
        double ir_current2=-1;
        
-       if(posicion_IR_2!=-1)
-        ir_current2 = Double.parseDouble(table.getValueAt(row, posicion_IR_2).toString());
+       if(posicion_IR_2!=-1){
+          ir_current2 = Double.parseDouble(table.getValueAt(row, posicion_IR_2).toString()); 
+       }
+        
        
       // System.out.println("valor IR: "+ir_current);
        

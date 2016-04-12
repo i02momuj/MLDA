@@ -292,6 +292,7 @@ public class util {
              if(encontrados == cant_etiquetas_encontradas) break;
              
              truncate_current = Double.toString(current.get_ir_inter_class());
+             System.out.println("truncate_current1: " + truncate_current);
              truncate_current = Truncate_values_aprox_zero(truncate_current, 5);
              
              current_ir = Double.parseDouble(truncate_current);
