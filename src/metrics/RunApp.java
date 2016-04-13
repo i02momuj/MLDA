@@ -1092,9 +1092,30 @@ private void Inicializa_config()
       button_calculate.setToolTipText("Calculate selected metrics");
             
       button_calculate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_calculateActionPerformed_multi(evt,jtable);
-                            }
+            public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                progressFrame.setVisible(true);
+                progressFrame.repaint();
+                progressBar.setIndeterminate(false);
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // do the long-running work here
+                        button_calculateActionPerformed_multi(evt,jtable);
+                        // at the end:
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                progressBar.setIndeterminate(false);
+                                progressFrame.setVisible(false);
+                                progressFrame.repaint();
+                                JOptionPane.showMessageDialog(null, "Metrics have been calculated succesfully.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                                
+                            }//run
+                        }); //invokeLater
+                    }}
+                ).start(); //Thread
+            }
         });
       jpanel.add(button_calculate);
       
@@ -3284,6 +3305,40 @@ private void Inicializa_config()
     // COMIENZA A CALCULAR LAS METRICAS SEGUN LA OPCION DEL train/TEST (BOTON "start")
     private void jButtonStartPreprocessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartPreprocessActionPerformed
 
+        
+        progressBar.setIndeterminate(true);
+        progressFrame.setVisible(true);
+        progressFrame.repaint();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // do the long-running work here
+                preprocess();
+                // at the end:
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setIndeterminate(false);
+                        progressFrame.setVisible(false);
+                        progressFrame.repaint();
+                        
+                        if(!(radioNoFS.isSelected() && radioNoSplit.isSelected())){
+                            JOptionPane.showMessageDialog(null, "Datasets have been generated succesfully.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                        }
+
+                        Toolkit.getDefaultToolkit().beep();
+                    }//run
+                }); //invokeLater
+            }
+        }
+        ).start();
+        
+        
+    }//GEN-LAST:event_jButtonStartPreprocessActionPerformed
+
+    private void preprocess(){
+        
         list_dataset_train = new ArrayList();
         list_dataset_test = new ArrayList();
 
@@ -3694,13 +3749,15 @@ private void Inicializa_config()
             //button_calculate2_train.setEnabled(true);
             //button_save_train.setEnabled(false);
 
+            /*
             if(!(radioNoFS.isSelected() && radioNoSplit.isSelected())){
                 JOptionPane.showMessageDialog(null, "Datasets have been generated succesfully.", "Successful", JOptionPane.INFORMATION_MESSAGE);
             }
             
             Toolkit.getDefaultToolkit().beep();
-    }//GEN-LAST:event_jButtonStartPreprocessActionPerformed
-
+            */
+    }
+    
     private void textLPStratifiedCVKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textLPStratifiedCVKeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_textLPStratifiedCVKeyTyped
@@ -3936,8 +3993,7 @@ private void Inicializa_config()
                 }); //invokeLater
             }
         }
-        ).start();
-        
+        ).start();        
 
     }//GEN-LAST:event_buttonChooseFileActionPerformed
 
@@ -6937,9 +6993,14 @@ private void Inicializa_config()
         
         String value = new String();
 
+        progressBar.setMinimum(0);
+        progressBar.setMaximum(metric_list.size() * Dataset_names.size() + 1);
+        progressBar.setValue(0);
+        int v = 1;
+        
         int d = 0;
         for(String dataName : Dataset_names){
-            
+
             label_frenquency = util.Get_Frequency_x_label(list_dataset.get(d));
             label_frenquency = util.Ordenar_freq_x_attr(label_frenquency);
             imbalanced_data = util.Get_data_imbalanced_x_label_inter_class(list_dataset.get(d), label_frenquency);
@@ -6953,6 +7014,8 @@ private void Inicializa_config()
             
             for(String metric : metric_list)
             {
+                progressBar.setValue(v);
+                
                 //If metric value exists, don't calculate
                if((tableMetricsMulti.get(dataName).get(metric) == null) || (tableMetricsMulti.get(dataName).get(metric).equals("-"))){
                    value = util.get_value_metric(metric, list_dataset.get(d), es_de_tipo_meka);
@@ -6963,7 +7026,9 @@ private void Inicializa_config()
                     System.out.println(metric + " --- " + value + " --> " + value.replace(",", "."));
                     tableMetricsMulti.get(dataName).put(metric, value.replace(",", "."));
                     //jTextArea1.append(metric + util.get_tabs_multi_datasets(metric) + value + "\n"); 
-               }   
+               } 
+               
+               v++;
             }
             
             d++;
