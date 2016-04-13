@@ -81,17 +81,15 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="panelCurrentDataset" min="-2" pref="795" max="-2" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <Component id="textChooseFile" max="32767" attributes="0"/>
+                              <Component id="textChooseFile" min="-2" pref="665" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="buttonChooseFile" min="-2" pref="100" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jProgressBar1" min="-2" pref="100" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="23" max="32767" attributes="0"/>
+                      <EmptySpace pref="26" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -99,16 +97,13 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="buttonChooseFile" alignment="1" min="-2" max="-2" attributes="0"/>
-                              <Component id="textChooseFile" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="jProgressBar1" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="textChooseFile" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="buttonChooseFile" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                       <Component id="panelCurrentDataset" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="330" max="32767" attributes="0"/>
+                      <EmptySpace pref="347" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -370,8 +365,6 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JProgressBar" name="jProgressBar1">
-            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="panelPreprocess">

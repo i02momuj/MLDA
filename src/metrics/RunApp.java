@@ -372,8 +372,7 @@ public class RunApp extends javax.swing.JFrame {
       progressBar = new JProgressBar(0, 100);
       progressBar.setValue(0);  
       progressFrame = new JFrame();
-        System.out.println("this.bounds" + this.getWidth());
-      progressFrame.setBounds(this.getWidth()/2, this.getHeight()/2, 200, 30);
+      progressFrame.setBounds(this.getBounds().x + this.getBounds().width/2 - 100, this.getBounds().y + this.getBounds().height/2 - 15, 200, 30);
       progressFrame.setResizable(false);
       progressFrame.setUndecorated(true);
       progressFrame.add(progressBar);      
@@ -999,7 +998,8 @@ private void Inicializa_config()
                 
                 progressFrame.setVisible(true);
                 progressFrame.repaint();
-                progressBar.setIndeterminate(true);
+                progressBar.setIndeterminate(false);
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -1239,7 +1239,6 @@ private void Inicializa_config()
         labelDiversityValue = new javax.swing.JLabel();
         labelLxIxF = new javax.swing.JLabel();
         labelLxIxFValue = new javax.swing.JLabel();
-        jProgressBar1 = new javax.swing.JProgressBar();
         panelPreprocess = new javax.swing.JPanel();
         panelTestOption = new javax.swing.JPanel();
         radioRandomHoldout = new javax.swing.JRadioButton();
@@ -1463,7 +1462,7 @@ private void Inicializa_config()
                                 .addComponent(labelDensity)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(labelDensityValue, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addContainerGap(144, Short.MAX_VALUE))
         );
         panelCurrentDatasetLayout.setVerticalGroup(
             panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1503,28 +1502,24 @@ private void Inicializa_config()
             panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelDatasetLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addGroup(panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelCurrentDataset, javax.swing.GroupLayout.PREFERRED_SIZE, 795, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panelDatasetLayout.createSequentialGroup()
-                        .addComponent(textChooseFile)
+                        .addComponent(textChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 665, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(buttonChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(23, Short.MAX_VALUE))
+                        .addComponent(buttonChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         panelDatasetLayout.setVerticalGroup(
             panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelDatasetLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(buttonChooseFile)
-                        .addComponent(textChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(textChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonChooseFile))
+                .addGap(7, 7, 7)
                 .addComponent(panelCurrentDataset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(330, Short.MAX_VALUE))
+                .addContainerGap(347, Short.MAX_VALUE))
         );
 
         TabPrincipal.addTab("Summary", panelDataset);
@@ -3921,6 +3916,32 @@ private void Inicializa_config()
     private void buttonChooseFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonChooseFileActionPerformed
         // TODO add your handling code here:
         
+        progressBar.setIndeterminate(true);
+        progressFrame.setVisible(true);
+        progressFrame.repaint();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // do the long-running work here
+                loadDataset();
+                // at the end:
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setIndeterminate(false);
+                        progressFrame.setVisible(false);
+                        progressFrame.repaint();
+                    }//run
+                }); //invokeLater
+            }
+        }
+        ).start();
+        
+
+    }//GEN-LAST:event_buttonChooseFileActionPerformed
+
+    private void loadDataset(){
         // ESCOGER EL DATASET
         JFileChooser jfile1 = new JFileChooser();
         FileNameExtensionFilter fname = new FileNameExtensionFilter(".arff", "arff");
@@ -3933,21 +3954,6 @@ private void Inicializa_config()
 
         if (returnVal == JFileChooser.OPEN_DIALOG)
         {
-            
-            //int velocidad=10;
-            
-            //INVOCAR EL PROGRESS BAR
-
-            //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
-            //progress_bar new_progress = new progress_bar();
-            //task = new Task(new_progress,velocidad);
-            //new_progress.setVisible(true);
-
-            //task.addPropertyChangeListener(new_progress);
-            //task.execute();
-
-
             File f1 = jfile1.getSelectedFile();
             dataset_name1 = f1.getName();
             dataset_current_name = dataset_name1.substring(0,dataset_name1.length()-5);
@@ -4103,8 +4109,8 @@ private void Inicializa_config()
             textChooseFile.setText(filename_database_arff);
 
         }
-    }//GEN-LAST:event_buttonChooseFileActionPerformed
-
+    }
+    
     private void tableHeatmapLeftMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableHeatmapLeftMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_tableHeatmapLeftMouseClicked
@@ -6880,8 +6886,13 @@ private void Inicializa_config()
         
         String value = new String();
 
+        progressBar.setMinimum(0);
+        progressBar.setMaximum(metric_list.size()+1);
+        progressBar.setValue(0);
+        int v = 1;
         for(String metric : metric_list)
         {
+            progressBar.setValue(v);
             //If metric value exists, don't calculate
            if((tableMetrics.get(metric) == null) || (tableMetrics.get(metric).equals("-"))){
                value = util.get_value_metric(metric, dataset, es_de_tipo_meka);
@@ -6892,7 +6903,9 @@ private void Inicializa_config()
                 System.out.println(metric + " --- " + value + " --> " + value.replace(",", "."));
                 tableMetrics.put(metric, value.replace(",", "."));
                 //jTextArea1.append(metric + util.get_tabs_multi_datasets(metric) + value + "\n"); 
-           }   
+           }
+           
+           v++;
         }
        
         TableModel model = jtable.getModel();
@@ -8925,7 +8938,6 @@ private void Inicializa_config()
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanelMulti;
     private javax.swing.JPopupMenu jPopupMenu1;
-    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane7;
