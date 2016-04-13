@@ -92,7 +92,9 @@ import preprocess.LabelPowersetTrainTest;
 import weka.core.Attribute;
 import weka.core.Instances;
 import weka.filters.Filter;
+import weka.filters.unsupervised.instance.Randomize;
 import weka.filters.unsupervised.instance.RemovePercentage;
+import weka.filters.unsupervised.instance.RemoveRange;
 
 
 /*
@@ -171,7 +173,7 @@ public class RunApp extends javax.swing.JFrame {
      
     //JPanel container;
     MultiLabelInstances dataset,dataset_train, dataset_test;
-    MultiLabelInstances FSdataset;
+    MultiLabelInstances preprocessedDataset;
     String filename_database_xml=null,filename_database_xml_path="";
     String filename_database_arff_test;
              
@@ -233,10 +235,10 @@ public class RunApp extends javax.swing.JFrame {
      Object[] column;
      
      //variables TRAIN-TEST
-     boolean  holdout_random=false, holdout_iterative_stratified=false, 
+     /*boolean  holdout_random=false, holdout_iterative_stratified=false, 
              cv_ramdon=false, cv_iterative_stratified =false,
              holdout_LP_stratified=false, cv_LP_stratified=false,
-             feature_selection_br=false, feature_selection_random=false;
+             feature_selection_br=false, feature_selection_random=false;*/
     //JButton button_calculate2_train,button_save_train;
     
     //VARIABLES BOX DIAGRAM
@@ -446,13 +448,20 @@ private void Inicializa_config()
       jButtonStartPreprocess.setToolTipText("Start preprocessing");
       jButtonSaveDatasets.setToolTipText("Save dataset files in a folder");
       jComboBox_SaveFormat.setToolTipText("Select Mulan or Meka format to save datasets");
-            
+
+      buttonGroup3.add(radioNoIS);
+      radioNoIS.setToolTipText("No instance selection is done");
+      buttonGroup3.add(radioRandomIS);
+      radioRandomIS.setToolTipText("Random selection of the instances");
+      textRandomIS.setToolTipText("Number of instances to select");
+      
       
       radioRandomHoldout.setSelected(true);
       radioNoFS.setSelected(true);
+      radioNoIS.setSelected(true);
       
       textRandomHoldout.setEnabled(true);
-      //buttonChooseSuppliedTest.setEnabled(false);
+      
       
      // jTable1.setVisible(true);        
       
@@ -1261,13 +1270,11 @@ private void Inicializa_config()
         labelLxIxF = new javax.swing.JLabel();
         labelLxIxFValue = new javax.swing.JLabel();
         panelPreprocess = new javax.swing.JPanel();
-        panelTestOption = new javax.swing.JPanel();
+        panelSplitting = new javax.swing.JPanel();
         radioRandomHoldout = new javax.swing.JRadioButton();
         labelPercIterativeStratified = new javax.swing.JLabel();
         radioIterativeStratifiedHoldout = new javax.swing.JRadioButton();
         textRandomHoldout = new javax.swing.JTextField();
-        labelHoldout = new javax.swing.JLabel();
-        labelCV = new javax.swing.JLabel();
         radioRandomCV = new javax.swing.JRadioButton();
         radioIterativeStratifiedCV = new javax.swing.JRadioButton();
         textIterativeStratifiedCV = new javax.swing.JTextField();
@@ -1285,7 +1292,7 @@ private void Inicializa_config()
         radioNoSplit = new javax.swing.JRadioButton();
         jButtonStartPreprocess = new javax.swing.JButton();
         jButtonSaveDatasets = new javax.swing.JButton();
-        panelTestOption1 = new javax.swing.JPanel();
+        panelFS = new javax.swing.JPanel();
         radioBRFS = new javax.swing.JRadioButton();
         textBRFS = new javax.swing.JTextField();
         labelBRFS = new javax.swing.JLabel();
@@ -1299,7 +1306,13 @@ private void Inicializa_config()
         textRandomFS = new javax.swing.JTextField();
         labelRandomFS = new javax.swing.JLabel();
         radioNoFS = new javax.swing.JRadioButton();
+        labelBRFS1 = new javax.swing.JLabel();
         jComboBox_SaveFormat = new javax.swing.JComboBox();
+        panelIS = new javax.swing.JPanel();
+        radioRandomIS = new javax.swing.JRadioButton();
+        textRandomIS = new javax.swing.JTextField();
+        labelRandomIS = new javax.swing.JLabel();
+        radioNoIS = new javax.swing.JRadioButton();
         panelImbalance = new javax.swing.JPanel();
         comboBoxLabelsInformation = new javax.swing.JComboBox();
         panelImbalanceLeft = new javax.swing.JPanel();
@@ -1483,7 +1496,7 @@ private void Inicializa_config()
                                 .addComponent(labelDensity)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(labelDensityValue, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(144, Short.MAX_VALUE))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
         panelCurrentDatasetLayout.setVerticalGroup(
             panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1540,13 +1553,14 @@ private void Inicializa_config()
                     .addComponent(buttonChooseFile))
                 .addGap(7, 7, 7)
                 .addComponent(panelCurrentDataset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(347, Short.MAX_VALUE))
+                .addContainerGap(329, Short.MAX_VALUE))
         );
 
         TabPrincipal.addTab("Summary", panelDataset);
 
-        panelTestOption.setBorder(javax.swing.BorderFactory.createTitledBorder("Splitting"));
+        panelSplitting.setBorder(javax.swing.BorderFactory.createTitledBorder("Splitting"));
 
+        radioRandomHoldout.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         radioRandomHoldout.setText("Random holdout");
         radioRandomHoldout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1554,8 +1568,10 @@ private void Inicializa_config()
             }
         });
 
+        labelPercIterativeStratified.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         labelPercIterativeStratified.setText("%");
 
+        radioIterativeStratifiedHoldout.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         radioIterativeStratifiedHoldout.setText("Iterative stratified holdout ");
         radioIterativeStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1563,6 +1579,7 @@ private void Inicializa_config()
             }
         });
 
+        textRandomHoldout.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         textRandomHoldout.setText("70");
         textRandomHoldout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1575,12 +1592,7 @@ private void Inicializa_config()
             }
         });
 
-        labelHoldout.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        labelHoldout.setText("Holdout");
-
-        labelCV.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        labelCV.setText("Cross validation");
-
+        radioRandomCV.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         radioRandomCV.setText("Random CV");
         radioRandomCV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1588,6 +1600,7 @@ private void Inicializa_config()
             }
         });
 
+        radioIterativeStratifiedCV.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         radioIterativeStratifiedCV.setText("Iterative stratified CV");
         radioIterativeStratifiedCV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1595,6 +1608,7 @@ private void Inicializa_config()
             }
         });
 
+        textIterativeStratifiedCV.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         textIterativeStratifiedCV.setText("5");
         textIterativeStratifiedCV.setEnabled(false);
         textIterativeStratifiedCV.addActionListener(new java.awt.event.ActionListener() {
@@ -1608,8 +1622,10 @@ private void Inicializa_config()
             }
         });
 
+        labelFoldsRandom.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         labelFoldsRandom.setText("Folds");
 
+        textRandomCV.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         textRandomCV.setText("5");
         textRandomCV.setEnabled(false);
         textRandomCV.addActionListener(new java.awt.event.ActionListener() {
@@ -1623,10 +1639,13 @@ private void Inicializa_config()
             }
         });
 
+        labelFoldsIterativeStratified.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         labelFoldsIterativeStratified.setText("Folds");
 
+        labelPercRandom.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         labelPercRandom.setText("%");
 
+        textIterativeStratifiedHoldout.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         textIterativeStratifiedHoldout.setText("70");
         textIterativeStratifiedHoldout.setEnabled(false);
         textIterativeStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
@@ -1640,6 +1659,7 @@ private void Inicializa_config()
             }
         });
 
+        radioLPStratifiedHoldout.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         radioLPStratifiedHoldout.setText("LabelPowerset stratified holdout ");
         radioLPStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1647,6 +1667,7 @@ private void Inicializa_config()
             }
         });
 
+        textLPStratifiedHoldout.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         textLPStratifiedHoldout.setText("70");
         textLPStratifiedHoldout.setEnabled(false);
         textLPStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
@@ -1660,8 +1681,10 @@ private void Inicializa_config()
             }
         });
 
+        labelPercLPStratified.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         labelPercLPStratified.setText("%");
 
+        radioLPStratifiedCV.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         radioLPStratifiedCV.setText("LabelPowerset stratified CV");
         radioLPStratifiedCV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1669,6 +1692,7 @@ private void Inicializa_config()
             }
         });
 
+        textLPStratifiedCV.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         textLPStratifiedCV.setText("5");
         textLPStratifiedCV.setEnabled(false);
         textLPStratifiedCV.addActionListener(new java.awt.event.ActionListener() {
@@ -1682,8 +1706,10 @@ private void Inicializa_config()
             }
         });
 
+        labelFoldsLPStratified.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         labelFoldsLPStratified.setText("Folds");
 
+        radioNoSplit.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         radioNoSplit.setText("None");
         radioNoSplit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1691,75 +1717,64 @@ private void Inicializa_config()
             }
         });
 
-        javax.swing.GroupLayout panelTestOptionLayout = new javax.swing.GroupLayout(panelTestOption);
-        panelTestOption.setLayout(panelTestOptionLayout);
-        panelTestOptionLayout.setHorizontalGroup(
-            panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTestOptionLayout.createSequentialGroup()
+        javax.swing.GroupLayout panelSplittingLayout = new javax.swing.GroupLayout(panelSplitting);
+        panelSplitting.setLayout(panelSplittingLayout);
+        panelSplittingLayout.setHorizontalGroup(
+            panelSplittingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSplittingLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelTestOptionLayout.createSequentialGroup()
+                .addGroup(panelSplittingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelSplittingLayout.createSequentialGroup()
                         .addComponent(radioNoSplit)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(panelTestOptionLayout.createSequentialGroup()
-                        .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelHoldout)
-                            .addGroup(panelTestOptionLayout.createSequentialGroup()
-                                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(radioRandomHoldout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(radioIterativeStratifiedHoldout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(radioLPStratifiedHoldout, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(panelTestOptionLayout.createSequentialGroup()
-                                            .addComponent(textLPStratifiedHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(labelPercLPStratified))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTestOptionLayout.createSequentialGroup()
-                                            .addComponent(textIterativeStratifiedHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(labelPercIterativeStratified)))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTestOptionLayout.createSequentialGroup()
-                                        .addComponent(textRandomHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(11, 11, 11)
-                                        .addComponent(labelPercRandom)))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                        .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelTestOptionLayout.createSequentialGroup()
-                                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(radioLPStratifiedCV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(radioIterativeStratifiedCV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(radioRandomCV, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(panelTestOptionLayout.createSequentialGroup()
-                                            .addComponent(textRandomCV, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(labelFoldsRandom))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTestOptionLayout.createSequentialGroup()
-                                            .addComponent(textIterativeStratifiedCV, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(labelFoldsIterativeStratified)))
-                                    .addGroup(panelTestOptionLayout.createSequentialGroup()
-                                        .addComponent(textLPStratifiedCV, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(labelFoldsLPStratified))))
-                            .addComponent(labelCV))
+                    .addGroup(panelSplittingLayout.createSequentialGroup()
+                        .addGroup(panelSplittingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(radioRandomHoldout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(radioIterativeStratifiedHoldout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(radioLPStratifiedHoldout, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelSplittingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelSplittingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(panelSplittingLayout.createSequentialGroup()
+                                    .addComponent(textLPStratifiedHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(labelPercLPStratified))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelSplittingLayout.createSequentialGroup()
+                                    .addComponent(textIterativeStratifiedHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(labelPercIterativeStratified)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelSplittingLayout.createSequentialGroup()
+                                .addComponent(textRandomHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(11, 11, 11)
+                                .addComponent(labelPercRandom)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(panelSplittingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(radioLPStratifiedCV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(radioIterativeStratifiedCV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(radioRandomCV, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelSplittingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelSplittingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(panelSplittingLayout.createSequentialGroup()
+                                    .addComponent(textRandomCV, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(labelFoldsRandom))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelSplittingLayout.createSequentialGroup()
+                                    .addComponent(textIterativeStratifiedCV, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(labelFoldsIterativeStratified)))
+                            .addGroup(panelSplittingLayout.createSequentialGroup()
+                                .addComponent(textLPStratifiedCV, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(labelFoldsLPStratified)))
                         .addGap(107, 107, 107))))
         );
-        panelTestOptionLayout.setVerticalGroup(
-            panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTestOptionLayout.createSequentialGroup()
-                .addContainerGap()
+        panelSplittingLayout.setVerticalGroup(
+            panelSplittingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSplittingLayout.createSequentialGroup()
                 .addComponent(radioNoSplit)
-                .addGap(18, 18, 18)
-                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelHoldout)
-                    .addComponent(labelCV))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panelSplittingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radioRandomHoldout)
                     .addComponent(textRandomHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelPercRandom)
@@ -1767,7 +1782,7 @@ private void Inicializa_config()
                     .addComponent(labelFoldsRandom)
                     .addComponent(textRandomCV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panelSplittingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radioIterativeStratifiedHoldout)
                     .addComponent(textIterativeStratifiedHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelPercIterativeStratified, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1775,14 +1790,13 @@ private void Inicializa_config()
                     .addComponent(textIterativeStratifiedCV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelFoldsIterativeStratified))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelTestOptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panelSplittingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radioLPStratifiedHoldout)
                     .addComponent(radioLPStratifiedCV)
                     .addComponent(textLPStratifiedCV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelFoldsLPStratified)
                     .addComponent(textLPStratifiedHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelPercLPStratified, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(labelPercLPStratified, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jButtonStartPreprocess.setText("Start");
@@ -1804,8 +1818,9 @@ private void Inicializa_config()
             }
         });
 
-        panelTestOption1.setBorder(javax.swing.BorderFactory.createTitledBorder("Feature Selection"));
+        panelFS.setBorder(javax.swing.BorderFactory.createTitledBorder("Feature Selection"));
 
+        radioBRFS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         radioBRFS.setText("Binary Relevance attribute selection");
         radioBRFS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1813,6 +1828,7 @@ private void Inicializa_config()
             }
         });
 
+        textBRFS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         textBRFS.setText("100");
         textBRFS.setEnabled(false);
         textBRFS.addActionListener(new java.awt.event.ActionListener() {
@@ -1826,41 +1842,52 @@ private void Inicializa_config()
             }
         });
 
+        labelBRFS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         labelBRFS.setText("features");
 
-        labelBRFS_Comb.setText("Combination");
+        labelBRFS_Comb.setFont(new java.awt.Font("Ubuntu", 0, 13)); // NOI18N
+        labelBRFS_Comb.setText("Comb");
         labelBRFS_Comb.setEnabled(false);
 
+        jComboBox_BRFS_Comb.setFont(new java.awt.Font("Ubuntu", 0, 13)); // NOI18N
         jComboBox_BRFS_Comb.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "max", "min", "avg" }));
         jComboBox_BRFS_Comb.setEnabled(false);
+        jComboBox_BRFS_Comb.setPreferredSize(new java.awt.Dimension(58, 20));
         jComboBox_BRFS_Comb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox_BRFS_CombActionPerformed(evt);
             }
         });
 
-        labelBRFS_Norm.setText("Normalization");
+        labelBRFS_Norm.setFont(new java.awt.Font("Ubuntu", 0, 13)); // NOI18N
+        labelBRFS_Norm.setText("Norm");
         labelBRFS_Norm.setEnabled(false);
 
+        jComboBox_BRFS_Norm.setFont(new java.awt.Font("Ubuntu", 0, 13)); // NOI18N
         jComboBox_BRFS_Norm.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "dm", "dl", "none" }));
         jComboBox_BRFS_Norm.setEnabled(false);
+        jComboBox_BRFS_Norm.setPreferredSize(new java.awt.Dimension(63, 20));
         jComboBox_BRFS_Norm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox_BRFS_NormActionPerformed(evt);
             }
         });
 
-        labelBRFS_Out.setText("Scoring");
+        labelBRFS_Out.setFont(new java.awt.Font("Ubuntu", 0, 13)); // NOI18N
+        labelBRFS_Out.setText("Score");
         labelBRFS_Out.setEnabled(false);
 
+        jComboBox_BRFS_Out.setFont(new java.awt.Font("Ubuntu", 0, 13)); // NOI18N
         jComboBox_BRFS_Out.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "eval", "rank" }));
         jComboBox_BRFS_Out.setEnabled(false);
+        jComboBox_BRFS_Out.setPreferredSize(new java.awt.Dimension(59, 20));
         jComboBox_BRFS_Out.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox_BRFS_OutActionPerformed(evt);
             }
         });
 
+        radioRandomFS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         radioRandomFS.setText("Random attribute selection");
         radioRandomFS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1868,6 +1895,7 @@ private void Inicializa_config()
             }
         });
 
+        textRandomFS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         textRandomFS.setText("100");
         textRandomFS.setEnabled(false);
         textRandomFS.addActionListener(new java.awt.event.ActionListener() {
@@ -1881,8 +1909,10 @@ private void Inicializa_config()
             }
         });
 
+        labelRandomFS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         labelRandomFS.setText("features");
 
+        radioNoFS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         radioNoFS.setText("None");
         radioNoFS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1890,68 +1920,69 @@ private void Inicializa_config()
             }
         });
 
-        javax.swing.GroupLayout panelTestOption1Layout = new javax.swing.GroupLayout(panelTestOption1);
-        panelTestOption1.setLayout(panelTestOption1Layout);
-        panelTestOption1Layout.setHorizontalGroup(
-            panelTestOption1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTestOption1Layout.createSequentialGroup()
+        labelBRFS1.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        labelBRFS1.setForeground(new java.awt.Color(106, 106, 106));
+        labelBRFS1.setText("//");
+        labelBRFS1.setToolTipText("");
+
+        javax.swing.GroupLayout panelFSLayout = new javax.swing.GroupLayout(panelFS);
+        panelFS.setLayout(panelFSLayout);
+        panelFSLayout.setHorizontalGroup(
+            panelFSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelFSLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelTestOption1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelFSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(radioNoFS)
-                    .addGroup(panelTestOption1Layout.createSequentialGroup()
+                    .addGroup(panelFSLayout.createSequentialGroup()
                         .addComponent(radioRandomFS)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(textRandomFS, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelRandomFS))
-                    .addGroup(panelTestOption1Layout.createSequentialGroup()
-                        .addGroup(panelTestOption1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(panelTestOption1Layout.createSequentialGroup()
-                                .addComponent(labelBRFS_Comb)
-                                .addGap(18, 18, 18)
-                                .addComponent(jComboBox_BRFS_Comb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(panelTestOption1Layout.createSequentialGroup()
-                                .addComponent(radioBRFS)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(textBRFS, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(panelFSLayout.createSequentialGroup()
+                        .addComponent(radioBRFS)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panelTestOption1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelTestOption1Layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addComponent(labelBRFS_Norm)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox_BRFS_Norm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(labelBRFS_Out)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox_BRFS_Out, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(labelBRFS))))
-                .addContainerGap(81, Short.MAX_VALUE))
+                        .addComponent(textBRFS, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(labelBRFS)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(labelBRFS1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(labelBRFS_Comb)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox_BRFS_Comb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(labelBRFS_Norm)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox_BRFS_Norm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(labelBRFS_Out)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox_BRFS_Out, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        panelTestOption1Layout.setVerticalGroup(
-            panelTestOption1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTestOption1Layout.createSequentialGroup()
-                .addContainerGap()
+        panelFSLayout.setVerticalGroup(
+            panelFSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelFSLayout.createSequentialGroup()
                 .addComponent(radioNoFS)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelTestOption1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panelFSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radioBRFS)
                     .addComponent(textBRFS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelBRFS))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelTestOption1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelBRFS)
                     .addComponent(labelBRFS_Comb)
-                    .addComponent(jComboBox_BRFS_Comb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox_BRFS_Comb, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelBRFS_Norm)
-                    .addComponent(jComboBox_BRFS_Norm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox_BRFS_Norm, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelBRFS_Out)
-                    .addComponent(jComboBox_BRFS_Out, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox_BRFS_Out, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelBRFS1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelTestOption1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panelFSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radioRandomFS)
                     .addComponent(textRandomFS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelRandomFS))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jComboBox_SaveFormat.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Mulan .arff", "Meka .arff" }));
@@ -1962,6 +1993,69 @@ private void Inicializa_config()
             }
         });
 
+        panelIS.setBorder(javax.swing.BorderFactory.createTitledBorder("Instance Selection"));
+
+        radioRandomIS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        radioRandomIS.setText("Random instance selection");
+        radioRandomIS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioRandomISActionPerformed(evt);
+            }
+        });
+
+        textRandomIS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        textRandomIS.setText("500");
+        textRandomIS.setEnabled(false);
+        textRandomIS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textRandomISActionPerformed(evt);
+            }
+        });
+        textRandomIS.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                textRandomISKeyTyped(evt);
+            }
+        });
+
+        labelRandomIS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        labelRandomIS.setText("instances");
+
+        radioNoIS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        radioNoIS.setText("None");
+        radioNoIS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioNoISActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelISLayout = new javax.swing.GroupLayout(panelIS);
+        panelIS.setLayout(panelISLayout);
+        panelISLayout.setHorizontalGroup(
+            panelISLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelISLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelISLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(radioNoIS)
+                    .addGroup(panelISLayout.createSequentialGroup()
+                        .addComponent(radioRandomIS)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(textRandomIS, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(labelRandomIS)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panelISLayout.setVerticalGroup(
+            panelISLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelISLayout.createSequentialGroup()
+                .addComponent(radioNoIS)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelISLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(radioRandomIS)
+                    .addComponent(textRandomIS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelRandomIS))
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout panelPreprocessLayout = new javax.swing.GroupLayout(panelPreprocess);
         panelPreprocess.setLayout(panelPreprocessLayout);
         panelPreprocessLayout.setHorizontalGroup(
@@ -1969,33 +2063,36 @@ private void Inicializa_config()
             .addGroup(panelPreprocessLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addGroup(panelPreprocessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(panelTestOption, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelTestOption1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(panelPreprocessLayout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addComponent(jButtonStartPreprocess, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButtonSaveDatasets)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox_SaveFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(23, Short.MAX_VALUE))
+                        .addComponent(jComboBox_SaveFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(panelFS, javax.swing.GroupLayout.PREFERRED_SIZE, 778, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panelSplitting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelIS, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
         panelPreprocessLayout.setVerticalGroup(
             panelPreprocessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelPreprocessLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(panelTestOption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(panelTestOption1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(panelSplitting, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelFS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelIS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelPreprocessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonStartPreprocess)
                     .addComponent(jButtonSaveDatasets)
                     .addComponent(jComboBox_SaveFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(75, Short.MAX_VALUE))
+                .addContainerGap(120, Short.MAX_VALUE))
         );
 
-        panelTestOption.getAccessibleContext().setAccessibleName("");
+        panelSplitting.getAccessibleContext().setAccessibleName("");
 
         TabPrincipal.addTab("Preprocess", panelPreprocess);
 
@@ -2654,7 +2751,7 @@ private void Inicializa_config()
                 .addGroup(panelMultipleDatasetsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanelMulti, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panelMultipleDatasetsLeft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
         TabPrincipal.addTab("Multiple datasets", panelMultipleDatasets);
@@ -3044,7 +3141,7 @@ private void Inicializa_config()
             JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        if((FSdataset == null) && (radioBRFS.isSelected() || radioRandomFS.isSelected())){
+        if((preprocessedDataset == null) && (radioBRFS.isSelected() || radioRandomFS.isSelected())){
             JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -3064,8 +3161,8 @@ private void Inicializa_config()
 
             if(fc.isDirectorySelectionEnabled())
             {
-                //Check if both none were selected -> Dataset conversion
-                if(radioNoFS.isSelected() && radioNoSplit.isSelected())
+                //Check if none were selected -> Dataset conversion
+                if(radioNoFS.isSelected() && radioNoIS.isSelected() && radioNoSplit.isSelected())
                 {
                     BufferedWriter bw_train = null;
                     try {
@@ -3118,22 +3215,35 @@ private void Inicializa_config()
                     }
                 }
                 
-                //check if only FS is selected
-                if((radioBRFS.isSelected() || radioRandomFS.isSelected()) && radioNoSplit.isSelected())//Feature selection
+                String preprocessedType = new String();
+                    
+                if(radioRandomIS.isSelected()){
+                    preprocessedType += "-randomIS";
+                }
+                if(radioBRFS.isSelected()){
+                    preprocessedType += "-BR_FS";
+                }
+                else if(radioRandomFS.isSelected()){
+                    preprocessedType += "-randomFS";
+                }
+                
+                //check if only FS and/or IS is selected
+                if((radioBRFS.isSelected() || radioRandomFS.isSelected() || radioRandomIS.isSelected()) && radioNoSplit.isSelected())//Feature and/or instance selection
                 {
+                    
                     BufferedWriter bw_train = null;
                     try {
 
                         String name_dataset= dataset_name1.substring(0,dataset_name1.length()-5);
                         
                         if(format.toLowerCase().contains("meka")){
-                            String dataPath = file.getAbsolutePath()+"/"+name_dataset+"-FS.arff";
+                            String dataPath = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".arff";
 
                             bw_train = new BufferedWriter(new FileWriter(dataPath));
                             PrintWriter wr_train = new PrintWriter(bw_train);
 
                             //System.out.println("longitud del train es "+dataset_train.getNumInstances());
-                            util.Save_dataset_Meka_in_the_file(wr_train, FSdataset, name_dataset+"_FS");
+                            util.Save_dataset_Meka_in_the_file(wr_train, preprocessedDataset, name_dataset + preprocessedType);
 
                             wr_train.close();
                             bw_train.close();
@@ -3143,14 +3253,14 @@ private void Inicializa_config()
                             //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
                             //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
 
-                            String dataPath = file.getAbsolutePath()+"/"+name_dataset+"-FS.arff";
-                            path_xml = file.getAbsolutePath()+"/"+name_dataset+".xml";
+                            String dataPath = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".arff";
+                            path_xml = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType +".xml";
 
                             bw_train = new BufferedWriter(new FileWriter(dataPath));
                             PrintWriter wr_train = new PrintWriter(bw_train);
 
                             //System.out.println("longitud del train es "+dataset_train.getNumInstances());
-                            util.Save_dataset_in_the_file(wr_train, FSdataset, name_dataset+"_FS");
+                            util.Save_dataset_in_the_file(wr_train, preprocessedDataset, name_dataset+ preprocessedType);
 
                             wr_train.close();
                             bw_train.close();
@@ -3158,7 +3268,7 @@ private void Inicializa_config()
                             BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
                             PrintWriter wr_xml = new PrintWriter(bw_xml);
 
-                            util.Save_xml_in_the_file(wr_xml,FSdataset);
+                            util.Save_xml_in_the_file(wr_xml,preprocessedDataset);
 
                             wr_xml.close();
                             bw_xml.close();
@@ -3184,15 +3294,15 @@ private void Inicializa_config()
                         //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
                         //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
 
-                        if(radioNoFS.isSelected()){
+                        if(radioNoFS.isSelected() && radioNoIS.isSelected()){
                             path_train = file.getAbsolutePath()+"/"+name_dataset+"-train.arff";
                             path_test = file.getAbsolutePath()+"/"+name_dataset+"-test.arff";
                             path_xml = file.getAbsolutePath()+"/"+name_dataset+".xml"; 
                         }
                         else{
-                            path_train = file.getAbsolutePath()+"/"+name_dataset+"-FS-train.arff";
-                            path_test = file.getAbsolutePath()+"/"+name_dataset+"-FS-test.arff";
-                            path_xml = file.getAbsolutePath()+"/"+name_dataset+"-FS.xml";
+                            path_train = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + "-train.arff";
+                            path_test = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + "-test.arff";
+                            path_xml = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".xml";
                         }
                         
                         if(format.toLowerCase().contains("meka")){
@@ -3255,25 +3365,25 @@ private void Inicializa_config()
                     try{
 
                         if(format.toLowerCase().contains("meka")){
-                           if(radioNoFS.isSelected()){
+                           if(radioNoFS.isSelected() && radioNoIS.isSelected()){
                                 util.Save_dataset_Meka_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "train");
                                 util.Save_dataset_Meka_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "test");  
                             }
                             else{
-                                util.Save_dataset_Meka_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "FS-train");
-                                util.Save_dataset_Meka_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "FS-test");  
+                                util.Save_dataset_Meka_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
+                                util.Save_dataset_Meka_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");  
                             }
                         }
                         else{
-                            if(radioNoFS.isSelected()){
+                            if(radioNoFS.isSelected() && radioNoIS.isSelected()){
                                 util.Save_dataset_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "train");
                                 util.Save_dataset_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "test");  
                                 path_xml = file.getAbsolutePath()+"/"+dataset_name1.substring(0,dataset_name1.length()-5)+".xml";
                             }
                             else{
-                                util.Save_dataset_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "FS-train");
-                                util.Save_dataset_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "FS-test");  
-                                path_xml = file.getAbsolutePath()+"/"+dataset_name1.substring(0,dataset_name1.length()-5)+"-FS.xml";
+                                util.Save_dataset_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
+                                util.Save_dataset_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");  
+                                path_xml = file.getAbsolutePath()+"/"+dataset_name1.substring(0,dataset_name1.length()-5)+ preprocessedType + ".xml";
                             }
         
 
@@ -3314,7 +3424,7 @@ private void Inicializa_config()
             @Override
             public void run() {
                 // do the long-running work here
-                preprocess();
+                final int returnCode = preprocess();
                 // at the end:
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
@@ -3323,7 +3433,7 @@ private void Inicializa_config()
                         progressFrame.setVisible(false);
                         progressFrame.repaint();
                         
-                        if(!(radioNoFS.isSelected() && radioNoSplit.isSelected())){
+                        if(returnCode == 1 && (!(radioNoFS.isSelected() && radioNoSplit.isSelected() && radioNoIS.isSelected()))){
                             JOptionPane.showMessageDialog(null, "Datasets have been generated succesfully.", "Successful", JOptionPane.INFORMATION_MESSAGE);
                         }
 
@@ -3337,7 +3447,7 @@ private void Inicializa_config()
         
     }//GEN-LAST:event_jButtonStartPreprocessActionPerformed
 
-    private void preprocess(){
+    private int preprocess(){
         
         list_dataset_train = new ArrayList();
         list_dataset_test = new ArrayList();
@@ -3347,91 +3457,162 @@ private void Inicializa_config()
 
         if(dataset == null){
             JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
-            return;
+            return -1;
         }
         
-        MultiLabelInstances preprocessDataset = null;
+        MultiLabelInstances preprocessDataset = dataset;
 
         
         //First check that any option is selected
-        if(radioNoSplit.isSelected() && radioNoFS.isSelected()){
+        if(radioNoSplit.isSelected() && radioNoFS.isSelected() && radioNoIS.isSelected()){
             //JOptionPane.showMessageDialog(null, "Select at least one option.", "alert", JOptionPane.ERROR_MESSAGE);
             //return;
         }
-        else if(! radioNoFS.isSelected()){
+        
+        if(! radioNoIS.isSelected()){
+            //Do Instance Selection
+            if(radioRandomIS.isSelected()){
+                int nInstances = Integer.parseInt(textRandomIS.getText());
+
+                if(nInstances < 1){
+                    JOptionPane.showMessageDialog(null, "The number of instances must be a positive natural number.", "alert", JOptionPane.ERROR_MESSAGE);
+                    return -1;
+                }
+                else if(nInstances > dataset.getNumInstances()){
+                    JOptionPane.showMessageDialog(null, "The number of features to select must be less than the original.", "alert", JOptionPane.ERROR_MESSAGE);
+                    return -1;
+                }
+                
+                
+                Instances dataIS = null;
+                try {
+                    Randomize randomize = new Randomize();                
+                    dataIS = dataset.getDataSet();
+                    
+                    System.out.println("dataIS.get(0): " + dataIS.get(0));
+                    
+                    randomize.setInputFormat(dataIS);
+                    dataIS = Filter.useFilter(dataIS, randomize);
+                    randomize.batchFinished();
+                    
+                    System.out.println("dataIS.get(0): " + dataIS.get(0));
+                    
+                    RemoveRange removeRange = new RemoveRange();
+                    removeRange.setInputFormat(dataIS);
+                    System.out.println((nInstances+1) + "-last");
+                    removeRange.setInstancesIndices((nInstances+1) + "-last");
+                    
+                    dataIS = Filter.useFilter(dataIS, removeRange);
+                    removeRange.batchFinished();
+                    System.out.println("dataIS.numInstances(): " + dataIS.numInstances());
+                    
+                    preprocessDataset = dataset.reintegrateModifiedDataSet(dataIS);
+                } catch (Exception ex) {
+                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+   
+                if(preprocessDataset == null)
+                {
+                    JOptionPane.showMessageDialog(null, "Error when selecting instances.", "alert", JOptionPane.ERROR_MESSAGE);
+                    return -1;
+                }
+
+                preprocessedDataset = preprocessDataset;
+                
+                System.out.println("preprocessedDataset.getNumInstances(): " + preprocessedDataset.getNumInstances());
+
+            }
+        }
+        
+        if(! radioNoFS.isSelected()){
             //FS_BR
             if(radioBRFS.isSelected()){
                 int nFeatures = Integer.parseInt(textBRFS.getText());
                 if(nFeatures < 1){
                     JOptionPane.showMessageDialog(null, "The number of features must be a positive natural number.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return -1;
                 }
                 else if(nFeatures > dataset.getFeatureIndices().length){
                     JOptionPane.showMessageDialog(null, "The number of features to select must be less than the original.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return -1;
                 }
 
                 String combination = jComboBox_BRFS_Comb.getSelectedItem().toString();
                 String normalization = jComboBox_BRFS_Norm.getSelectedItem().toString();
                 String output = jComboBox_BRFS_Out.getSelectedItem().toString();
 
-                FeatureSelector fs = new FeatureSelector(dataset, nFeatures);
-                FSdataset = fs.select(combination, normalization, output);
-
-                if(FSdataset == null)
-                {
-                    JOptionPane.showMessageDialog(null, "Error when selecting features.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                FeatureSelector fs;
+                if(radioNoIS.isSelected()){
+                   fs = new FeatureSelector(dataset, nFeatures); 
+                }
+                else{
+                    //If IS have been done
+                    fs = new FeatureSelector(preprocessDataset, nFeatures);
                 }
                 
-                preprocessDataset = FSdataset;
+                preprocessedDataset = fs.select(combination, normalization, output);
 
-                holdout_random =false;
+                if(preprocessedDataset == null)
+                {
+                    JOptionPane.showMessageDialog(null, "Error when selecting features.", "alert", JOptionPane.ERROR_MESSAGE);
+                    return -1;
+                }
+                
+                preprocessDataset = preprocessedDataset;
+
+                /*holdout_random =false;
                 cv_ramdon =false;
                 holdout_iterative_stratified =false;
                 cv_iterative_stratified =false;
                 holdout_LP_stratified =false;
                 cv_LP_stratified =false;
                 feature_selection_br = true;
-                feature_selection_random = false;
+                feature_selection_random = false;*/
             }
             else if(radioRandomFS.isSelected()){
                 int nFeatures = Integer.parseInt(textRandomFS.getText());
 
                 if(nFeatures < 1){
                     JOptionPane.showMessageDialog(null, "The number of features must be a positive natural number.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return -1;
                 }
                 else if(nFeatures > dataset.getFeatureIndices().length){
                     JOptionPane.showMessageDialog(null, "The number of features to select must be less than the original.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return -1;
                 }
-
-                FeatureSelector fs = new FeatureSelector(dataset, nFeatures);
-                FSdataset = fs.randomSelect();
                 
-                if(FSdataset == null)
+                FeatureSelector fs;
+
+                if(radioNoIS.isSelected()){
+                   fs = new FeatureSelector(dataset, nFeatures);
+                }
+                else{
+                    //If IS have been done
+                    fs = new FeatureSelector(preprocessDataset, nFeatures);
+                }
+                                
+                preprocessedDataset = fs.randomSelect();
+                
+                if(preprocessedDataset == null)
                 {
                     JOptionPane.showMessageDialog(null, "Error when selecting features.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return -1;
                 }
                 
-                preprocessDataset = FSdataset;
+                preprocessDataset = preprocessedDataset;
 
-                holdout_random =false;
+                /*holdout_random =false;
                 cv_ramdon =false;
                 holdout_iterative_stratified =false;
                 cv_iterative_stratified =false;
                 holdout_LP_stratified =false;
                 cv_LP_stratified =false;
                 feature_selection_br = false;
-                feature_selection_random = true;
+                feature_selection_random = true;*/
             }
         }
-        else{
-            preprocessDataset = dataset.clone();
-        }
-        
+
         
         if(!radioNoSplit.isSelected()){
             
@@ -3441,12 +3622,13 @@ private void Inicializa_config()
                 double percent_split = Double.parseDouble(split);
                 if((percent_split <= 0) || (percent_split >= 100)){
                     JOptionPane.showMessageDialog(null, "The percentage must be a number in the range (0, 100).", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return -1;
                 }
 
                 try{
 
                     RandomTrainTest pre = new RandomTrainTest();
+                    
                     MultiLabelInstances [] partitions = pre.split(preprocessDataset, percent_split);
 
                     //dataset_train = new MultiLabelInstances(trainDataSet, dataset.getLabelsMetaData());
@@ -3455,14 +3637,14 @@ private void Inicializa_config()
                     dataset_train = partitions[0];
                     dataset_test = partitions[1];
 
-                    holdout_random =true;
+                    /*holdout_random =true;
                     cv_ramdon =false;
                     holdout_iterative_stratified =false;
                     cv_iterative_stratified =false;
                     holdout_LP_stratified =false;
                     cv_LP_stratified =false;
                     feature_selection_br = false;
-                    feature_selection_random = false;
+                    feature_selection_random = false;*/
                     //calculte metric selected
 
                     //button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7);// HOLDOUT percentage
@@ -3481,7 +3663,7 @@ private void Inicializa_config()
                 if(split.equals(""))
                 {
                     JOptionPane.showMessageDialog(null, "You must enter a number of folds.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return -1;
                 }
 
                 int nFolds = 0;
@@ -3491,17 +3673,17 @@ private void Inicializa_config()
                 }
                 catch(Exception e){
                     JOptionPane.showMessageDialog(null, "Introduce a correct number of folds.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return -1;
                 }
 
                 if(nFolds < 2)
                 {
                     JOptionPane.showMessageDialog(null, "The number of folds must be greater or equal to 2.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return -1;
                 }
                 else if(nFolds > preprocessDataset.getNumInstances()){
                     JOptionPane.showMessageDialog(null, "The number of folds can not be greater than the number of instances.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return -1;
                 }
 
                 try{
@@ -3541,14 +3723,14 @@ private void Inicializa_config()
                         list_dataset_test.add(new MultiLabelInstances(test, preprocessDataset.getLabelsMetaData()));
                     }
 
-                    holdout_random =false;
+                    /*holdout_random =false;
                     cv_ramdon =true;
                     holdout_iterative_stratified =false;
                     cv_iterative_stratified =false;
                     holdout_LP_stratified =false;
                     cv_LP_stratified =false;
                     feature_selection_br = false;
-                    feature_selection_random = false;
+                    feature_selection_random = false;*/
                 }
 
                 catch (Exception ex) {
@@ -3561,7 +3743,7 @@ private void Inicializa_config()
                 double percent_split = Double.parseDouble(split);
                 if((percent_split <= 0) || (percent_split >= 100)){
                     JOptionPane.showMessageDialog(null, "The percentage must be a number in the range (0, 100).", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return -1;
                 }
 
                 try{
@@ -3571,14 +3753,14 @@ private void Inicializa_config()
                     dataset_train = partitions[0];
                     dataset_test = partitions[1];
 
-                    holdout_random =false;
+                    /*holdout_random =false;
                     cv_ramdon =false;
                     holdout_iterative_stratified =true;
                     cv_iterative_stratified =false;
                     holdout_LP_stratified =false;
                     cv_LP_stratified =false;
                     feature_selection_br = false;
-                    feature_selection_random = false;
+                    feature_selection_random = false;*/
                     //calculte metric selected
 
                     //button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7);// HOLDOUT percentage
@@ -3594,7 +3776,7 @@ private void Inicializa_config()
                 if(split.equals(""))
                 {
                     JOptionPane.showMessageDialog(null, "You must enter a number of folds.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return -1;
                 }
 
                 int nFolds = 0;
@@ -3604,17 +3786,17 @@ private void Inicializa_config()
                 }
                 catch(Exception e){
                     JOptionPane.showMessageDialog(null, "Introduce a correct number of folds.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return -1;
                 }
 
                 if(nFolds < 2)
                 {
                     JOptionPane.showMessageDialog(null, "The number of folds must be greater or equal to 2.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return -1;
                 }
                 else if(nFolds > preprocessDataset.getNumInstances()){
                     JOptionPane.showMessageDialog(null, "The number of folds can not be greater than the number of instances.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return -1;
                 }
 
                 IterativeStratification strat = new IterativeStratification();
@@ -3654,7 +3836,7 @@ private void Inicializa_config()
                 double percent_split = Double.parseDouble(split);
                 if((percent_split <= 0) || (percent_split >= 100)){
                     JOptionPane.showMessageDialog(null, "The percentage must be a number in the range (0, 100).", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return -1;
                 }
 
                 try{
@@ -3664,14 +3846,14 @@ private void Inicializa_config()
                     dataset_train = partitions[0];
                     dataset_test = partitions[1];
 
-                    holdout_random =false;
+                    /*holdout_random =false;
                     cv_ramdon =false;
                     holdout_iterative_stratified =false;
                     cv_iterative_stratified =false;
                     holdout_LP_stratified =true;
                     cv_LP_stratified =false;
                     feature_selection_br = false;
-                    feature_selection_random = false;
+                    feature_selection_random = false;*/
                     //calculte metric selected
 
                     //button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7);// HOLDOUT percentage
@@ -3687,7 +3869,7 @@ private void Inicializa_config()
                 if(split.equals(""))
                 {
                     JOptionPane.showMessageDialog(null, "You must enter a number of folds.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return -1;
                 }
 
                 int nFolds = 0;
@@ -3697,17 +3879,17 @@ private void Inicializa_config()
                 }
                 catch(Exception e){
                     JOptionPane.showMessageDialog(null, "Introduce a correct number of folds.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return -1;
                 }
 
                 if(nFolds < 2)
                 {
                     JOptionPane.showMessageDialog(null, "The number of folds must be greater or equal to 2.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return -1;
                 }
                 else if(nFolds > preprocessDataset.getNumInstances()){
                     JOptionPane.showMessageDialog(null, "The number of folds can not be greater than the number of instances.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    return -1;
                 }
 
                 LabelPowersetTrainTest strat = new LabelPowersetTrainTest();
@@ -3732,14 +3914,14 @@ private void Inicializa_config()
                     }
                 }
 
-                holdout_random =false;
+                /*holdout_random =false;
                 cv_ramdon =false;
                 holdout_iterative_stratified =false;
                 cv_iterative_stratified =false;
                 holdout_LP_stratified =false;
                 cv_LP_stratified =true;
                 feature_selection_br = false;
-                feature_selection_random = false;
+                feature_selection_random = false;*/
             }
 
         }
@@ -3756,6 +3938,8 @@ private void Inicializa_config()
             
             Toolkit.getDefaultToolkit().beep();
             */
+            
+        return 1;
     }
     
     private void textLPStratifiedCVKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textLPStratifiedCVKeyTyped
@@ -4821,6 +5005,30 @@ private void Inicializa_config()
             //  System.out.println("SE HA PRESIONADO el "+jTabbedPane2.getSelectedIndex() );
         }
     }//GEN-LAST:event_tabsImbalanceStateChanged
+
+    private void radioRandomISActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomISActionPerformed
+        // TODO add your handling code here:
+        textRandomIS.setEnabled(true);
+
+        jButtonSaveDatasets.setEnabled(false);
+        jComboBox_SaveFormat.setEnabled(false);
+    }//GEN-LAST:event_radioRandomISActionPerformed
+
+    private void textRandomISActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textRandomISActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textRandomISActionPerformed
+
+    private void textRandomISKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textRandomISKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textRandomISKeyTyped
+
+    private void radioNoISActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioNoISActionPerformed
+        // TODO add your handling code here:
+        textRandomIS.setEnabled(false);
+
+        jButtonSaveDatasets.setEnabled(false);
+        jComboBox_SaveFormat.setEnabled(false);
+    }//GEN-LAST:event_radioNoISActionPerformed
 
     private void showHeatMap(){
         if(lista_pares== null) 
@@ -9010,12 +9218,12 @@ private void Inicializa_config()
     private javax.swing.JLabel labelAttributes;
     private javax.swing.JLabel labelAttributesValue;
     private javax.swing.JLabel labelBRFS;
+    private javax.swing.JLabel labelBRFS1;
     private javax.swing.JLabel labelBRFS_Comb;
     private javax.swing.JLabel labelBRFS_Norm;
     private javax.swing.JLabel labelBRFS_Out;
     private javax.swing.JLabel labelBound;
     private javax.swing.JLabel labelBoundValue;
-    private javax.swing.JLabel labelCV;
     private javax.swing.JLabel labelCardinality;
     private javax.swing.JLabel labelCardinalityValue;
     private javax.swing.JLabel labelDensity;
@@ -9027,7 +9235,6 @@ private void Inicializa_config()
     private javax.swing.JLabel labelFoldsIterativeStratified;
     private javax.swing.JLabel labelFoldsLPStratified;
     private javax.swing.JLabel labelFoldsRandom;
-    private javax.swing.JLabel labelHoldout;
     private javax.swing.JLabel labelInstances;
     private javax.swing.JLabel labelInstancesValue;
     private javax.swing.JLabel labelLabels;
@@ -9038,6 +9245,7 @@ private void Inicializa_config()
     private javax.swing.JLabel labelPercLPStratified;
     private javax.swing.JLabel labelPercRandom;
     private javax.swing.JLabel labelRandomFS;
+    private javax.swing.JLabel labelRandomIS;
     private javax.swing.JLabel labelRelation;
     private javax.swing.JLabel labelRelationValue;
     private javax.swing.JList listMultipleDatasetsLeft;
@@ -9051,12 +9259,14 @@ private void Inicializa_config()
     private javax.swing.JPanel panelDataset;
     private javax.swing.JPanel panelExamplesPerLabel;
     private javax.swing.JPanel panelExamplesPerLabelset;
+    private javax.swing.JPanel panelFS;
     private javax.swing.JPanel panelHeatmap;
     private javax.swing.JPanel panelHeatmapGraph;
     private javax.swing.JPanel panelHeatmapValues;
     private javax.swing.JPanel panelIRperLabelInterClass;
     private javax.swing.JPanel panelIRperLabelIntraClass;
     private javax.swing.JPanel panelIRperLabelset;
+    private javax.swing.JPanel panelIS;
     private javax.swing.JPanel panelImbalance;
     private javax.swing.JPanel panelImbalanceDataMetrics;
     private javax.swing.JPanel panelImbalanceLeft;
@@ -9066,8 +9276,7 @@ private void Inicializa_config()
     private javax.swing.JPanel panelMultipleDatasets;
     private javax.swing.JPanel panelMultipleDatasetsLeft;
     private javax.swing.JPanel panelPreprocess;
-    private javax.swing.JPanel panelTestOption;
-    private javax.swing.JPanel panelTestOption1;
+    private javax.swing.JPanel panelSplitting;
     private javax.swing.JRadioButton radioBRFS;
     private javax.swing.JRadioButton radioExamplesPerLabel;
     private javax.swing.JRadioButton radioExamplesPerLabelset;
@@ -9076,10 +9285,12 @@ private void Inicializa_config()
     private javax.swing.JRadioButton radioLPStratifiedCV;
     private javax.swing.JRadioButton radioLPStratifiedHoldout;
     private javax.swing.JRadioButton radioNoFS;
+    private javax.swing.JRadioButton radioNoIS;
     private javax.swing.JRadioButton radioNoSplit;
     private javax.swing.JRadioButton radioRandomCV;
     private javax.swing.JRadioButton radioRandomFS;
     private javax.swing.JRadioButton radioRandomHoldout;
+    private javax.swing.JRadioButton radioRandomIS;
     private javax.swing.JTable tableCoOcurrenceLeft;
     private javax.swing.JTable tableHeatmapLeft;
     private javax.swing.JTable tableImbalance;
@@ -9098,5 +9309,6 @@ private void Inicializa_config()
     private javax.swing.JTextField textRandomCV;
     private javax.swing.JTextField textRandomFS;
     private javax.swing.JTextField textRandomHoldout;
+    private javax.swing.JTextField textRandomIS;
     // End of variables declaration//GEN-END:variables
 }
