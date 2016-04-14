@@ -1057,9 +1057,15 @@ public class util {
         if(words.length > 1){
             System.out.println("words: " + Arrays.toString(words));
             for(int i=0; i<words.length-1; i++){
-                result = result + words[i]+"-";
+                if(i == (words.length-2)){
+                    result = result + words[i];
+                }
+                else{
+                    result = result + words[i]+"-t";
+                }
+                
             }
-            result = result.substring(0, result.length()-1) + ".xml";
+            result = result.substring(0, result.length()) + ".xml";
             System.out.println("result1: " + result);
         }
         else{
@@ -2327,7 +2333,7 @@ public class util {
       
       for(MultiLabelInstances dataset_current : dataset)
       {
-          current_path = path + "/"+dataset_name+"-"+type+index+".arff";
+          current_path = path + "/"+dataset_name+type+index+".arff";
           
           bw_current = new BufferedWriter(new FileWriter(current_path));
           wr = new PrintWriter(bw_current);

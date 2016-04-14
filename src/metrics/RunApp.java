@@ -3366,8 +3366,8 @@ private void Inicializa_config()
 
                         if(format.toLowerCase().contains("meka")){
                            if(radioNoFS.isSelected() && radioNoIS.isSelected()){
-                                util.Save_dataset_Meka_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "train");
-                                util.Save_dataset_Meka_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "test");  
+                                util.Save_dataset_Meka_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-train");
+                                util.Save_dataset_Meka_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-test");  
                             }
                             else{
                                 util.Save_dataset_Meka_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
@@ -3376,8 +3376,8 @@ private void Inicializa_config()
                         }
                         else{
                             if(radioNoFS.isSelected() && radioNoIS.isSelected()){
-                                util.Save_dataset_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "train");
-                                util.Save_dataset_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "test");  
+                                util.Save_dataset_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-train");
+                                util.Save_dataset_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-test");  
                                 path_xml = file.getAbsolutePath()+"/"+dataset_name1.substring(0,dataset_name1.length()-5)+".xml";
                             }
                             else{
@@ -3479,7 +3479,7 @@ private void Inicializa_config()
                     return -1;
                 }
                 else if(nInstances > dataset.getNumInstances()){
-                    JOptionPane.showMessageDialog(null, "The number of features to select must be less than the original.", "alert", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "The number of instances to select must be less than the original.", "alert", JOptionPane.ERROR_MESSAGE);
                     return -1;
                 }
                 
@@ -4157,6 +4157,14 @@ private void Inicializa_config()
     private void buttonChooseFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonChooseFileActionPerformed
         // TODO add your handling code here:
         
+        final JFileChooser jfile1 = new JFileChooser();
+        FileNameExtensionFilter fname = new FileNameExtensionFilter(".arff", "arff");
+        jfile1.setFileFilter(fname);
+
+        final boolean deleteXML = false;
+        
+        final int returnVal = jfile1.showOpenDialog(this);
+        
         progressBar.setIndeterminate(true);
         progressFrame.setVisible(true);
         progressFrame.repaint();
@@ -4165,7 +4173,7 @@ private void Inicializa_config()
             @Override
             public void run() {
                 // do the long-running work here
-                loadDataset();
+                loadDataset(returnVal, jfile1, deleteXML);
                 // at the end:
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
@@ -4181,17 +4189,8 @@ private void Inicializa_config()
 
     }//GEN-LAST:event_buttonChooseFileActionPerformed
 
-    private void loadDataset(){
-        // ESCOGER EL DATASET
-        JFileChooser jfile1 = new JFileChooser();
-        FileNameExtensionFilter fname = new FileNameExtensionFilter(".arff", "arff");
-        jfile1.setFileFilter(fname);
-        //int returnVal =
-
-        boolean deleteXML = false;
+    private int loadDataset(int returnVal, JFileChooser jfile1, boolean deleteXML){
         
-        int returnVal = jfile1.showOpenDialog(this);
-
         if (returnVal == JFileChooser.OPEN_DIALOG)
         {
             File f1 = jfile1.getSelectedFile();
@@ -4295,8 +4294,10 @@ private void Inicializa_config()
             }
             catch (FileNotFoundException ex) {
                 Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                return -1;
             } catch (IOException ex) {
                 Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                return -1;
             }
 
             //-------------------------------------------------------------------------------------------------------
@@ -4312,11 +4313,23 @@ private void Inicializa_config()
             System.out.println("Choosefilename_database_xml_path: " + filename_database_xml_path);
 
             try {
-                MultiLabelInstances dataset_temp = new MultiLabelInstances(filename_database_arff, filename_database_xml);
+                File f = new File(filename_database_xml);
+                if(f.exists() && !f.isDirectory()) { 
+                    MultiLabelInstances dataset_temp = new MultiLabelInstances(filename_database_arff, filename_database_xml);
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "File could not be loaded.", "alert", JOptionPane.ERROR_MESSAGE); 
+                    return -1;
+                }
+
                 //System.out.println("prueba xml "+filename_database_xml);
                 //velocidad =util.get_velocidad(dataset_temp);
             } catch (InvalidDataFormatException ex) {
                 Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                progressBar.setVisible(false);
+                progressFrame.setVisible(false);
+                progressFrame.repaint();
+                return -1;
             }
             
             
@@ -4349,6 +4362,8 @@ private void Inicializa_config()
             textChooseFile.setText(filename_database_arff);
 
         }
+        
+        return 1;
     }
     
     private void tableHeatmapLeftMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableHeatmapLeftMouseClicked
