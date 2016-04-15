@@ -184,6 +184,7 @@ public class util {
         Matcher matcher = Pattern.compile("\\d+").matcher(c);
         matcher.find();
         labels = Integer.valueOf(matcher.group());
+        System.out.println("c: -"+ c + "- ; " + labels);
         if(c.charAt(0) == '-'){
             labels = labels * -1;
         }

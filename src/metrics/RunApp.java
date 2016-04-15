@@ -2804,12 +2804,38 @@ private void Inicializa_config()
         // TODO add your handling code here:
 
         // ESCOGER EL DATASET
-        JFileChooser jfile1 = new JFileChooser();
+        final JFileChooser jfile1 = new JFileChooser();
         FileNameExtensionFilter fname = new FileNameExtensionFilter(".arff", "arff");
         jfile1.setFileFilter(fname);
 
-        int returnVal = jfile1.showOpenDialog(this);
+        final int returnVal = jfile1.showOpenDialog(this);
+        
+        progressBar.setIndeterminate(true);
+        progressFrame.setVisible(true);
+        progressFrame.repaint();
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // do the long-running work here
+                loadMultiDataset(returnVal, jfile1);
+                // at the end:
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setIndeterminate(false);
+                        progressFrame.setVisible(false);
+                        progressFrame.repaint();
+                    }//run
+                }); //invokeLater
+            }
+        }
+        ).start();  
+        
+    }//GEN-LAST:event_buttonAddMultipleDatasetsActionPerformed
+
+    private int loadMultiDataset(int returnVal, JFileChooser jfile1){
+        
         if (returnVal == JFileChooser.OPEN_DIALOG)
         {
 
@@ -2821,7 +2847,7 @@ private void Inicializa_config()
             if(Dataset_names.contains(dataset_name))
             {
                 JOptionPane.showMessageDialog(null, "The dataset is duplicated.", "alert", JOptionPane.ERROR_MESSAGE);
-                return;
+                return -1;
             }
 
             String filename_database_arff = f1.getAbsolutePath();
@@ -2852,9 +2878,63 @@ private void Inicializa_config()
                     es_de_tipo_meka = true;
 
                     int label_count = util.Extract_labels_from_arff(sCadena);
-                    label_names_found = new String[label_count];
+                    //System.out.println("label_count: " + label_count);
+                    //label_names_found = new String[label_count];                    
+                    
+                    
+                    //---------------
+                    
+                    if(label_count > 0){
+                        label_names_found = new String[label_count];
 
-                    while(label_found < label_count)
+                        while(label_found < label_count)
+                        {
+                            sCadena = bf.readLine();
+                            label_name = util.Extract_label_name_from_String(sCadena);
+
+                            if(label_name!= null)
+                            {
+                                label_names_found[label_found]=label_name;
+                                label_found++;
+
+                            }
+
+                        }
+                    }
+                    else{
+                        label_count = Math.abs(label_count);
+                        label_names_found = new String[label_count];
+                        
+                        String [] sCadenas = new String[label_count];
+                        
+                        while(!(sCadena = bf.readLine()).contains("@data")){
+                            if(!sCadena.trim().equals("")){
+                                for(int s=0; s<label_count-1; s++){
+                                    sCadenas[s] = sCadenas[s+1];
+                                }
+                                sCadenas[label_count-1] = sCadena;
+                            }
+                        }
+                        
+                        for(int i=0; i<label_count; i++){
+                            System.out.println("sCadenas[" + i + "]: -" + sCadenas[i] + "-");
+                            label_name = util.Extract_label_name_from_String(sCadenas[i]);
+
+                            if(label_name!= null)
+                            {
+                                label_names_found[label_found]=label_name;
+                                label_found++;
+
+                            }
+                        }
+                    }
+                    
+                    //---------------
+                    
+                    
+                    
+
+                    /*while(label_found < label_count)
                     {
                         sCadena = bf.readLine();
                         label_name = util.Extract_label_name_from_String(sCadena);
@@ -2866,7 +2946,7 @@ private void Inicializa_config()
 
                         }
 
-                    }
+                    }*/
                     //util.Recorre_Arreglo(label_names_found);
 
                     BufferedWriter bw_xml= new BufferedWriter(new FileWriter(filename_database_xml_path1));
@@ -2906,11 +2986,12 @@ private void Inicializa_config()
                     f2.delete();
                 }
                 
-                if(util.Esta_dataset(list_dataset, current.getDataSet().relationName()))
+                /*if(util.Esta_dataset(list_dataset, current.getDataSet().relationName()))
                 {
+                    System.out.println("Dataset name: " + dataset_name);
                     JOptionPane.showMessageDialog(null, "The dataset is duplicated.", "alert", JOptionPane.ERROR_MESSAGE);
                     return;
-                }
+                }*/
 
                 list_dataset.add(current);
                 Dataset_names.add(dataset_name);
@@ -2923,8 +3004,10 @@ private void Inicializa_config()
                 Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }//GEN-LAST:event_buttonAddMultipleDatasetsActionPerformed
-
+        
+        return 1;
+    }
+    
     private void tabsDependencesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabsDependencesStateChanged
 
         //System.out.println(jTabbedPane4.getSelectedIndex());
@@ -6056,7 +6139,13 @@ private void Inicializa_config()
 
                      
             //Relation
-            labelRelationValue.setText(dataset_current_name);
+            if(dataset_current_name.length() > 30){
+                labelRelationValue.setText(dataset_current_name.substring(0, 28) + "...");
+            }
+            else{
+                labelRelationValue.setText(dataset_current_name);
+            }
+            
             
             //Instances
             String num_instancias = util.get_value_metric("Instances", dataset, es_de_tipo_meka);

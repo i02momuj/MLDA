@@ -390,11 +390,11 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jComboBox_SaveFormat" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="panelFS" alignment="0" min="-2" pref="778" max="-2" attributes="0"/>
+                          <Component id="panelFS" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="panelSplitting" alignment="0" max="32767" attributes="0"/>
                           <Component id="panelIS" alignment="0" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="40" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -797,7 +797,7 @@
                                   <Component id="jComboBox_BRFS_Out" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace pref="50" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
