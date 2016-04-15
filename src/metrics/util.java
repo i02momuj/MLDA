@@ -4003,6 +4003,8 @@ public class util {
     
     public static void Save_csv_file_multi(PrintWriter wr,ArrayList<String> metric_list, ArrayList<String> dataNames, Hashtable<String, Hashtable<String, String>> tableMetrics)
     {
+        System.out.println("Data_names: " + dataNames.toString());
+        
         String value = new String();
          
         value = ";";

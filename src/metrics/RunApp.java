@@ -2787,8 +2787,11 @@ private void Inicializa_config()
         }
         
         list_dataset.remove(current);
+        String dataName = Dataset_names.get(current);
         Dataset_names.remove(current);
         lista_son_meka.remove(current);
+
+        tableMetricsMulti.remove(dataName);
         /*
         System.out.println("");
         for(MultiLabelInstances actual : list_dataset)
