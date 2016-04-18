@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
@@ -275,6 +276,14 @@ public class RunApp extends javax.swing.JFrame {
         jTableMulti = new JTable();
         
         this.setTitle("Multi-Label Dataset Analyzer (MLDA)");
+
+        try {
+            this.setIconImage(ImageIO.read(new File("src/images/64.png")));
+        }
+        catch (IOException exc) {
+            exc.printStackTrace();
+        }
+        
         this.setMinimumSize(new Dimension(780,500));       
         this.setBounds(300,0, 780, 500);
         
@@ -1376,6 +1385,7 @@ private void Inicializa_config()
             }
         });
 
+        textChooseFile.setEditable(false);
         textChooseFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 textChooseFileActionPerformed(evt);
@@ -1959,7 +1969,7 @@ private void Inicializa_config()
                         .addComponent(labelBRFS_Out)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBox_BRFS_Out, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
         panelFSLayout.setVerticalGroup(
             panelFSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2070,10 +2080,10 @@ private void Inicializa_config()
                         .addComponent(jButtonSaveDatasets)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBox_SaveFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(panelFS, javax.swing.GroupLayout.PREFERRED_SIZE, 778, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panelFS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panelSplitting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panelIS, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelPreprocessLayout.setVerticalGroup(
             panelPreprocessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
