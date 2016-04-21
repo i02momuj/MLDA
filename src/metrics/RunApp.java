@@ -191,7 +191,7 @@ public class RunApp extends javax.swing.JFrame {
     
     JButton button_all_1,button_none_1,button_invert_1, button_calculate_1,button_save, button_clear;
     JButton button_all_3,button_none_3,button_invert_3, button_calculate_3,button_save3;
-    JButton export1,export2,export3,export4,export5,export6,export7;
+    JButton export1,export3,export4,export5,export6,export7;
     
     final JTable jTable5,jTable6,jTable7, jTable8,jTable9;
     final JTable jTable1, jTableMulti;
@@ -382,8 +382,20 @@ public class RunApp extends javax.swing.JFrame {
       
       progressBar = new JProgressBar(0, 100);
       progressBar.setValue(0);  
+      
+      /*
+      int x = this.getX();
+      int y = this.getY();
+      int centerX = this.getWidth()/2;
+      int centerY = this.getHeight()/2;
+      int progressWidth = 200;
+      int progressHeight = 30;
+      */
+      
       progressFrame = new JFrame();
-      progressFrame.setBounds(this.getBounds().x + this.getBounds().width/2 - 100, this.getBounds().y + this.getBounds().height/2 - 15, 200, 30);
+        
+      //progressFrame.setBounds(this.getBounds().x + this.getBounds().width/2 - 100, this.getBounds().y + this.getBounds().height/2 - 15, 200, 30);
+      progressFrame.setBounds(this.getX() + this.getWidth()/2 - 100, this.getY() + this.getHeight()/2 - 15, 200, 30);
       progressFrame.setResizable(false);
       progressFrame.setUndecorated(true);
       progressFrame.add(progressBar);      
@@ -552,7 +564,7 @@ private void Inicializa_config()
       
         
       //create_button_export(jTable2,panelDataset,export1,20,285); //375
-      export2 = create_button_export_jtable4(tableImbalance,panelImbalanceLeft,export2, 30,405);
+      //export2 = create_button_export_jtable4(tableImbalance,panelImbalance,export2, 30,405);
      
       
       
@@ -1013,10 +1025,17 @@ private void Inicializa_config()
             
       button_calculate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                
-                progressFrame.setVisible(true);
-                progressFrame.repaint();
+
                 progressBar.setIndeterminate(false);
+                progressFrame.setVisible(true);
+                //progressFrame.repaint();
+                progressFrame.setBounds(repaintProgressBar());
+                progressFrame.repaint();
+                System.out.println("progressFrame.getX(): " + progressFrame.getX());
+                System.out.println("progressFrame.getY(): " + progressFrame.getY());
+                System.out.println("progressFrame.getWidth(): " + progressFrame.getWidth());
+                System.out.println("progressFrame.getHeight(): " + progressFrame.getHeight());
+                
 
                 new Thread(new Runnable() {
                     @Override
@@ -1327,6 +1346,9 @@ private void Inicializa_config()
         panelImbalanceLeft = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         tableImbalance = new javax.swing.JTable();
+        radioExamplesPerLabel = new javax.swing.JRadioButton();
+        radioExamplesPerLabelset = new javax.swing.JRadioButton();
+        jButton1 = new javax.swing.JButton();
         tabsImbalance = new javax.swing.JTabbedPane();
         panelExamplesPerLabel = new javax.swing.JPanel();
         panelExamplesPerLabelset = new javax.swing.JPanel();
@@ -1339,8 +1361,6 @@ private void Inicializa_config()
         panelIRperLabelInterClass = new javax.swing.JPanel();
         panel1 = new java.awt.Panel();
         panelLabelsIRperLabelInterClass = new javax.swing.JPanel();
-        radioExamplesPerLabel = new javax.swing.JRadioButton();
-        radioExamplesPerLabelset = new javax.swing.JRadioButton();
         jPanel21 = new javax.swing.JPanel();
         tabsDependences = new javax.swing.JTabbedPane();
         panelChiPhi = new javax.swing.JPanel();
@@ -2106,7 +2126,7 @@ private void Inicializa_config()
 
         TabPrincipal.addTab("Preprocess", panelPreprocess);
 
-        comboBoxLabelsInformation.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Label frequency", "Labelset frequency", "#Labels per example", "Box diagram", "IR per label inter class", "#Labels/IR per label inter class", "IR per label intra class", "#Labels/IR per label intra class", "IR per labelset" }));
+        comboBoxLabelsInformation.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Label frequency", "Labelset frequency", "Labels per example", "Box diagram", "IR per label inter class", "#Labels/IR per label inter class", "IR per label intra class", "#Labels/IR per label intra class", "IR per labelset" }));
         comboBoxLabelsInformation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboBoxLabelsInformationActionPerformed(evt);
@@ -2131,6 +2151,32 @@ private void Inicializa_config()
         });
         jScrollPane5.setViewportView(tableImbalance);
 
+        radioExamplesPerLabel.setText("# Examples per label");
+        radioExamplesPerLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                radioExamplesPerLabelMouseClicked(evt);
+            }
+        });
+        radioExamplesPerLabel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioExamplesPerLabelActionPerformed(evt);
+            }
+        });
+
+        radioExamplesPerLabelset.setText("# Examples per labelset");
+        radioExamplesPerLabelset.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                radioExamplesPerLabelsetMouseClicked(evt);
+            }
+        });
+        radioExamplesPerLabelset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioExamplesPerLabelsetActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Save");
+
         javax.swing.GroupLayout panelImbalanceLeftLayout = new javax.swing.GroupLayout(panelImbalanceLeft);
         panelImbalanceLeft.setLayout(panelImbalanceLeftLayout);
         panelImbalanceLeftLayout.setHorizontalGroup(
@@ -2138,12 +2184,25 @@ private void Inicializa_config()
             .addGroup(panelImbalanceLeftLayout.createSequentialGroup()
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(panelImbalanceLeftLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelImbalanceLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(radioExamplesPerLabel)
+                    .addComponent(radioExamplesPerLabelset)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelImbalanceLeftLayout.setVerticalGroup(
             panelImbalanceLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelImbalanceLeftLayout.createSequentialGroup()
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 32, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(radioExamplesPerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(radioExamplesPerLabelset, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         tabsImbalance.setTabPlacement(javax.swing.JTabbedPane.RIGHT);
@@ -2296,45 +2355,13 @@ private void Inicializa_config()
 
         tabsImbalance.addTab("", panel1);
 
-        radioExamplesPerLabel.setText("# Examples per label");
-        radioExamplesPerLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                radioExamplesPerLabelMouseClicked(evt);
-            }
-        });
-        radioExamplesPerLabel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radioExamplesPerLabelActionPerformed(evt);
-            }
-        });
-
-        radioExamplesPerLabelset.setText("# Examples per labelset");
-        radioExamplesPerLabelset.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                radioExamplesPerLabelsetMouseClicked(evt);
-            }
-        });
-        radioExamplesPerLabelset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radioExamplesPerLabelsetActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout panelImbalanceLayout = new javax.swing.GroupLayout(panelImbalance);
         panelImbalance.setLayout(panelImbalanceLayout);
         panelImbalanceLayout.setHorizontalGroup(
             panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelImbalanceLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelImbalanceLeft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(panelImbalanceLayout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addGroup(panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelImbalanceLayout.createSequentialGroup()
-                                .addComponent(radioExamplesPerLabelset)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(radioExamplesPerLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addComponent(panelImbalanceLeft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(tabsImbalance)
@@ -2347,16 +2374,12 @@ private void Inicializa_config()
                 .addContainerGap()
                 .addGroup(panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelImbalanceLayout.createSequentialGroup()
+                        .addComponent(panelImbalanceLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(panelImbalanceLayout.createSequentialGroup()
                         .addComponent(comboBoxLabelsInformation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tabsImbalance))
-                    .addGroup(panelImbalanceLayout.createSequentialGroup()
-                        .addComponent(panelImbalanceLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(radioExamplesPerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(radioExamplesPerLabelset, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(tabsImbalance)))
                 .addContainerGap())
         );
 
@@ -3229,18 +3252,21 @@ private void Inicializa_config()
             JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        if((list_dataset_train.isEmpty() && list_dataset_test.isEmpty()) && (radioRandomCV.isSelected() || radioIterativeStratifiedCV.isSelected() || radioLPStratifiedCV.isSelected())){
-            JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
-            return;
+        if(!(radioNoFS.isSelected() && radioNoIS.isSelected() && radioNoSplit.isSelected())){
+            if((list_dataset_train.isEmpty() && list_dataset_test.isEmpty()) && (radioRandomCV.isSelected() || radioIterativeStratifiedCV.isSelected() || radioLPStratifiedCV.isSelected())){
+                JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if((dataset_train ==null && dataset_test==null) && (radioIterativeStratifiedHoldout.isSelected()|| radioRandomHoldout.isSelected() || radioLPStratifiedHoldout.isSelected())){
+                JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if((preprocessedDataset == null) && (radioBRFS.isSelected() || radioRandomFS.isSelected())){
+                JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
         }
-        if((dataset_train ==null && dataset_test==null) && (radioIterativeStratifiedHoldout.isSelected()|| radioRandomHoldout.isSelected() || radioLPStratifiedHoldout.isSelected())){
-            JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        if((preprocessedDataset == null) && (radioBRFS.isSelected() || radioRandomFS.isSelected())){
-            JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        
 
         // JFILECHOOSER SAVE
         JFileChooser fc= new JFileChooser();
@@ -4626,8 +4652,16 @@ private void Inicializa_config()
         textIterativeStratifiedCV.setEnabled(false);
         textLPStratifiedCV.setEnabled(false);
 
-        jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
+        
+        if(radioNoFS.isSelected() && radioNoIS.isSelected()){
+            jButtonSaveDatasets.setEnabled(true);
+            jComboBox_SaveFormat.setEnabled(true);
+        }
+        else{
+            jButtonSaveDatasets.setEnabled(false);
+            jComboBox_SaveFormat.setEnabled(false);
+        }        
+        
     }//GEN-LAST:event_radioNoSplitActionPerformed
 
     private void radioNoFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioNoFSActionPerformed
@@ -4641,8 +4675,14 @@ private void Inicializa_config()
         jComboBox_BRFS_Out.setEnabled(false);
         textRandomFS.setEnabled(false);
 
-        jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
+        if(radioNoSplit.isSelected() && radioNoIS.isSelected()){
+            jButtonSaveDatasets.setEnabled(true);
+            jComboBox_SaveFormat.setEnabled(true);
+        }
+        else{
+            jButtonSaveDatasets.setEnabled(false);
+            jComboBox_SaveFormat.setEnabled(false);
+        }
     }//GEN-LAST:event_radioNoFSActionPerformed
 
     private void jComboBox_SaveFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_SaveFormatActionPerformed
@@ -4855,33 +4895,53 @@ private void Inicializa_config()
         
         if(comboBoxLabelsInformation.getSelectedIndex() == 0){
                 tabsImbalance.setSelectedIndex(0);
+                jButton1.setVisible(true);
+                jButton1.repaint();
         }
         else if(comboBoxLabelsInformation.getSelectedIndex() == 1){
                 tabsImbalance.setSelectedIndex(1);
+                jButton1.setVisible(true);
+                jButton1.repaint();
         }
         else if(comboBoxLabelsInformation.getSelectedIndex() == 2){
                 tabsImbalance.setSelectedIndex(2);
+                jButton1.setVisible(true);
+                jButton1.repaint();
         }
         else if(comboBoxLabelsInformation.getSelectedIndex() == 3){
                 tabsImbalance.setSelectedIndex(7);
+                jButton1.setVisible(false);
+                jButton1.repaint();
         }
         else if(comboBoxLabelsInformation.getSelectedIndex() == 4){
                 tabsImbalance.setSelectedIndex(8);
+                jButton1.setVisible(true);
+                jButton1.repaint();
         }
         else if(comboBoxLabelsInformation.getSelectedIndex() == 5){
                 tabsImbalance.setSelectedIndex(9);
+                jButton1.setVisible(true);
+                jButton1.repaint();
         }
         else if(comboBoxLabelsInformation.getSelectedIndex() == 6){
-                tabsImbalance.setSelectedIndex(4);
+                tabsImbalance.setSelectedIndex(3);
+                jButton1.setVisible(true);
+                jButton1.repaint();
         }
         else if(comboBoxLabelsInformation.getSelectedIndex() == 7){
-                tabsImbalance.setSelectedIndex(3);
+                tabsImbalance.setSelectedIndex(4);
+                jButton1.setVisible(true);
+                jButton1.repaint();
         }
         else if(comboBoxLabelsInformation.getSelectedIndex() == 8){
                 tabsImbalance.setSelectedIndex(5);
+                jButton1.setVisible(true);
+                jButton1.repaint();
         }
         else if(comboBoxLabelsInformation.getSelectedIndex() == 9){
                 tabsImbalance.setSelectedIndex(6);
+                jButton1.setVisible(true);
+                jButton1.repaint();
         }
     }//GEN-LAST:event_comboBoxLabelsInformationActionPerformed
 
@@ -4907,7 +4967,7 @@ private void Inicializa_config()
             else if (tabsImbalance.getSelectedIndex()==5)
             {
                 tableImbalance.setModel(tm_ir_per_labelset);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset id per IR"));
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelsets Imbalance Ratio"));
 
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
                 panelImbalanceLeft.repaint();
@@ -4958,7 +5018,7 @@ private void Inicializa_config()
             else if (tabsImbalance.getSelectedIndex()==3)
             {
                 tableImbalance.setModel(tm_ir_per_label_intra_class);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Number of labels intra class per IR"));
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance Ratio intra class"));
 
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(2));
                 panelImbalanceLeft.repaint();
@@ -5006,7 +5066,7 @@ private void Inicializa_config()
             else if (tabsImbalance.getSelectedIndex()==8)
             {
                 tableImbalance.setModel(tm_ir_per_label_inter_class_only);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Label per IR values inter class"));
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance Ratio inter class"));
 
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
                 panelImbalanceLeft.repaint();
@@ -5058,7 +5118,7 @@ private void Inicializa_config()
                 // jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset id per IR"));
 
                 tableImbalance.setModel(tm_ir_per_label_intra_class_only);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Label per IR values intra class"));
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Number of labels intra class per label"));
 
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
 
@@ -5137,8 +5197,14 @@ private void Inicializa_config()
         // TODO add your handling code here:
         textRandomIS.setEnabled(false);
 
-        jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
+        if(radioNoFS.isSelected() && radioNoSplit.isSelected()){
+            jButtonSaveDatasets.setEnabled(true);
+            jComboBox_SaveFormat.setEnabled(true);
+        }
+        else{
+            jButtonSaveDatasets.setEnabled(false);
+            jComboBox_SaveFormat.setEnabled(false);
+        }
     }//GEN-LAST:event_radioNoISActionPerformed
 
     private void showHeatMap(){
@@ -5593,7 +5659,7 @@ private void Inicializa_config()
         //System.out.println(filename_database_arff);
  
         try {        
-             export2.setVisible(true); //boton salvar de la tabla de la izquierda en class imbalance
+             jButton1.setVisible(true); //boton salvar de la tabla de la izquierda en class imbalance
             
              
              if(tabsDependences.getSelectedIndex()==0)jLabelChiFi_text.setVisible(true);
@@ -5753,7 +5819,7 @@ private void Inicializa_config()
             else if (tabsImbalance.getSelectedIndex()==5) // ir per labelset
             {
                 tableImbalance.setModel(tm_ir_per_labelset);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset id per IR"));
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelsets Imbalance Ratio"));
                 
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
                 panelImbalanceLeft.repaint();
@@ -5796,7 +5862,7 @@ private void Inicializa_config()
             else if (tabsImbalance.getSelectedIndex()==3)
             {
                 tableImbalance.setModel(tm_ir_per_label_intra_class);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Number of labels intra class per IR"));
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance Ratio intra class"));
                 
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(2));
                 panelImbalanceLeft.repaint();
@@ -5823,7 +5889,7 @@ private void Inicializa_config()
             else if (tabsImbalance.getSelectedIndex()==8)
             {
                 tableImbalance.setModel(tm_ir_per_label_inter_class_only);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Label per IR values inter class"));
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance ratio inter class"));
                 
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
                 panelImbalanceLeft.repaint();
@@ -5850,7 +5916,7 @@ private void Inicializa_config()
             {
                               
                 tableImbalance.setModel(tm_ir_per_label_intra_class_only);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Label per IR values intra class"));
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Number of labels intra class per label"));
                 
                 
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
@@ -9260,6 +9326,15 @@ private void Inicializa_config()
         }
      
      
+    public Rectangle repaintProgressBar(){
+        System.out.println("this.getX(): " + this.getX());
+        System.out.println("this.getY(): " + this.getY());
+        System.out.println("this.getWidth(): " + this.getWidth());
+        System.out.println("this.getHeight(): " + this.getHeight());
+        
+        return(new Rectangle(this.getX(), this.getY(), this.getWidth(), this.getHeight()));
+    } 
+     
     
      
      
@@ -9318,6 +9393,7 @@ private void Inicializa_config()
     private javax.swing.JButton buttonShowMostRelated;
     private javax.swing.JButton buttonShowMostRelatedHeatMap;
     private javax.swing.JComboBox comboBoxLabelsInformation;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonSaveDatasets;
     private javax.swing.JButton jButtonStartPreprocess;
     private javax.swing.JComboBox jComboBox_BRFS_Comb;
