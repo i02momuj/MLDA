@@ -294,11 +294,11 @@ public class RunApp extends javax.swing.JFrame {
      
         dataset_current_name="";          
         
-       // System.out.println("valor de fortaleza "+util.get_valor_fortaleza(2, 15, 3, 6));      
+       ////System.out.println("valor de fortaleza "+util.get_valor_fortaleza(2, 15, 3, 6));      
         
        start_config_multiples_datasets();
        
-       // System.out.println("punto inicial del jheat graph " + jLabel20.getBounds().x+" , "+ jLabel20.getBounds().y);
+       ////System.out.println("punto inicial del jheat graph " + jLabel20.getBounds().x+" , "+ jLabel20.getBounds().y);
 
        // BOX DIAGRAM INICIALIZACION
        jRadioButton8 = new JRadioButton();
@@ -732,7 +732,7 @@ private void Inicializa_config()
     jlabel.setHorizontalAlignment(JLabel.CENTER);
    
     
-       // System.out.println(" las dimensiones del chart son "+chart.getCellSize().height +" alto "+ chart.getCellSize().width);
+       ////System.out.println(" las dimensiones del chart son "+chart.getCellSize().height +" alto "+ chart.getCellSize().width);
     
         return chart;
     }     
@@ -1008,7 +1008,7 @@ private void Inicializa_config()
       
       //button CLEAR
       button_clear = new JButton("Clear");
-      button_clear.setToolTipText("Clear selection an metric values");
+      button_clear.setToolTipText("Clear selection and metric values");
       button_clear.setBounds(posx+270, posy+heigh+5, 80, 20);
             
       button_clear.addActionListener(new java.awt.event.ActionListener() {
@@ -1031,10 +1031,10 @@ private void Inicializa_config()
                 //progressFrame.repaint();
                 progressFrame.setBounds(repaintProgressBar());
                 progressFrame.repaint();
-                System.out.println("progressFrame.getX(): " + progressFrame.getX());
-                System.out.println("progressFrame.getY(): " + progressFrame.getY());
-                System.out.println("progressFrame.getWidth(): " + progressFrame.getWidth());
-                System.out.println("progressFrame.getHeight(): " + progressFrame.getHeight());
+                //System.out.println("progressFrame.getX(): " + progressFrame.getX());
+                //System.out.println("progressFrame.getY(): " + progressFrame.getY());
+                //System.out.println("progressFrame.getWidth(): " + progressFrame.getWidth());
+                //System.out.println("progressFrame.getHeight(): " + progressFrame.getHeight());
                 
 
                 new Thread(new Runnable() {
@@ -2127,7 +2127,7 @@ private void Inicializa_config()
 
         TabPrincipal.addTab("Preprocess", panelPreprocess);
 
-        comboBoxLabelsInformation.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Label frequency", "Labelset frequency", "Labels per example", "Box diagram", "IR per label inter class", "#Labels/IR per label inter class", "IR per label intra class", "#Labels/IR per label intra class", "IR per labelset" }));
+        comboBoxLabelsInformation.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Label frequency", "Labelset frequency", "Labels histogram", "Box diagram", "IR per label inter class", "IR per label intra class", "IR per labelset" }));
         comboBoxLabelsInformation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboBoxLabelsInformationActionPerformed(evt);
@@ -2386,7 +2386,7 @@ private void Inicializa_config()
 
         panelImbalanceLeft.getAccessibleContext().setAccessibleName("pepe");
 
-        TabPrincipal.addTab("Labels information", panelImbalance);
+        TabPrincipal.addTab("Labels", panelImbalance);
 
         tabsDependences.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -2827,10 +2827,10 @@ private void Inicializa_config()
 
         tableMetricsMulti.remove(dataName);
         /*
-        System.out.println("");
+       //System.out.println("");
         for(MultiLabelInstances actual : list_dataset)
-        System.out.print(", "+actual.getDataSet().relationName());
-        System.out.println("");
+       //System.out.print(", "+actual.getDataSet().relationName());
+       //System.out.println("");
         */
 
         lista.remove(current);
@@ -2911,7 +2911,7 @@ private void Inicializa_config()
 
                 if(es_meka)
                 {
-                    System.out.println("el dataset es de tipo MEKA");
+                    //System.out.println("el dataset es de tipo MEKA");
                     es_de_tipo_meka = true;
 
                     int label_count = util.Extract_labels_from_arff(sCadena);
@@ -2954,7 +2954,7 @@ private void Inicializa_config()
                         }
                         
                         for(int i=0; i<label_count; i++){
-                            System.out.println("sCadenas[" + i + "]: -" + sCadenas[i] + "-");
+                            //System.out.println("sCadenas[" + i + "]: -" + sCadenas[i] + "-");
                             label_name = util.Extract_label_name_from_String(sCadenas[i]);
 
                             if(label_name!= null)
@@ -2999,7 +2999,7 @@ private void Inicializa_config()
                 }
                 else
                 {
-                    System.out.println("el dataset NO es de tipo MEKA");
+                    //System.out.println("el dataset NO es de tipo MEKA");
                     es_de_tipo_meka= false;
                 }
             }
@@ -3019,13 +3019,13 @@ private void Inicializa_config()
 
                 if(es_meka){
                     File f2 = new File(filename_database_xml);
-                    System.out.println("f2: " + f2.getAbsolutePath());
+                   //System.out.println("f2: " + f2.getAbsolutePath());
                     f2.delete();
                 }
                 
                 /*if(util.Esta_dataset(list_dataset, current.getDataSet().relationName()))
                 {
-                    System.out.println("Dataset name: " + dataset_name);
+                   //System.out.println("Dataset name: " + dataset_name);
                     JOptionPane.showMessageDialog(null, "The dataset is duplicated.", "alert", JOptionPane.ERROR_MESSAGE);
                     return;
                 }*/
@@ -3034,7 +3034,7 @@ private void Inicializa_config()
                 Dataset_names.add(dataset_name);
                 lista.addElement(dataset_name );
                 
-                System.out.println("current: " + current + " ; dataset_name: " + dataset_name);
+               //System.out.println("current: " + current + " ; dataset_name: " + dataset_name);
 
             }
             catch (InvalidDataFormatException ex) {
@@ -3062,7 +3062,7 @@ private void Inicializa_config()
 
         if(evt.getButton() == MouseEvent.BUTTON3 )
         {
-            //  System.out.println("se dio el clic derecho");
+            // //System.out.println("se dio el clic derecho");
 
             jPopupMenu1.removeAll();
 
@@ -3107,7 +3107,7 @@ private void Inicializa_config()
             seleccionados.add((tableCoOcurrenceLeft.getValueAt(selecteds[i], 0).toString()));
         }
         
-        System.out.println("seleccionados: " + seleccionados.toString());
+       //System.out.println("seleccionados: " + seleccionados.toString());
         
         
 
@@ -3145,7 +3145,7 @@ private void Inicializa_config()
 
         if(labelset_frequency == null) return;
 
-        util.Recorre_Arreglo(labelset_frequency);
+        //util.Recorre_Arreglo(labelset_frequency);
 
         HeapSort.sort(labelset_frequency);
 
@@ -3166,7 +3166,7 @@ private void Inicializa_config()
 
         double [] label_frenquency_values = util.get_label_frequency(label_frenquency);
 
-        util.Recorre_Arreglo(label_frenquency_values);
+        //util.Recorre_Arreglo(label_frenquency_values);
 
         HeapSort.sort(label_frenquency_values);
 
@@ -3241,298 +3241,310 @@ private void Inicializa_config()
 
     private void jButtonSaveDatasetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveDatasetsActionPerformed
         // TODO add your handling code here:
+        
+        try{
+            /*
+                If only FS is selected, save FS dataset
+                If any splitting method is selected, save the splitted datasets (those are FS too if it has been selected)
+            */
 
-        /*
-            If only FS is selected, save FS dataset
-            If any splitting method is selected, save the splitted datasets (those are FS too if it has been selected)
-        */
-        
-        String format = jComboBox_SaveFormat.getSelectedItem().toString();
-        
-        if(dataset == null){
-            JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        if(!(radioNoFS.isSelected() && radioNoIS.isSelected() && radioNoSplit.isSelected())){
-            if((list_dataset_train.isEmpty() && list_dataset_test.isEmpty()) && (radioRandomCV.isSelected() || radioIterativeStratifiedCV.isSelected() || radioLPStratifiedCV.isSelected())){
-                JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
+            String format = jComboBox_SaveFormat.getSelectedItem().toString();
+
+            if(dataset == null){
+                JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            if((dataset_train ==null && dataset_test==null) && (radioIterativeStratifiedHoldout.isSelected()|| radioRandomHoldout.isSelected() || radioLPStratifiedHoldout.isSelected())){
-                JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
-                return;
+            if(!(radioNoFS.isSelected() && radioNoIS.isSelected() && radioNoSplit.isSelected())){
+                if((list_dataset_train.isEmpty() && list_dataset_test.isEmpty()) && (radioRandomCV.isSelected() || radioIterativeStratifiedCV.isSelected() || radioLPStratifiedCV.isSelected())){
+                    JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if((dataset_train ==null && dataset_test==null) && (radioIterativeStratifiedHoldout.isSelected()|| radioRandomHoldout.isSelected() || radioLPStratifiedHoldout.isSelected())){
+                    JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if((preprocessedDataset == null) && (radioBRFS.isSelected() || radioRandomFS.isSelected())){
+                    JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
             }
-            if((preprocessedDataset == null) && (radioBRFS.isSelected() || radioRandomFS.isSelected())){
-                JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        }
-        
 
-        // JFILECHOOSER SAVE
-        JFileChooser fc= new JFileChooser();
 
-        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        String path_train, path_test,path_xml;
+            // JFILECHOOSER SAVE
+            JFileChooser fc= new JFileChooser();
 
-        int returnVal = fc.showSaveDialog(this);
+            fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            String path_train, path_test,path_xml;
 
-        if (returnVal == JFileChooser.APPROVE_OPTION)
-        {
-            File file = fc.getSelectedFile();
-            FileFilter f1 = fc.getFileFilter();
+            int returnVal = fc.showSaveDialog(this);
 
-            if(fc.isDirectorySelectionEnabled())
+            if (returnVal == JFileChooser.APPROVE_OPTION)
             {
-                //Check if none were selected -> Dataset conversion
-                if(radioNoFS.isSelected() && radioNoIS.isSelected() && radioNoSplit.isSelected())
+                File file = fc.getSelectedFile();
+                FileFilter f1 = fc.getFileFilter();
+
+                if(fc.isDirectorySelectionEnabled())
                 {
-                    BufferedWriter bw_train = null;
-                    try {
+                    //Check if none were selected -> Dataset conversion
+                    if(radioNoFS.isSelected() && radioNoIS.isSelected() && radioNoSplit.isSelected())
+                    {
+                        BufferedWriter bw_train = null;
+                        try {
 
-                        String name_dataset= dataset_name1.substring(0,dataset_name1.length()-5);
-                        
-                        if(format.toLowerCase().contains("meka")){
-                            String dataPath = file.getAbsolutePath()+"/"+name_dataset+"-MekaConverted.arff";
+                            String name_dataset= dataset_name1.substring(0,dataset_name1.length()-5);
 
-                            bw_train = new BufferedWriter(new FileWriter(dataPath));
-                            PrintWriter wr_train = new PrintWriter(bw_train);
+                            if(format.toLowerCase().contains("meka")){
+                                String dataPath = file.getAbsolutePath()+"/"+name_dataset+"-MekaConverted.arff";
 
-                            //System.out.println("longitud del train es "+dataset_train.getNumInstances());
-                            util.Save_dataset_Meka_in_the_file(wr_train, dataset, name_dataset+"_MekaConverted");
+                                bw_train = new BufferedWriter(new FileWriter(dataPath));
+                                PrintWriter wr_train = new PrintWriter(bw_train);
 
-                            wr_train.close();
-                            bw_train.close();
-                        }
-                        else{
-                            //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-                            //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-                            //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+                                //System.out.println("longitud del train es "+dataset_train.getNumInstances());
+                                util.Save_dataset_Meka_in_the_file(wr_train, dataset, name_dataset+"_MekaConverted");
 
-                            String dataPath = file.getAbsolutePath()+"/"+name_dataset+"-MulanConverted.arff";
-                            path_xml = file.getAbsolutePath()+"/"+name_dataset+"-MulanConverted.xml";
-
-                            bw_train = new BufferedWriter(new FileWriter(dataPath));
-                            PrintWriter wr_train = new PrintWriter(bw_train);
-
-                            //System.out.println("longitud del train es "+dataset_train.getNumInstances());
-                            util.Save_dataset_in_the_file(wr_train, dataset, name_dataset+"_MulanConverted");
-
-                            wr_train.close();
-                            bw_train.close();
-
-                            BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
-                            PrintWriter wr_xml = new PrintWriter(bw_xml);
-
-                            util.Save_xml_in_the_file(wr_xml, dataset);
-
-                            wr_xml.close();
-                            bw_xml.close();
-                        }
-
-
-                        JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
-
-                    } catch (IOException ex) {
-                        Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                
-                String preprocessedType = new String();
-                    
-                if(radioRandomIS.isSelected()){
-                    preprocessedType += "-randomIS";
-                }
-                if(radioBRFS.isSelected()){
-                    preprocessedType += "-BR_FS";
-                }
-                else if(radioRandomFS.isSelected()){
-                    preprocessedType += "-randomFS";
-                }
-                
-                //check if only FS and/or IS is selected
-                if((radioBRFS.isSelected() || radioRandomFS.isSelected() || radioRandomIS.isSelected()) && radioNoSplit.isSelected())//Feature and/or instance selection
-                {
-                    
-                    BufferedWriter bw_train = null;
-                    try {
-
-                        String name_dataset= dataset_name1.substring(0,dataset_name1.length()-5);
-                        
-                        if(format.toLowerCase().contains("meka")){
-                            String dataPath = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".arff";
-
-                            bw_train = new BufferedWriter(new FileWriter(dataPath));
-                            PrintWriter wr_train = new PrintWriter(bw_train);
-
-                            //System.out.println("longitud del train es "+dataset_train.getNumInstances());
-                            util.Save_dataset_Meka_in_the_file(wr_train, preprocessedDataset, name_dataset + preprocessedType);
-
-                            wr_train.close();
-                            bw_train.close();
-                        }
-                        else{
-                            //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-                            //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-                            //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-
-                            String dataPath = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".arff";
-                            path_xml = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType +".xml";
-
-                            bw_train = new BufferedWriter(new FileWriter(dataPath));
-                            PrintWriter wr_train = new PrintWriter(bw_train);
-
-                            //System.out.println("longitud del train es "+dataset_train.getNumInstances());
-                            util.Save_dataset_in_the_file(wr_train, preprocessedDataset, name_dataset+ preprocessedType);
-
-                            wr_train.close();
-                            bw_train.close();
-
-                            BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
-                            PrintWriter wr_xml = new PrintWriter(bw_xml);
-
-                            util.Save_xml_in_the_file(wr_xml,preprocessedDataset);
-
-                            wr_xml.close();
-                            bw_xml.close();
-                        }
-
-
-                        JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
-
-                    } catch (IOException ex) {
-                        Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                
-                
-                if(radioIterativeStratifiedHoldout.isSelected()|| radioRandomHoldout.isSelected() || radioLPStratifiedHoldout.isSelected()) //holdout
-                {
-                    BufferedWriter bw_train = null;
-                    try {
-
-                        String name_dataset= dataset_name1.substring(0,dataset_name1.length()-5);
-
-                        //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-                        //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-                        //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-
-                        if(radioNoFS.isSelected() && radioNoIS.isSelected()){
-                            path_train = file.getAbsolutePath()+"/"+name_dataset+"-train.arff";
-                            path_test = file.getAbsolutePath()+"/"+name_dataset+"-test.arff";
-                            path_xml = file.getAbsolutePath()+"/"+name_dataset+".xml"; 
-                        }
-                        else{
-                            path_train = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + "-train.arff";
-                            path_test = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + "-test.arff";
-                            path_xml = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".xml";
-                        }
-                        
-                        if(format.toLowerCase().contains("meka")){
-                            bw_train = new BufferedWriter(new FileWriter(path_train));
-                            PrintWriter wr_train = new PrintWriter(bw_train);
-
-                            //System.out.println("longitud del train es "+dataset_train.getNumInstances());
-                            util.Save_dataset_Meka_in_the_file(wr_train, dataset_train);
-
-                            wr_train.close();
-                            bw_train.close();
-
-                            BufferedWriter bw_test = new BufferedWriter(new FileWriter(path_test));
-                            PrintWriter wr_test = new PrintWriter(bw_test);
-
-                            // System.out.println("longitud del test es "+dataset_test.getNumInstances());
-                            util.Save_dataset_Meka_in_the_file(wr_test, dataset_test);
-
-                            wr_test.close();
-                            bw_test.close();
-                        }
-                        else{
-                            bw_train = new BufferedWriter(new FileWriter(path_train));
-                            PrintWriter wr_train = new PrintWriter(bw_train);
-
-                            //System.out.println("longitud del train es "+dataset_train.getNumInstances());
-                            util.Save_dataset_in_the_file(wr_train, dataset_train);
-
-                            wr_train.close();
-                            bw_train.close();
-
-                            BufferedWriter bw_test = new BufferedWriter(new FileWriter(path_test));
-                            PrintWriter wr_test = new PrintWriter(bw_test);
-
-                            // System.out.println("longitud del test es "+dataset_test.getNumInstances());
-                            util.Save_dataset_in_the_file(wr_test, dataset_test);
-
-                            wr_test.close();
-                            bw_test.close();
-
-                            BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
-                            PrintWriter wr_xml = new PrintWriter(bw_xml);
-
-                            util.Save_xml_in_the_file(wr_xml, dataset_train);
-
-                            wr_xml.close();
-                            bw_xml.close();
-                        }
-
-                        JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
-
-                    } catch (IOException ex) {
-                        Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-
-                }
-
-                else if(radioIterativeStratifiedCV.isSelected()|| radioRandomCV.isSelected() || radioLPStratifiedCV.isSelected())//CROSS VALIDATION
-                {
-                    try{
-
-                        if(format.toLowerCase().contains("meka")){
-                           if(radioNoFS.isSelected() && radioNoIS.isSelected()){
-                                util.Save_dataset_Meka_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-train");
-                                util.Save_dataset_Meka_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-test");  
+                                wr_train.close();
+                                bw_train.close();
                             }
                             else{
-                                util.Save_dataset_Meka_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
-                                util.Save_dataset_Meka_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");  
+                                //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+                                //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+                                //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+
+                                String dataPath = file.getAbsolutePath()+"/"+name_dataset+"-MulanConverted.arff";
+                                path_xml = file.getAbsolutePath()+"/"+name_dataset+"-MulanConverted.xml";
+
+                                bw_train = new BufferedWriter(new FileWriter(dataPath));
+                                PrintWriter wr_train = new PrintWriter(bw_train);
+
+                                //System.out.println("longitud del train es "+dataset_train.getNumInstances());
+                                util.Save_dataset_in_the_file(wr_train, dataset, name_dataset+"_MulanConverted");
+
+                                wr_train.close();
+                                bw_train.close();
+
+                                BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
+                                PrintWriter wr_xml = new PrintWriter(bw_xml);
+
+                                util.Save_xml_in_the_file(wr_xml, dataset);
+
+                                wr_xml.close();
+                                bw_xml.close();
                             }
+
+
+                            JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+
+                        } catch (IOException ex) {
+                            JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
+                            Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        else{
+                    }
+
+                    String preprocessedType = new String();
+
+                    if(radioRandomIS.isSelected()){
+                        preprocessedType += "-randomIS";
+                    }
+                    if(radioBRFS.isSelected()){
+                        preprocessedType += "-BR_FS";
+                    }
+                    else if(radioRandomFS.isSelected()){
+                        preprocessedType += "-randomFS";
+                    }
+
+                    //check if only FS and/or IS is selected
+                    if((radioBRFS.isSelected() || radioRandomFS.isSelected() || radioRandomIS.isSelected()) && radioNoSplit.isSelected())//Feature and/or instance selection
+                    {
+
+                        BufferedWriter bw_train = null;
+                        try {
+
+                            String name_dataset= dataset_name1.substring(0,dataset_name1.length()-5);
+
+                            if(format.toLowerCase().contains("meka")){
+                                String dataPath = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".arff";
+
+                                bw_train = new BufferedWriter(new FileWriter(dataPath));
+                                PrintWriter wr_train = new PrintWriter(bw_train);
+
+                                //System.out.println("longitud del train es "+dataset_train.getNumInstances());
+                                util.Save_dataset_Meka_in_the_file(wr_train, preprocessedDataset, name_dataset + preprocessedType);
+
+                                wr_train.close();
+                                bw_train.close();
+                            }
+                            else{
+                                //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+                                //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+                                //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+
+                                String dataPath = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".arff";
+                                path_xml = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType +".xml";
+
+                                bw_train = new BufferedWriter(new FileWriter(dataPath));
+                                PrintWriter wr_train = new PrintWriter(bw_train);
+
+                                //System.out.println("longitud del train es "+dataset_train.getNumInstances());
+                                util.Save_dataset_in_the_file(wr_train, preprocessedDataset, name_dataset+ preprocessedType);
+
+                                wr_train.close();
+                                bw_train.close();
+
+                                BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
+                                PrintWriter wr_xml = new PrintWriter(bw_xml);
+
+                                util.Save_xml_in_the_file(wr_xml,preprocessedDataset);
+
+                                wr_xml.close();
+                                bw_xml.close();
+                            }
+
+
+                            JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+
+                        } catch (IOException ex) {
+                            JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
+                            Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+
+
+                    if(radioIterativeStratifiedHoldout.isSelected()|| radioRandomHoldout.isSelected() || radioLPStratifiedHoldout.isSelected()) //holdout
+                    {
+                        BufferedWriter bw_train = null;
+                        try {
+
+                            String name_dataset= dataset_name1.substring(0,dataset_name1.length()-5);
+
+                            //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+                            //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+                            //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+
                             if(radioNoFS.isSelected() && radioNoIS.isSelected()){
-                                util.Save_dataset_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-train");
-                                util.Save_dataset_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-test");  
-                                path_xml = file.getAbsolutePath()+"/"+dataset_name1.substring(0,dataset_name1.length()-5)+".xml";
+                                path_train = file.getAbsolutePath()+"/"+name_dataset+"-train.arff";
+                                path_test = file.getAbsolutePath()+"/"+name_dataset+"-test.arff";
+                                path_xml = file.getAbsolutePath()+"/"+name_dataset+".xml"; 
                             }
                             else{
-                                util.Save_dataset_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
-                                util.Save_dataset_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");  
-                                path_xml = file.getAbsolutePath()+"/"+dataset_name1.substring(0,dataset_name1.length()-5)+ preprocessedType + ".xml";
+                                path_train = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + "-train.arff";
+                                path_test = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + "-test.arff";
+                                path_xml = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".xml";
                             }
-        
 
-                            BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
-                            PrintWriter wr_xml = new PrintWriter(bw_xml);
+                            if(format.toLowerCase().contains("meka")){
+                                bw_train = new BufferedWriter(new FileWriter(path_train));
+                                PrintWriter wr_train = new PrintWriter(bw_train);
 
-                            System.out.println("filename_database_xml_path: " + filename_database_xml_path);
-                            util.Save_xml_in_the_file(wr_xml,list_dataset_train.get(0));
+                                //System.out.println("longitud del train es "+dataset_train.getNumInstances());
+                                util.Save_dataset_Meka_in_the_file(wr_train, dataset_train);
 
-                            wr_xml.close();
-                            bw_xml.close();
+                                wr_train.close();
+                                bw_train.close();
+
+                                BufferedWriter bw_test = new BufferedWriter(new FileWriter(path_test));
+                                PrintWriter wr_test = new PrintWriter(bw_test);
+
+                                ////System.out.println("longitud del test es "+dataset_test.getNumInstances());
+                                util.Save_dataset_Meka_in_the_file(wr_test, dataset_test);
+
+                                wr_test.close();
+                                bw_test.close();
+                            }
+                            else{
+                                bw_train = new BufferedWriter(new FileWriter(path_train));
+                                PrintWriter wr_train = new PrintWriter(bw_train);
+
+                                //System.out.println("longitud del train es "+dataset_train.getNumInstances());
+                                util.Save_dataset_in_the_file(wr_train, dataset_train);
+
+                                wr_train.close();
+                                bw_train.close();
+
+                                BufferedWriter bw_test = new BufferedWriter(new FileWriter(path_test));
+                                PrintWriter wr_test = new PrintWriter(bw_test);
+
+                                ////System.out.println("longitud del test es "+dataset_test.getNumInstances());
+                                util.Save_dataset_in_the_file(wr_test, dataset_test);
+
+                                wr_test.close();
+                                bw_test.close();
+
+                                BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
+                                PrintWriter wr_xml = new PrintWriter(bw_xml);
+
+                                util.Save_xml_in_the_file(wr_xml, dataset_train);
+
+                                wr_xml.close();
+                                bw_xml.close();
+                            }
+
+                            JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+
+                        } catch (IOException ex) {
+                            JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
+                            Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
                         }
 
-                        JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
-
-                    }
-                    catch(Exception e1){
-                        e1.printStackTrace();
                     }
 
+                    else if(radioIterativeStratifiedCV.isSelected()|| radioRandomCV.isSelected() || radioLPStratifiedCV.isSelected())//CROSS VALIDATION
+                    {
+                        try{
+
+                            if(format.toLowerCase().contains("meka")){
+                               if(radioNoFS.isSelected() && radioNoIS.isSelected()){
+                                    util.Save_dataset_Meka_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-train");
+                                    util.Save_dataset_Meka_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-test");  
+                                }
+                                else{
+                                    util.Save_dataset_Meka_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
+                                    util.Save_dataset_Meka_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");  
+                                }
+                            }
+                            else{
+                                if(radioNoFS.isSelected() && radioNoIS.isSelected()){
+                                    util.Save_dataset_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-train");
+                                    util.Save_dataset_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-test");  
+                                    path_xml = file.getAbsolutePath()+"/"+dataset_name1.substring(0,dataset_name1.length()-5)+".xml";
+                                }
+                                else{
+                                    util.Save_dataset_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
+                                    util.Save_dataset_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");  
+                                    path_xml = file.getAbsolutePath()+"/"+dataset_name1.substring(0,dataset_name1.length()-5)+ preprocessedType + ".xml";
+                                }
+
+
+                                BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
+                                PrintWriter wr_xml = new PrintWriter(bw_xml);
+
+                               //System.out.println("filename_database_xml_path: " + filename_database_xml_path);
+                                util.Save_xml_in_the_file(wr_xml,list_dataset_train.get(0));
+
+                                wr_xml.close();
+                                bw_xml.close();
+                            }
+
+                            JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+
+                        }
+                        catch(Exception e1){
+                            JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
+                            e1.printStackTrace();
+                        }
+
+                    }
+
+                    Toolkit.getDefaultToolkit().beep();
                 }
-                
-                Toolkit.getDefaultToolkit().beep();
-            }
 
+            }
         }
+        catch(Exception e){            
+            JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        
+        
     }//GEN-LAST:event_jButtonSaveDatasetsActionPerformed
 
     // COMIENZA A CALCULAR LAS METRICAS SEGUN LA OPCION DEL train/TEST (BOTON "start")
@@ -3612,22 +3624,22 @@ private void Inicializa_config()
                     Randomize randomize = new Randomize();                
                     dataIS = dataset.getDataSet();
                     
-                    System.out.println("dataIS.get(0): " + dataIS.get(0));
+                   //System.out.println("dataIS.get(0): " + dataIS.get(0));
                     
                     randomize.setInputFormat(dataIS);
                     dataIS = Filter.useFilter(dataIS, randomize);
                     randomize.batchFinished();
                     
-                    System.out.println("dataIS.get(0): " + dataIS.get(0));
+                   //System.out.println("dataIS.get(0): " + dataIS.get(0));
                     
                     RemoveRange removeRange = new RemoveRange();
                     removeRange.setInputFormat(dataIS);
-                    System.out.println((nInstances+1) + "-last");
+                   //System.out.println((nInstances+1) + "-last");
                     removeRange.setInstancesIndices((nInstances+1) + "-last");
                     
                     dataIS = Filter.useFilter(dataIS, removeRange);
                     removeRange.batchFinished();
-                    System.out.println("dataIS.numInstances(): " + dataIS.numInstances());
+                   //System.out.println("dataIS.numInstances(): " + dataIS.numInstances());
                     
                     preprocessDataset = dataset.reintegrateModifiedDataSet(dataIS);
                 } catch (Exception ex) {
@@ -3643,7 +3655,7 @@ private void Inicializa_config()
 
                 preprocessedDataset = preprocessDataset;
                 
-                System.out.println("preprocessedDataset.getNumInstances(): " + preprocessedDataset.getNumInstances());
+               //System.out.println("preprocessedDataset.getNumInstances(): " + preprocessedDataset.getNumInstances());
 
             }
         }
@@ -3839,8 +3851,8 @@ private void Inicializa_config()
                         }
                         test.addAll(foldsCV[i]);
 
-                        System.out.println("train: " + train.numInstances());
-                        System.out.println("test: " + test.numInstances());
+                       //System.out.println("train: " + train.numInstances());
+                       //System.out.println("test: " + test.numInstances());
 
                         list_dataset_train.add(new MultiLabelInstances(train, preprocessDataset.getLabelsMetaData()));
                         list_dataset_test.add(new MultiLabelInstances(test, preprocessDataset.getLabelsMetaData()));
@@ -4344,7 +4356,7 @@ private void Inicializa_config()
                 {
                     deleteXML = true;
                     
-                    System.out.println("el dataset es de tipo MEKA");
+                   //System.out.println("el dataset es de tipo MEKA");
                     es_de_tipo_meka = true;
 
                     int label_count = util.Extract_labels_from_arff(sCadena);
@@ -4382,7 +4394,7 @@ private void Inicializa_config()
                         }
                         
                         for(int i=0; i<label_count; i++){
-                            System.out.println("sCadenas[" + i + "]: -" + sCadenas[i] + "-");
+                           //System.out.println("sCadenas[" + i + "]: -" + sCadenas[i] + "-");
                             label_name = util.Extract_label_name_from_String(sCadenas[i]);
 
                             if(label_name!= null)
@@ -4410,7 +4422,7 @@ private void Inicializa_config()
 
                 else
                 {
-                    System.out.println("el dataset NO es de tipo MEKA");
+                   //System.out.println("el dataset NO es de tipo MEKA");
                     es_de_tipo_meka= false;
 
                 }
@@ -4433,7 +4445,7 @@ private void Inicializa_config()
                 filename_database_xml = util.Get_file_name_xml(filename_database_xml_path);
             }
 
-            System.out.println("Choosefilename_database_xml_path: " + filename_database_xml_path);
+           //System.out.println("Choosefilename_database_xml_path: " + filename_database_xml_path);
 
             try {
                 File f = new File(filename_database_xml);
@@ -4478,7 +4490,7 @@ private void Inicializa_config()
 
             if(deleteXML){
                     File f2 = new File(filename_database_xml);
-                    System.out.println("f2: " + f2.getAbsolutePath());
+                   //System.out.println("f2: " + f2.getAbsolutePath());
                     f2.delete();
                 }
 
@@ -4654,14 +4666,8 @@ private void Inicializa_config()
         textLPStratifiedCV.setEnabled(false);
 
         
-        if(radioNoFS.isSelected() && radioNoIS.isSelected()){
-            jButtonSaveDatasets.setEnabled(true);
-            jComboBox_SaveFormat.setEnabled(true);
-        }
-        else{
-            jButtonSaveDatasets.setEnabled(false);
-            jComboBox_SaveFormat.setEnabled(false);
-        }        
+        jButtonSaveDatasets.setEnabled(false);
+        jComboBox_SaveFormat.setEnabled(false);        
         
     }//GEN-LAST:event_radioNoSplitActionPerformed
 
@@ -4676,14 +4682,8 @@ private void Inicializa_config()
         jComboBox_BRFS_Out.setEnabled(false);
         textRandomFS.setEnabled(false);
 
-        if(radioNoSplit.isSelected() && radioNoIS.isSelected()){
-            jButtonSaveDatasets.setEnabled(true);
-            jComboBox_SaveFormat.setEnabled(true);
-        }
-        else{
-            jButtonSaveDatasets.setEnabled(false);
-            jComboBox_SaveFormat.setEnabled(false);
-        }
+        jButtonSaveDatasets.setEnabled(false);
+        jComboBox_SaveFormat.setEnabled(false);
     }//GEN-LAST:event_radioNoFSActionPerformed
 
     private void jComboBox_SaveFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_SaveFormatActionPerformed
@@ -4732,7 +4732,7 @@ private void Inicializa_config()
         // evento cuando se da un click en el jtable de la pestaña class imbalance
 
         for(int i=0; i<tabsImbalance.getTabCount(); i++){
-            System.out.println("i: " + i + " - " + tabsImbalance.getTitleAt(i));
+           //System.out.println("i: " + i + " - " + tabsImbalance.getTitleAt(i));
         }
 
         //#Examples per labelset
@@ -4816,17 +4816,16 @@ private void Inicializa_config()
 
         else if(tabsImbalance.getSelectedIndex()==3) // si esta activado el panel del IR per Label intra class
         {
-
             //System.out.println("Se ha tocado");
             int seleccionada = tableImbalance.getSelectedRow();
 
             if(id_x_IR == null) return;
 
             int cant_labels =(int)tableImbalance.getValueAt(seleccionada, 1);
-            //  System.out.println(" hay "+cant_labels +" etiquetas");
+            // //System.out.println(" hay "+cant_labels +" etiquetas");
 
             double ir = Double.parseDouble(tableImbalance.getValueAt(seleccionada, 2).toString());
-            //  System.out.println(" el ir es de "+ir +" ");
+            // //System.out.println(" el ir es de "+ir +" ");
 
             ArrayList<String> label_names= util.Get_labelnames_x_IR_intra_class(ir,cant_labels,label_imbalanced);
 
@@ -4848,10 +4847,10 @@ private void Inicializa_config()
             if(id_x_IR == null) return;
 
             int cant_labels =(int)tableImbalance.getValueAt(seleccionada, 1);
-            //  System.out.println(" hay "+cant_labels +" etiquetas");
+            // //System.out.println(" hay "+cant_labels +" etiquetas");
 
             double ir = Double.parseDouble(tableImbalance.getValueAt(seleccionada, 2).toString());
-            //  System.out.println(" el ir es de "+ir +" ");
+            // //System.out.println(" el ir es de "+ir +" ");
 
             ArrayList<String> label_names= util.Get_labelnames_x_IR_inter_class(ir,cant_labels,label_imbalanced);
 
@@ -4920,15 +4919,18 @@ private void Inicializa_config()
                 jButton1.repaint();
         }
         else if(comboBoxLabelsInformation.getSelectedIndex() == 5){
-                tabsImbalance.setSelectedIndex(9);
-                jButton1.setVisible(true);
-                jButton1.repaint();
-        }
-        else if(comboBoxLabelsInformation.getSelectedIndex() == 6){
+                //tabsImbalance.setSelectedIndex(9);
                 tabsImbalance.setSelectedIndex(3);
                 jButton1.setVisible(true);
                 jButton1.repaint();
         }
+        else if(comboBoxLabelsInformation.getSelectedIndex() == 6){
+                //tabsImbalance.setSelectedIndex(3);
+                tabsImbalance.setSelectedIndex(5);
+                jButton1.setVisible(true);
+                jButton1.repaint();
+        }
+        /*
         else if(comboBoxLabelsInformation.getSelectedIndex() == 7){
                 tabsImbalance.setSelectedIndex(4);
                 jButton1.setVisible(true);
@@ -4944,13 +4946,14 @@ private void Inicializa_config()
                 jButton1.setVisible(true);
                 jButton1.repaint();
         }
+        */
     }//GEN-LAST:event_comboBoxLabelsInformationActionPerformed
 
     private void tabsImbalanceStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabsImbalanceStateChanged
         // jtabbpane de la pestaña class imbalance
         if(tm_BR1 !=null && tm_LP1!=null){
 
-            System.out.println(" id "+ tabsImbalance.getSelectedIndex());
+           //System.out.println(" id "+ tabsImbalance.getSelectedIndex());
 
             if(tabsImbalance.getSelectedIndex()==1)
             {
@@ -5018,10 +5021,10 @@ private void Inicializa_config()
             }
             else if (tabsImbalance.getSelectedIndex()==3)
             {
-                tableImbalance.setModel(tm_ir_per_label_intra_class);
+                tableImbalance.setModel(tm_ir_per_label_intra_class_only);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance Ratio intra class"));
 
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(2));
+                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
 
@@ -5036,7 +5039,7 @@ private void Inicializa_config()
             else if (tabsImbalance.getSelectedIndex()==2)
             {
                 tableImbalance.setModel(tm_labelxExamples);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels per example"));
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels histogram"));
 
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
                 panelImbalanceLeft.repaint();
@@ -5157,7 +5160,7 @@ private void Inicializa_config()
             else
             {
                 tableImbalance.setModel(tm_labelxExamples);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels per example"));
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels histogram"));
 
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
                 panelImbalanceLeft.repaint();
@@ -5174,7 +5177,7 @@ private void Inicializa_config()
 
             tableImbalance.repaint();
             tableImbalance.validate();
-            //  System.out.println("SE HA PRESIONADO el "+jTabbedPane2.getSelectedIndex() );
+            // //System.out.println("SE HA PRESIONADO el "+jTabbedPane2.getSelectedIndex() );
         }
     }//GEN-LAST:event_tabsImbalanceStateChanged
 
@@ -5198,14 +5201,8 @@ private void Inicializa_config()
         // TODO add your handling code here:
         textRandomIS.setEnabled(false);
 
-        if(radioNoFS.isSelected() && radioNoSplit.isSelected()){
-            jButtonSaveDatasets.setEnabled(true);
-            jComboBox_SaveFormat.setEnabled(true);
-        }
-        else{
-            jButtonSaveDatasets.setEnabled(false);
-            jComboBox_SaveFormat.setEnabled(false);
-        }
+        jButtonSaveDatasets.setEnabled(false);
+        jComboBox_SaveFormat.setEnabled(false);
     }//GEN-LAST:event_radioNoISActionPerformed
 
     private void showHeatMap(){
@@ -5237,7 +5234,7 @@ private void Inicializa_config()
         }
           
         Collections.sort(selectedIndex);
-        System.out.println("Show Heatmap selected: " + Arrays.toString(selectedIndex.toArray()));
+       //System.out.println("Show Heatmap selected: " + Arrays.toString(selectedIndex.toArray()));
         
         double [][] newCoeffs = new double[selectedIndex.size()][selectedIndex.size()];
 
@@ -5293,7 +5290,7 @@ private void Inicializa_config()
         
         Arrays.sort(selectedIndex);
         
-        System.out.println("HEatmap selectedindex: " + Arrays.toString(selectedIndex));
+       //System.out.println("HEatmap selectedindex: " + Arrays.toString(selectedIndex));
           
         double [][] newCoeffs = new double[n][n];
 
@@ -5330,7 +5327,7 @@ private void Inicializa_config()
         int[] selecteds = getTopRelatedHeatmap(n);
         Arrays.sort(selecteds);
         //tableHeatmapLeft.setRowSelectionInterval(selecteds[0], selecteds[n-1]);
-        System.out.println("selecteds: " + Arrays.toString(selecteds));
+       //System.out.println("selecteds: " + Arrays.toString(selecteds));
 
         
         for(int i=0;i<selecteds.length; i++)
@@ -5629,9 +5626,9 @@ private void Inicializa_config()
                 }
             }
             
-            System.out.println("NEWCOEFS");
+           //System.out.println("NEWCOEFS");
             for(int i=0; i<sortedSelected.size(); i++){
-                System.out.println(Arrays.toString(newCoefs[i]));
+               //System.out.println(Arrays.toString(newCoefs[i]));
             }
         }
         
@@ -5703,7 +5700,7 @@ private void Inicializa_config()
               
             if(filename_database_xml == null){
                 MekaToMulan m = new MekaToMulan();
-                System.out.println(filename_database_arff);
+               //System.out.println(filename_database_arff);
                 m.convertir(filename_database_arff, filename_database_arff+"_mulan");
             
                 dataset = new MultiLabelInstances(filename_database_arff+"_mulan.arff", filename_database_arff+"_mulan.xml");
@@ -5711,7 +5708,7 @@ private void Inicializa_config()
                 /*File f = new File(filename_database_arff+"_mulan.arff");
                 f.delete();*/
                 File f2 = new File(filename_database_arff+"_mulan.xml");
-                System.out.println("f2: " + f2.getAbsolutePath());
+               //System.out.println("f2: " + f2.getAbsolutePath());
                 f2.delete();
             }
             else{
@@ -5862,10 +5859,10 @@ private void Inicializa_config()
             }
             else if (tabsImbalance.getSelectedIndex()==3)
             {
-                tableImbalance.setModel(tm_ir_per_label_intra_class);
+                tableImbalance.setModel(tm_ir_per_label_intra_class_only);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance Ratio intra class"));
                 
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(2));
+                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
             }
@@ -5873,7 +5870,7 @@ private void Inicializa_config()
             else if (tabsImbalance.getSelectedIndex()==2)
             {
                 tableImbalance.setModel(tm_labelxExamples);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels per example"));
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels histogram"));
                 
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
                 panelImbalanceLeft.repaint();
@@ -5940,7 +5937,7 @@ private void Inicializa_config()
             else
             {
                 tableImbalance.setModel(tm_labelxExamples);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels per example"));
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels histogram"));
                 
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
                 panelImbalanceLeft.repaint();
@@ -5949,7 +5946,7 @@ private void Inicializa_config()
 
             tableImbalance.repaint();
             tableImbalance.validate();
-            //  System.out.println("SE HA PRESIONADO el "+jTabbedPane2.getSelectedIndex() );
+            // //System.out.println("SE HA PRESIONADO el "+jTabbedPane2.getSelectedIndex() );
         }
             
             
@@ -6031,7 +6028,7 @@ private void Inicializa_config()
       graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname1,graphComponent);
 
             
-            // System.out.println("dimensiones del panel jpanel25 "+jPanel25.getBounds().width+ " , "+ jPanel25.getBounds().height);
+            ////System.out.println("dimensiones del panel jpanel25 "+jPanel25.getBounds().width+ " , "+ jPanel25.getBounds().height);
         //    graphComponent  =  Create_jgraphx(jPanel10,lista_pares,labelname,graphComponent);// balanced
             //create_button_export(jPanel25 ,export6,350,370);
 
@@ -6067,7 +6064,7 @@ private void Inicializa_config()
         }
         catch (Exception ex) {
             JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.INFORMATION_MESSAGE);
-            System.out.println("Error: " + ex);
+           //System.out.println("Error: " + ex);
             Logger.getLogger(CrossValidationExperiment.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -6088,7 +6085,7 @@ private void Inicializa_config()
             }
             Collections.sort(pairs, Collections.reverseOrder());
             
-            System.out.println("COCURRENCE-> " + Arrays.toString(pairs.toArray()));
+           //System.out.println("COCURRENCE-> " + Arrays.toString(pairs.toArray()));
 
             int numLabels = n;
             int currentSelectedLabels = 0;
@@ -6098,14 +6095,14 @@ private void Inicializa_config()
             do{
                 if(!selectedLabels.contains(pairs.get(0).label1)){
                     selectedLabels.add(pairs.get(0).label1);
-                    System.out.println("Add " + pairs.get(0).label1);
+                   //System.out.println("Add " + pairs.get(0).label1);
                     currentSelectedLabels++;
                 }
                 
                 if(currentSelectedLabels < numLabels){
                     if(!selectedLabels.contains(pairs.get(0).label2)){
                         selectedLabels.add(pairs.get(0).label2);
-                        System.out.println("Add " + pairs.get(0).label2);
+                       //System.out.println("Add " + pairs.get(0).label2);
                         currentSelectedLabels++;
                     }
                 }
@@ -6159,7 +6156,7 @@ private void Inicializa_config()
             }
             Collections.sort(pairs, Collections.reverseOrder());
             
-            System.out.println("HEATMAP-> " + Arrays.toString(pairs.toArray()));
+           //System.out.println("HEATMAP-> " + Arrays.toString(pairs.toArray()));
 
             int numLabels = n;
             int currentSelectedLabels = 0;
@@ -6169,14 +6166,14 @@ private void Inicializa_config()
             do{
                 if(!selectedLabels.contains(pairs.get(0).label1)){
                     selectedLabels.add(pairs.get(0).label1);
-                    System.out.println("Add " + pairs.get(0).label1);
+                   //System.out.println("Add " + pairs.get(0).label1);
                     currentSelectedLabels++;
                 }
                 
                 if(currentSelectedLabels < numLabels){
                     if(!selectedLabels.contains(pairs.get(0).label2)){
                         selectedLabels.add(pairs.get(0).label2);
-                        System.out.println("Add " + pairs.get(0).label2);
+                       //System.out.println("Add " + pairs.get(0).label2);
                         currentSelectedLabels++;
                     }
                 }
@@ -6470,15 +6467,15 @@ private void Inicializa_config()
                     imbalanced_data = util.Get_data_imbalanced_x_label_inter_class(current,label_frequency);
 
                      temp= util.get_value_metric(metric, list_datasets_train.get(n), es_de_tipo_meka); 
-                     System.out.println(temp);              
+                    //System.out.println(temp);              
 
                     if(temp.equals( "-1.0" )){
                         temp = util.get_value_metric_imbalanced(metric, list_datasets_train.get(n), imbalanced_data);
-                        System.out.println(temp);
+                       //System.out.println(temp);
                     }
                     if(temp.equals( "-1.0" )) {
                         temp ="NaN";
-                        System.out.println(temp);
+                       //System.out.println(temp);
                     }
 
                     temp=temp.replace(",", ".");
@@ -6611,7 +6608,7 @@ private void Inicializa_config()
                 {
                
                 //This is where a real application would save the file.
-               // System.out.println("Saving: "  + file.getName()+ " ruta "+file.getAbsolutePath());
+               ////System.out.println("Saving: "  + file.getName()+ " ruta "+file.getAbsolutePath());
                 
                 // BufferedWriter AND  PrintWriter
                 path = file.getAbsolutePath() +".txt";
@@ -6654,7 +6651,7 @@ private void Inicializa_config()
 
                       catch(Exception e1)
                         {
-                            System.out.println("Error: " +  e1.getMessage());
+                           //System.out.println("Error: " +  e1.getMessage());
                             JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
                         }   
                         
@@ -6678,7 +6675,7 @@ private void Inicializa_config()
 
                       catch(Exception e1)
                         {
-                            System.out.println("este es el mensaje "+e1.getMessage());
+                           //System.out.println("este es el mensaje "+e1.getMessage());
                             JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
                         }   
                       //util.Save_in_the_file_csv(wr, metric_list_commun, metric_list_train, metric_list_test, dataset_train, dataset_test,dataset_current_name);
@@ -6811,7 +6808,7 @@ private void Inicializa_config()
                 File file = fc.getSelectedFile();
                 FileFilter f1 = fc.getFileFilter();
                 
-                System.out.println("escogio la opcion "+f1.getDescription());
+               //System.out.println("escogio la opcion "+f1.getDescription());
                
                 if(f1.getDescription().equals(".csv"))
                 {
@@ -6997,7 +6994,7 @@ private void Inicializa_config()
          // extension txt
         FileNameExtensionFilter fname = new FileNameExtensionFilter(".txt", "txt");
         FileNameExtensionFilter fname2 = new FileNameExtensionFilter(".csv", "csv");
-        FileNameExtensionFilter fname3 = new FileNameExtensionFilter(".arff (Meka)", ".arff (Meka)");
+        FileNameExtensionFilter fname3 = new FileNameExtensionFilter(".arff", ".arff");
         FileNameExtensionFilter fname4 = new FileNameExtensionFilter(".tex", ".tex");
         
         //eliminar el que tiene por defecto
@@ -7085,7 +7082,7 @@ private void Inicializa_config()
                }
                 
                
-               else if (f1.getDescription().equals(".arff (Meka)"))
+               else if (f1.getDescription().equals(".arff"))
                 {
                     String path = file.getAbsolutePath() +".arff";
                 
@@ -7144,7 +7141,7 @@ private void Inicializa_config()
          // extension txt
         FileNameExtensionFilter fname = new FileNameExtensionFilter(".txt", "txt");
         FileNameExtensionFilter fname2 = new FileNameExtensionFilter(".csv", "csv");
-        FileNameExtensionFilter fname3 = new FileNameExtensionFilter(".arff (Meka)", ".arff (Meka)");
+        FileNameExtensionFilter fname3 = new FileNameExtensionFilter(".arff", ".arff");
         FileNameExtensionFilter fname4 = new FileNameExtensionFilter(".tex", ".tex");
         
         //eliminar el que tiene por defecto
@@ -7232,7 +7229,7 @@ private void Inicializa_config()
                }
                 
                
-               else if (f1.getDescription().equals(".arff (Meka)"))
+               else if (f1.getDescription().equals(".arff"))
                 {
                     String path = file.getAbsolutePath() +".arff";
                 
@@ -7348,7 +7345,7 @@ private void Inicializa_config()
                     value = util.get_value_metric_imbalanced(metric, dataset, imbalanced_data);
                 } 	
 
-                System.out.println(metric + " --- " + value + " --> " + value.replace(",", "."));
+               //System.out.println(metric + " --- " + value + " --> " + value.replace(",", "."));
                 tableMetrics.put(metric, value.replace(",", "."));
                 //jTextArea1.append(metric + util.get_tabs_multi_datasets(metric) + value + "\n"); 
            }
@@ -7415,7 +7412,7 @@ private void Inicializa_config()
                         value = util.get_value_metric_imbalanced(metric, list_dataset.get(d), imbalanced_data);
                     } 	
 
-                    System.out.println(metric + " --- " + value + " --> " + value.replace(",", "."));
+                   //System.out.println(metric + " --- " + value + " --> " + value.replace(",", "."));
                     tableMetricsMulti.get(dataName).put(metric, value.replace(",", "."));
                     //jTextArea1.append(metric + util.get_tabs_multi_datasets(metric) + value + "\n"); 
                } 
@@ -7427,9 +7424,9 @@ private void Inicializa_config()
         }
 
         for(int i=0; i<Dataset_names.size(); i++){
-            System.out.println("DATASET: " + Dataset_names.get(i));
+           //System.out.println("DATASET: " + Dataset_names.get(i));
             for(int m=0; m<metric_list.size(); m++){
-                System.out.println("\t" + metric_list.get(m) + tableMetricsMulti.get(Dataset_names.get(i)).get(metric_list.get(m)));
+               //System.out.println("\t" + metric_list.get(m) + tableMetricsMulti.get(Dataset_names.get(i)).get(metric_list.get(m)));
             }
         }
         
@@ -7437,7 +7434,7 @@ private void Inicializa_config()
         
         /*
         TableModel model = new Table_model_metrics(util.Get_row_data_multi(Dataset_names.size()), "multi", Dataset_names.size()+2);
-        System.out.println("model columns: " + model.getColumnCount());
+       //System.out.println("model columns: " + model.getColumnCount());
         
         for(int i=0; i<metric_list.size(); i++){
             //model.setValueAt(util.getValueFormatted(model.getValueAt(i, 0).toString(), tableMetrics.get(model.getValueAt(i, 0).toString())), i, 1);
@@ -7942,7 +7939,7 @@ private void Inicializa_config()
                  }
                  catch(Exception e1)
                  {
-                     System.out.println("otro mensaje "+e1.toString());
+                    //System.out.println("otro mensaje "+e1.toString());
                      JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
                  }   
                              
@@ -8153,7 +8150,7 @@ private void Inicializa_config()
         
         ArrayList<atributo> lista1 = new ArrayList();
         atributo temp;
-       // System.out.println("TESTING CODE");
+       ////System.out.println("TESTING CODE");
         int value;
         
          for(LabelSet current : keysets)
@@ -8261,12 +8258,12 @@ private void Inicializa_config()
         
         ArrayList<atributo> lista1 = new ArrayList();
         atributo temp;
-       // System.out.println("TESTING CODE");
+       ////System.out.println("TESTING CODE");
         int value;
          for(LabelSet current : keysets)
         {
               value=  result.get(current); //es la cantidad de veces que aparece el labelset en el dataset
-            //  System.out.println(" value "+ value);
+            // //System.out.println(" value "+ value);
               temp = new atributo(current.toString(), value);
               lista1.add(temp);
         }      
@@ -8364,9 +8361,9 @@ private void Inicializa_config()
              heatmap_coefficients = pair_label_values.clone();
              
              /*
-             System.out.println("HEATMAP");
+            //System.out.println("HEATMAP");
              for(int i=0; i<heatmap_coefficients.length; i++){
-                 System.out.println(Arrays.toString(heatmap_coefficients[i]));
+                //System.out.println(Arrays.toString(heatmap_coefficients[i]));
              }
              */
         }
@@ -8565,7 +8562,7 @@ private void Inicializa_config()
         double freq ;
         String truncate;
         
-       // System.out.println("TEST JTABLE_FREQUENCY");
+       ////System.out.println("TEST JTABLE_FREQUENCY");
         //RECORRE LAS ETIQUETAS
                      
         for(int i=0;i<dataset.getNumLabels();i++)
@@ -8583,7 +8580,7 @@ private void Inicializa_config()
             fila[2]= util.Truncate_values_aprox_zero(truncate, 4);
             
             
-          //  System.out.println(fila[1]);
+          // //System.out.println(fila[1]);
             
             table_model1.addRow(fila);
         }
@@ -8850,9 +8847,9 @@ private void Inicializa_config()
         id_x_nums_label_inter_class = ir_veces.Get_Id_x_Cant_veces();
         id_x_IR_inter_class = ir_veces.Get_Id_x_IR();
         
-        System.out.println("Recorre tabla inter class");
-        util.Recorre_Arreglo(id_x_nums_label_inter_class);
-        util.Recorre_Arreglo( id_x_IR_inter_class);
+       //System.out.println("Recorre tabla inter class");
+        //util.Recorre_Arreglo(id_x_nums_label_inter_class);
+        //util.Recorre_Arreglo( id_x_IR_inter_class);
         
         //representalos en la tabla
         for(int i=0; i<id_x_IR_inter_class.length; i++)
@@ -8960,7 +8957,7 @@ private void Inicializa_config()
         double freq ;
         int freq_current;
         String truncate;
-       // System.out.println("TEST JTABLE_FREQUENCY");
+       ////System.out.println("TEST JTABLE_FREQUENCY");
         //RECORRE LAS ETIQUETAS
         
         int max = util.Maxim_key(labels_x_example);
@@ -9018,7 +9015,7 @@ private void Inicializa_config()
         atributo current;
         double freq ;
         String truncate;
-       // System.out.println("TEST JTABLE_FREQUENCY");
+       ////System.out.println("TEST JTABLE_FREQUENCY");
         //RECORRE LAS ETIQUETAS
                      
         for(int i=0;i<dataset.getNumLabels();i++)
@@ -9036,7 +9033,7 @@ private void Inicializa_config()
             
             
             
-          //  System.out.println(fila[1]);
+          // //System.out.println(fila[1]);
             
             table_model1.addRow(fila);
         }
@@ -9199,9 +9196,9 @@ private void Inicializa_config()
          
          double [][] coeffs = new double[dataset.getNumLabels()][dataset.getNumLabels()];
          
-         System.out.println("COOCURRENCE");
+        //System.out.println("COOCURRENCE");
          for(int i=0; i<dataset.getNumLabels(); i++){
-             System.out.println(Arrays.toString(coocurrence_coefficients[i]));
+            //System.out.println(Arrays.toString(coocurrence_coefficients[i]));
          }
          
         for(int i=0; i<dataset.getNumLabels(); i++){
@@ -9216,12 +9213,12 @@ private void Inicializa_config()
                 else{
                     if(coocurrence_coefficients[i][j] > 0){
                         coeffs[i][j] = coocurrence_coefficients[i][j] / label_frenquency_values[j];
-                        System.out.println("1. coocurrence[" + i + "][" + j + "]: " + coocurrence_coefficients[i][j] + " ; frequency[" + i + "]: " + label_frenquency_values[j]);
+                       //System.out.println("1. coocurrence[" + i + "][" + j + "]: " + coocurrence_coefficients[i][j] + " ; frequency[" + i + "]: " + label_frenquency_values[j]);
                     }
                     else{
                         if(coocurrence_coefficients[j][i] > 0){
                             coeffs[i][j] = coocurrence_coefficients[j][i] / label_frenquency_values[j];
-                            System.out.println("2. coocurrence[" + j + "][" + i + "]: " + coocurrence_coefficients[j][i] + " ; frequency[" + i + "]: " + label_frenquency_values[j]);
+                           //System.out.println("2. coocurrence[" + j + "][" + i + "]: " + coocurrence_coefficients[j][i] + " ; frequency[" + i + "]: " + label_frenquency_values[j]);
                         }
                         else{
                            coeffs[i][j] = 0; 
@@ -9233,9 +9230,9 @@ private void Inicializa_config()
             }
         }
         
-        System.out.println("HEATMAP TABLE");
+       //System.out.println("HEATMAP TABLE");
          for(int p=0; p<coeffs.length; p++){
-             System.out.println(Arrays.toString(coeffs[p]));
+            //System.out.println(Arrays.toString(coeffs[p]));
          }
          
          return coeffs;
@@ -9258,7 +9255,7 @@ private void Inicializa_config()
             }
             Collections.sort(pairs, Collections.reverseOrder());
             
-            System.out.println(Arrays.toString(pairs.toArray()));
+           //System.out.println(Arrays.toString(pairs.toArray()));
 
             int numLabels = n;
             int currentSelectedLabels = 0;
@@ -9268,14 +9265,14 @@ private void Inicializa_config()
             do{
                 if(!selectedLabels.contains(pairs.get(0).label1)){
                     selectedLabels.add(pairs.get(0).label1);
-                    System.out.println("Add " + pairs.get(0).label1);
+                   //System.out.println("Add " + pairs.get(0).label1);
                     currentSelectedLabels++;
                 }
                 
                 if(currentSelectedLabels < numLabels){
                     if(!selectedLabels.contains(pairs.get(0).label2)){
                         selectedLabels.add(pairs.get(0).label2);
-                        System.out.println("Add " + pairs.get(0).label2);
+                       //System.out.println("Add " + pairs.get(0).label2);
                         currentSelectedLabels++;
                     }
                 }
@@ -9284,7 +9281,7 @@ private void Inicializa_config()
             }while((pairs.size() > 0) && (currentSelectedLabels < numLabels));
 
             
-            System.out.println("-----");
+           //System.out.println("-----");
             
             int [] labelIndices = new int[n];
             
@@ -9299,7 +9296,7 @@ private void Inicializa_config()
                     selectedsFreq[i] = i;
                 }
                 
-                System.out.println("selectedsFreq: " + Arrays.toString(selectedsFreq));
+               //System.out.println("selectedsFreq: " + Arrays.toString(selectedsFreq));
                 
                 int i = 0;
                 do{
@@ -9316,10 +9313,10 @@ private void Inicializa_config()
                 if(s != null){
                     pares.add(s);
                     labelIndices[i] = selectedLabels.get(i);
-                    System.out.println("Adding " + labelIndices[i]);
+                   //System.out.println("Adding " + labelIndices[i]);
                 }
                 else{
-                    System.out.println("NULL");
+                   //System.out.println("NULL");
                 }
             }
             
@@ -9328,10 +9325,10 @@ private void Inicializa_config()
      
      
     public Rectangle repaintProgressBar(){
-        System.out.println("this.getX(): " + this.getX());
-        System.out.println("this.getY(): " + this.getY());
-        System.out.println("this.getWidth(): " + this.getWidth());
-        System.out.println("this.getHeight(): " + this.getHeight());
+       //System.out.println("this.getX(): " + this.getX());
+       //System.out.println("this.getY(): " + this.getY());
+       //System.out.println("this.getWidth(): " + this.getWidth());
+       //System.out.println("this.getHeight(): " + this.getHeight());
         
         return(new Rectangle(this.getX(), this.getY(), this.getWidth(), this.getHeight()));
     } 

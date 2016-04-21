@@ -178,17 +178,17 @@ public class util {
         int labels;
         String current, value="";
         
-        System.out.println("cadena: " + cadena);
+       //System.out.println("cadena: " + cadena);
         String [] words = cadena.split("-C");
         String c = words[1].trim();
         Matcher matcher = Pattern.compile("\\d+").matcher(c);
         matcher.find();
         labels = Integer.valueOf(matcher.group());
-        System.out.println("c: -"+ c + "- ; " + labels);
+       //System.out.println("c: -"+ c + "- ; " + labels);
         if(c.charAt(0) == '-'){
             labels = labels * -1;
         }
-        System.out.println("labels: " + labels);
+       //System.out.println("labels: " + labels);
 
         
         return labels;
@@ -293,7 +293,7 @@ public class util {
              if(encontrados == cant_etiquetas_encontradas) break;
              
              truncate_current = Double.toString(current.get_ir_inter_class());
-             System.out.println("truncate_current1: " + truncate_current);
+            //System.out.println("truncate_current1: " + truncate_current);
              truncate_current = Truncate_values_aprox_zero(truncate_current, 5);
              
              current_ir = Double.parseDouble(truncate_current);
@@ -390,7 +390,7 @@ public class util {
             {
                 prob= label_x_frequency[i].get_frequency()*1.0/cant_instancias;
                 sum += prob;
-               // System.out.println(" TESTING "+label_x_frequency[i].get_name()+" "+label_x_frequency[i].get_frequency() +" "+ prob);
+               ////System.out.println(" TESTING "+label_x_frequency[i].get_name()+" "+label_x_frequency[i].get_frequency() +" "+ prob);
                                 
                     //type === bar
                     my_data.setValue(prob, label_x_frequency[i].get_name()," ");               
@@ -420,7 +420,7 @@ public class util {
    XYPlot xyplot = xyplot1.getChart().getXYPlot();
     
    double min = arreglo_ordenado[0];
-    System.out.println("el menor es " +min);
+   //System.out.println("el menor es " +min);
    double max = arreglo_ordenado[arreglo_ordenado.length-1];
    
    double mediana = util.get_mediana(arreglo_ordenado);
@@ -609,7 +609,7 @@ public class util {
    XYPlot xyplot = xyplot1.getChart().getXYPlot();
     
    double min = arreglo_ordenado[0];
-    System.out.println("el menor es " +min);
+   //System.out.println("el menor es " +min);
    double max = arreglo_ordenado[arreglo_ordenado.length-1];
    
    double mediana = get_mediana(arreglo_ordenado);
@@ -1045,7 +1045,7 @@ public class util {
     public static String Get_xml_string( String arff_text)
     {
         String result="";
-        System.out.println("arff_text: " + arff_text);
+       //System.out.println("arff_text: " + arff_text);
         
         //for(int i=0; i<arff_text.length();i++)
         //{
@@ -1056,7 +1056,7 @@ public class util {
         
         String [] words = arff_text.split("-t");
         if(words.length > 1){
-            System.out.println("words: " + Arrays.toString(words));
+           //System.out.println("words: " + Arrays.toString(words));
             for(int i=0; i<words.length-1; i++){
                 if(i == (words.length-2)){
                     result = result + words[i];
@@ -1067,11 +1067,11 @@ public class util {
                 
             }
             result = result.substring(0, result.length()) + ".xml";
-            System.out.println("result1: " + result);
+           //System.out.println("result1: " + result);
         }
         else{
             result = arff_text.substring(0,arff_text.length()-5)+".xml";
-            System.out.println("result2: " + result);
+           //System.out.println("result2: " + result);
         }
         
        
@@ -1141,67 +1141,16 @@ public class util {
         return result;
     }
     
-     public static void Recorre_Arreglo(int[] data)
-    {
-        System.out.println("RECORRER ARREGLO DATOS");
-        
-        for(int j=0; j<data.length ; j++)
-             System.out.print(" , "+data[j]);
-               
-        System.out.println();            
-    }
-     
-     public static void Recorre_Arreglo(String[] data)
-    {
-        //System.out.println("RECORRER ARREGLO DATOS");
-        
-        for(int j=0; j<data.length ; j++)
-             System.out.print(" , "+data[j]);
-               
-        System.out.println();            
-    }
-     
-     public static void Recorre_Arreglo(atributo[] data)
-    {
-        //System.out.println("RECORRER ARREGLO DATOS");
-        
-        for(int j=0; j<data.length ; j++)
-             System.out.print(" , "+data[j].get_frequency());
-               
-        System.out.println();            
-    }
-         
-     public static void Recorre_Arreglo(Integer[] data)
-    {
-       // System.out.println("RECORRER ARREGLO DATOS");
-        
-        for(int j=0; j<data.length ; j++)
-             System.out.print(" , "+data[j]);
-               
-        System.out.println();            
-    }
-     
-     
-     public static void Recorre_Arreglo(double[] data)
-    {
-        System.out.println("RECORRER ARREGLO DATOS");
-        
-        for(int j=0; j<data.length ; j++)
-             System.out.print(" , "+data[j]);
-               
-        System.out.println();            
-    }
-    
     public static void Recorre_Arreglo_2_dimensiones(double[][] data)
     {
-        System.out.println("RECORRER ARREGLO DATOS");
+       //System.out.println("RECORRER ARREGLO DATOS");
         for(int j=0; j<data.length ; j++)
         {
             for(int k=0; k<data.length; k++)
             {
-                System.out.print(" , "+data[j][k]);
+               //System.out.print(" , "+data[j][k]);
             }
-            System.out.println();            
+           //System.out.println();            
         }   
     }
     
@@ -1408,7 +1357,7 @@ public class util {
     public static double get_q1(double[] arreglo_ordenado)
      {
          int cuarto = arreglo_ordenado.length/4;
-       //  System.out.println("cuarto " + cuarto);
+       // //System.out.println("cuarto " + cuarto);
           
           if(arreglo_ordenado.length %4 ==0)return arreglo_ordenado[cuarto-1];
           return arreglo_ordenado[cuarto];
@@ -1419,7 +1368,7 @@ public class util {
     public static double get_q1(int[] arreglo_ordenado)
      {
          int cuarto = arreglo_ordenado.length/4;
-       //  System.out.println("cuarto " + cuarto);
+       // //System.out.println("cuarto " + cuarto);
           
           if(arreglo_ordenado.length %4 ==0)return arreglo_ordenado[cuarto-1];
           return arreglo_ordenado[cuarto];
@@ -1430,7 +1379,7 @@ public class util {
     public static double get_q3(double[] arreglo_ordenado)
      {
          int cuarto = 3*(arreglo_ordenado.length/4);
-        // System.out.println("cuarto " + cuarto);
+        ////System.out.println("cuarto " + cuarto);
           
           if(arreglo_ordenado.length %4 ==0)return arreglo_ordenado[cuarto-1];
           return arreglo_ordenado[cuarto];
@@ -1441,7 +1390,7 @@ public class util {
         public static double get_q3(int[] arreglo_ordenado)
      {
          int cuarto = 3*(arreglo_ordenado.length/4);
-        // System.out.println("cuarto " + cuarto);
+        ////System.out.println("cuarto " + cuarto);
           
           if(arreglo_ordenado.length %4 ==0)return arreglo_ordenado[cuarto-1];
           return arreglo_ordenado[cuarto];
@@ -1624,7 +1573,13 @@ public class util {
              
              mayor_ocurrencia = label_frequency[0].get_frequency();
              
-             ir_inter_class = mayor_ocurrencia/(current_label_freq.get_frequency()*1.0);
+             if(current_label_freq.get_frequency() <= 0){
+                 ir_inter_class = Double.NaN;
+             }
+             else{
+                 ir_inter_class = mayor_ocurrencia/(current_label_freq.get_frequency()*1.0);
+             }
+             
              
              labels_imbalanced[i]= new atributo(current.name(),current_label_freq.get_frequency(),ir, variance, ir_inter_class);
              
@@ -1806,7 +1761,7 @@ public class util {
             }
           
         if(Double.isNaN(value) || value == Double.POSITIVE_INFINITY || value == Double.NEGATIVE_INFINITY){
-            System.out.println("isNaN");
+           //System.out.println("isNaN");
             return("NaN");
         }
         else{
@@ -2398,7 +2353,7 @@ public class util {
         relationName.replaceAll(" ", "_");
         
        wr.write("@relation " + relationName);
-        System.out.println("relationName: " + relationName);
+       //System.out.println("relationName: " + relationName);
        wr.write(System.getProperty("line.separator"));  
        //wr.write(System.getProperty("line.separator"));  
         
@@ -2606,8 +2561,7 @@ public class util {
     
      public static void Save_in_the_file_arff_meka(PrintWriter wr,ArrayList<String> metric_list, MultiLabelInstances dataset_train, MultiLabelInstances dataset_test , String relation_name, boolean es_de_tipo_meka)
      {
-       //write the relation name 'tt: -C 0'
-       relation_name = "@relation "+"'"+relation_name+": -C 0'";
+       relation_name = "@relation "+"'"+relation_name+"'";
        
        wr.write(relation_name);
        wr.write(System.getProperty("line.separator"));  
@@ -2761,8 +2715,7 @@ public class util {
      
       public static void Save_in_the_file_arff_meka(PrintWriter wr,ArrayList<String> metric_list, ArrayList<MultiLabelInstances> dataset_train_list, ArrayList<MultiLabelInstances> dataset_test_list , String relation_name, boolean es_de_tipo_meka)
      {
-       //write the relation name 'tt: -C 0'
-       relation_name = "@relation "+"'"+relation_name+": -C 0'";
+       relation_name = "@relation "+"'"+relation_name+"'";
        
        wr.write(relation_name);
        wr.write(System.getProperty("line.separator"));  
@@ -2843,8 +2796,7 @@ public class util {
     
     public static void Save_in_the_file_arff_meka(PrintWriter wr,ArrayList<String> metric_list, ArrayList<MultiLabelInstances> list_datasets, String relation_name, boolean es_de_tipo_meka)
    {
-       //write the relation name 'tt: -C 0'
-       relation_name = "@relation "+"'"+relation_name+": -C 0'";
+       relation_name = "@relation "+"'"+relation_name+"'";
        
        wr.write(relation_name);
        wr.write(System.getProperty("line.separator"));  
@@ -4003,7 +3955,7 @@ public class util {
     
     public static void Save_csv_file_multi(PrintWriter wr,ArrayList<String> metric_list, ArrayList<String> dataNames, Hashtable<String, Hashtable<String, String>> tableMetrics)
     {
-        System.out.println("Data_names: " + dataNames.toString());
+       //System.out.println("Data_names: " + dataNames.toString());
         
         String value = new String();
          
@@ -4042,7 +3994,7 @@ public class util {
     public static void Save_chi_phi_csv_file(PrintWriter wr, double [][] coefficients, String[] labelNames)
     {
         for(int i=0; i<coefficients.length; i++){
-            System.out.println(Arrays.toString(coefficients[i]));
+           //System.out.println(Arrays.toString(coefficients[i]));
         }
         
         //Save label names row
@@ -4056,7 +4008,7 @@ public class util {
         
         wr.write(line);
         wr.write(System.getProperty("line.separator"));  
-       // System.out.println("line: " + line);
+       ////System.out.println("line: " + line);
         
         for(int i=0; i<labelNames.length; i++){
             line = "";
@@ -4144,7 +4096,7 @@ public class util {
                  
         wr.write(line);
         wr.write(System.getProperty("line.separator"));  
-        System.out.println("line: " + line);
+       //System.out.println("line: " + line);
         
         for(int i=0; i<labelNames.length; i++){
             line = "";
@@ -4163,7 +4115,7 @@ public class util {
             }
             wr.write(line);
             wr.write(System.getProperty("line.separator"));  
-            System.out.println("line: " + line);
+           //System.out.println("line: " + line);
         }
     
      }
@@ -4181,7 +4133,7 @@ public class util {
         
         wr.write(line);
         wr.write(System.getProperty("line.separator"));  
-        System.out.println("line: " + line);
+       //System.out.println("line: " + line);
         
         for(int i=0; i<labelNames.length; i++){
             line = "";
@@ -4197,7 +4149,7 @@ public class util {
             }
             wr.write(line);
             wr.write(System.getProperty("line.separator"));  
-            System.out.println("line: " + line);
+           //System.out.println("line: " + line);
         }
     
      }
@@ -4208,24 +4160,11 @@ public class util {
          
          Instances i1= dataset.getDataSet();
                  
-          wr.write("@relation" + " \'" + i1.relationName() + ": -C 0\'");
+          wr.write("@relation" + " \'" + i1.relationName() + "\'");
           wr.write(System.getProperty("line.separator"));  
           
           wr.write(System.getProperty("line.separator")); 
     
-          //cant de atributos
-          int num_atributos= i1.numAttributes();
-          int numero_etiquetas = dataset.getNumLabels();
-          int num_instances = dataset.getNumInstances();
-          
-          //Attributes
-          wr.write("@attribute Attributes numeric");
-          wr.write(System.getProperty("line.separator"));  
-          wr.write("@attribute Labels numeric");
-          wr.write(System.getProperty("line.separator"));  
-          wr.write("@attribute Instances numeric");
-          wr.write(System.getProperty("line.separator"));  
-
         
         for(String metric : metric_list)
         {
@@ -4240,9 +4179,6 @@ public class util {
         wr.write(System.getProperty("line.separator")); 
         
         String line = new String();
-        line += Integer.toString(num_atributos-numero_etiquetas) + ", ";
-        line += Integer.toString(numero_etiquetas) + ", ";
-        line += Integer.toString(num_instances) + ", ";
         
         String value = new String();
         for(String metric : metric_list)
@@ -4266,7 +4202,7 @@ public class util {
     
     public static void Save_meka_file_multi(PrintWriter wr,ArrayList<String> metric_list, ArrayList<String> dataNames, Hashtable<String, Hashtable<String, String>> tableMetrics)
     {
-        wr.write("@relation" + " \'" + "relationMUDA" + ": -C 0\'");
+        wr.write("@relation" + " \'" + "relationMLDA" + "\'");
         wr.write(System.getProperty("line.separator"));  
           
         wr.write(System.getProperty("line.separator")); 
@@ -4360,7 +4296,7 @@ public class util {
             }
         
         if(Double.isNaN(value) || value == Double.POSITIVE_INFINITY || value == Double.NEGATIVE_INFINITY){
-            System.out.println("isNaN");
+           //System.out.println("isNaN");
             return("NaN");
         }
         else{
@@ -4419,8 +4355,8 @@ public class util {
         double value =-1.0;
         Integer[] combCounts= metrics.get_combCounts(stat1);
         
-        System.out.println("se recorre el combcounts");
-        util.Recorre_Arreglo(combCounts);
+       //System.out.println("se recorre el combcounts");
+        //util.Recorre_Arreglo(combCounts);
         
         try{
             
@@ -4598,7 +4534,7 @@ public class util {
         //System.out.println("formatter: " + formatter.format(Double.parseDouble(val.toString().replace(",", "."))));
         
         if(Double.isNaN(value) || value == Double.POSITIVE_INFINITY || value == Double.NEGATIVE_INFINITY){
-            System.out.println("isNaN");
+           //System.out.println("isNaN");
             return("NaN");
         }
         else{
@@ -5238,7 +5174,7 @@ public class util {
      public static double[][] get_pair_label_values (MultiLabelInstances dataset, ArrayList<pares_atributos> lista_pares)
      {
          //Statistics stat = new Statistics();
-         System.out.println("dataLabels: " + dataset.getNumLabels());
+        //System.out.println("dataLabels: " + dataset.getNumLabels());
          double [][] coocurrences = new double[dataset.getNumLabels()][dataset.getNumLabels()];
          coocurrences = calculateCoocurrences(dataset);
          return(coocurrences);
@@ -5262,8 +5198,8 @@ public class util {
             for (LabelsPair pair : pairs) {
                 chi = pair.getScore();
                 phi = phiMatrix[pair.getPair()[0]][pair.getPair()[1]];
-                // System.out.println("chi:"+pairs[i].getPair()[0]+" , "+ pairs[i].getPair()[1]+"= "+ chi);
-                // System.out.println("fi:"+pairs[i].getPair()[1]+" , "+ pairs[i].getPair()[0]+"= "+ fi);
+                ////System.out.println("chi:"+pairs[i].getPair()[0]+" , "+ pairs[i].getPair()[1]+"= "+ chi);
+                ////System.out.println("fi:"+pairs[i].getPair()[1]+" , "+ pairs[i].getPair()[0]+"= "+ fi);
                 chi_fi_coefficient[pair.getPair()[0]][pair.getPair()[1]] = chi;
                 chi_fi_coefficient[pair.getPair()[1]][pair.getPair()[0]] = phi;
             }
@@ -5353,7 +5289,13 @@ public class util {
         
         for(int i=0;i<label_freq_sorted.length; i++)
         {
-            value = mayor/(label_freq_sorted[i].get_frequency()*1.0);
+            if(label_freq_sorted[i].get_frequency() <= 0){
+                value = Double.NaN;
+            }
+            else{
+                value = mayor/(label_freq_sorted[i].get_frequency()*1.0);
+            }
+            
             ir_inter_class[i] = value;
             //System.out.println(" Atributo "+i+" , "+value);
             
@@ -5361,7 +5303,7 @@ public class util {
         }
         media = media/label_freq_sorted.length;
                 
-        System.out.println("Media es "+ media);
+       //System.out.println("Media es "+ media);
         
         return ir_inter_class;
     }
@@ -5669,7 +5611,7 @@ public class util {
         
         String [] words;
         words = path.split("/");
-        System.out.println("words1: " + Arrays.toString(words));
+       //System.out.println("words1: " + Arrays.toString(words));
         path = words[words.length-1];
         String dir = new String();
         if(words.length > 1){
@@ -5677,11 +5619,11 @@ public class util {
                 dir += words[i] + "/";
             }
         }
-        System.out.println("dir1: " + dir);
-        System.out.println("path1: " + path);
+       //System.out.println("dir1: " + dir);
+       //System.out.println("path1: " + path);
         /*words = path.split("-");
         if(words.length > 1){
-            System.out.println("words2: " + Arrays.toString(words));
+           //System.out.println("words2: " + Arrays.toString(words));
             path = "";
             for(int i=0; i<words.length-1; i++){
                 path += words[i]+"-";
@@ -5689,15 +5631,15 @@ public class util {
             path = path.substring(0, path.length()-1) + ".xml";
         }
         else{
-            System.out.println("path2: " + path);
+           //System.out.println("path2: " + path);
             path = path.split("\\.")[0];
-            System.out.println("path3: " + path);
+           //System.out.println("path3: " + path);
             path+=".xml";
         }
         */
-        System.out.println("path4: " + path);
+       //System.out.println("path4: " + path);
         path = dir+path;
-        System.out.println("path5: " + path);
+       //System.out.println("path5: " + path);
         
         return path;
     }

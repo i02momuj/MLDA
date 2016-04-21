@@ -45,11 +45,11 @@ public class metrics
             double bound = Bound(dataset);
             double labelsets = DistincLabelset(stat);
             
-            System.out.println("bound: " + bound);
-            System.out.println("labelsets: " + labelsets);
+           //System.out.println("bound: " + bound);
+           //System.out.println("labelsets: " + labelsets);
             
             double diversity = labelsets/bound;
-            System.out.println("diversity: " + diversity);
+           //System.out.println("diversity: " + diversity);
             
             return(diversity);
             
@@ -132,7 +132,7 @@ public class metrics
         public static double Distinct_classes(Statistics stat1)
         {
             double result = stat1.labelCombCount().size();
-            System.out.println("distinct classes "+result);
+           //System.out.println("distinct classes "+result);
             return result;
         }
     
@@ -460,7 +460,7 @@ public class metrics
             Arrays.sort(combCounts);
             
             /*util.Recorre_Arreglo(combCounts);
-            System.out.println(combCounts.length);
+           //System.out.println(combCounts.length);
             */
             return combCounts;
         }
@@ -480,9 +480,9 @@ public class metrics
                 /*System.out.println("Chi square test para cada par de etiqueta");
                 for(LabelsPair current : pairs)
                 {
-                    System.out.println(current.toString());
+                   //System.out.println(current.toString());
                 }
-                System.out.println("cantidad de pares "+ pairs.length);
+               //System.out.println("cantidad de pares "+ pairs.length);
                 */
                 
                 int total = pairs.length;
@@ -744,49 +744,74 @@ public class metrics
      public static double Mean_IR_BR_intra_class(atributo[] imbalanced_data)
      {
          double value=0;
+         int numValues = 0;
          
          for(int i=0; i<imbalanced_data.length ; i++)
-              value+=imbalanced_data[i].get_ir();
+         {
+             if(imbalanced_data[i].get_ir() != Double.NaN){
+                 value+=imbalanced_data[i].get_ir();
+                 numValues++;
+             }
+             
+         }
                   
-         value=value/imbalanced_data.length;
-         
+         //value=value/imbalanced_data.length;
+         value=value/numValues;         
 
          return value;
      }
      
-          public static double Mean_IR_BR_inter_class(atributo[] imbalanced_data)
-          {
+     public static double Mean_IR_BR_inter_class(atributo[] imbalanced_data)
+     {
          double value=0;
+         int numValues = 0;
          
          for(int i=0; i<imbalanced_data.length ; i++)
-              value+=imbalanced_data[i].get_ir_inter_class();
+         {
+             System.out.print("imbalanced_data[i].get_ir_inter_class(): " + imbalanced_data[i].get_ir_inter_class());
+             if(imbalanced_data[i].get_ir_inter_class() >= 0){
+                 value+=imbalanced_data[i].get_ir_inter_class();
+                 numValues++;
+                 System.out.println(";");
+             }
+             else{
+                 System.out.println("  NAN");
+             }
+         }
                   
-         value=value/imbalanced_data.length;
+         //value=value/imbalanced_data.length;
+         value=value/numValues;
          
          return value;
-          }
+     }
      
-          public static double CVIR_inter_class (atributo[] imbalanced_data)
-            {
+     public static double CVIR_inter_class (atributo[] imbalanced_data)
+     {
            
               double value=0,temp;
+              int nValues = 0;
               double media = Mean_IR_BR_inter_class(imbalanced_data);
          
-                System.out.println("imbalanced_data.length: " + imbalanced_data.length);
+               //System.out.println("imbalanced_data.length: " + imbalanced_data.length);
               for(int i=0; i<imbalanced_data.length ; i++)
               {
-                  temp = imbalanced_data[i].get_ir_inter_class() - media;
-                  temp = Math.pow(temp, 2);
+                  if(imbalanced_data[i].get_ir_inter_class() >= 0){
+                      temp = imbalanced_data[i].get_ir_inter_class() - media;
+                      temp = Math.pow(temp, 2);
+
+                      value+= temp;
+                      nValues ++;
+                  }
                   
-                 value+= temp;
               }
                                
-              value = value/(imbalanced_data.length-1);
+              //value = value/(imbalanced_data.length-1);
+              value = value/(nValues-1);
               value = Math.sqrt(value);
               value = value/media;
               
               return value;
-          }
+     }
           
           
      
@@ -803,7 +828,7 @@ public class metrics
                 
                 int[] ints = train.getFeatureIndices();
                 
-                util.Recorre_Arreglo(ints);
+                //util.Recorre_Arreglo(ints);
                 
                int count;
                
@@ -824,10 +849,10 @@ public class metrics
                 for (int i=0;i<tam;i++) 
                 {
                     count=i+1;
-                    System.out.println(" atributo "+ count+" ,indice dentro del elemento"+ ints[i] + " , indice "+i);
+                   //System.out.println(" atributo "+ count+" ,indice dentro del elemento"+ ints[i] + " , indice "+i);
                     
                     v = eval.evaluateAttribute(ints[i]);
-                    System.out.println("valor "+ v);
+                   //System.out.println("valor "+ v);
                     res += v;
                 }
                 
@@ -1030,8 +1055,8 @@ public class metrics
                                 
                 if (stats.nominalCounts != null) {
                     
-                    util.Recorre_Arreglo(stats.nominalCounts);
-                    System.out.println("cantidad "+ stats.nominalCounts.length);
+                    //util.Recorre_Arreglo(stats.nominalCounts);
+                   //System.out.println("cantidad "+ stats.nominalCounts.length);
                     
                     countNominal++;
                     
@@ -1220,7 +1245,7 @@ public class metrics
                 SortedSet<Integer> sorted = new TreeSet<Integer>(values);
                 double res = sorted.last();
                 
-                System.out.println("res " +res);
+               //System.out.println("res " +res);
                 
                 value = res / total;
             } catch (Exception e) {

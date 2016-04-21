@@ -1118,8 +1118,8 @@
         <Container class="javax.swing.JPanel" name="panelImbalance">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Labels information">
-                <Property name="tabTitle" type="java.lang.String" value="Labels information"/>
+              <JTabbedPaneConstraints tabName="Labels">
+                <Property name="tabTitle" type="java.lang.String" value="Labels"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -1163,16 +1163,14 @@
             <Component class="javax.swing.JComboBox" name="comboBoxLabelsInformation">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="9">
+                  <StringArray count="7">
                     <StringItem index="0" value="Label frequency"/>
                     <StringItem index="1" value="Labelset frequency"/>
-                    <StringItem index="2" value="Labels per example"/>
+                    <StringItem index="2" value="Labels histogram"/>
                     <StringItem index="3" value="Box diagram"/>
                     <StringItem index="4" value="IR per label inter class"/>
-                    <StringItem index="5" value="#Labels/IR per label inter class"/>
-                    <StringItem index="6" value="IR per label intra class"/>
-                    <StringItem index="7" value="#Labels/IR per label intra class"/>
-                    <StringItem index="8" value="IR per labelset"/>
+                    <StringItem index="5" value="IR per label intra class"/>
+                    <StringItem index="6" value="IR per labelset"/>
                   </StringArray>
                 </Property>
               </Properties>
