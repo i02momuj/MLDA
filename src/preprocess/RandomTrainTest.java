@@ -53,7 +53,7 @@ public class RandomTrainTest
    * @throws java.lang.Exception */
   public MultiLabelInstances[] split(MultiLabelInstances mlDataSet, double percentage) throws Exception
     {
-        System.out.println("percentage: " + percentage);
+       //System.out.println("percentage: " + percentage);
     Instances trainDataSet = null, testDataSet = null;
     // splits the data set into train and test
     Instances dataSet = mlDataSet.getDataSet();

@@ -31,10 +31,10 @@ public class Mi_Render_IR extends DefaultTableCellRenderer
    {
        super.getTableCellRendererComponent (table, value, isSelected, hasFocus, row, column);
        
-        System.out.println("row: " + row);
-        System.out.println("posicion_IR: " + posicion_IR);
-        System.out.println("posicion_IR_2: " + posicion_IR_2);
-        System.out.println("table.getValueAt(row, posicion_IR).toString(): " + table.getValueAt(row, posicion_IR).toString());
+       //System.out.println("row: " + row);
+       //System.out.println("posicion_IR: " + posicion_IR);
+       //System.out.println("posicion_IR_2: " + posicion_IR_2);
+       //System.out.println("table.getValueAt(row, posicion_IR).toString(): " + table.getValueAt(row, posicion_IR).toString());
        
        double ir_current = Double.parseDouble(table.getValueAt(row, posicion_IR).toString());
        double ir_current2=-1;
@@ -44,7 +44,7 @@ public class Mi_Render_IR extends DefaultTableCellRenderer
        }
         
        
-      // System.out.println("valor IR: "+ir_current);
+      ////System.out.println("valor IR: "+ir_current);
        
        if((ir_current>1.5 && column==posicion_IR )){ this.setForeground(Color.red);}
        else if(posicion_IR_2!=-1)

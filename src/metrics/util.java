@@ -1857,10 +1857,10 @@ public class util {
             case "Label density": value ="\t"+"\t" +"\t"+"\t"+"\t";
                     break;                
                
-            case "Distinct Labelset":  value = "\t"+"\t" +"\t"+"\t";
+            case "Distinct labelsets":  value = "\t"+"\t" +"\t"+"\t";
                      break;
             
-            case "Proportion of Distinct Labelset":  value = "\t"+"\t" +"\t";
+            case "Proportion of distinct labelsets":  value = "\t"+"\t" +"\t";
                      break;
                 
             case "Density": value ="\t"+"\t" +"\t"+"\t"+"\t";
@@ -1907,7 +1907,7 @@ public class util {
             case "Mean of mean of numeric attributes":  value ="\t"+"\t" +"\t";
                      break;
                 
-            case "Mean of standar deviation of numeric attributes":  value ="\t"+"\t";
+            case "Mean of standard deviation of numeric attributes":  value ="\t"+"\t";
                      break;      
                 
             case "Mean of skewness of numeric attributes": value ="\t"+"\t" +"\t";
@@ -1916,7 +1916,7 @@ public class util {
             case "Mean of kurtosis": value ="\t"+"\t" +"\t"+"\t";
                      break;
             
-            case "Mean of entropy of nominal attributes":  value ="\t"+"\t" +"\t";
+            case "Mean of entropies of nominal attributes":  value ="\t"+"\t" +"\t";
                      break;
                 
            /* case "Mean of entropies (numeric attr)":  value ="\t"+"\t" +"\t"+"\t";
@@ -1934,7 +1934,7 @@ public class util {
             case "Ratio of distinct classes to the total number label combinations": value ="\t"+"\t";
                      break;
             
-            case "Standard desviation of the label cardinality": value ="\t"+"\t";
+            case "Standard deviation of label cardinality": value ="\t"+"\t";
                      break;    
           
             case "Skewness cardinality":  value ="\t"+"\t" +"\t"+"\t";
@@ -1991,19 +1991,19 @@ public class util {
             case "Maximal entropy of labels": value ="\t"+"\t" +"\t"+"\t";
                      break;
                 
-            case "Mean entropy of labels":  value ="\t"+"\t" +"\t"+"\t";
+            case "Mean of entropies of labels":  value ="\t"+"\t" +"\t"+"\t";
                     break;
             
             case "Ratio of test instances over training instances":  value ="\t"+"\t" +"\t";
                     break;
                 
-            case "Standard desviation of examples per labelset":  value ="\t"+"\t";
+            case "Standard deviation of examples per labelset":  value ="\t"+"\t";
                     break;
                 
             case "Mean of IR per labelset":  value = "\t"+"\t" +"\t"+"\t";
                     break;                 
  
-            case "Mean of standard deviation IR per label intra class":  value = "\t"+"\t";
+            case "Mean of standard deviation of IR per label intra class":  value = "\t"+"\t";
                     break;
                 
             case "Mean of IR per label intra class":  value ="\t"+"\t" +"\t";
@@ -2069,7 +2069,7 @@ public class util {
             case "Density":
                 return("\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+ "\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t");
              
-            case "Distinct Labelset":
+            case "Distinct labelsets":
                 return("\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t");
             
             case "Diversity":
@@ -2084,10 +2084,10 @@ public class util {
             case "Maximal entropy of labels":
                 return("\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t");
                 
-            case "Mean of entropy of nominal attributes":
+            case "Mean of entropies of nominal attributes":
                 return("\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t");
                 
-            case "Mean of standard deviation IR per label intra class":
+            case "Mean of standard deviation of IR per label intra class":
                 return("\t"+"\t"+"\t"+"\t"+"\t"+"\t");
                 
             case "Mean of IR per label intra class":
@@ -2102,7 +2102,7 @@ public class util {
              case "Mean of mean of numeric attributes":
                 return("\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t");
                 
-            case "Mean of standar deviation of numeric attributes":
+            case "Mean of standard deviation of numeric attributes":
                 return("\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t");
                 
             case "Mean of skewness of numeric attributes":
@@ -2135,7 +2135,7 @@ public class util {
             case "Number of unconditionally dependent label pairs by chi-square test":
                 return("\t");
                 
-            case "Proportion of Distinct Labelset":
+            case "Proportion of distinct labelsets":
                 return("\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t");
             
             case "Proportion of maxim label combination (PMax)":
@@ -2177,10 +2177,10 @@ public class util {
             case "Skewness cardinality":
                 return("\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t");
             
-            case "Standard desviation of the label cardinality":
+            case "Standard deviation of label cardinality":
                 return("\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t"+"\t");
                 
-            case "Standard desviation of examples per labelset":
+            case "Standard deviation of examples per labelset":
                 return("\t"+"\t" +"\t"+"\t"+"\t"+"\t"+"\t"+"\t");
                 
                 
@@ -3836,12 +3836,21 @@ public class util {
         wr.write("");
         wr.write(System.getProperty("line.separator"));
         
-        s = "\\begin{tabular}{|l|";
+        s = "\\begin{tabular}{l|";
         for(int i=0; i<dataNames.size(); i++){
             s += "r|";
         }
         s += "}";
         wr.write(s);
+        wr.write(System.getProperty("line.separator"));
+        
+        s = " ";
+        for(String name : dataNames){
+            s = s + "& " + name + " ";
+        }
+        s += " \\";
+        
+        wr.write(s);       
         wr.write(System.getProperty("line.separator"));
         
         wr.write("\\hline");
@@ -4267,14 +4276,23 @@ public class util {
               
             case "Mean of IR per label intra class":  value =  metrics.Mean_IR_BR_intra_class(imbalanced_data);
                     break;     
+                
+            case "Max IR per label intra class":  value =  metrics.Max_IR_BR_intra_class(imbalanced_data);
+                    break;  
             
             case "Mean of IR per label inter class":  value =  metrics.Mean_IR_BR_inter_class(imbalanced_data);
                     break;  
                 
+            case "Max IR per label inter class":  value =  metrics.Max_IR_BR_inter_class(imbalanced_data);
+                    break;  
+                
             case "Mean of IR per labelset":  value =  metrics.get_mean_ir_per_labelset(dataset);
                     break;  
+                
+            case "Max IR per labelset":  value =  metrics.get_max_ir_per_labelset(dataset);
+                    break; 
                                                         
-            case "Mean of standard deviation IR per label intra class":  value =  metrics.Mean_Standard_Desviation_imbalance_intra_class(imbalanced_data);
+            case "Mean of standard deviation of IR per label intra class":  value =  metrics.Mean_Standard_deviation_imbalance_intra_class(imbalanced_data);
                     break;         
          
             //case "IR per labelset":  value =  metrics.imbalanced_ratio_LP(dataset);
@@ -4284,7 +4302,10 @@ public class util {
                     break;       
                 
             case "CVIR inter class":  value =  metrics.CVIR_inter_class(imbalanced_data);
-                   break;            
+                   break;       
+                
+            case "SCUMBLE":  value =  metrics.SCUMBLE(imbalanced_data, dataset);
+                   break;    
                 
             
             default:  value = -1.0;
@@ -4367,7 +4388,6 @@ public class util {
             case "Labels x instances x features":  value =  metrics.labelsxinstancesxfeatures(dataset);
                     break;     
                  
-            
             case "Instances":  value =  dataset.getNumInstances();
                     break;     
 
@@ -4383,11 +4403,13 @@ public class util {
             case "Label Cardinality":  value = metrics.LabelCardinality(dataset, stat1);
                       break;
                 
+            case "Distinct labelsets":  value = metrics.DistincLabelset(stat1);
+                     break;
                 
-            case "Distinct Labelset":  value = metrics.DistincLabelset(stat1);
+            case "Number of unique labelsets":  value = metrics.UniqueLabelset(stat1);
                      break;
             
-            case "Proportion of Distinct Labelset":  value = metrics.ProportionDistincLabelset(stat1,dataset);
+            case "Proportion of distinct labelsets":  value = metrics.ProportionDistincLabelset(stat1,dataset);
                      break;
                 
             case "Density":  value = metrics.Density(stat1);
@@ -4429,7 +4451,7 @@ public class util {
             case "Mean of mean of numeric attributes":  value = metrics.MeanOfMeans(dataset);
                      break;
                 
-            case "Mean of standar deviation of numeric attributes":  value = metrics.MeanOfStDev(dataset);
+            case "Mean of standard deviation of numeric attributes":  value = metrics.MeanOfStDev(dataset);
                      break;      
                 
             case "Mean of skewness of numeric attributes":  value = metrics.MeanSkewness(dataset);
@@ -4438,7 +4460,7 @@ public class util {
             case "Mean of kurtosis":  value = metrics.MeanKurtosis(dataset);
                      break;
             
-            case "Mean of entropy of nominal attributes":  value = metrics.MeanOfEntropies_nominal_attr(dataset);
+            case "Mean of entropies of nominal attributes":  value = metrics.MeanOfEntropies_nominal_attr(dataset);
                      break;
             
             /*case "Mean of entropies (numeric attr)":  value = metrics.MeanOfEntropies_numeric_attr(dataset);
@@ -4456,7 +4478,7 @@ public class util {
             case "Ratio of distinct classes to the total number label combinations":  value = metrics.Ratio_DC_to_total_label_combination(stat1, dataset);
                      break;
             
-            case "Standard desviation of the label cardinality":  value = metrics.StDevOfTrainCardinality(stat1, metrics.LabelsForInstance(dataset));
+            case "Standard deviation of label cardinality":  value = metrics.StDevOfTrainCardinality(stat1, metrics.LabelsForInstance(dataset));
                      break;    
             
             case "Skewness cardinality":  value = metrics.SkewnessOfTrainCardinality(stat1, metrics.LabelsForInstance(dataset));
@@ -4502,7 +4524,7 @@ public class util {
             case "Ratio of number of labelsets up to 50 examples":  value =  metrics.RatioClassesWithUpTo_n_Examples(combCounts,50);
                      break;     
                 
-            case "Ratio of Distinct Labelset over Bound": value= metrics.ratio_DL_over_bount(dataset, stat1);
+            case "Ratio of Distinct labelsets over Bound": value= metrics.ratio_DL_over_bount(dataset, stat1);
                     break;
                 
             case "Average examples per labelset":  value = metrics.AvgExamplesPerClass(dataset);
@@ -4514,10 +4536,10 @@ public class util {
             case "Maximal entropy of labels":  value = metrics.Min_MaxOfLabelEntropies(dataset)[1];
                      break;
                 
-            case "Mean entropy of labels":  value =  metrics.MeanOfLabelEntropies(dataset);
+            case "Mean of entropies of labels":  value =  metrics.MeanOfLabelEntropies(dataset);
                     break;
             
-            case "Standard desviation of examples per labelset":  value =  metrics.Standard_Desviation_x_labelset(dataset, stat1);
+            case "Standard deviation of examples per labelset":  value =  metrics.Standard_deviation_x_labelset(dataset, stat1);
                     break;                
               
                 
@@ -4549,6 +4571,214 @@ public class util {
         //return Truncate_values_aprox_zero(Double.toString(value),4);
     }
     
+    
+    public static String get_value_metric_Old(String metric, MultiLabelInstances dataset , boolean es_de_tipo_meka)
+    {
+        Statistics stat1 = new Statistics();
+        stat1.calculateStats(dataset);
+        
+        
+        double value =-1.0;
+        Integer[] combCounts= metrics.get_combCounts(stat1);
+        
+       //System.out.println("se recorre el combcounts");
+        //util.Recorre_Arreglo(combCounts);
+        
+        try{
+            
+            
+        switch (metric) 
+        {
+            
+            case "Labels x instances x features":  value =  metrics.labelsxinstancesxfeatures(dataset);
+                    break;     
+                 
+            case "Instances":  value =  dataset.getNumInstances();
+                    break;     
+
+            case "Attributes":  value =  dataset.getDataSet().numAttributes()-dataset.getNumLabels();
+                    break;    
+                
+            case "Labels":  value =  dataset.getNumLabels();
+                    break;    
+                
+            case "Label density":  value =  metrics.Label_Density(dataset, stat1);
+                    break;                
+             
+            case "Label Cardinality":  value = metrics.LabelCardinality(dataset, stat1);
+                      break;
+                
+            case "Distinct labelsets":  value = metrics.DistincLabelset(stat1);
+                     break;
+                
+            case "Number of unique labelsets":  value = metrics.UniqueLabelset(stat1);
+                     break;
+            
+            case "Proportion of distinct labelsets":  value = metrics.ProportionDistincLabelset(stat1,dataset);
+                     break;
+                
+            case "Density":  value = metrics.Density(stat1);
+                     break;
+                
+            case "Cardinality":  value = metrics.Cardinality(stat1);
+                     break;
+                
+            case "Bound":  value = metrics.Bound(dataset);
+                     break;      
+            
+            case "Diversity":  value = metrics.Diversity(dataset, stat1);
+                   break;       
+                                
+            case "Proportion of unique label combination (PUniq)":  value = metrics.PUniq(stat1, dataset);
+                     break;
+            
+            case "Proportion of maxim label combination (PMax)":  value = metrics.PMax(stat1, dataset);
+                     break;
+                
+            case "Ratio of number of instances to the number of attributes":  value = metrics.Ratio_instances_to_attr(dataset);
+                     break;
+                
+            case "Number of binary attributes":  value = metrics.count_attributes_binary(dataset);
+                     break;   
+                
+             case "Proportion of binary attributes":  value = metrics.Proportion_binary_attr(dataset);
+                     break;
+            
+            case "Proportion of nominal attributes":  value = metrics.Proportion_nominal_attr(dataset);
+                     break;
+                
+            case "Number of nominal attributes":  value = metrics.count_attributes_nominal(dataset);
+                     break;    
+                
+            case "Default accuracy":  value = metrics.Default_Accuracy(dataset);
+                     break;
+                
+            case "Mean of mean of numeric attributes":  value = metrics.MeanOfMeans(dataset);
+                     break;
+                
+            case "Mean of standard deviation of numeric attributes":  value = metrics.MeanOfStDev(dataset);
+                     break;      
+                
+            case "Mean of skewness of numeric attributes":  value = metrics.MeanSkewness(dataset);
+                     break;    
+                
+            case "Mean of kurtosis":  value = metrics.MeanKurtosis(dataset);
+                     break;
+            
+            case "Mean of entropies of nominal attributes":  value = metrics.MeanOfEntropies_nominal_attr(dataset);
+                     break;
+            
+            /*case "Mean of entropies (numeric attr)":  value = metrics.MeanOfEntropies_numeric_attr(dataset);
+                     break;
+              */  
+            case "Average absolute correlation between numeric attributes":  value = metrics.AverageAbsoluteCorrelation(dataset);
+                     break;
+                
+            case "Proportion of numeric attributes with outliers":  value = metrics.ProportionWithOutliers(dataset);
+                     break;
+                
+            case "Average gain ratio":  value = metrics.AverageGainRatio(dataset, es_de_tipo_meka);
+                     break;      
+                
+            case "Ratio of distinct classes to the total number label combinations":  value = metrics.Ratio_DC_to_total_label_combination(stat1, dataset);
+                     break;
+            
+            case "Standard deviation of label cardinality":  value = metrics.StDevOfTrainCardinality(stat1, metrics.LabelsForInstance(dataset));
+                     break;    
+            
+            case "Skewness cardinality":  value = metrics.SkewnessOfTrainCardinality(stat1, metrics.LabelsForInstance(dataset));
+                     break;
+ 
+            
+            case "Kurtosis cardinality":  value = metrics.KurtosisOfTrainCardinality(stat1,  metrics.LabelsForInstance(dataset));
+                     break;
+                
+            case "Number of unconditionally dependent label pairs by chi-square test":  value = metrics.UncondDepPairsNum_UncondDepPairsRatio_AvgOfDepChiScores(dataset)[0];
+                     break;
+                
+            case "Ratio of unconditionally dependent label pairs by chi-square test":  value = metrics.UncondDepPairsNum_UncondDepPairsRatio_AvgOfDepChiScores(dataset)[1];
+                     break;
+                
+            case "Average of unconditionally dependent label pairs by chi-square test":  value = metrics.UncondDepPairsNum_UncondDepPairsRatio_AvgOfDepChiScores(dataset)[2];
+                     break;      
+                
+            case "Number of labelsets up to 2 examples":  value = metrics.countUpTo(2,combCounts);
+                     break;
+            
+            case "Number of labelsets up to 5 examples":  value = metrics.countUpTo(5,combCounts);
+                     break;
+                
+            case "Number of labelsets up to 10 examples":  value = metrics.countUpTo(10,combCounts);
+                     break;
+                
+            case "Number of labelsets up to 50 examples":  value = metrics.countUpTo(50,combCounts);
+                     break;   
+                
+            case "Ratio of labelsets with number of examples < half of the attributes":  value = metrics.RatioClassesWithExamplesLessHalfAttributes(dataset,combCounts);
+                     break;    
+                 
+             case "Ratio of number of labelsets up to 2 examples":  value = metrics.RatioClassesWithUpTo_n_Examples(combCounts,2);
+                     break;
+            
+            case "Ratio of number of labelsets up to 5 examples":  value = metrics.RatioClassesWithUpTo_n_Examples(combCounts,5);
+                     break;
+                
+            case "Ratio of number of labelsets up to 10 examples":  value = metrics.RatioClassesWithUpTo_n_Examples(combCounts,10);
+                     break;
+                
+            case "Ratio of number of labelsets up to 50 examples":  value =  metrics.RatioClassesWithUpTo_n_Examples(combCounts,50);
+                     break;     
+                
+            case "Ratio of Distinct labelsets over Bound": value= metrics.ratio_DL_over_bount(dataset, stat1);
+                    break;
+                
+            case "Average examples per labelset":  value = metrics.AvgExamplesPerClass(dataset);
+                     break;
+            
+            case "Minimal entropy of labels":  value = metrics.Min_MaxOfLabelEntropies(dataset)[0];
+                     break;
+                
+            case "Maximal entropy of labels":  value = metrics.Min_MaxOfLabelEntropies(dataset)[1];
+                     break;
+                
+            case "Mean of entropies of labels":  value =  metrics.MeanOfLabelEntropies(dataset);
+                    break;
+            
+            case "Standard deviation of examples per labelset":  value =  metrics.Standard_deviation_x_labelset(dataset, stat1);
+                    break;                
+              
+                
+            default:  value = -1.0;
+                     break;    
+        
+        }
+        
+        }
+        catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        //System.out.println("formatter: " + formatter.format(Double.parseDouble(val.toString().replace(",", "."))));
+        
+        if(Double.isNaN(value) || value == Double.POSITIVE_INFINITY || value == Double.NEGATIVE_INFINITY){
+           //System.out.println("isNaN");
+            return("NaN");
+        }
+        else{
+            //NumberFormat formatter = new DecimalFormat("#0.000"); 
+            //return(formatter.format(value));
+            //System.out.println("formatter: " + formatter.format(value) + "  value: " + value);
+            
+            return(Double.toString(value));
+        }
+        
+        
+        //return Truncate_values_aprox_zero(Double.toString(value),4);
+    }
+    
+    
+    
+    
     public static double Get_media(ArrayList<Double> lista)
     {
         double value=0.0;
@@ -4571,19 +4801,22 @@ public class util {
         result.add("Cardinality");
         result.add("CVIR inter class");
         result.add("Density");
-        result.add("Distinct Labelset");
+        result.add("Distinct labelsets");
         result.add("Diversity");
         result.add("Instances");
         result.add("Kurtosis cardinality");
         result.add("Labels x instances x features");
+        result.add("Max IR per label inter class");
+        result.add("Max IR per label intra class");
+        result.add("Max IR per labelset");
         result.add("Maximal entropy of labels");
-        result.add("Mean of entropy of nominal attributes");
+        result.add("Mean of entropies of nominal attributes");
         result.add("Mean entropy of labels");
         result.add("Mean of kurtosis");
         result.add("Mean of mean of numeric attributes");
         result.add("Mean of skewness of numeric attributes");
-        result.add("Mean of standar deviation of numeric attributes");
-        result.add("Mean of standard deviation IR per label intra class");
+        result.add("Mean of standard deviation of numeric attributes");
+        result.add("Mean of standard deviation of IR per label intra class");
         result.add("Mean of IR per label intra class");
         result.add("Mean of IR per label inter class");
         result.add("Mean of IR per labelset");
@@ -4593,6 +4826,7 @@ public class util {
         result.add("Number of labelsets up to 10 examples");
         result.add("Number of labelsets up to 50 examples");
         result.add("Number of unconditionally dependent label pairs by chi-square test");
+        result.add("Number of unique labelsets");
         result.add("Number of unseen labelsets");
         result.add("Proportion of numeric attributes with outliers");
         result.add("Ratio of labelsets with number of examples < half of the attributes");
@@ -4604,8 +4838,8 @@ public class util {
         result.add("Ratio of unseen labelsets");
         result.add("Ratio of unconditionally dependent label pairs by chi-square test");
         result.add("Skewness cardinality");
-        result.add("Standard desviation of the label cardinality");
-        result.add("Standard desviation of examples per labelset");
+        result.add("Standard deviation of label cardinality");
+        result.add("Standard deviation of examples per labelset");
 
        return result;
      }
@@ -4638,14 +4872,14 @@ public class util {
                  { "CVIR inter class", "-", Boolean.FALSE }, 
                  { "Density", "-", Boolean.FALSE },
                  //{ "Default accuracy", Boolean.FALSE }, HACE LO MISMO QUE EL PMAX 
-                 { "Distinct Labelset", "-", Boolean.FALSE }, 
+                 { "Distinct labelsets", "-", Boolean.FALSE }, 
                  { "Diversity", "-", Boolean.FALSE }, 
                  { "Instances", "-", Boolean.FALSE},
                    
                  
                  { "Kurtosis cardinality", "-", Boolean.FALSE },//MEDIA OF ALL NUMERIC ATTR    
                  { "Labels x instances x features", "-", Boolean.FALSE }, 
-                 { "Mean of standard deviation IR per label intra class", "-", Boolean.FALSE }, 
+                 { "Mean of standard deviation of IR per label intra class", "-", Boolean.FALSE }, 
                  
                  { "Mean of IR per label intra class", "-", Boolean.FALSE }, 
                  { "Mean of IR per label inter class", "-", Boolean.FALSE }, 
@@ -4668,8 +4902,8 @@ public class util {
                   { "Ratio of unconditionally dependent label pairs by chi-square test", "-", Boolean.FALSE }, 
                   { "Skewness cardinality", "-", Boolean.FALSE },   
                 
-                  { "Standard desviation of the label cardinality", "-", Boolean.FALSE },
-                  { "Standard desviation of examples per labelset", "-", Boolean.FALSE },        
+                  { "Standard deviation of label cardinality", "-", Boolean.FALSE },
+                  { "Standard deviation of examples per labelset", "-", Boolean.FALSE },        
                  // { "Variance of examples per labelset", Boolean.FALSE },  
               };
              
@@ -4715,7 +4949,7 @@ public class util {
            { "CVIR inter class", "-", Boolean.FALSE }, 
            
            { "Kurtosis cardinality", "-", Boolean.FALSE },      
-           { "Mean of standard deviation IR per label intra class", "-", Boolean.FALSE }, 
+           { "Mean of standard deviation of IR per label intra class", "-", Boolean.FALSE }, 
            
            { "Mean of IR per label intra class", "-", Boolean.FALSE },      
            { "Mean of IR per label inter class", "-", Boolean.FALSE }, 
@@ -4727,7 +4961,7 @@ public class util {
            { "Proportion of maxim label combination (PMax)", "-", Boolean.FALSE},
            { "Proportion of unique label combination (PUniq)", "-", Boolean.FALSE},
            { "Skewness cardinality", "-", Boolean.FALSE },
-           { "Standard desviation of examples per labelset", "-", Boolean.FALSE }, 
+           { "Standard deviation of examples per labelset", "-", Boolean.FALSE }, 
          //  { "Variance of examples per labelset", Boolean.FALSE }, 
                  
                  
@@ -4751,7 +4985,7 @@ public class util {
                  
                  //{ "Default accuracy", Boolean.FALSE }, HACE LO MISMO QUE EL PMAX 
                  { "Density", Boolean.FALSE }, 
-                 { "Distinct Labelset", Boolean.FALSE}, 
+                 { "Distinct labelsets", Boolean.FALSE}, 
                  { "Diversity", Boolean.FALSE },
                  { "Instances", Boolean.FALSE },
                  
@@ -4760,15 +4994,15 @@ public class util {
                  { "Labels x instances x features", Boolean.FALSE }, 
                  
                  { "Maximal entropy of labels", Boolean.FALSE },
-                 { "Mean of entropy of nominal attributes", Boolean.FALSE },
-		 { "Mean of standard deviation IR per label intra class", Boolean.FALSE }, 
+                 { "Mean of entropies of nominal attributes", Boolean.FALSE },
+		 { "Mean of standard deviation of IR per label intra class", Boolean.FALSE }, 
                  
                  { "Mean of IR per label intra class", Boolean.FALSE },     
                  { "Mean of IR per label inter class", Boolean.FALSE },  
                  { "Mean of IR per labelset", Boolean.FALSE }, 
                  
                  { "Mean of mean of numeric attributes", Boolean.FALSE },
-                 { "Mean of standar deviation of numeric attributes", Boolean.FALSE },
+                 { "Mean of standard deviation of numeric attributes", Boolean.FALSE },
                  { "Mean of skewness of numeric attributes", Boolean.FALSE },
                  { "Mean of kurtosis", Boolean.FALSE },
                  //{ "Mean of entropies (numeric attr)", Boolean.FALSE },
@@ -4784,7 +5018,7 @@ public class util {
                  
                  { "Number of unconditionally dependent label pairs by chi-square test", Boolean.FALSE },
                  
-                 { "Proportion of Distinct Labelset", Boolean.FALSE },                  
+                 { "Proportion of distinct labelsets", Boolean.FALSE },                  
                  { "Proportion of maxim label combination (PMax)", Boolean.FALSE},
                  { "Proportion of numeric attributes with outliers", Boolean.FALSE },
                  { "Proportion of binary attributes", Boolean.FALSE },
@@ -4800,8 +5034,8 @@ public class util {
                  { "Ratio of number of labelsets up to 50 examples", Boolean.FALSE },                 
                  { "Ratio of unconditionally dependent label pairs by chi-square test", Boolean.FALSE },
                  { "Skewness cardinality", Boolean.FALSE },
-                 { "Standard desviation of the label cardinality", Boolean.FALSE },
-                 { "Standard desviation of examples per labelset", Boolean.FALSE },
+                 { "Standard deviation of label cardinality", Boolean.FALSE },
+                 { "Standard deviation of examples per labelset", Boolean.FALSE },
                 // { "Variance of examples per labelset", Boolean.FALSE }, 
                  
              };
@@ -4859,74 +5093,71 @@ public class util {
     
     
     public static ArrayList<String> Get_all_metrics()
-     {
+    {
        ArrayList<String> result= new ArrayList();
-
+       
        result.add("Attributes");
-       result.add("Average absolute correlation between numeric attributes");
-       result.add("Average examples per labelset");
-       result.add("Average gain ratio");
-       result.add("Average of unconditionally dependent label pairs by chi-square test");
-       result.add("Bound");
-       result.add("Cardinality");
-       result.add("CVIR inter class");
-       
-       result.add("Density");
-       result.add("Distinct Labelset");
-       result.add("Diversity");
        result.add("Instances");
-       
-       result.add("Kurtosis cardinality");
-       
        result.add("Labels");
+       result.add("Distinct labelsets");
        result.add("Labels x instances x features");
+       result.add("Ratio of number of instances to the number of attributes");
        
-       result.add("Maximal entropy of labels");
-       result.add("Mean of entropy of nominal attributes");
-       result.add("Mean of standard deviation IR per label intra class");
-       
-       result.add("Mean of IR per label intra class");
-       result.add("Mean of IR per label inter class");
-       result.add("Mean of IR per labelset");
-       
-       result.add("Mean of mean of numeric attributes");
-       result.add("Mean of standar deviation of numeric attributes");
-       result.add("Mean of skewness of numeric attributes");
-       result.add("Mean of kurtosis");
-       
+       result.add("Cardinality");
+       result.add("Density");
+       result.add("Standard deviation of label cardinality");
        result.add("Minimal entropy of labels");
+       result.add("Maximal entropy of labels");
+       result.add("Mean of entropies of labels");
        
-       result.add("Number of binary attributes");
+       result.add("Diversity");
+       result.add("Bound");
+       result.add("SCUMBLE");
+       result.add("Proportion of distinct labelsets");
        result.add("Number of labelsets up to 2 examples");
        result.add("Number of labelsets up to 5 examples");
        result.add("Number of labelsets up to 10 examples");
        result.add("Number of labelsets up to 50 examples");
-       
-       result.add("Number of nominal attributes");
-       
-       result.add("Number of unconditionally dependent label pairs by chi-square test");
-       
-       result.add("Proportion of Distinct Labelset");
-       result.add("Proportion of maxim label combination (PMax)");
-       result.add("Proportion of numeric attributes with outliers");
-       result.add("Proportion of binary attributes");
-       result.add("Proportion of nominal attributes");
-       result.add("Proportion of unique label combination (PUniq)");
-       
-       result.add("Ratio of labelsets with number of examples < half of the attributes");
-       
-       result.add("Ratio of number of instances to the number of attributes");
        result.add("Ratio of number of labelsets up to 2 examples");
        result.add("Ratio of number of labelsets up to 5 examples");
        result.add("Ratio of number of labelsets up to 10 examples");
        result.add("Ratio of number of labelsets up to 50 examples");
+       result.add("Average examples per labelset");
+       result.add("Standard deviation of examples per labelset");
+       result.add("Number of unique labelsets");
+       result.add("Ratio of labelsets with number of examples < half of the attributes");
+       result.add("Number of unconditionally dependent label pairs by chi-square test");
+       result.add("Average of unconditionally dependent label pairs by chi-square test");
        result.add("Ratio of unconditionally dependent label pairs by chi-square test");
+       
+       result.add("Mean of IR per label intra class");
+       result.add("Mean of IR per label inter class");
+       result.add("Mean of IR per labelset");
+       result.add("Max IR per label inter class");
+       result.add("Max IR per label intra class");
+       result.add("Max IR per labelset");
+       result.add("Mean of standard deviation of IR per label intra class");
+       result.add("Kurtosis cardinality");
        result.add("Skewness cardinality");
-       result.add("Standard desviation of the label cardinality");
-       result.add("Standard desviation of examples per labelset");
+       result.add("CVIR inter class");
+       result.add("Proportion of maxim label combination (PMax)");
+       result.add("Proportion of unique label combination (PUniq)");
+       result.add("Mean of kurtosis");
+       result.add("Mean of skewness of numeric attributes");
+       
+       result.add("Number of binary attributes");
+       result.add("Number of nominal attributes");
+       result.add("Proportion of binary attributes");
+       result.add("Proportion of nominal attributes");
+       result.add("Proportion of numeric attributes with outliers");
+       result.add("Mean of entropies of nominal attributes");
+       result.add("Mean of mean of numeric attributes");
+       result.add("Mean of standard deviation of numeric attributes");
+       result.add("Average gain ratio");
+       result.add("Average absolute correlation between numeric attributes");
 
        return result;
-     }
+    }
     
     
     public static ArrayList<String> Get_metrics_multi()
@@ -4943,7 +5174,7 @@ public class util {
        result.add("CVIR inter class");
        
        result.add("Density");
-       result.add("Distinct Labelset");
+       result.add("Distinct labelsets");
        result.add("Diversity");
        result.add("Instances");
        
@@ -4953,15 +5184,15 @@ public class util {
        result.add("Labels x instances x features");
        
        result.add("Maximal entropy of labels");
-       result.add("Mean of entropy of nominal attributes");
-       result.add("Mean of standard deviation IR per label intra class");
+       result.add("Mean of entropies of nominal attributes");
+       result.add("Mean of standard deviation of IR per label intra class");
        
        result.add("Mean of IR per label intra class");
        result.add("Mean of IR per label inter class");
        result.add("Mean of IR per labelset");
        
        result.add("Mean of mean of numeric attributes");
-       result.add("Mean of standar deviation of numeric attributes");
+       result.add("Mean of standard deviation of numeric attributes");
        result.add("Mean of skewness of numeric attributes");
        result.add("Mean of kurtosis");
        
@@ -4977,7 +5208,7 @@ public class util {
        
        result.add("Number of unconditionally dependent label pairs by chi-square test");
        
-       result.add("Proportion of Distinct Labelset");
+       result.add("Proportion of distinct labelsets");
        result.add("Proportion of maxim label combination (PMax)");
        result.add("Proportion of numeric attributes with outliers");
        result.add("Proportion of binary attributes");
@@ -4992,9 +5223,12 @@ public class util {
        result.add("Ratio of number of labelsets up to 10 examples");
        result.add("Ratio of number of labelsets up to 50 examples");
        result.add("Ratio of unconditionally dependent label pairs by chi-square test");
+       
+       result.add("SCUMBLE");
+       
        result.add("Skewness cardinality");
-       result.add("Standard desviation of the label cardinality");
-       result.add("Standard desviation of examples per labelset");
+       result.add("Standard deviation of label cardinality");
+       result.add("Standard deviation of examples per labelset");
 
        return result;
      }
@@ -5017,7 +5251,7 @@ public class util {
                  
                  //{ "Default accuracy", Boolean.FALSE }, HACE LO MISMO QUE EL PMAX 
                  { "Density", "-", Boolean.FALSE}, 
-                 { "Distinct Labelset", "-", Boolean.FALSE}, 
+                 { "Distinct labelsets", "-", Boolean.FALSE}, 
                  { "Diversity", "-", Boolean.FALSE },
                  { "Instances", "-", Boolean.FALSE}, 
                            
@@ -5027,9 +5261,9 @@ public class util {
                  { "Labels x instances x features", "-", Boolean.FALSE },
                  
                  { "Maximal entropy of labels", "-", Boolean.FALSE },
-                 { "Mean entropy of labels", "-", Boolean.FALSE },         
+                 { "Mean of entropies of labels", "-", Boolean.FALSE },         
                  
-                 { "Mean of entropy of nominal attributes", "-", Boolean.FALSE },
+                 { "Mean of entropies of nominal attributes", "-", Boolean.FALSE },
                 
                  { "Mean of IR per label intra class", "-", Boolean.FALSE }, 
                  { "Mean of IR per label inter class", "-", Boolean.FALSE },    
@@ -5037,9 +5271,9 @@ public class util {
                  
                  { "Mean of kurtosis", "-", Boolean.FALSE },
                  { "Mean of mean of numeric attributes", "-", Boolean.FALSE },
-                 { "Mean of standar deviation of numeric attributes", "-", Boolean.FALSE },
+                 { "Mean of standard deviation of numeric attributes", "-", Boolean.FALSE },
                  { "Mean of skewness of numeric attributes", "-", Boolean.FALSE },
-                 { "Mean of standard deviation IR per label intra class", "-", Boolean.FALSE }, 
+                 { "Mean of standard deviation of IR per label intra class", "-", Boolean.FALSE }, 
                  
                  { "Minimal entropy of labels", "-", Boolean.FALSE },
                  { "Number of binary attributes", "-", Boolean.FALSE },
@@ -5051,7 +5285,7 @@ public class util {
                  
                  { "Number of unconditionally dependent label pairs by chi-square test", "-", Boolean.FALSE },
                   
-                 { "Proportion of Distinct Labelset", "-", Boolean.FALSE }, 
+                 { "Proportion of distinct labelsets", "-", Boolean.FALSE }, 
                  { "Proportion of unique label combination (PUniq)", "-", Boolean.FALSE},
                  { "Proportion of maxim label combination (PMax)", "-", Boolean.FALSE},
                  { "Proportion of numeric attributes with outliers", "-", Boolean.FALSE },
@@ -5068,8 +5302,8 @@ public class util {
                  { "Ratio of number of instances to the number of attributes", "-", Boolean.FALSE }, 
                  { "Ratio of unconditionally dependent label pairs by chi-square test", "-", Boolean.FALSE },
                  { "Skewness cardinality", "-", Boolean.FALSE },
-                 { "Standard desviation of the label cardinality", "-", Boolean.FALSE },
-                 { "Standard desviation of examples per labelset", "-", Boolean.FALSE },
+                 { "Standard deviation of label cardinality", "-", Boolean.FALSE },
+                 { "Standard deviation of examples per labelset", "-", Boolean.FALSE },
                //  { "Variance of examples per labelset", Boolean.FALSE }, 
                  
              };
@@ -5801,6 +6035,7 @@ public class util {
                     || (name.toLowerCase().equals("number of labelsets up to 10 examples"))
                     || (name.toLowerCase().equals("number of labelsets up to 50 examples"))
                     || (name.toLowerCase().equals("number of nominal attributes"))
+                    || (name.toLowerCase().equals("number of unqiue labelsets"))
                     || (name.toLowerCase().equals("number of unconditionally dependent label pairs by chi-square test"))){
 
                 NumberFormat formatter = new DecimalFormat("#0"); 

@@ -99,13 +99,13 @@ public class FeatureSelector {
             int[] toKeep = new int[nFeatures + dataset.getNumLabels()];
             
             System.arraycopy(attIndices, 0, toKeep, 0, nFeatures);
-            System.out.println("toKeep1: " + Arrays.toString(toKeep));
+           //System.out.println("toKeep1: " + Arrays.toString(toKeep));
 
             int[] labelIndices = dataset.getLabelIndices();
             System.arraycopy(labelIndices, 0, toKeep, nFeatures, dataset.getNumLabels());
             
-            System.out.println("nFeatures: " + nFeatures);
-            System.out.println("toKeep2: " + Arrays.toString(toKeep));
+           //System.out.println("nFeatures: " + nFeatures);
+           //System.out.println("toKeep2: " + Arrays.toString(toKeep));
             
             Remove filterRemove = new Remove();
             filterRemove.setAttributeIndicesArray(toKeep);

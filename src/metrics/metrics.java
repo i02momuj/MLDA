@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -252,6 +253,36 @@ public class metrics
          return mean;
      }
      
+     public static double get_max_ir_per_labelset(MultiLabelInstances dataset)
+     {
+         Statistics stat1 = new Statistics();
+         stat1.calculateStats(dataset);
+         
+         double max = 0;
+                  
+        //CALCULA LA FRECUENCIA DE LOS LABEL-COMBINATION
+        HashMap<LabelSet,Integer> result = stat1.labelCombCount();
+        
+        Set<LabelSet> keysets = result.keySet();
+
+        double IR_labelset;
+         
+         int mayor = get_Mayor(keysets, result);
+         int value;
+         
+         for(LabelSet current : keysets)
+         {
+             value=  result.get(current); //es la cantidad de veces que aparece el labelset en el dataset
+             IR_labelset = mayor /(value*1.0);
+             
+             if(IR_labelset > max){
+                 max = IR_labelset;
+             }
+         }
+         
+         return max;
+     }
+     
      public static double Variance_imbalanced_ratio_LP(MultiLabelInstances dataset)
      {
           Statistics stat1 = new Statistics();
@@ -344,6 +375,23 @@ public class metrics
         public static double DistincLabelset(Statistics stat1)
         {
             return stat1.labelCombCount().size();
+        }
+        
+        public static double UniqueLabelset(Statistics stat1)
+        {
+            HashMap<LabelSet, Integer> labelsets = stat1.labelCombCount();
+            
+            int uniqCount = 0;
+            
+            Iterator it = labelsets.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                if((Integer)pair.getValue() == 1){
+                    uniqCount++;
+                }
+            }
+            
+            return uniqCount;
         }
     
          
@@ -724,7 +772,7 @@ public class metrics
             
      }
      
-          public static double Mean_Standard_Desviation_imbalance_intra_class(atributo[] imbalanced_data)
+          public static double Mean_Standard_deviation_imbalance_intra_class(atributo[] imbalanced_data)
      {
          double value=0;
          double variance;
@@ -741,7 +789,7 @@ public class metrics
           
 
      
-     public static double Mean_IR_BR_intra_class(atributo[] imbalanced_data)
+        public static double Mean_IR_BR_intra_class(atributo[] imbalanced_data)
      {
          double value=0;
          int numValues = 0;
@@ -761,6 +809,23 @@ public class metrics
          return value;
      }
      
+     public static double Max_IR_BR_intra_class(atributo[] imbalanced_data)
+     {
+         double max=0;
+         
+         for(int i=0; i<imbalanced_data.length ; i++)
+         {
+             if(imbalanced_data[i].get_ir() != Double.NaN){
+                 if(imbalanced_data[i].get_ir() > max){
+                     max = imbalanced_data[i].get_ir();
+                 }
+             }
+             
+         }
+
+         return max;
+     }
+     
      public static double Mean_IR_BR_inter_class(atributo[] imbalanced_data)
      {
          double value=0;
@@ -768,14 +833,14 @@ public class metrics
          
          for(int i=0; i<imbalanced_data.length ; i++)
          {
-             System.out.print("imbalanced_data[i].get_ir_inter_class(): " + imbalanced_data[i].get_ir_inter_class());
+            //System.out.print("imbalanced_data[i].get_ir_inter_class(): " + imbalanced_data[i].get_ir_inter_class());
              if(imbalanced_data[i].get_ir_inter_class() >= 0){
                  value+=imbalanced_data[i].get_ir_inter_class();
                  numValues++;
-                 System.out.println(";");
+                //System.out.println(";");
              }
              else{
-                 System.out.println("  NAN");
+                //System.out.println("  NAN");
              }
          }
                   
@@ -785,9 +850,23 @@ public class metrics
          return value;
      }
      
-     public static double CVIR_inter_class (atributo[] imbalanced_data)
+     public static double Max_IR_BR_inter_class(atributo[] imbalanced_data)
      {
-           
+         double max=0;
+         
+         for(int i=0; i<imbalanced_data.length ; i++)
+         {
+            //System.out.println("imbalanced_data[i].get_ir_inter_class(): " + imbalanced_data[i].get_ir_inter_class());
+             if(imbalanced_data[i].get_ir_inter_class() > max){
+                 max = imbalanced_data[i].get_ir_inter_class();
+             }
+         }
+                  
+         return max;
+     }
+     
+     public static double CVIR_inter_class (atributo[] imbalanced_data)
+     {           
               double value=0,temp;
               int nValues = 0;
               double media = Mean_IR_BR_inter_class(imbalanced_data);
@@ -812,6 +891,44 @@ public class metrics
               
               return value;
      }
+     
+     
+     public static double SCUMBLE (atributo[] imbalanced_data, MultiLabelInstances data)
+     {
+         double SCUMBLE = 0.0;
+         
+         int nInstances = data.getNumInstances();
+         
+         double IRLbli = 0.0;
+         double prod = 1.0;
+         int [] labelIndices = data.getLabelIndices();
+         int active = 0;
+         
+         for(Instance inst : data.getDataSet()){
+             IRLbli = 0.0;
+             prod = 1.0;
+             active = 0;
+             
+             for(int i=0; i<data.getNumLabels(); i++){
+                 if(inst.value(labelIndices[i]) == 1){
+                     //prod = prod*imbalanced_data[i].get_ir_inter_class();
+                     //System.out.println("label[" + i + "]: " + data.getLabelNames()[i] + "  ; imbalanced[" + i + "]: " + imbalanced_data[i].get_name());
+                     IRLbli += imbalanced_data[i].get_ir_inter_class();
+                     //System.out.println("imbalanced_data[i].get_ir_inter_class(): " + imbalanced_data[i].get_ir_inter_class());
+                     active++;
+                 }
+             }
+             
+             IRLbli = IRLbli/active;
+             prod = Math.pow(prod, 1.0/active);      
+             //System.out.println("prod: " + prod);
+             
+             SCUMBLE += (1 - (1/IRLbli)*prod);
+         }
+         
+         SCUMBLE = SCUMBLE/nInstances;
+         return(SCUMBLE);
+     }
           
           
      
@@ -828,12 +945,9 @@ public class metrics
                 
                 int[] ints = train.getFeatureIndices();
                 
-                //util.Recorre_Arreglo(ints);
-                
-               int count;
+                //util.Recorre_Arreglo(ints);               
                
-               
-               int tam = ints.length;
+               int tam = ints.length;               
                
                if(es_de_tipo_meka)
                {
@@ -845,17 +959,17 @@ public class metrics
                        res += v;
                    }
                }
-               
-                for (int i=0;i<tam;i++) 
-                {
-                    count=i+1;
-                   //System.out.println(" atributo "+ count+" ,indice dentro del elemento"+ ints[i] + " , indice "+i);
-                    
-                    v = eval.evaluateAttribute(ints[i]);
-                   //System.out.println("valor "+ v);
-                    res += v;
-                }
-                
+               else{
+                   for (int i=0;i<tam;i++) 
+                    {
+                       //System.out.println(" atributo "+ count+" ,indice dentro del elemento"+ ints[i] + " , indice "+i);
+
+                        v = eval.evaluateAttribute(i);
+                       //System.out.println("valor "+ v);
+                        res += v;
+                    }
+               }
+                                
                 value = res / ints.length;
             }
          
@@ -1146,7 +1260,7 @@ public class metrics
     }
 
     
-    public static double Standard_Desviation_x_labelset (MultiLabelInstances dataset ,Statistics stat1)
+    public static double Standard_deviation_x_labelset (MultiLabelInstances dataset ,Statistics stat1)
     {
         double value;
         

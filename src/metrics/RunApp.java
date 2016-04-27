@@ -281,7 +281,7 @@ public class RunApp extends javax.swing.JFrame {
             this.setIconImage(ImageIO.read(new File("src/images/64.png")));
         }
         catch (IOException exc) {
-            exc.printStackTrace();
+            //exc.printStackTrace();
         }
         
         this.setMinimumSize(new Dimension(780,500));       
@@ -312,6 +312,8 @@ public class RunApp extends javax.swing.JFrame {
        //labelIR1.setVisible(false); // comentario de IR>1.5
        //labelIR2.setVisible(false); // comentario de IR>1.5
        jLabelChiFi_text.setVisible(false); // comentario de valores dependientes chi- coefficient
+       
+       jLabelIR.setVisible(false);
        
        buttonGroup5.add(jRadioButton8);
        buttonGroup5.add(radioExamplesPerLabel);
@@ -371,8 +373,8 @@ public class RunApp extends javax.swing.JFrame {
     
       fi = new JLabel("Phi coefficients", SwingConstants.CENTER);
       fi.setBounds(165,420, 120, 20);
-      fi.setBackground(Color.gray);
-      fi.setForeground(Color.white);
+      fi.setBackground(Color.lightGray);
+      fi.setForeground(Color.black);
       fi.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
       fi.setOpaque(true);
       fi.setToolTipText("Gray cells corresponds to phi coefficients");
@@ -511,10 +513,10 @@ private void Inicializa_config()
        
        cp_ir_x_label_intra_class = create_jchart(panelLabelsIRperLabelIntraClass, "line_2_axis", "Label id","IR values",true);
        cp_ir_x_label_inter_class = create_jchart(panelLabelsIRperLabelInterClass, "line_2_axis", "Label id","IR values",true);
-       cp_ir_x_label_inter_class_only = create_jchart(panelIRperLabelInterClass, "line", "Label id","IR values",true);
-       cp_ir_x_label_intra_class_only = create_jchart(panelIRperLabelIntraClass, "line", "Label id","IR values",true);
+       cp_ir_x_label_inter_class_only = create_jchart(panelIRperLabelInterClass, "bar", "Label id","IR values",true);
+       cp_ir_x_label_intra_class_only = create_jchart(panelIRperLabelIntraClass, "bar", "Label id","IR values",true);
                
-       cp_per_labelset = create_jchart(panelIRperLabelset, "line", "Labelset id","IR per labelset",false);
+       cp_per_labelset = create_jchart(panelIRperLabelset, "bar", "Labelset id","IR per labelset",false);
       
      create_jtable_metrics_jpanel1(jTable9,panelImbalanceDataMetrics,button_all_3,button_none_3,button_invert_3,button_calculate_3,button_save3,30,50,500,200,"imbalanced"); //imbalanced class
       
@@ -1028,8 +1030,7 @@ private void Inicializa_config()
 
                 progressBar.setIndeterminate(false);
                 progressFrame.setVisible(true);
-                //progressFrame.repaint();
-                progressFrame.setBounds(repaintProgressBar());
+
                 progressFrame.repaint();
                 //System.out.println("progressFrame.getX(): " + progressFrame.getX());
                 //System.out.println("progressFrame.getY(): " + progressFrame.getY());
@@ -1348,7 +1349,7 @@ private void Inicializa_config()
         tableImbalance = new javax.swing.JTable();
         radioExamplesPerLabel = new javax.swing.JRadioButton();
         radioExamplesPerLabelset = new javax.swing.JRadioButton();
-        jButton1 = new javax.swing.JButton();
+        export2 = new javax.swing.JButton();
         tabsImbalance = new javax.swing.JTabbedPane();
         panelExamplesPerLabel = new javax.swing.JPanel();
         panelExamplesPerLabelset = new javax.swing.JPanel();
@@ -1361,6 +1362,7 @@ private void Inicializa_config()
         panelIRperLabelInterClass = new javax.swing.JPanel();
         panel1 = new java.awt.Panel();
         panelLabelsIRperLabelInterClass = new javax.swing.JPanel();
+        jLabelIR = new javax.swing.JLabel();
         jPanel21 = new javax.swing.JPanel();
         tabsDependences = new javax.swing.JTabbedPane();
         panelChiPhi = new javax.swing.JPanel();
@@ -1590,7 +1592,7 @@ private void Inicializa_config()
 
         panelSplitting.setBorder(javax.swing.BorderFactory.createTitledBorder("Splitting"));
 
-        radioRandomHoldout.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        radioRandomHoldout.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         radioRandomHoldout.setText("Random holdout");
         radioRandomHoldout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1598,10 +1600,10 @@ private void Inicializa_config()
             }
         });
 
-        labelPercIterativeStratified.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        labelPercIterativeStratified.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelPercIterativeStratified.setText("%");
 
-        radioIterativeStratifiedHoldout.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        radioIterativeStratifiedHoldout.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         radioIterativeStratifiedHoldout.setText("Iterative stratified holdout ");
         radioIterativeStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1609,7 +1611,7 @@ private void Inicializa_config()
             }
         });
 
-        textRandomHoldout.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        textRandomHoldout.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         textRandomHoldout.setText("70");
         textRandomHoldout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1622,7 +1624,7 @@ private void Inicializa_config()
             }
         });
 
-        radioRandomCV.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        radioRandomCV.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         radioRandomCV.setText("Random CV");
         radioRandomCV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1630,7 +1632,7 @@ private void Inicializa_config()
             }
         });
 
-        radioIterativeStratifiedCV.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        radioIterativeStratifiedCV.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         radioIterativeStratifiedCV.setText("Iterative stratified CV");
         radioIterativeStratifiedCV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1638,7 +1640,7 @@ private void Inicializa_config()
             }
         });
 
-        textIterativeStratifiedCV.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        textIterativeStratifiedCV.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         textIterativeStratifiedCV.setText("5");
         textIterativeStratifiedCV.setEnabled(false);
         textIterativeStratifiedCV.addActionListener(new java.awt.event.ActionListener() {
@@ -1652,10 +1654,10 @@ private void Inicializa_config()
             }
         });
 
-        labelFoldsRandom.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        labelFoldsRandom.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelFoldsRandom.setText("Folds");
 
-        textRandomCV.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        textRandomCV.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         textRandomCV.setText("5");
         textRandomCV.setEnabled(false);
         textRandomCV.addActionListener(new java.awt.event.ActionListener() {
@@ -1669,13 +1671,13 @@ private void Inicializa_config()
             }
         });
 
-        labelFoldsIterativeStratified.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        labelFoldsIterativeStratified.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelFoldsIterativeStratified.setText("Folds");
 
-        labelPercRandom.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        labelPercRandom.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelPercRandom.setText("%");
 
-        textIterativeStratifiedHoldout.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        textIterativeStratifiedHoldout.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         textIterativeStratifiedHoldout.setText("70");
         textIterativeStratifiedHoldout.setEnabled(false);
         textIterativeStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
@@ -1689,7 +1691,7 @@ private void Inicializa_config()
             }
         });
 
-        radioLPStratifiedHoldout.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        radioLPStratifiedHoldout.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         radioLPStratifiedHoldout.setText("LabelPowerset stratified holdout ");
         radioLPStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1697,7 +1699,7 @@ private void Inicializa_config()
             }
         });
 
-        textLPStratifiedHoldout.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        textLPStratifiedHoldout.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         textLPStratifiedHoldout.setText("70");
         textLPStratifiedHoldout.setEnabled(false);
         textLPStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
@@ -1711,10 +1713,10 @@ private void Inicializa_config()
             }
         });
 
-        labelPercLPStratified.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        labelPercLPStratified.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelPercLPStratified.setText("%");
 
-        radioLPStratifiedCV.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        radioLPStratifiedCV.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         radioLPStratifiedCV.setText("LabelPowerset stratified CV");
         radioLPStratifiedCV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1722,7 +1724,7 @@ private void Inicializa_config()
             }
         });
 
-        textLPStratifiedCV.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        textLPStratifiedCV.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         textLPStratifiedCV.setText("5");
         textLPStratifiedCV.setEnabled(false);
         textLPStratifiedCV.addActionListener(new java.awt.event.ActionListener() {
@@ -1736,10 +1738,10 @@ private void Inicializa_config()
             }
         });
 
-        labelFoldsLPStratified.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        labelFoldsLPStratified.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelFoldsLPStratified.setText("Folds");
 
-        radioNoSplit.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        radioNoSplit.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         radioNoSplit.setText("None");
         radioNoSplit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1754,9 +1756,7 @@ private void Inicializa_config()
             .addGroup(panelSplittingLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelSplittingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelSplittingLayout.createSequentialGroup()
-                        .addComponent(radioNoSplit)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(radioNoSplit)
                     .addGroup(panelSplittingLayout.createSequentialGroup()
                         .addGroup(panelSplittingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(radioRandomHoldout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1777,7 +1777,7 @@ private void Inicializa_config()
                                 .addComponent(textRandomHoldout, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(11, 11, 11)
                                 .addComponent(labelPercRandom)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(84, 84, 84)
                         .addGroup(panelSplittingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(radioLPStratifiedCV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(radioIterativeStratifiedCV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1796,8 +1796,8 @@ private void Inicializa_config()
                             .addGroup(panelSplittingLayout.createSequentialGroup()
                                 .addComponent(textLPStratifiedCV, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(labelFoldsLPStratified)))
-                        .addGap(107, 107, 107))))
+                                .addComponent(labelFoldsLPStratified)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelSplittingLayout.setVerticalGroup(
             panelSplittingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1850,7 +1850,7 @@ private void Inicializa_config()
 
         panelFS.setBorder(javax.swing.BorderFactory.createTitledBorder("Feature Selection"));
 
-        radioBRFS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        radioBRFS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         radioBRFS.setText("Binary Relevance attribute selection");
         radioBRFS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1858,7 +1858,7 @@ private void Inicializa_config()
             }
         });
 
-        textBRFS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        textBRFS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         textBRFS.setText("100");
         textBRFS.setEnabled(false);
         textBRFS.addActionListener(new java.awt.event.ActionListener() {
@@ -1872,14 +1872,14 @@ private void Inicializa_config()
             }
         });
 
-        labelBRFS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        labelBRFS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelBRFS.setText("features");
 
-        labelBRFS_Comb.setFont(new java.awt.Font("Ubuntu", 0, 13)); // NOI18N
+        labelBRFS_Comb.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelBRFS_Comb.setText("Comb");
         labelBRFS_Comb.setEnabled(false);
 
-        jComboBox_BRFS_Comb.setFont(new java.awt.Font("Ubuntu", 0, 13)); // NOI18N
+        jComboBox_BRFS_Comb.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jComboBox_BRFS_Comb.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "max", "min", "avg" }));
         jComboBox_BRFS_Comb.setEnabled(false);
         jComboBox_BRFS_Comb.setPreferredSize(new java.awt.Dimension(58, 20));
@@ -1889,11 +1889,11 @@ private void Inicializa_config()
             }
         });
 
-        labelBRFS_Norm.setFont(new java.awt.Font("Ubuntu", 0, 13)); // NOI18N
+        labelBRFS_Norm.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelBRFS_Norm.setText("Norm");
         labelBRFS_Norm.setEnabled(false);
 
-        jComboBox_BRFS_Norm.setFont(new java.awt.Font("Ubuntu", 0, 13)); // NOI18N
+        jComboBox_BRFS_Norm.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jComboBox_BRFS_Norm.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "dm", "dl", "none" }));
         jComboBox_BRFS_Norm.setEnabled(false);
         jComboBox_BRFS_Norm.setPreferredSize(new java.awt.Dimension(63, 20));
@@ -1903,11 +1903,11 @@ private void Inicializa_config()
             }
         });
 
-        labelBRFS_Out.setFont(new java.awt.Font("Ubuntu", 0, 13)); // NOI18N
+        labelBRFS_Out.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelBRFS_Out.setText("Score");
         labelBRFS_Out.setEnabled(false);
 
-        jComboBox_BRFS_Out.setFont(new java.awt.Font("Ubuntu", 0, 13)); // NOI18N
+        jComboBox_BRFS_Out.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jComboBox_BRFS_Out.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "eval", "rank" }));
         jComboBox_BRFS_Out.setEnabled(false);
         jComboBox_BRFS_Out.setPreferredSize(new java.awt.Dimension(59, 20));
@@ -1917,7 +1917,7 @@ private void Inicializa_config()
             }
         });
 
-        radioRandomFS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        radioRandomFS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         radioRandomFS.setText("Random attribute selection");
         radioRandomFS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1925,7 +1925,7 @@ private void Inicializa_config()
             }
         });
 
-        textRandomFS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        textRandomFS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         textRandomFS.setText("100");
         textRandomFS.setEnabled(false);
         textRandomFS.addActionListener(new java.awt.event.ActionListener() {
@@ -1939,10 +1939,10 @@ private void Inicializa_config()
             }
         });
 
-        labelRandomFS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        labelRandomFS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelRandomFS.setText("features");
 
-        radioNoFS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        radioNoFS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         radioNoFS.setText("None");
         radioNoFS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1975,9 +1975,9 @@ private void Inicializa_config()
                         .addComponent(textBRFS, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelBRFS)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(labelBRFS1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(labelBRFS_Comb)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBox_BRFS_Comb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1989,7 +1989,7 @@ private void Inicializa_config()
                         .addComponent(labelBRFS_Out)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBox_BRFS_Out, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
         panelFSLayout.setVerticalGroup(
             panelFSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2025,7 +2025,7 @@ private void Inicializa_config()
 
         panelIS.setBorder(javax.swing.BorderFactory.createTitledBorder("Instance Selection"));
 
-        radioRandomIS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        radioRandomIS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         radioRandomIS.setText("Random instance selection");
         radioRandomIS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2033,7 +2033,7 @@ private void Inicializa_config()
             }
         });
 
-        textRandomIS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        textRandomIS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         textRandomIS.setText("500");
         textRandomIS.setEnabled(false);
         textRandomIS.addActionListener(new java.awt.event.ActionListener() {
@@ -2047,10 +2047,10 @@ private void Inicializa_config()
             }
         });
 
-        labelRandomIS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        labelRandomIS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelRandomIS.setText("instances");
 
-        radioNoIS.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        radioNoIS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         radioNoIS.setText("None");
         radioNoIS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2093,18 +2093,20 @@ private void Inicializa_config()
             .addGroup(panelPreprocessLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelPreprocessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelIS, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(panelPreprocessLayout.createSequentialGroup()
-                        .addGap(12, 12, 12)
+                        .addGap(10, 10, 10)
                         .addComponent(jButtonStartPreprocess, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButtonSaveDatasets)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBox_SaveFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(panelFS, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelSplitting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panelPreprocessLayout.createSequentialGroup()
+                        .addGroup(panelPreprocessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(panelIS, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(panelFS, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(panelSplitting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())))
         );
         panelPreprocessLayout.setVerticalGroup(
             panelPreprocessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2115,12 +2117,12 @@ private void Inicializa_config()
                 .addComponent(panelFS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelSplitting, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelPreprocessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonStartPreprocess)
                     .addComponent(jButtonSaveDatasets)
                     .addComponent(jComboBox_SaveFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(128, Short.MAX_VALUE))
+                .addContainerGap(191, Short.MAX_VALUE))
         );
 
         panelSplitting.getAccessibleContext().setAccessibleName("");
@@ -2176,7 +2178,12 @@ private void Inicializa_config()
             }
         });
 
-        jButton1.setText("Save");
+        export2.setText("Save");
+        export2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                export2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelImbalanceLeftLayout = new javax.swing.GroupLayout(panelImbalanceLeft);
         panelImbalanceLeft.setLayout(panelImbalanceLeftLayout);
@@ -2190,7 +2197,7 @@ private void Inicializa_config()
                 .addGroup(panelImbalanceLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(radioExamplesPerLabel)
                     .addComponent(radioExamplesPerLabelset)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(export2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelImbalanceLeftLayout.setVerticalGroup(
@@ -2202,7 +2209,7 @@ private void Inicializa_config()
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(radioExamplesPerLabelset, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(export2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -2356,14 +2363,24 @@ private void Inicializa_config()
 
         tabsImbalance.addTab("", panel1);
 
+        jLabelIR.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        jLabelIR.setText("label IR");
+        jLabelIR.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout panelImbalanceLayout = new javax.swing.GroupLayout(panelImbalance);
         panelImbalance.setLayout(panelImbalanceLayout);
         panelImbalanceLayout.setHorizontalGroup(
             panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelImbalanceLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panelImbalanceLeft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelImbalanceLayout.createSequentialGroup()
+                        .addComponent(panelImbalanceLeft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(panelImbalanceLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jLabelIR)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(tabsImbalance)
                     .addComponent(comboBoxLabelsInformation, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -2375,16 +2392,18 @@ private void Inicializa_config()
                 .addContainerGap()
                 .addGroup(panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelImbalanceLayout.createSequentialGroup()
-                        .addComponent(panelImbalanceLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(panelImbalanceLayout.createSequentialGroup()
                         .addComponent(comboBoxLabelsInformation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tabsImbalance)))
-                .addContainerGap())
+                        .addComponent(tabsImbalance, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(panelImbalanceLayout.createSequentialGroup()
+                        .addComponent(panelImbalanceLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabelIR)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
 
-        panelImbalanceLeft.getAccessibleContext().setAccessibleName("pepe");
+        panelImbalanceLeft.getAccessibleContext().setAccessibleName("");
 
         TabPrincipal.addTab("Labels", panelImbalance);
 
@@ -4817,24 +4836,25 @@ private void Inicializa_config()
         else if(tabsImbalance.getSelectedIndex()==3) // si esta activado el panel del IR per Label intra class
         {
             //System.out.println("Se ha tocado");
-            int seleccionada = tableImbalance.getSelectedRow();
+            //int seleccionada = tableImbalance.getSelectedRow();
 
-            if(id_x_IR == null) return;
+            //if(id_x_IR == null) return;
 
-            int cant_labels =(int)tableImbalance.getValueAt(seleccionada, 1);
+            //int cant_labels = Integer.parseInt((String)tableImbalance.getValueAt(seleccionada, 1));
+            //int cant_labels = dataset.getNumLabels();
             // //System.out.println(" hay "+cant_labels +" etiquetas");
 
-            double ir = Double.parseDouble(tableImbalance.getValueAt(seleccionada, 2).toString());
+            //double ir = Double.parseDouble(tableImbalance.getValueAt(seleccionada, 1).toString());
             // //System.out.println(" el ir es de "+ir +" ");
 
-            ArrayList<String> label_names= util.Get_labelnames_x_IR_intra_class(ir,cant_labels,label_imbalanced);
+            //ArrayList<String> label_names= util.Get_labelnames_x_IR_intra_class(ir,cant_labels,label_imbalanced);
 
-            int posx = this.getBounds().x;
-            int posy = this.getBounds().y;
+            //int posx = this.getBounds().x;
+            //int posy = this.getBounds().y;
 
-            metric_output mo = new metric_output(dataset, posx, posy+50,label_names,label_x_frequency, es_de_tipo_meka);
+            //metric_output mo = new metric_output(dataset, posx, posy+50,label_names,label_x_frequency, es_de_tipo_meka);
 
-            mo.setVisible(true);
+            //mo.setVisible(true);
 
         }
 
@@ -4895,40 +4915,57 @@ private void Inicializa_config()
         
         if(comboBoxLabelsInformation.getSelectedIndex() == 0){
                 tabsImbalance.setSelectedIndex(0);
-                jButton1.setVisible(true);
-                jButton1.repaint();
+                export2.setVisible(true);
+                export2.repaint();
+                jLabelIR.setVisible(false);
+                jLabelIR.repaint();
         }
         else if(comboBoxLabelsInformation.getSelectedIndex() == 1){
                 tabsImbalance.setSelectedIndex(1);
-                jButton1.setVisible(true);
-                jButton1.repaint();
+                export2.setVisible(true);
+                export2.repaint();
+                jLabelIR.setVisible(false);
+                jLabelIR.repaint();
         }
         else if(comboBoxLabelsInformation.getSelectedIndex() == 2){
                 tabsImbalance.setSelectedIndex(2);
-                jButton1.setVisible(true);
-                jButton1.repaint();
+                export2.setVisible(true);
+                export2.repaint();
+                jLabelIR.setVisible(false);
+                jLabelIR.repaint();
         }
         else if(comboBoxLabelsInformation.getSelectedIndex() == 3){
                 tabsImbalance.setSelectedIndex(7);
-                jButton1.setVisible(false);
-                jButton1.repaint();
+                export2.setVisible(false);
+                export2.repaint();
+                jLabelIR.setVisible(false);
+                jLabelIR.repaint();
         }
         else if(comboBoxLabelsInformation.getSelectedIndex() == 4){
                 tabsImbalance.setSelectedIndex(8);
-                jButton1.setVisible(true);
-                jButton1.repaint();
+                export2.setVisible(true);
+                export2.repaint();
+                jLabelIR.setText("<html>When IR > 1.5, the label is <br> imbalanced and it is marked in red</html>");
+                jLabelIR.setVisible(true);
+                jLabelIR.repaint();
         }
         else if(comboBoxLabelsInformation.getSelectedIndex() == 5){
                 //tabsImbalance.setSelectedIndex(9);
                 tabsImbalance.setSelectedIndex(3);
-                jButton1.setVisible(true);
-                jButton1.repaint();
+                export2.setVisible(true);
+                export2.repaint();
+                jLabelIR.setText("<html>When IR > 1.5, the label is <br> imbalanced and it is marked in red</html>");
+                jLabelIR.setVisible(true);
+                jLabelIR.repaint();
         }
         else if(comboBoxLabelsInformation.getSelectedIndex() == 6){
                 //tabsImbalance.setSelectedIndex(3);
                 tabsImbalance.setSelectedIndex(5);
-                jButton1.setVisible(true);
-                jButton1.repaint();
+                export2.setVisible(true);
+                export2.repaint();
+                jLabelIR.setText("<html>When IR > 1.5, the labelset is <br> imbalanced and it is marked in red</html>");
+                jLabelIR.setVisible(true);
+                jLabelIR.repaint();
         }
         /*
         else if(comboBoxLabelsInformation.getSelectedIndex() == 7){
@@ -4963,6 +5000,8 @@ private void Inicializa_config()
                 //jPanel15.setVisible(false);
                 radioExamplesPerLabel.setVisible(false);
                 radioExamplesPerLabelset.setVisible(false);
+                
+                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
 
                 //labelIR1.setVisible(false);
                 //labelIR2.setVisible(false);
@@ -5204,6 +5243,11 @@ private void Inicializa_config()
         jButtonSaveDatasets.setEnabled(false);
         jComboBox_SaveFormat.setEnabled(false);
     }//GEN-LAST:event_radioNoISActionPerformed
+
+    private void export2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_export2ActionPerformed
+        // TODO add your handling code here:
+        button_export_ActionPerformed(evt, tableImbalance);
+    }//GEN-LAST:event_export2ActionPerformed
 
     private void showHeatMap(){
         if(lista_pares== null) 
@@ -5657,7 +5701,7 @@ private void Inicializa_config()
         //System.out.println(filename_database_arff);
  
         try {        
-             jButton1.setVisible(true); //boton salvar de la tabla de la izquierda en class imbalance
+             export2.setVisible(true); //boton salvar de la tabla de la izquierda en class imbalance
             
              
              if(tabsDependences.getSelectedIndex()==0)jLabelChiFi_text.setVisible(true);
@@ -9324,17 +9368,6 @@ private void Inicializa_config()
         }
      
      
-    public Rectangle repaintProgressBar(){
-       //System.out.println("this.getX(): " + this.getX());
-       //System.out.println("this.getY(): " + this.getY());
-       //System.out.println("this.getWidth(): " + this.getWidth());
-       //System.out.println("this.getHeight(): " + this.getHeight());
-        
-        return(new Rectangle(this.getX(), this.getY(), this.getWidth(), this.getHeight()));
-    } 
-     
-    
-     
      
     /**
      * @param args the command line arguments
@@ -9391,7 +9424,7 @@ private void Inicializa_config()
     private javax.swing.JButton buttonShowMostRelated;
     private javax.swing.JButton buttonShowMostRelatedHeatMap;
     private javax.swing.JComboBox comboBoxLabelsInformation;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton export2;
     private javax.swing.JButton jButtonSaveDatasets;
     private javax.swing.JButton jButtonStartPreprocess;
     private javax.swing.JComboBox jComboBox_BRFS_Comb;
@@ -9399,6 +9432,7 @@ private void Inicializa_config()
     private javax.swing.JComboBox jComboBox_BRFS_Out;
     private javax.swing.JComboBox jComboBox_SaveFormat;
     private javax.swing.JLabel jLabelChiFi_text;
+    private javax.swing.JLabel jLabelIR;
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanelMulti;
     private javax.swing.JPopupMenu jPopupMenu1;
