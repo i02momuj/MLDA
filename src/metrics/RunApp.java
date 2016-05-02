@@ -5,23 +5,14 @@ import convertir.MekaToMulan;
 import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -30,9 +21,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -67,7 +55,6 @@ import mulan.data.IterativeStratification;
 import mulan.data.LabelSet;
 import mulan.data.MultiLabelInstances;
 import mulan.data.Statistics;
-import mulan.data.Stratification;
 import mulan.examples.CrossValidationExperiment;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -94,7 +81,6 @@ import weka.core.Attribute;
 import weka.core.Instances;
 import weka.filters.Filter;
 import weka.filters.unsupervised.instance.Randomize;
-import weka.filters.unsupervised.instance.RemovePercentage;
 import weka.filters.unsupervised.instance.RemoveRange;
 
 
@@ -109,68 +95,16 @@ import weka.filters.unsupervised.instance.RemoveRange;
  */
 public class RunApp extends javax.swing.JFrame {
 
-
-
     /**
      * Creates new form RunApp
      */
-       
-      //private Task task;
-    
-      /*
-     class Task extends SwingWorker<Void, Void> {
-         
-         //SEE THAT TO CREATE A GOOD PROGRESS BAR
-         //http://felinfo.blogspot.com.es/2010/06/crear-una-barra-de-progreso-en-java.html
-         
-         
-         progress_bar new_progress;
-         int velocidad;
-
-        @Override
-        public Void doInBackground() {
-            Random random = new Random();
-            int progress = 0;
-            //Initialize progress property.
-            setProgress(0);
-            
-            while (progress < 100) {
-                //Sleep for up to one second.
-                try {
-                    if(velocidad ==2) Thread.sleep(1000);
-                    else Thread.sleep(500);
-                } catch (InterruptedException ignore) {}
-                //Make random progress.
-                progress += velocidad;
-                setProgress(Math.min(progress, 100));
-            }
-            return null;
-        }
-
-        public Task(progress_bar new_progress, int velocidad)
-        {
-            this.new_progress = new_progress;
-            this.velocidad = velocidad;
-        }
-
-        
-        @Override
-        public void done() {
-            Toolkit.getDefaultToolkit().beep();
-            setCursor(null); //turn off the wait cursor
-          //  taskOutput.append("Done!\n");
-            new_progress.setVisible(false);
-        }
-    }*/
-    
     public static JProgressBar progressBar;
     public static JFrame progressFrame;
     
+    String dataset_name1="";
     
-     String dataset_name1="";
-    
-     static int count_test=1;
-     ArrayList<String> test_list = new ArrayList();
+    static int count_test=1;
+    ArrayList<String> test_list = new ArrayList();
      
     //JPanel container;
     MultiLabelInstances dataset,dataset_train, dataset_test;
@@ -178,15 +112,16 @@ public class RunApp extends javax.swing.JFrame {
     String filename_database_xml=null,filename_database_xml_path="";
     String filename_database_arff_test;
              
+    //Charts
     ChartPanel cp,cp1,cp2,cp3,cp11,cp22,cp_box,cp_ir_x_label_intra_class,cp_ir_x_label_inter_class,cp_per_labelset, cp_ir_x_label_inter_class_only, cp_ir_x_label_intra_class_only;
     
     double radio;
     int num_atributos;
     int numero_etiquetas;
     int num_instancias;
-    int velocidad_multiple=5; //pestaña multiple dataset
+    int velocidad_multiple=5; //multiple datasets tab
    
-    //PERTENECE A LA PESTAÑA CHOOSE DATASETS
+    //Summary
     JButton button_all_2,button_none_2,button_invert_2, button_calculate_2,button_save2;
     
     JButton button_all_1,button_none_1,button_invert_1, button_calculate_1,button_save, button_clear;
@@ -228,32 +163,24 @@ public class RunApp extends javax.swing.JFrame {
     atributo[] label_frenquency = null;
     double[] labelset_frequency = null;
     
-    //variables chi and fi
+    //Chi and Phi
     double[][] chi_fi_coefficient;
     double [][] coocurrence_coefficients;
     double [][] heatmap_coefficients;
      Object[][] data; 
      Object[] column;
-     
-     //variables TRAIN-TEST
-     /*boolean  holdout_random=false, holdout_iterative_stratified=false, 
-             cv_ramdon=false, cv_iterative_stratified =false,
-             holdout_LP_stratified=false, cv_LP_stratified=false,
-             feature_selection_br=false, feature_selection_random=false;*/
-    //JButton button_calculate2_train,button_save_train;
-    
-    //VARIABLES BOX DIAGRAM
+        
+    //Box diagram
     JRadioButton jRadioButton8;
     
     boolean first_time_chi=true; 
     boolean es_de_tipo_meka = false;
     
-    
+    //Metrics
     Hashtable<String, String> tableMetrics = new Hashtable<String, String>();
     Hashtable<String, String> tableMetrics_common = new Hashtable<String, String>();
     Hashtable<String, String> tableMetrics_train = new Hashtable<String, String>();
-    Hashtable<String, String> tableMetrics_test = new Hashtable<String, String>();
-    
+    Hashtable<String, String> tableMetrics_test = new Hashtable<String, String>();    
     Hashtable<String, Hashtable<String, String>> tableMetricsMulti = new Hashtable<String, Hashtable<String, String>>();
     
     HeatMap heatMap = null; 
@@ -286,38 +213,29 @@ public class RunApp extends javax.swing.JFrame {
         
         this.setMinimumSize(new Dimension(780,500));       
         this.setBounds(300,0, 780, 500);
-        
-        
+
         initComponents();   
 
         Inicializa_config(); //add jradionbutton
      
         dataset_current_name="";          
         
-       ////System.out.println("valor de fortaleza "+util.get_valor_fortaleza(2, 15, 3, 6));      
-        
-       start_config_multiples_datasets();
+        start_config_multiples_datasets();
        
-       ////System.out.println("punto inicial del jheat graph " + jLabel20.getBounds().x+" , "+ jLabel20.getBounds().y);
+        // BOX DIAGRAM INICIALIZACION
+        jRadioButton8 = new JRadioButton();
+        jRadioButton8.setVisible(false);
+        radioExamplesPerLabel.setVisible(true);
+        radioExamplesPerLabelset.setVisible(true);
+        radioExamplesPerLabel.setVisible(false);
+        radioExamplesPerLabelset.setVisible(false);
+        jLabelChiFi_text.setVisible(false); // comentario de valores dependientes chi- coefficient
 
-       // BOX DIAGRAM INICIALIZACION
-       jRadioButton8 = new JRadioButton();
-       
-       jRadioButton8.setVisible(false);
-       radioExamplesPerLabel.setVisible(true);
-       radioExamplesPerLabelset.setVisible(true);
-       //jPanel15.setVisible(false);
-       radioExamplesPerLabel.setVisible(false);
-       radioExamplesPerLabelset.setVisible(false);
-       //labelIR1.setVisible(false); // comentario de IR>1.5
-       //labelIR2.setVisible(false); // comentario de IR>1.5
-       jLabelChiFi_text.setVisible(false); // comentario de valores dependientes chi- coefficient
-       
-       jLabelIR.setVisible(false);
-       
-       buttonGroup5.add(jRadioButton8);
-       buttonGroup5.add(radioExamplesPerLabel);
-       buttonGroup5.add(radioExamplesPerLabelset);
+        jLabelIR.setVisible(false);
+
+        buttonGroup5.add(jRadioButton8);
+        buttonGroup5.add(radioExamplesPerLabel);
+        buttonGroup5.add(radioExamplesPerLabelset);
        
        
        
@@ -325,566 +243,254 @@ public class RunApp extends javax.swing.JFrame {
     
     private void Inicializa_jtable_fi_chi()
     {
-                /*
-       
-      //JTABLE CHI & FI COEFFICIENT
+        fixedTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jTable10.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        fixedTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jTable10.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-      */
-        
-    fixedTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTable10.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    fixedTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTable10.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    
-    fixedTable1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTable11.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    fixedTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTable11.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        fixedTable1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jTable11.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        fixedTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jTable11.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-    fixedTable2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTable12.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    fixedTable2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTable12.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    /*
-    JScrollPane scroll = new JScrollPane(jTable10);
-    JViewport viewport = new JViewport();
-    viewport.setView(fixedTable);
-    viewport.setPreferredSize(fixedTable.getPreferredSize());
-    scroll.setRowHeaderView(viewport);
-    
-    scroll.setBounds(20, 20, 760, 350);
-    
-    scroll.setCorner(JScrollPane.UPPER_LEFT_CORNER, fixedTable
-        .getTableHeader());
-    
-    jTable10.setBorder(BorderFactory.createLineBorder(Color.black));
-    jPanel24.add(scroll, BorderLayout.CENTER);  
-   */
-   
-      chi = new JLabel("Chi coefficients", SwingConstants.CENTER);
-      chi.setBounds(25,420, 120,20);
-      chi.setBackground(Color.white);
-      chi.setForeground(Color.black);
-      chi.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-      chi.setOpaque(true);
-      chi.setToolTipText("White cells corresponds to chi coefficients");
-           
-      panelChiPhi.add(chi);
-    
-      fi = new JLabel("Phi coefficients", SwingConstants.CENTER);
-      fi.setBounds(165,420, 120, 20);
-      fi.setBackground(Color.lightGray);
-      fi.setForeground(Color.black);
-      fi.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-      fi.setOpaque(true);
-      fi.setToolTipText("Gray cells corresponds to phi coefficients");
-      
-      panelChiPhi.add(fi);
-      
-      
-      progressBar = new JProgressBar(0, 100);
-      progressBar.setValue(0);  
-      
-      /*
-      int x = this.getX();
-      int y = this.getY();
-      int centerX = this.getWidth()/2;
-      int centerY = this.getHeight()/2;
-      int progressWidth = 200;
-      int progressHeight = 30;
-      */
-      
-      progressFrame = new JFrame();
-        
-      //progressFrame.setBounds(this.getBounds().x + this.getBounds().width/2 - 100, this.getBounds().y + this.getBounds().height/2 - 15, 200, 30);
-      progressFrame.setBounds(this.getX() + this.getWidth()/2 - 100, this.getY() + this.getHeight()/2 - 15, 200, 30);
-      progressFrame.setResizable(false);
-      progressFrame.setUndecorated(true);
-      progressFrame.add(progressBar);      
-      
-    
-    }
-    
-    
-    
-private void Inicializa_config()
-{
-  
-        
-     //radiobutton to group
-      buttonGroup1.add(radioRandomHoldout);
-      radioRandomHoldout.setToolTipText("Split the dataset into random train and test files");
-      textRandomHoldout.setToolTipText("Percentage of train instances");
-      
-      buttonGroup1.add(radioIterativeStratifiedHoldout);
-      radioIterativeStratifiedHoldout.setToolTipText("Split the dataset into train and test files by Iterative stratified method");
-      textIterativeStratifiedHoldout.setToolTipText("Percentage of train instances");
-      
-      buttonGroup1.add(radioLPStratifiedHoldout);
-      radioLPStratifiedHoldout.setToolTipText("Split the dataset into train and test files by Label Powerset stratified method");
-      textLPStratifiedHoldout.setToolTipText("Percentage of train instances");
-      
-      buttonGroup1.add(radioRandomCV);
-      radioRandomCV.setToolTipText("Generates random cross-validation files for selected number of folds");
-      textRandomCV.setToolTipText("Number of folds for cross-validation");
-      
-      buttonGroup1.add(radioIterativeStratifiedCV);
-      radioIterativeStratifiedCV.setToolTipText("Generates Iterative stratified cross-validation files for selected number of folds");
-      textIterativeStratifiedCV.setToolTipText("Number of folds for cross-validation");
-      
-      buttonGroup1.add(radioLPStratifiedCV);
-      radioLPStratifiedCV.setToolTipText("Generates Label Powerset stratified cross-validation files for selected number of folds");
-      textLPStratifiedCV.setToolTipText("Number of folds for cross-validation");
-      
-      buttonGroup1.add(radioNoSplit);
-      radioNoSplit.setToolTipText("Not generate any partition of the dataset");
-      
-      buttonGroup2.add(radioBRFS);
-      radioBRFS.setToolTipText("Feature selection by Binary Relevance Feature Selection method");
-      textBRFS.setToolTipText("Number of features to select");
-      
-      labelBRFS_Comb.setToolTipText("Combiantion approach mode");
-      jComboBox_BRFS_Comb.setToolTipText("<html>Combiantion approach mode: <br>"
-                                        + "max: maximum <br>"
-                                        + "avg: average <br>"
-                                        + "min: minumum </html>");
-      
-      labelBRFS_Norm.setToolTipText("Normalization mode");
-      jComboBox_BRFS_Norm.setToolTipText("<html>Normalization mode: <br>"
-                                        + "dl: divide by length <br>"
-                                        + "dm: divide by maximum <br>"
-                                        + "none: no normalization </html>");
-      
-      labelBRFS_Out.setToolTipText("Scoring mode");
-      jComboBox_BRFS_Out.setToolTipText("<html>Scoring mode: <br>"
-                                        + "eval: evaluation score <br>"
-                                        + "rank: ranking score </html>");
-      
-      
-      buttonGroup2.add(radioRandomFS);
-      radioRandomFS.setToolTipText("Random selection of the features");
-      textRandomFS.setToolTipText("Number of features to select");
-      
-      buttonGroup2.add(radioNoFS);
-      radioNoFS.setToolTipText("No feature selection is done");
-      
-      jButtonStartPreprocess.setToolTipText("Start preprocessing");
-      jButtonSaveDatasets.setToolTipText("Save dataset files in a folder");
-      jComboBox_SaveFormat.setToolTipText("Select Mulan or Meka format to save datasets");
+        fixedTable2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jTable12.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        fixedTable2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jTable12.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-      buttonGroup3.add(radioNoIS);
-      radioNoIS.setToolTipText("No instance selection is done");
-      buttonGroup3.add(radioRandomIS);
-      radioRandomIS.setToolTipText("Random selection of the instances");
-      textRandomIS.setToolTipText("Number of instances to select");
+        chi = new JLabel("Chi coefficients", SwingConstants.CENTER);
+        chi.setBounds(25,420, 120,20);
+        chi.setBackground(Color.white);
+        chi.setForeground(Color.black);
+        chi.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        chi.setOpaque(true);
+        chi.setToolTipText("White cells corresponds to chi coefficients");
+
+        panelChiPhi.add(chi);
+
+        fi = new JLabel("Phi coefficients", SwingConstants.CENTER);
+        fi.setBounds(165,420, 120, 20);
+        fi.setBackground(Color.lightGray);
+        fi.setForeground(Color.black);
+        fi.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        fi.setOpaque(true);
+        fi.setToolTipText("Gray cells corresponds to phi coefficients");
+
+        panelChiPhi.add(fi);
+    } 
+    
+    
+    private void Inicializa_config()
+    {
+        //radiobutton to group
+        buttonGroup1.add(radioRandomHoldout);
+        radioRandomHoldout.setToolTipText("Split the dataset into random train and test files");
+        textRandomHoldout.setToolTipText("Percentage of train instances");
+
+        buttonGroup1.add(radioIterativeStratifiedHoldout);
+        radioIterativeStratifiedHoldout.setToolTipText("Split the dataset into train and test files by Iterative stratified method");
+        textIterativeStratifiedHoldout.setToolTipText("Percentage of train instances");
+
+        buttonGroup1.add(radioLPStratifiedHoldout);
+        radioLPStratifiedHoldout.setToolTipText("Split the dataset into train and test files by Label Powerset stratified method");
+        textLPStratifiedHoldout.setToolTipText("Percentage of train instances");
+
+        buttonGroup1.add(radioRandomCV);
+        radioRandomCV.setToolTipText("Generates random cross-validation files for selected number of folds");
+        textRandomCV.setToolTipText("Number of folds for cross-validation");
+
+        buttonGroup1.add(radioIterativeStratifiedCV);
+        radioIterativeStratifiedCV.setToolTipText("Generates Iterative stratified cross-validation files for selected number of folds");
+        textIterativeStratifiedCV.setToolTipText("Number of folds for cross-validation");
+
+        buttonGroup1.add(radioLPStratifiedCV);
+        radioLPStratifiedCV.setToolTipText("Generates Label Powerset stratified cross-validation files for selected number of folds");
+        textLPStratifiedCV.setToolTipText("Number of folds for cross-validation");
+
+        buttonGroup1.add(radioNoSplit);
+        radioNoSplit.setToolTipText("Not generate any partition of the dataset");
+
+        buttonGroup2.add(radioBRFS);
+        radioBRFS.setToolTipText("Feature selection by Binary Relevance Feature Selection method");
+        textBRFS.setToolTipText("Number of features to select");
+
+        labelBRFS_Comb.setToolTipText("Combiantion approach mode");
+        jComboBox_BRFS_Comb.setToolTipText("<html>Combiantion approach mode: <br>"
+                                          + "max: maximum <br>"
+                                          + "avg: average <br>"
+                                          + "min: minumum </html>");
+
+        labelBRFS_Norm.setToolTipText("Normalization mode");
+        jComboBox_BRFS_Norm.setToolTipText("<html>Normalization mode: <br>"
+                                          + "dl: divide by length <br>"
+                                          + "dm: divide by maximum <br>"
+                                          + "none: no normalization </html>");
+
+        labelBRFS_Out.setToolTipText("Scoring mode");
+        jComboBox_BRFS_Out.setToolTipText("<html>Scoring mode: <br>"
+                                          + "eval: evaluation score <br>"
+                                          + "rank: ranking score </html>");
+
+
+        buttonGroup2.add(radioRandomFS);
+        radioRandomFS.setToolTipText("Random selection of the features");
+        textRandomFS.setToolTipText("Number of features to select");
+
+        buttonGroup2.add(radioNoFS);
+        radioNoFS.setToolTipText("No feature selection is done");
+
+        jButtonStartPreprocess.setToolTipText("Start preprocessing");
+        jButtonSaveDatasets.setToolTipText("Save dataset files in a folder");
+        jComboBox_SaveFormat.setToolTipText("Select Mulan or Meka format to save datasets");
+
+        buttonGroup3.add(radioNoIS);
+        radioNoIS.setToolTipText("No instance selection is done");
+        buttonGroup3.add(radioRandomIS);
+        radioRandomIS.setToolTipText("Random selection of the instances");
+        textRandomIS.setToolTipText("Number of instances to select");
+
+
+        radioRandomHoldout.setSelected(true);
+        radioNoFS.setSelected(true);
+        radioNoIS.setSelected(true);
+
+        textRandomHoldout.setEnabled(true);
+
+        buttonShowCoOcurrence.setToolTipText("Show graph with labels selected in table");
+        buttonShowMostFrequent.setToolTipText("Show graph with most frequent labels");
+        textMostFrequent.setToolTipText("Number of most frequent labels to show");
+        buttonShowMostRelated.setToolTipText("Show graph with most related labels");
+        textMostRelated.setToolTipText("Number of most related labels to show");
+
+        buttonShowHeatMap.setToolTipText("Show heatmap with labels selected in table");
+        buttonShowMostFrequentHeatMap.setToolTipText("Show heatmap with most frequent labels");
+        textMostFrequentHeatMap.setToolTipText("Number of most frequent labels to show");
+        buttonShowMostRelatedHeatMap.setToolTipText("Show heatmap with most related labels");
+        textMostRelatedHeatMap.setToolTipText("Number of most related labels to show");
       
+        //Charts
+        cp3 = create_jchart(panelExamplesPerLabel,"bar","Labels", "Relative frequency",false);
+        cp11 =  create_jchart(panelLabelsPerExample,"bar", "# Labels/example","Relative frequency",false);
+        cp_box =generaGrafico(panelBoxDiagram);
+        cp22 = create_jchart(panelExamplesPerLabelset, "bar","Labelsets","Relative frequency",false);
+        cp_ir_x_label_intra_class = create_jchart(panelLabelsIRperLabelIntraClass, "line_2_axis", "Label id","IR values",true);
+        cp_ir_x_label_inter_class = create_jchart(panelLabelsIRperLabelInterClass, "line_2_axis", "Label id","IR values",true);
+        cp_ir_x_label_inter_class_only = create_jchart(panelIRperLabelInterClass, "bar", "Label id","IR values",true);
+        cp_ir_x_label_intra_class_only = create_jchart(panelIRperLabelIntraClass, "bar", "Label id","IR values",true);
+
+        cp_per_labelset = create_jchart(panelIRperLabelset, "bar", "Labelset id","IR per labelset",false);
       
-      radioRandomHoldout.setSelected(true);
-      radioNoFS.setSelected(true);
-      radioNoIS.setSelected(true);
-      
-      textRandomHoldout.setEnabled(true);
-      
-      
-     // jTable1.setVisible(true);        
-      
-      
-      buttonShowCoOcurrence.setToolTipText("Show graph with labels selected in table");
-      buttonShowMostFrequent.setToolTipText("Show graph with most frequent labels");
-      textMostFrequent.setToolTipText("Number of most frequent labels to show");
-      buttonShowMostRelated.setToolTipText("Show graph with most related labels");
-      textMostRelated.setToolTipText("Number of most related labels to show");
-      
-      buttonShowHeatMap.setToolTipText("Show heatmap with labels selected in table");
-      buttonShowMostFrequentHeatMap.setToolTipText("Show heatmap with most frequent labels");
-      textMostFrequentHeatMap.setToolTipText("Number of most frequent labels to show");
-      buttonShowMostRelatedHeatMap.setToolTipText("Show heatmap with most related labels");
-      textMostRelatedHeatMap.setToolTipText("Number of most related labels to show");
-      
-      
-      
-       
-       cp3 = create_jchart(panelExamplesPerLabel,"bar","Labels", "Relative frequency",false);
-       cp11 =  create_jchart(panelLabelsPerExample,"bar", "# Labels/example","Relative frequency",false);
-       //crea el grafico box diagram
-       cp_box =generaGrafico(panelBoxDiagram);
-       
-       cp22 = create_jchart(panelExamplesPerLabelset, "bar","Labelsets","Relative frequency",false);
-       
-       cp_ir_x_label_intra_class = create_jchart(panelLabelsIRperLabelIntraClass, "line_2_axis", "Label id","IR values",true);
-       cp_ir_x_label_inter_class = create_jchart(panelLabelsIRperLabelInterClass, "line_2_axis", "Label id","IR values",true);
-       cp_ir_x_label_inter_class_only = create_jchart(panelIRperLabelInterClass, "bar", "Label id","IR values",true);
-       cp_ir_x_label_intra_class_only = create_jchart(panelIRperLabelIntraClass, "bar", "Label id","IR values",true);
-               
-       cp_per_labelset = create_jchart(panelIRperLabelset, "bar", "Labelset id","IR per labelset",false);
-      
-     create_jtable_metrics_jpanel1(jTable9,panelImbalanceDataMetrics,button_all_3,button_none_3,button_invert_3,button_calculate_3,button_save3,30,50,500,200,"imbalanced"); //imbalanced class
-      
-      create_jtable_metrics_jpanel1_principal(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save, button_clear, 30,190,780,280,"database"); //tab Database //35,155,500,355
-      create_jtable_metrics_jpanel14(jTable8,panelMultipleDatasets,button_all_2,button_none_2,button_invert_2,button_calculate_2,button_save2,290,35,565,400); //
-      
-      create_jtable_metrics_multi(jTableMulti,jPanelMulti,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save, 25,15,510,420); //tab Multi
-      
-      //create_jtable_metrics_jpanel2();
-      
-      jButtonSaveDatasets.setEnabled(false);
-      jComboBox_SaveFormat.setEnabled(false);
-      //button_calculate2_train.setEnabled(false);
-      //button_save_train.setEnabled(false);
-            
-      //CONFIG JTABLE FI AND CHI CO-OCURRENCES VALUES
-      Inicializa_jtable_fi_chi();
-      
-      
-      
-      
-      //CONFIG JTABLE CO-OCURRENCES VALUES
-      
-      jTable11.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-      JScrollPane scrollPane = new JScrollPane(jTable11, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-         
-      
-      scrollPane.setBounds(20, 20, 780, 390);
-      jTable11.setBorder(BorderFactory.createLineBorder(Color.black));
-      panelCoOcurrenceValues.add(scrollPane, BorderLayout.CENTER);
-      
-      //CONFIG JTABLE heapmap VALUES
-      
-      jTable12.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-      scrollPane = new JScrollPane(jTable12, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            
-      scrollPane.setBounds(20, 20, 780, 390);
-      jTable12.setBorder(BorderFactory.createLineBorder(Color.black));
-      panelHeatmapValues.add(scrollPane, BorderLayout.CENTER);
-      
-      
-      //INICIALIZAR ELEMENTOS DE LA PESTAÑA TRAIN/TEST
-      list_dataset_train = new ArrayList();
-      list_dataset_test = new ArrayList();
-      
-      //BOTON EXPORTAR PESTAÑA DATASET
-      
+        create_jtable_metrics_jpanel1_principal(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save, button_clear, 30,190,780,280,"database"); //tab Database //35,155,500,355
+       // create_jtable_metrics_jpanel14(jTable8,panelMultipleDatasets,button_all_2,button_none_2,button_invert_2,button_calculate_2,button_save2,290,35,565,400); //
+
+        create_jtable_metrics_multi(jTableMulti,jPanelMulti,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save, 25,15,510,420); //tab Multi
+
+        jButtonSaveDatasets.setEnabled(false);
+        jComboBox_SaveFormat.setEnabled(false);
+
+        //Configure jTable Phi and Chi
+        Inicializa_jtable_fi_chi();
+
+        //Config jTable Co-ocurrence values
+        jTable11.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        JScrollPane scrollPane = new JScrollPane(jTable11, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         
-      //create_button_export(jTable2,panelDataset,export1,20,285); //375
-      //export2 = create_button_export_jtable4(tableImbalance,panelImbalance,export2, 30,405);
-     
+        scrollPane.setBounds(20, 20, 780, 390);
+        jTable11.setBorder(BorderFactory.createLineBorder(Color.black));
+        panelCoOcurrenceValues.add(scrollPane, BorderLayout.CENTER);
       
-      
-      create_button_export(jTable10,fixedTable ,panelChiPhi ,export3,710,415, "ChiPhi"); // chi and fi values
-      create_button_export(jTable11,fixedTable1,panelCoOcurrenceValues ,export4,710,415, "Coocurrence");//graph values
-      create_button_export(jTable12,fixedTable2,panelHeatmapValues ,export5,710,415, "Heatmap");//heatmap values
-      
-      create_button_export(panelCoOcurrence ,export6,720,440); //graph- dependences
-      //export6.setToolTipText("Save co-ocurrence graph as image");
-      create_button_export(panelHeatmapGraph,export7,720,440);
-      //export7.setToolTipText("Save heatmap as image");
-      
-      //create_button_export(jPanel21 ,export6,5,50);
-      Border border = BorderFactory.createLineBorder(Color.gray, 1);
-   
-      
-      
-      panelHeatmap.setBorder(border); 
-      jTable10.setBorder(border);
-      jTable11.setBorder(border);
-      jTable12.setBorder(border);
-      
-      //jradio por defecto "PESTAÑA TRAIN TEST"
-      textRandomHoldout.setEnabled(true);
+        //CONFIG JTABLE heapmap VALUES
+        jTable12.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        scrollPane = new JScrollPane(jTable12, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        scrollPane.setBounds(20, 20, 780, 390);
+        jTable12.setBorder(BorderFactory.createLineBorder(Color.black));
+        panelHeatmapValues.add(scrollPane, BorderLayout.CENTER);
+
+        create_button_export(jTable10,fixedTable ,panelChiPhi ,export3,710,415, "ChiPhi"); // chi and fi values
+        create_button_export(jTable11,fixedTable1,panelCoOcurrenceValues ,export4,710,415, "Coocurrence");//graph values
+        create_button_export(jTable12,fixedTable2,panelHeatmapValues ,export5,710,415, "Heatmap");//heatmap values
+
+        create_button_export(panelCoOcurrence ,export6,720,440); //graph- dependences
+        create_button_export(panelHeatmapGraph,export7,720,440);
+        Border border = BorderFactory.createLineBorder(Color.gray, 1);
+
+        panelHeatmap.setBorder(border); 
+        jTable10.setBorder(border);
+        jTable11.setBorder(border);
+        jTable12.setBorder(border);
+
+        textRandomHoldout.setEnabled(true);
         textIterativeStratifiedHoldout.setEnabled(false);
-        //buttonChooseSuppliedTest.setEnabled(false);
         textRandomCV.setEnabled(false);
         textIterativeStratifiedCV.setEnabled(false);
-        
 
-        
-}
-    //"TEST" TAB CONFIG
-    private void create_jtable_metrics_jpanel2()
-    {
-     
-     //COMMUN METRICS TRAIN/TEST
-     JLabel label1 = new JLabel("Common metrics for train/test");
-     panelPreprocess.add(label1);
-     label1.setBounds(300, 20, 250, 20);
-     label1.setFont(new Font("Arial", Font.BOLD, 12));
-         
-     
-     //create_jtable_metric_principal(jTable5, panelTrainTest, util.Get_row_data_commun_data(), 295, 40, 610, 175);
-     
-     
-   
-          
-     // METRICS TEST
-     JLabel label3 = new JLabel("NOT common metrics for train/test set");
-     panelPreprocess.add(label3);
-     label3.setBounds(300, 220, 250, 20);
-     label3.setFont(new Font("Arial", Font.BOLD, 12));
-     
-     
-     //Not Common train_test
-     //create_jtable_metric_train_test(jTable7, panelTrainTest, util.Get_row_data_test_data(), 295, 240, 625, 270);
-     
-     
-     //button ALL
-      JButton button_all2 = new JButton("All");
-      button_all2.setBounds(295, 515, 80, 20);
-            
-      button_all2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_allActionPerformed2(evt,jTable5,jTable6,jTable7 );
-                            }
-        });
-      panelPreprocess.add(button_all2);
-      
-      
-     //button NONE
-      JButton button_none2 = new JButton("None");
-      button_none2.setBounds(385, 515, 80, 20);
-            
-      button_none2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt){
-                button_noneActionPerformed2(evt,jTable5,jTable6,jTable7);
-                            }
-        });
-      panelPreprocess.add(button_none2);
-      
-      //button INVERT
-     JButton button_invert2 = new JButton("Invert");
-      button_invert2.setBounds(475, 515, 80, 20);
-            
-      button_invert2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_invertActionPerformed2(evt,jTable5,jTable6,jTable7);
-                            }
-        });
-      panelPreprocess.add(button_invert2);
-      
-      
-         //button CALCULATE
-      //button_calculate2_train = new JButton("Calculate");
-      //button_calculate2_train.setBounds(720, 515, 90, 20);
-            
-      /*button_calculate2_train.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_calculateActionPerformed1_general(evt,jTable5,jTable6,jTable7);
-                            }
-        });*/
-      //panelTrainTest.add(button_calculate2_train);
-     
-               //button SAVE
-    // button_save_train = new JButton("Save");
-     // button_save_train.setBounds(820, 515, 80, 20);
-            
-      /*button_save_train.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    button_saveActionPerformed1(evt,jTable5,jTable6,jTable7);
-                    Toolkit.getDefaultToolkit().beep();
-                    //button_saveActionPerformed1(evt,jTable5,jTable6,jTable7);
-                } catch (IOException ex) {
-                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                            }
-        });
-      panelTrainTest.add(button_save_train);
-     */
-        
-    }
+        progressBar = new JProgressBar(0, 100);
+        progressBar.setValue(0);  
 
-  
-    
-    private HeatChart create_heapmap(JLabel jlabel, MultiLabelInstances dataset, int[] labels_names)
-    {
-       double[][] data= util.Get_data_heapmap(dataset, labels_names);
-       
-     //  util.Recorre_Arreglo_2_dimensiones(data);
-       
-       // Create our heat chart using our data.
-       data = util.Invertir_Matrix(data);
-       HeatChart chart = new HeatChart(data);
-       
-    chart.setAxisColour(Color.black);
-    chart.setAxisValuesColour(Color.black);
-  
-    chart.setShowXAxisValues(false);
-    chart.setShowYAxisValues(false);
-    chart.setHighValueColour(Color.white);
-    chart.setLowValueColour(Color.black);
-  
-    chart.setChartMargin(0);
-    
-    
-    int cant_labels=labels_names.length;
-    
-    if(cant_labels<30)chart.setCellSize(new Dimension(10,10));
-    if(cant_labels>30 && cant_labels <60 ) chart.setCellSize(new Dimension(9,6));
-    if(cant_labels >60 && cant_labels < 102)chart.setCellSize(new Dimension(4,3));
-    if(cant_labels >102 && cant_labels < 250)chart.setCellSize(new Dimension(3,2));
-    if(cant_labels >250 && cant_labels < 500)chart.setCellSize(new Dimension(2,1));
-    if(cant_labels >500)
-    {
-        JOptionPane.showMessageDialog(null, "The heatmap can not be represented.", "Warning", JOptionPane.ERROR_MESSAGE);
-        return null;
-    }   
-    
-    ImageIcon temp = new ImageIcon(chart.getChartImage());
-    
-    jlabel.setIcon(temp);
-    jlabel.setHorizontalAlignment(JLabel.CENTER);
-   
-    
-       ////System.out.println(" las dimensiones del chart son "+chart.getCellSize().height +" alto "+ chart.getCellSize().width);
-    
-        return chart;
-    }     
+        progressFrame = new JFrame();
+
+        progressFrame.setBounds(this.getX() + this.getWidth()/2 - 100, this.getY() + this.getHeight()/2 - 15, 200, 30);
+        progressFrame.setResizable(false);
+        progressFrame.setUndecorated(true);
+        progressFrame.add(progressBar);   
         
-    
-    private HeatChart create_heapmap(JLabel jlabel, MultiLabelInstances dataset)
-    {
-       double[][] data= util.Get_data_heapmap(dataset);
-       
-     //  util.Recorre_Arreglo_2_dimensiones(data);
-       
-       // Create our heat chart using our data.
-       data = util.Invertir_Matrix(data);
-       HeatChart chart = new HeatChart(data);
-       
-    chart.setAxisColour(Color.black);
-    chart.setAxisValuesColour(Color.black);
-  
-    chart.setShowXAxisValues(false);
-    chart.setShowYAxisValues(false);
-    chart.setHighValueColour(Color.white);
-    chart.setLowValueColour(Color.black);
-  
-    chart.setChartMargin(0);
-    
-    int cant_labels=dataset.getNumLabels();
-    
-    if(cant_labels<30)chart.setCellSize(new Dimension(20,20));
-    if(cant_labels>30 && cant_labels <60 ) chart.setCellSize(new Dimension(9,6));
-    if(cant_labels >60 && cant_labels < 102)chart.setCellSize(new Dimension(4,3));
-    if(cant_labels >102 && cant_labels < 250)chart.setCellSize(new Dimension(3,2));
-    if(cant_labels >250 && cant_labels < 500)chart.setCellSize(new Dimension(2,1));
-    if(cant_labels >500)
-    {
-        JOptionPane.showMessageDialog(null, "The heatmap can not be represented.", "Warning", JOptionPane.ERROR_MESSAGE);
-        return null;
-    }   
-    
-    ImageIcon temp = new ImageIcon(chart.getChartImage());
-    
-    jlabel.setIcon(temp);
-    jlabel.setHorizontalAlignment(JLabel.CENTER);
-    
-    return chart;
-    
-    }     
-    
-   
-        private void create_button_export(final JTable jtable, JPanel jpanel, JButton jbutton_export, int posx,int posy)
-    {
-      //button export table
-      jbutton_export = new JButton("Save");
-      jbutton_export.setBounds(posx, posy, 80, 20);
-     
-      jbutton_export.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_export_ActionPerformed(evt,jtable );
-                            }
-        });
-      jpanel.add(jbutton_export);
     }
-        
-    private JButton create_button_export_jtable4(final JTable jtable, JPanel jpanel, JButton jbutton_export, int posx,int posy)
-    {
-      //button export table
-      jbutton_export = new JButton("Save");
-      jbutton_export.setBounds(posx, posy, 80, 20);
-      jbutton_export.setVisible(false);      
-      jbutton_export.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_export_ActionPerformed(evt,jtable );
-                            }
-        });
-      jpanel.add(jbutton_export);
-      return jbutton_export;
-    }
+    
         
     private void create_button_export(final JTable jtable,final JTable columns, JPanel jpanel, JButton jbutton_export, int posx,int posy, final String table)
     {
-      //button export table
-      jbutton_export = new JButton("Save");
-      jbutton_export.setBounds(posx, posy, 80, 25);
-      
-      if(table.equals("ChiPhi")){
-          jbutton_export.setToolTipText("Save table with Chi and Phi coefficients");
-      }
-      else if(table.equals("Coocurrence")){
-          jbutton_export.setToolTipText("Save table with co-ocurrence values");
-      }
-      else if(table.equals("Heatmap")){
-          jbutton_export.setToolTipText("Save table with heatmap values");
-      }
-            
-      jbutton_export.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_export_ActionPerformed(evt,jtable,columns, table);
-                            }
-        });
-      jpanel.add(jbutton_export);
+        //button export table
+        jbutton_export = new JButton("Save");
+        jbutton_export.setBounds(posx, posy, 80, 25);
+
+        if(table.equals("ChiPhi")){
+            jbutton_export.setToolTipText("Save table with Chi and Phi coefficients");
+        }
+        else if(table.equals("Coocurrence")){
+            jbutton_export.setToolTipText("Save table with co-ocurrence values");
+        }
+        else if(table.equals("Heatmap")){
+            jbutton_export.setToolTipText("Save table with heatmap values");
+        }
+
+        jbutton_export.addActionListener(new java.awt.event.ActionListener() {
+              public void actionPerformed(java.awt.event.ActionEvent evt) {
+                  button_export_ActionPerformed(evt,jtable,columns, table);
+                              }
+          });
+        jpanel.add(jbutton_export);
     }    
         
-  private void create_button_export(final JPanel jpanel, JButton jbutton_export, int posx,int posy)
+    private void create_button_export(final JPanel jpanel, JButton jbutton_export, int posx,int posy)
     {
-      //button export table
-      jbutton_export = new JButton("Save");
-      jbutton_export.setBounds(posx, posy, 80, 25);
-      jbutton_export.setToolTipText("Save graph as image");
-            
-      jbutton_export.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-              if(jpanel.getName().equals("jpanel25")) try {  
-                  save_as_ActionPerformed(evt);
-              } catch (AWTException ex) {
-                  Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-              } catch (IOException ex) {
-                  Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-              }  
-              else try {
-                  save_as_ActionPerformed1(evt);
-              } catch (AWTException ex) {
-                  Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-              } catch (IOException ex) {
-                  Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-              }  
-                            }
-        });
-      jpanel.add(jbutton_export);
-    }
-  
-   private void create_button_export(JButton jbutton_export, int posx,int posy)
-    {
-      //button export table
-      jbutton_export = new JButton("Save");
-      jbutton_export.setBounds(posx, posy, 80, 20);
-            
-      jbutton_export.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {               
+        //button export table
+        jbutton_export = new JButton("Save");
+        jbutton_export.setBounds(posx, posy, 80, 25);
+        jbutton_export.setToolTipText("Save graph as image");
+
+        jbutton_export.addActionListener(new java.awt.event.ActionListener() {
+              public void actionPerformed(java.awt.event.ActionEvent evt) {
+                if(jpanel.getName().equals("jpanel25")) try {  
+                    save_as_ActionPerformed(evt);
+                } catch (AWTException ex) {
+                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                }  
+                else try {
                     save_as_ActionPerformed1(evt);
                 } catch (AWTException ex) {
                     Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
                     Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                            }
-        });
-      panelHeatmapGraph.add(jbutton_export);
+                }  
+                              }
+          });
+        jpanel.add(jbutton_export);
     }
+  
 
-  //"Dataset" TAB CONFIG    
     private void create_jtable_metrics_jpanel1(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_calculate,JButton button_save, int posx,int posy, int width, int heigh,String info)
     {
         if(info.equals("imbalanced"))
@@ -897,67 +503,65 @@ private void Inicializa_config()
             create_jtable_metric(jtable,jpanel, util.Get_row_data(),posx,posy,width,heigh);
         }  
         
-        
-       //button ALL
-      button_all = new JButton("All");
-      button_all.setBounds(posx, posy+heigh+5, 80, 20);
-            
-      button_all.addActionListener(new java.awt.event.ActionListener() {
+        //button ALL
+        button_all = new JButton("All");
+        button_all.setBounds(posx, posy+heigh+5, 80, 20);
+
+        button_all.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 button_allActionPerformed(evt,jtable );
-                            }
+            }
         });
-      jpanel.add(button_all);
+        jpanel.add(button_all);
+
+        //button NONE
+        button_none = new JButton("None");
+        button_none.setBounds(posx+100, posy+heigh+5, 80, 20);
+
+        button_none.addActionListener(new java.awt.event.ActionListener() {
+              public void actionPerformed(java.awt.event.ActionEvent evt) {
+                  button_noneActionPerformed(evt,jtable);
+                              }
+          });
+        jpanel.add(button_none);
       
-      
-     //button NONE
-      button_none = new JButton("None");
-      button_none.setBounds(posx+100, posy+heigh+5, 80, 20);
-            
-      button_none.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_noneActionPerformed(evt,jtable);
-                            }
-        });
-      jpanel.add(button_none);
-      
-      //button INVERT
-      button_invert = new JButton("Invert");
-      button_invert.setBounds(posx+200, posy+heigh+5, 80, 20);
-            
-      button_invert.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_invertActionPerformed(evt,jtable);
-                            }
-        });
-      jpanel.add(button_invert);
+        //button INVERT
+        button_invert = new JButton("Invert");
+        button_invert.setBounds(posx+200, posy+heigh+5, 80, 20);
+
+        button_invert.addActionListener(new java.awt.event.ActionListener() {
+              public void actionPerformed(java.awt.event.ActionEvent evt) {
+                  button_invertActionPerformed(evt,jtable);
+                              }
+          });
+        jpanel.add(button_invert);
       
          //button CALCULATE
-      button_calculate = new JButton("Show");
-      button_calculate.setBounds(posx+420, posy+heigh+5, 80, 20);
-            
-      button_calculate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_calculateActionPerformed(evt,jtable);
-                            }
-        });
-      jpanel.add(button_calculate);
+        button_calculate = new JButton("Show");
+        button_calculate.setBounds(posx+420, posy+heigh+5, 80, 20);
+
+        button_calculate.addActionListener(new java.awt.event.ActionListener() {
+              public void actionPerformed(java.awt.event.ActionEvent evt) {
+                  button_calculateActionPerformed(evt,jtable);
+                              }
+          });
+        jpanel.add(button_calculate);
       
       
-       //button SAVE
-      button_save = new JButton("Save");
-      button_save.setBounds(posx+420, posy+heigh+25, 80, 20);
-            
-      button_save.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    button_saveActionPerformed_principal(evt,jtable);
-                } catch (IOException ex) {
-                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                            }
-        });
-      jpanel.add(button_save);
+        //button SAVE
+        button_save = new JButton("Save");
+        button_save.setBounds(posx+420, posy+heigh+25, 80, 20);
+
+        button_save.addActionListener(new java.awt.event.ActionListener() {
+              public void actionPerformed(java.awt.event.ActionEvent evt) {
+                  try {
+                      button_saveActionPerformed_principal(evt,jtable);
+                  } catch (IOException ex) {
+                      Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                  }
+                              }
+          });
+        jpanel.add(button_save);
       
     }
     
@@ -1528,7 +1132,7 @@ private void Inicializa_config()
                                 .addComponent(labelDensity)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(labelDensityValue, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addContainerGap(144, Short.MAX_VALUE))
         );
         panelCurrentDatasetLayout.setVerticalGroup(
             panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -6256,7 +5860,42 @@ private void Inicializa_config()
     
     private void Print_main_metric_dataset(MultiLabelInstances dataset, Statistics stat1 )
     {
-            Instances i1= dataset.getDataSet();
+        /*
+        MLDataEvaluator mldEvaluator = new MLDataEvaluator(dataset);
+        
+        mldEvaluator.addMetric("Instances");
+        mldEvaluator.addMetric("Attributes");
+        mldEvaluator.addMetric("Labels");
+        mldEvaluator.addMetric("Density");
+        mldEvaluator.addMetric("Cardinality");
+        mldEvaluator.addMetric("Diversity");
+        mldEvaluator.addMetric("Bound");
+        mldEvaluator.addMetric("Distinct labelsets");
+        mldEvaluator.addMetric("Labels x instances x features");
+        
+        mldEvaluator.calculate();
+        
+        String valueInstances = String.valueOf(mldEvaluator.getMetric("Instances").getValue());
+        String valueAttributes = String.valueOf(mldEvaluator.getMetric("Attributes").getValue());
+        String valueLabels = String.valueOf(mldEvaluator.getMetric("Labels").getValue());
+        String valueDensity = String.valueOf(mldEvaluator.getMetric("Density").getValue());
+        String valueCardinality = String.valueOf(mldEvaluator.getMetric("Cardinality").getValue());
+        String valueDiversity = String.valueOf(mldEvaluator.getMetric("Diversity").getValue());
+        String valueBound = String.valueOf(mldEvaluator.getMetric("Bound").getValue());
+        String valueDistinct = String.valueOf(mldEvaluator.getMetric("Distinct labelsets").getValue());
+        String valueLIF = String.valueOf(mldEvaluator.getMetric("Labels x instances x features").getValue());
+        labelInstancesValue.setText(util.getValueFormatted("Instances", valueInstances));
+        labelAttributesValue.setText(util.getValueFormatted("Attributes", valueAttributes));
+        labelLabelsValue.setText(util.getValueFormatted("Labels", valueLabels));
+        labelDensityValue.setText(util.getValueFormatted("Density", valueDensity));
+        labelCardinalityValue.setText(util.getValueFormatted("Cardinality", valueCardinality));
+        labelDiversityValue.setText(util.getValueFormatted("Diversity", valueDiversity));
+        labelBoundValue.setText(util.getValueFormatted("Bound", valueBound));
+        labelDistinctValue.setText(util.getValueFormatted("Distinct labelsets", valueDistinct));
+        labelLxIxFValue.setText(util.getValueFormatted("Labels x instances x features", valueLIF));
+        */
+        
+            //Instances i1= dataset.getDataSet();
 
                      
             //Relation
@@ -6296,12 +5935,13 @@ private void Inicializa_config()
             labelBoundValue.setText(util.getValueFormatted("Bound", bound));
             
             //Distinct labelset     
-            String distinct_labelset = util.get_value_metric("Distinct Labelset", dataset, es_de_tipo_meka);
-            labelDistinctValue.setText(util.getValueFormatted("Distinct Labelset", distinct_labelset));
+            String distinct_labelset = util.get_value_metric("Distinct labelsets", dataset, es_de_tipo_meka);
+            labelDistinctValue.setText(util.getValueFormatted("Distinct labelsets", distinct_labelset));
             
             //LxIxF
             String LIF = util.get_value_metric("Labels x instances x features", dataset, es_de_tipo_meka);
             labelLxIxFValue.setText(util.getValueFormatted("Labels x instances x features", LIF));
+            
     }
   
     

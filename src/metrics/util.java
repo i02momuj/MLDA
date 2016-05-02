@@ -6025,7 +6025,7 @@ public class util {
             //Integer numbers
             else if( (name.toLowerCase().equals("attributes")) 
                     || (name.toLowerCase().equals("bound")) 
-                    || (name.toLowerCase().equals("distinct labelset"))
+                    || (name.toLowerCase().equals("distinct labelsets"))
                     || (name.toLowerCase().equals("instances"))
                     || (name.toLowerCase().equals("labels x instances x features"))
                     || (name.toLowerCase().equals("labels")) 

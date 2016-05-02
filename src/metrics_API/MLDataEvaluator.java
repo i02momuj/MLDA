@@ -147,6 +147,18 @@ public class MLDataEvaluator {
         return false;
     }
     
+    public MLDataMetric getMetric(String name){
+        if(hasMetric(name)){
+            for(MLDataMetric metric : metrics){
+                if(metric.getName().equals(name)){
+                    return(metric);
+                }
+            }
+        }
+        
+        return null;
+    }
+    
     
     public ArrayList<String> getMetricsAvailable(){
         
