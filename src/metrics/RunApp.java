@@ -113,7 +113,7 @@ public class RunApp extends javax.swing.JFrame {
     String filename_database_arff_test;
              
     //Charts
-    ChartPanel cp,cp1,cp2,cp3,cp11,cp22,cp_box,cp_ir_x_label_intra_class,cp_ir_x_label_inter_class,cp_per_labelset, cp_ir_x_label_inter_class_only, cp_ir_x_label_intra_class_only;
+    ChartPanel cp,cp1,cp2,cp3,cp11,cp22,cp_box,cp_per_labelset, cp_ir_x_label_inter_class_only, cp_ir_x_label_intra_class_only;
     
     double radio;
     int num_atributos;
@@ -373,8 +373,6 @@ public class RunApp extends javax.swing.JFrame {
         cp11 =  create_jchart(panelLabelsPerExample,"bar", "# Labels/example","Relative frequency",false);
         cp_box =generaGrafico(panelBoxDiagram);
         cp22 = create_jchart(panelExamplesPerLabelset, "bar","Labelsets","Relative frequency",false);
-        cp_ir_x_label_intra_class = create_jchart(panelLabelsIRperLabelIntraClass, "line_2_axis", "Label id","IR values",true);
-        cp_ir_x_label_inter_class = create_jchart(panelLabelsIRperLabelInterClass, "line_2_axis", "Label id","IR values",true);
         cp_ir_x_label_inter_class_only = create_jchart(panelIRperLabelInterClass, "bar", "Label id","IR values",true);
         cp_ir_x_label_intra_class_only = create_jchart(panelIRperLabelIntraClass, "bar", "Label id","IR values",true);
 
@@ -959,13 +957,9 @@ public class RunApp extends javax.swing.JFrame {
         panelExamplesPerLabelset = new javax.swing.JPanel();
         panelLabelsPerExample = new javax.swing.JPanel();
         panelIRperLabelIntraClass = new javax.swing.JPanel();
-        panelLabelsIRperLabelIntraClass = new javax.swing.JPanel();
         panelIRperLabelset = new javax.swing.JPanel();
-        panelImbalanceDataMetrics = new javax.swing.JPanel();
         panelBoxDiagram = new javax.swing.JPanel();
         panelIRperLabelInterClass = new javax.swing.JPanel();
-        panel1 = new java.awt.Panel();
-        panelLabelsIRperLabelInterClass = new javax.swing.JPanel();
         jLabelIR = new javax.swing.JLabel();
         jPanel21 = new javax.swing.JPanel();
         tabsDependences = new javax.swing.JTabbedPane();
@@ -1818,7 +1812,6 @@ public class RunApp extends javax.swing.JFrame {
         );
 
         tabsImbalance.setTabPlacement(javax.swing.JTabbedPane.RIGHT);
-        tabsImbalance.setEnabled(false);
         tabsImbalance.setFocusable(false);
         tabsImbalance.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -1830,7 +1823,7 @@ public class RunApp extends javax.swing.JFrame {
         panelExamplesPerLabel.setLayout(panelExamplesPerLabelLayout);
         panelExamplesPerLabelLayout.setHorizontalGroup(
             panelExamplesPerLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 532, Short.MAX_VALUE)
+            .addGap(0, 540, Short.MAX_VALUE)
         );
         panelExamplesPerLabelLayout.setVerticalGroup(
             panelExamplesPerLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1843,7 +1836,7 @@ public class RunApp extends javax.swing.JFrame {
         panelExamplesPerLabelset.setLayout(panelExamplesPerLabelsetLayout);
         panelExamplesPerLabelsetLayout.setHorizontalGroup(
             panelExamplesPerLabelsetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 532, Short.MAX_VALUE)
+            .addGap(0, 540, Short.MAX_VALUE)
         );
         panelExamplesPerLabelsetLayout.setVerticalGroup(
             panelExamplesPerLabelsetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1856,7 +1849,7 @@ public class RunApp extends javax.swing.JFrame {
         panelLabelsPerExample.setLayout(panelLabelsPerExampleLayout);
         panelLabelsPerExampleLayout.setHorizontalGroup(
             panelLabelsPerExampleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 532, Short.MAX_VALUE)
+            .addGap(0, 540, Short.MAX_VALUE)
         );
         panelLabelsPerExampleLayout.setVerticalGroup(
             panelLabelsPerExampleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1869,7 +1862,7 @@ public class RunApp extends javax.swing.JFrame {
         panelIRperLabelIntraClass.setLayout(panelIRperLabelIntraClassLayout);
         panelIRperLabelIntraClassLayout.setHorizontalGroup(
             panelIRperLabelIntraClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 532, Short.MAX_VALUE)
+            .addGap(0, 540, Short.MAX_VALUE)
         );
         panelIRperLabelIntraClassLayout.setVerticalGroup(
             panelIRperLabelIntraClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1878,24 +1871,13 @@ public class RunApp extends javax.swing.JFrame {
 
         tabsImbalance.addTab("", panelIRperLabelIntraClass);
 
-        javax.swing.GroupLayout panelLabelsIRperLabelIntraClassLayout = new javax.swing.GroupLayout(panelLabelsIRperLabelIntraClass);
-        panelLabelsIRperLabelIntraClass.setLayout(panelLabelsIRperLabelIntraClassLayout);
-        panelLabelsIRperLabelIntraClassLayout.setHorizontalGroup(
-            panelLabelsIRperLabelIntraClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 532, Short.MAX_VALUE)
-        );
-        panelLabelsIRperLabelIntraClassLayout.setVerticalGroup(
-            panelLabelsIRperLabelIntraClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 446, Short.MAX_VALUE)
-        );
-
-        tabsImbalance.addTab("", panelLabelsIRperLabelIntraClass);
+        panelIRperLabelset.setEnabled(false);
 
         javax.swing.GroupLayout panelIRperLabelsetLayout = new javax.swing.GroupLayout(panelIRperLabelset);
         panelIRperLabelset.setLayout(panelIRperLabelsetLayout);
         panelIRperLabelsetLayout.setHorizontalGroup(
             panelIRperLabelsetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 532, Short.MAX_VALUE)
+            .addGap(0, 540, Short.MAX_VALUE)
         );
         panelIRperLabelsetLayout.setVerticalGroup(
             panelIRperLabelsetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1904,24 +1886,11 @@ public class RunApp extends javax.swing.JFrame {
 
         tabsImbalance.addTab("", panelIRperLabelset);
 
-        javax.swing.GroupLayout panelImbalanceDataMetricsLayout = new javax.swing.GroupLayout(panelImbalanceDataMetrics);
-        panelImbalanceDataMetrics.setLayout(panelImbalanceDataMetricsLayout);
-        panelImbalanceDataMetricsLayout.setHorizontalGroup(
-            panelImbalanceDataMetricsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 532, Short.MAX_VALUE)
-        );
-        panelImbalanceDataMetricsLayout.setVerticalGroup(
-            panelImbalanceDataMetricsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 446, Short.MAX_VALUE)
-        );
-
-        tabsImbalance.addTab("", panelImbalanceDataMetrics);
-
         javax.swing.GroupLayout panelBoxDiagramLayout = new javax.swing.GroupLayout(panelBoxDiagram);
         panelBoxDiagram.setLayout(panelBoxDiagramLayout);
         panelBoxDiagramLayout.setHorizontalGroup(
             panelBoxDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 532, Short.MAX_VALUE)
+            .addGap(0, 540, Short.MAX_VALUE)
         );
         panelBoxDiagramLayout.setVerticalGroup(
             panelBoxDiagramLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1934,7 +1903,7 @@ public class RunApp extends javax.swing.JFrame {
         panelIRperLabelInterClass.setLayout(panelIRperLabelInterClassLayout);
         panelIRperLabelInterClassLayout.setHorizontalGroup(
             panelIRperLabelInterClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 532, Short.MAX_VALUE)
+            .addGap(0, 540, Short.MAX_VALUE)
         );
         panelIRperLabelInterClassLayout.setVerticalGroup(
             panelIRperLabelInterClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1942,30 +1911,6 @@ public class RunApp extends javax.swing.JFrame {
         );
 
         tabsImbalance.addTab("", panelIRperLabelInterClass);
-
-        javax.swing.GroupLayout panelLabelsIRperLabelInterClassLayout = new javax.swing.GroupLayout(panelLabelsIRperLabelInterClass);
-        panelLabelsIRperLabelInterClass.setLayout(panelLabelsIRperLabelInterClassLayout);
-        panelLabelsIRperLabelInterClassLayout.setHorizontalGroup(
-            panelLabelsIRperLabelInterClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 532, Short.MAX_VALUE)
-        );
-        panelLabelsIRperLabelInterClassLayout.setVerticalGroup(
-            panelLabelsIRperLabelInterClassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 446, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
-        panel1.setLayout(panel1Layout);
-        panel1Layout.setHorizontalGroup(
-            panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelLabelsIRperLabelInterClass, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        panel1Layout.setVerticalGroup(
-            panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelLabelsIRperLabelInterClass, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
-        tabsImbalance.addTab("", panel1);
 
         jLabelIR.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         jLabelIR.setText("label IR");
@@ -1985,10 +1930,10 @@ public class RunApp extends javax.swing.JFrame {
                         .addGap(12, 12, 12)
                         .addComponent(jLabelIR)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(tabsImbalance)
-                    .addComponent(comboBoxLabelsInformation, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(46, 46, 46))
+                .addGroup(panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(comboBoxLabelsInformation, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tabsImbalance, javax.swing.GroupLayout.PREFERRED_SIZE, 561, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(38, 38, 38))
         );
         panelImbalanceLayout.setVerticalGroup(
             panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4385,7 +4330,7 @@ public class RunApp extends javax.swing.JFrame {
             mo.setVisible(true);
         }
 
-        else if(tabsImbalance.getSelectedIndex()==7) // si esta activado el panel de los BOX DIAGRAM
+        else if(tabsImbalance.getSelectedIndex()==5) // si esta activado el panel de los BOX DIAGRAM
         {
             //BUTTON GROUP
             jRadioButton8.setSelected(true);
@@ -4410,7 +4355,7 @@ public class RunApp extends javax.swing.JFrame {
 
         }
 
-        else if(tabsImbalance.getSelectedIndex()==5) // si esta activado el panel del IR per Labelset
+        else if(tabsImbalance.getSelectedIndex()==6) // si esta activado el panel del IR per Labelset
         {
 
             //System.out.println("Se ha tocado");
@@ -4462,30 +4407,6 @@ public class RunApp extends javax.swing.JFrame {
 
         }
 
-        else if(tabsImbalance.getSelectedIndex()==9) // si esta activado el panel del IR per Label inter class
-        {
-
-            //System.out.println("Se ha tocado");
-            int seleccionada = tableImbalance.getSelectedRow();
-
-            if(id_x_IR == null) return;
-
-            int cant_labels =(int)tableImbalance.getValueAt(seleccionada, 1);
-            // //System.out.println(" hay "+cant_labels +" etiquetas");
-
-            double ir = Double.parseDouble(tableImbalance.getValueAt(seleccionada, 2).toString());
-            // //System.out.println(" el ir es de "+ir +" ");
-
-            ArrayList<String> label_names= util.Get_labelnames_x_IR_inter_class(ir,cant_labels,label_imbalanced);
-
-            int posx = this.getBounds().x;
-            int posy = this.getBounds().y;
-
-            metric_output mo = new metric_output(dataset, posx, posy+50,label_names,label_x_frequency, es_de_tipo_meka);
-
-            mo.setVisible(true);
-
-        }
     }//GEN-LAST:event_tableImbalanceMouseClicked
 
     private void comboBoxLabelsInformationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxLabelsInformationActionPerformed
@@ -4539,14 +4460,14 @@ public class RunApp extends javax.swing.JFrame {
                 jLabelIR.repaint();
         }
         else if(comboBoxLabelsInformation.getSelectedIndex() == 3){
-                tabsImbalance.setSelectedIndex(7);
+                tabsImbalance.setSelectedIndex(5);
                 export2.setVisible(false);
                 export2.repaint();
                 jLabelIR.setVisible(false);
                 jLabelIR.repaint();
         }
         else if(comboBoxLabelsInformation.getSelectedIndex() == 4){
-                tabsImbalance.setSelectedIndex(8);
+                tabsImbalance.setSelectedIndex(6);
                 export2.setVisible(true);
                 export2.repaint();
                 jLabelIR.setText("<html>When IR > 1.5, the label is <br> imbalanced and it is marked in red</html>");
@@ -4564,7 +4485,7 @@ public class RunApp extends javax.swing.JFrame {
         }
         else if(comboBoxLabelsInformation.getSelectedIndex() == 6){
                 //tabsImbalance.setSelectedIndex(3);
-                tabsImbalance.setSelectedIndex(5);
+                tabsImbalance.setSelectedIndex(4);
                 export2.setVisible(true);
                 export2.repaint();
                 jLabelIR.setText("<html>When IR > 1.5, the labelset is <br> imbalanced and it is marked in red</html>");
@@ -4611,7 +4532,7 @@ public class RunApp extends javax.swing.JFrame {
                 //labelIR2.setVisible(false);
             }
 
-            else if (tabsImbalance.getSelectedIndex()==5)
+            else if (tabsImbalance.getSelectedIndex()==4)
             {
                 tableImbalance.setModel(tm_ir_per_labelset);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelsets Imbalance Ratio"));
@@ -4644,24 +4565,7 @@ public class RunApp extends javax.swing.JFrame {
                 //labelIR2.setVisible(false);
 
             }
-            else if (tabsImbalance.getSelectedIndex()==6) // imbalance data metric
-            {
-                tableImbalance.setModel(tm_IR);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imabalance ratio per label"));
-
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1,2));
-
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-                //jRadioButton6.setVisible(true);
-                //jRadioButton7.setVisible(true);
-                //jPanel15.setVisible(false);//es el panel del los botones del diagram box
-                radioExamplesPerLabel.setVisible(false);
-                radioExamplesPerLabelset.setVisible(false);
-
-                //labelIR1.setVisible(true);
-                //labelIR2.setVisible(true);
-            }
+            
             else if (tabsImbalance.getSelectedIndex()==3)
             {
                 tableImbalance.setModel(tm_ir_per_label_intra_class_only);
@@ -4710,7 +4614,7 @@ public class RunApp extends javax.swing.JFrame {
 
             }
 
-            else if (tabsImbalance.getSelectedIndex()==8)
+            else if (tabsImbalance.getSelectedIndex()==6)
             {
                 tableImbalance.setModel(tm_ir_per_label_inter_class_only);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance Ratio inter class"));
@@ -4728,60 +4632,7 @@ public class RunApp extends javax.swing.JFrame {
 
             }
 
-            else if (tabsImbalance.getSelectedIndex()==9)
-            {
-                tableImbalance.setModel(tm_ir_per_label_inter_class);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Number of labels inter class per IR"));
-
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(2));
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-
-                //jPanel15.setVisible(false);
-                radioExamplesPerLabel.setVisible(false);
-                radioExamplesPerLabelset.setVisible(false);
-
-                //labelIR1.setVisible(true);
-                //labelIR2.setVisible(true);
-
-                /*
-                jTable4.setModel(tm_ir_per_label_intra_class_only);
-                jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder("Label per IR values intra class"));
-
-                jTable4.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
-                jPanel17.repaint();
-                jPanel17.validate();
-
-                jPanel15.setVisible(false);
-
-                jLabel27.setVisible(true);
-                jLabel28.setVisible(true);
-                */
-            }
-
-            else if (tabsImbalance.getSelectedIndex()==4)
-            {
-                // jTable4.setModel(tm_ir_per_labelset);
-                // jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset id per IR"));
-
-                tableImbalance.setModel(tm_ir_per_label_intra_class_only);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Number of labels intra class per label"));
-
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
-
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-
-                //jPanel15.setVisible(false);
-                radioExamplesPerLabel.setVisible(false);
-                radioExamplesPerLabelset.setVisible(false);
-
-                //labelIR1.setVisible(true);
-                //labelIR2.setVisible(true);
-
-            }
-
-            else if (tabsImbalance.getSelectedIndex()==7)
+            else if (tabsImbalance.getSelectedIndex()==5)
             {
                 tableImbalance.setModel(tm_attr);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Numeric attributes"));
@@ -5313,7 +5164,7 @@ public class RunApp extends javax.swing.JFrame {
             
              
              //para el box diagram
-             if(tabsImbalance.getSelectedIndex()==7){
+             if(tabsImbalance.getSelectedIndex()==5){
                  //jPanel15.setVisible(true);
                 radioExamplesPerLabel.setVisible(true);
                 radioExamplesPerLabelset.setVisible(true);
@@ -5325,9 +5176,7 @@ public class RunApp extends javax.swing.JFrame {
              }
             
              if(tabsImbalance.getSelectedIndex()==3
-                     || tabsImbalance.getSelectedIndex()==4
-                     || tabsImbalance.getSelectedIndex()==5
-                     || tabsImbalance.getSelectedIndex()==6) 
+                     || tabsImbalance.getSelectedIndex()==4) 
              {
                  //labelIR1.setVisible(true);
                  //labelIR2.setVisible(true);
@@ -5429,14 +5278,14 @@ public class RunApp extends javax.swing.JFrame {
             tm_ir_per_labelset = jchart_and_jtable_label_set_IR(tableImbalance,dataset,stat1,cp_per_labelset.getChart().getCategoryPlot());
             
             
-            temp1 = cp_ir_x_label_intra_class.getChart().getCategoryPlot();
-            temp1.clearRangeMarkers();
-            util.update_values_line_chart(id_x_IR, id_x_nums_label, cp_ir_x_label_intra_class.getChart().getCategoryPlot()); //tiene que ejecutarse despues del jtable_ir_per_label_intra_class para que cargue los datos imbabalanced.
+            //temp1 = cp_ir_x_label_intra_class.getChart().getCategoryPlot();
+            //temp1.clearRangeMarkers();
+            //util.update_values_line_chart(id_x_IR, id_x_nums_label, cp_ir_x_label_intra_class.getChart().getCategoryPlot()); //tiene que ejecutarse despues del jtable_ir_per_label_intra_class para que cargue los datos imbabalanced.
             
-            temp1 = cp_ir_x_label_inter_class.getChart().getCategoryPlot();
-            temp1.clearRangeMarkers();
+            //temp1 = cp_ir_x_label_inter_class.getChart().getCategoryPlot();
+            //temp1.clearRangeMarkers();
             
-            util.update_values_line_chart(ir_veces.Get_Id_x_IR(), ir_veces.Get_Id_x_Cant_veces(), cp_ir_x_label_inter_class.getChart().getCategoryPlot()); //tiene que ejecutarse despues del jtable_ir_per_label_intra_class para que cargue los datos imbabalanced.
+            //util.update_values_line_chart(ir_veces.Get_Id_x_IR(), ir_veces.Get_Id_x_Cant_veces(), cp_ir_x_label_inter_class.getChart().getCategoryPlot()); //tiene que ejecutarse despues del jtable_ir_per_label_intra_class para que cargue los datos imbabalanced.
             
             //ir per label inter class only
             temp1= cp_ir_x_label_inter_class_only.getChart().getCategoryPlot();
@@ -5462,7 +5311,7 @@ public class RunApp extends javax.swing.JFrame {
                 panelImbalanceLeft.validate();
 
             }
-            else if (tabsImbalance.getSelectedIndex()==5) // ir per labelset
+            else if (tabsImbalance.getSelectedIndex()==4) // ir per labelset
             {
                 tableImbalance.setModel(tm_ir_per_labelset);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelsets Imbalance Ratio"));
@@ -5490,21 +5339,7 @@ public class RunApp extends javax.swing.JFrame {
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
             }
-            else if (tabsImbalance.getSelectedIndex()==6)//imbalance data metric
-            {
-                tableImbalance.setModel(tm_IR);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imabalance ratio per label"));
-                
-		tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1,2));
-                
-               /* jTable4.setModel(tm_attr);
-                jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder("Numeric attributes"));
-                
-                jTable4.setDefaultRenderer(Object.class, new Mi_Render_default());*/
-                
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-            }
+           
             else if (tabsImbalance.getSelectedIndex()==3)
             {
                 tableImbalance.setModel(tm_ir_per_label_intra_class_only);
@@ -5532,7 +5367,7 @@ public class RunApp extends javax.swing.JFrame {
                 jPanel17.validate();*/
             }
                        
-            else if (tabsImbalance.getSelectedIndex()==8)
+            else if (tabsImbalance.getSelectedIndex()==6)
             {
                 tableImbalance.setModel(tm_ir_per_label_inter_class_only);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance ratio inter class"));
@@ -5542,36 +5377,8 @@ public class RunApp extends javax.swing.JFrame {
                 panelImbalanceLeft.validate();
             }
             
-            else if (tabsImbalance.getSelectedIndex()==9)
-            {
-                tableImbalance.setModel(tm_ir_per_label_inter_class);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Number of labels inter class per IR"));
-                
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(2));
-                /*
-                jTable4.setModel(tm_ir_per_label_intra_class_only);
-                jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder("Label per IR values intra class"));
-                
-                jTable4.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
-                * */
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-            }
             
-            else if (tabsImbalance.getSelectedIndex()==4)
-            {
-                              
-                tableImbalance.setModel(tm_ir_per_label_intra_class_only);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Number of labels intra class per label"));
-                
-                
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-            }
-            
-            
-            else if (tabsImbalance.getSelectedIndex()==7)
+            else if (tabsImbalance.getSelectedIndex()==5)
             {
                 tableImbalance.setModel(tm_attr);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Numeric attributes"));
@@ -9114,7 +8921,6 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JLabel labelRelation;
     private javax.swing.JLabel labelRelationValue;
     private javax.swing.JList listMultipleDatasetsLeft;
-    private java.awt.Panel panel1;
     private javax.swing.JPanel panelBoxDiagram;
     private javax.swing.JPanel panelChiPhi;
     private javax.swing.JPanel panelCoOcurrence;
@@ -9133,10 +8939,7 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JPanel panelIRperLabelset;
     private javax.swing.JPanel panelIS;
     private javax.swing.JPanel panelImbalance;
-    private javax.swing.JPanel panelImbalanceDataMetrics;
     private javax.swing.JPanel panelImbalanceLeft;
-    private javax.swing.JPanel panelLabelsIRperLabelInterClass;
-    private javax.swing.JPanel panelLabelsIRperLabelIntraClass;
     private javax.swing.JPanel panelLabelsPerExample;
     private javax.swing.JPanel panelMultipleDatasets;
     private javax.swing.JPanel panelMultipleDatasetsLeft;
