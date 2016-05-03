@@ -125,8 +125,6 @@
                 <Property name="editable" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textChooseFileActionPerformed"/>
-                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="textChooseFileFocusLost"/>
                 <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="textChooseFileKeyPressed"/>
               </Events>
             </Component>
@@ -575,10 +573,6 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="70"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textRandomHoldoutActionPerformed"/>
-                    <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="textRandomHoldoutKeyTyped"/>
-                  </Events>
                 </Component>
                 <Component class="javax.swing.JRadioButton" name="radioRandomCV">
                   <Properties>
@@ -610,10 +604,6 @@
                     <Property name="text" type="java.lang.String" value="5"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textIterativeStratifiedCVActionPerformed"/>
-                    <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="textIterativeStratifiedCVKeyTyped"/>
-                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelFoldsRandom">
                   <Properties>
@@ -631,10 +621,6 @@
                     <Property name="text" type="java.lang.String" value="5"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textRandomCVActionPerformed"/>
-                    <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="textRandomCVKeyTyped"/>
-                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelFoldsIterativeStratified">
                   <Properties>
@@ -660,10 +646,6 @@
                     <Property name="text" type="java.lang.String" value="70"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textIterativeStratifiedHoldoutActionPerformed"/>
-                    <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="textIterativeStratifiedHoldoutKeyTyped"/>
-                  </Events>
                 </Component>
                 <Component class="javax.swing.JRadioButton" name="radioLPStratifiedHoldout">
                   <Properties>
@@ -684,10 +666,6 @@
                     <Property name="text" type="java.lang.String" value="70"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textLPStratifiedHoldoutActionPerformed"/>
-                    <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="textLPStratifiedHoldoutKeyTyped"/>
-                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelPercLPStratified">
                   <Properties>
@@ -716,10 +694,6 @@
                     <Property name="text" type="java.lang.String" value="5"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textLPStratifiedCVActionPerformed"/>
-                    <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="textLPStratifiedCVKeyTyped"/>
-                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelFoldsLPStratified">
                   <Properties>
@@ -747,7 +721,6 @@
                 <Property name="text" type="java.lang.String" value="Start"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButtonStartPreprocessMouseEntered"/>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonStartPreprocessActionPerformed"/>
               </Events>
             </Component>
@@ -854,10 +827,6 @@
                     <Property name="text" type="java.lang.String" value="100"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textBRFSActionPerformed"/>
-                    <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="textBRFSKeyTyped"/>
-                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelBRFS">
                   <Properties>
@@ -893,9 +862,6 @@
                       <Dimension value="[58, 20]"/>
                     </Property>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBox_BRFS_CombActionPerformed"/>
-                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelBRFS_Norm">
                   <Properties>
@@ -923,9 +889,6 @@
                       <Dimension value="[63, 20]"/>
                     </Property>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBox_BRFS_NormActionPerformed"/>
-                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelBRFS_Out">
                   <Properties>
@@ -952,9 +915,6 @@
                       <Dimension value="[59, 20]"/>
                     </Property>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBox_BRFS_OutActionPerformed"/>
-                  </Events>
                 </Component>
                 <Component class="javax.swing.JRadioButton" name="radioRandomFS">
                   <Properties>
@@ -975,10 +935,6 @@
                     <Property name="text" type="java.lang.String" value="100"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textRandomFSActionPerformed"/>
-                    <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="textRandomFSKeyTyped"/>
-                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelRandomFS">
                   <Properties>
@@ -1023,9 +979,6 @@
                 </Property>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBox_SaveFormatActionPerformed"/>
-              </Events>
             </Component>
             <Container class="javax.swing.JPanel" name="panelIS">
               <Properties>
@@ -1088,10 +1041,6 @@
                     <Property name="text" type="java.lang.String" value="500"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textRandomISActionPerformed"/>
-                    <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="textRandomISKeyTyped"/>
-                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelRandomIS">
                   <Properties>
@@ -1260,7 +1209,6 @@
                   </Properties>
                   <Events>
                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="radioExamplesPerLabelMouseClicked"/>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="radioExamplesPerLabelActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JRadioButton" name="radioExamplesPerLabelset">
@@ -1269,7 +1217,6 @@
                   </Properties>
                   <Events>
                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="radioExamplesPerLabelsetMouseClicked"/>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="radioExamplesPerLabelsetActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="export2">
@@ -1285,6 +1232,7 @@
             <Container class="javax.swing.JTabbedPane" name="tabsImbalance">
               <Properties>
                 <Property name="tabPlacement" type="int" value="4"/>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="focusable" type="boolean" value="false"/>
               </Properties>
               <Events>
@@ -1490,7 +1438,6 @@
           <SubComponents>
             <Container class="javax.swing.JTabbedPane" name="tabsDependences">
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tabsDependencesMouseClicked"/>
                 <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="tabsDependencesStateChanged"/>
               </Events>
 
@@ -1648,9 +1595,6 @@
                               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                             </Property>
                           </Properties>
-                          <Events>
-                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tableCoOcurrenceLeftMouseClicked"/>
-                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>
@@ -1666,10 +1610,6 @@
                       <Properties>
                         <Property name="text" type="java.lang.String" value="10"/>
                       </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textMostFrequentActionPerformed"/>
-                        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="textMostFrequentKeyTyped"/>
-                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="buttonShowMostRelated">
                       <Properties>
@@ -1683,10 +1623,6 @@
                       <Properties>
                         <Property name="text" type="java.lang.String" value="10"/>
                       </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textMostRelatedActionPerformed"/>
-                        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="textMostRelatedKeyTyped"/>
-                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -1798,9 +1734,6 @@
                               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                             </Property>
                           </Properties>
-                          <Events>
-                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tableHeatmapLeftMouseClicked"/>
-                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>
@@ -1850,19 +1783,11 @@
                       <Properties>
                         <Property name="text" type="java.lang.String" value="10"/>
                       </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textMostRelatedHeatMapActionPerformed"/>
-                        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="textMostRelatedHeatMapKeyTyped"/>
-                      </Events>
                     </Component>
                     <Component class="javax.swing.JTextField" name="textMostFrequentHeatMap">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="10"/>
                       </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="textMostFrequentHeatMapActionPerformed"/>
-                        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="textMostFrequentHeatMapKeyTyped"/>
-                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>

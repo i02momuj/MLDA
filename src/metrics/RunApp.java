@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
@@ -158,8 +159,8 @@ public class RunApp extends javax.swing.JFrame {
     double[] id_x_IR=null;         
     double[] id_x_IR_inter_class=null;  
     container_id_ir_inter_class ir_veces=null;
-     double[] IR_inter_class = null;
-     double[] IR_intra_class = null;
+    double[] IR_inter_class = null;
+    double[] IR_intra_class = null;
     atributo[] label_frenquency = null;
     double[] labelset_frequency = null;
     
@@ -167,8 +168,8 @@ public class RunApp extends javax.swing.JFrame {
     double[][] chi_fi_coefficient;
     double [][] coocurrence_coefficients;
     double [][] heatmap_coefficients;
-     Object[][] data; 
-     Object[] column;
+    Object[][] data; 
+    Object[] column;
         
     //Box diagram
     JRadioButton jRadioButton8;
@@ -178,9 +179,9 @@ public class RunApp extends javax.swing.JFrame {
     
     //Metrics
     Hashtable<String, String> tableMetrics = new Hashtable<String, String>();
-    Hashtable<String, String> tableMetrics_common = new Hashtable<String, String>();
-    Hashtable<String, String> tableMetrics_train = new Hashtable<String, String>();
-    Hashtable<String, String> tableMetrics_test = new Hashtable<String, String>();    
+    //Hashtable<String, String> tableMetrics_common = new Hashtable<String, String>();
+    //Hashtable<String, String> tableMetrics_train = new Hashtable<String, String>();
+    //Hashtable<String, String> tableMetrics_test = new Hashtable<String, String>();    
     Hashtable<String, Hashtable<String, String>> tableMetricsMulti = new Hashtable<String, Hashtable<String, String>>();
     
     HeatMap heatMap = null; 
@@ -216,7 +217,7 @@ public class RunApp extends javax.swing.JFrame {
 
         initComponents();   
 
-        Inicializa_config(); //add jradionbutton
+        init_config(); //add jradionbutton
      
         dataset_current_name="";          
         
@@ -241,7 +242,7 @@ public class RunApp extends javax.swing.JFrame {
        
     }
     
-    private void Inicializa_jtable_fi_chi()
+    private void init_jtable_chi_phi()
     {
         fixedTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTable10.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -279,8 +280,7 @@ public class RunApp extends javax.swing.JFrame {
         panelChiPhi.add(fi);
     } 
     
-    
-    private void Inicializa_config()
+    private void init_config()
     {
         //radiobutton to group
         buttonGroup1.add(radioRandomHoldout);
@@ -369,16 +369,16 @@ public class RunApp extends javax.swing.JFrame {
         textMostRelatedHeatMap.setToolTipText("Number of most related labels to show");
       
         //Charts
-        cp3 = create_jchart(panelExamplesPerLabel,"bar","Labels", "Relative frequency",false);
-        cp11 =  create_jchart(panelLabelsPerExample,"bar", "# Labels/example","Relative frequency",false);
-        cp_box =generaGrafico(panelBoxDiagram);
-        cp22 = create_jchart(panelExamplesPerLabelset, "bar","Labelsets","Relative frequency",false);
-        cp_ir_x_label_inter_class_only = create_jchart(panelIRperLabelInterClass, "bar", "Label id","IR values",true);
-        cp_ir_x_label_intra_class_only = create_jchart(panelIRperLabelIntraClass, "bar", "Label id","IR values",true);
+        cp3 = createJChart(panelExamplesPerLabel,"bar","Labels", "Relative frequency",false);
+        cp11 =  createJChart(panelLabelsPerExample,"bar", "# Labels/example","Relative frequency",false);
+        cp_box =createGraph(panelBoxDiagram);
+        cp22 = createJChart(panelExamplesPerLabelset, "bar","Labelsets","Relative frequency",false);
+        cp_ir_x_label_inter_class_only = createJChart(panelIRperLabelInterClass, "bar", "Label id","IR values",true);
+        cp_ir_x_label_intra_class_only = createJChart(panelIRperLabelIntraClass, "bar", "Label id","IR values",true);
 
-        cp_per_labelset = create_jchart(panelIRperLabelset, "bar", "Labelset id","IR per labelset",false);
+        cp_per_labelset = createJChart(panelIRperLabelset, "bar", "Labelset id","IR per labelset",false);
       
-        create_jtable_metrics_jpanel1_principal(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save, button_clear, 30,190,780,280,"database"); //tab Database //35,155,500,355
+        create_jtable_metrics_principal(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save, button_clear, 30,190,780,280,"database"); //tab Database //35,155,500,355
 
         create_jtable_metrics_multi(jTableMulti,jPanelMulti,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save, 25,15,510,420); //tab Multi
 
@@ -386,7 +386,7 @@ public class RunApp extends javax.swing.JFrame {
         jComboBox_SaveFormat.setEnabled(false);
 
         //Configure jTable Phi and Chi
-        Inicializa_jtable_fi_chi();
+        init_jtable_chi_phi();
 
         //Config jTable Co-ocurrence values
         jTable11.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -404,12 +404,12 @@ public class RunApp extends javax.swing.JFrame {
         jTable12.setBorder(BorderFactory.createLineBorder(Color.black));
         panelHeatmapValues.add(scrollPane, BorderLayout.CENTER);
 
-        create_button_export(jTable10,fixedTable ,panelChiPhi ,export3,710,415, "ChiPhi"); // chi and fi values
-        create_button_export(jTable11,fixedTable1,panelCoOcurrenceValues ,export4,710,415, "Coocurrence");//graph values
-        create_button_export(jTable12,fixedTable2,panelHeatmapValues ,export5,710,415, "Heatmap");//heatmap values
+        create_button_export_dependences_table(jTable10,fixedTable ,panelChiPhi ,export3,710,415, "ChiPhi"); // chi and fi values
+        create_button_export_dependences_table(jTable11,fixedTable1,panelCoOcurrenceValues ,export4,710,415, "Coocurrence");//graph values
+        create_button_export_dependences_table(jTable12,fixedTable2,panelHeatmapValues ,export5,710,415, "Heatmap");//heatmap values
 
-        create_button_export(panelCoOcurrence ,export6,720,440); //graph- dependences
-        create_button_export(panelHeatmapGraph,export7,720,440);
+        create_button_export_dependences_graph(panelCoOcurrence ,export6,720,440);
+        create_button_export_dependences_graph(panelHeatmapGraph,export7,720,440);
         Border border = BorderFactory.createLineBorder(Color.gray, 1);
 
         panelHeatmap.setBorder(border); 
@@ -433,9 +433,8 @@ public class RunApp extends javax.swing.JFrame {
         progressFrame.add(progressBar);   
         
     }
-    
         
-    private void create_button_export(final JTable jtable,final JTable columns, JPanel jpanel, JButton jbutton_export, int posx,int posy, final String table)
+    private void create_button_export_dependences_table(final JTable jtable,final JTable columns, JPanel jpanel, JButton jbutton_export, int posx,int posy, final String table)
     {
         //button export table
         jbutton_export = new JButton("Save");
@@ -459,7 +458,7 @@ public class RunApp extends javax.swing.JFrame {
         jpanel.add(jbutton_export);
     }    
         
-    private void create_button_export(final JPanel jpanel, JButton jbutton_export, int posx,int posy)
+    private void create_button_export_dependences_graph(final JPanel jpanel, JButton jbutton_export, int posx,int posy)
     {
         //button export table
         jbutton_export = new JButton("Save");
@@ -487,8 +486,7 @@ public class RunApp extends javax.swing.JFrame {
         jpanel.add(jbutton_export);
     }
   
-    
-    private void create_jtable_metrics_jpanel1_principal(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_calculate,JButton button_save, JButton button_clear, int posx,int posy, int width, int heigh,String info)
+    private void create_jtable_metrics_principal(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_calculate,JButton button_save, JButton button_clear, int posx,int posy, int width, int heigh,String info)
     {
         create_jtable_metric_principal(jtable,jpanel, util.Get_row_data_principal(),posx,posy,width,heigh);        
         
@@ -595,8 +593,6 @@ public class RunApp extends javax.swing.JFrame {
       
     }
     
-    
-    
     private void create_jtable_metrics_multi(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_calculate,JButton button_save, int posx,int posy, int width, int heigh)
     {
 
@@ -690,8 +686,6 @@ public class RunApp extends javax.swing.JFrame {
         jpanel.add(button_save);
       
     }
-
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -834,16 +828,6 @@ public class RunApp extends javax.swing.JFrame {
         });
 
         textChooseFile.setEditable(false);
-        textChooseFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textChooseFileActionPerformed(evt);
-            }
-        });
-        textChooseFile.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                textChooseFileFocusLost(evt);
-            }
-        });
         textChooseFile.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 textChooseFileKeyPressed(evt);
@@ -1039,16 +1023,6 @@ public class RunApp extends javax.swing.JFrame {
 
         textRandomHoldout.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         textRandomHoldout.setText("70");
-        textRandomHoldout.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textRandomHoldoutActionPerformed(evt);
-            }
-        });
-        textRandomHoldout.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                textRandomHoldoutKeyTyped(evt);
-            }
-        });
 
         radioRandomCV.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         radioRandomCV.setText("Random CV");
@@ -1069,16 +1043,6 @@ public class RunApp extends javax.swing.JFrame {
         textIterativeStratifiedCV.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         textIterativeStratifiedCV.setText("5");
         textIterativeStratifiedCV.setEnabled(false);
-        textIterativeStratifiedCV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textIterativeStratifiedCVActionPerformed(evt);
-            }
-        });
-        textIterativeStratifiedCV.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                textIterativeStratifiedCVKeyTyped(evt);
-            }
-        });
 
         labelFoldsRandom.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelFoldsRandom.setText("Folds");
@@ -1086,16 +1050,6 @@ public class RunApp extends javax.swing.JFrame {
         textRandomCV.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         textRandomCV.setText("5");
         textRandomCV.setEnabled(false);
-        textRandomCV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textRandomCVActionPerformed(evt);
-            }
-        });
-        textRandomCV.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                textRandomCVKeyTyped(evt);
-            }
-        });
 
         labelFoldsIterativeStratified.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelFoldsIterativeStratified.setText("Folds");
@@ -1106,16 +1060,6 @@ public class RunApp extends javax.swing.JFrame {
         textIterativeStratifiedHoldout.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         textIterativeStratifiedHoldout.setText("70");
         textIterativeStratifiedHoldout.setEnabled(false);
-        textIterativeStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textIterativeStratifiedHoldoutActionPerformed(evt);
-            }
-        });
-        textIterativeStratifiedHoldout.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                textIterativeStratifiedHoldoutKeyTyped(evt);
-            }
-        });
 
         radioLPStratifiedHoldout.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         radioLPStratifiedHoldout.setText("LabelPowerset stratified holdout ");
@@ -1128,16 +1072,6 @@ public class RunApp extends javax.swing.JFrame {
         textLPStratifiedHoldout.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         textLPStratifiedHoldout.setText("70");
         textLPStratifiedHoldout.setEnabled(false);
-        textLPStratifiedHoldout.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textLPStratifiedHoldoutActionPerformed(evt);
-            }
-        });
-        textLPStratifiedHoldout.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                textLPStratifiedHoldoutKeyTyped(evt);
-            }
-        });
 
         labelPercLPStratified.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelPercLPStratified.setText("%");
@@ -1153,16 +1087,6 @@ public class RunApp extends javax.swing.JFrame {
         textLPStratifiedCV.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         textLPStratifiedCV.setText("5");
         textLPStratifiedCV.setEnabled(false);
-        textLPStratifiedCV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textLPStratifiedCVActionPerformed(evt);
-            }
-        });
-        textLPStratifiedCV.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                textLPStratifiedCVKeyTyped(evt);
-            }
-        });
 
         labelFoldsLPStratified.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelFoldsLPStratified.setText("Folds");
@@ -1256,11 +1180,6 @@ public class RunApp extends javax.swing.JFrame {
         );
 
         jButtonStartPreprocess.setText("Start");
-        jButtonStartPreprocess.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jButtonStartPreprocessMouseEntered(evt);
-            }
-        });
         jButtonStartPreprocess.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonStartPreprocessActionPerformed(evt);
@@ -1287,16 +1206,6 @@ public class RunApp extends javax.swing.JFrame {
         textBRFS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         textBRFS.setText("100");
         textBRFS.setEnabled(false);
-        textBRFS.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textBRFSActionPerformed(evt);
-            }
-        });
-        textBRFS.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                textBRFSKeyTyped(evt);
-            }
-        });
 
         labelBRFS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelBRFS.setText("features");
@@ -1309,11 +1218,6 @@ public class RunApp extends javax.swing.JFrame {
         jComboBox_BRFS_Comb.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "max", "min", "avg" }));
         jComboBox_BRFS_Comb.setEnabled(false);
         jComboBox_BRFS_Comb.setPreferredSize(new java.awt.Dimension(58, 20));
-        jComboBox_BRFS_Comb.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox_BRFS_CombActionPerformed(evt);
-            }
-        });
 
         labelBRFS_Norm.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelBRFS_Norm.setText("Norm");
@@ -1323,11 +1227,6 @@ public class RunApp extends javax.swing.JFrame {
         jComboBox_BRFS_Norm.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "dm", "dl", "none" }));
         jComboBox_BRFS_Norm.setEnabled(false);
         jComboBox_BRFS_Norm.setPreferredSize(new java.awt.Dimension(63, 20));
-        jComboBox_BRFS_Norm.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox_BRFS_NormActionPerformed(evt);
-            }
-        });
 
         labelBRFS_Out.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelBRFS_Out.setText("Score");
@@ -1337,11 +1236,6 @@ public class RunApp extends javax.swing.JFrame {
         jComboBox_BRFS_Out.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "eval", "rank" }));
         jComboBox_BRFS_Out.setEnabled(false);
         jComboBox_BRFS_Out.setPreferredSize(new java.awt.Dimension(59, 20));
-        jComboBox_BRFS_Out.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox_BRFS_OutActionPerformed(evt);
-            }
-        });
 
         radioRandomFS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         radioRandomFS.setText("Random attribute selection");
@@ -1354,16 +1248,6 @@ public class RunApp extends javax.swing.JFrame {
         textRandomFS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         textRandomFS.setText("100");
         textRandomFS.setEnabled(false);
-        textRandomFS.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textRandomFSActionPerformed(evt);
-            }
-        });
-        textRandomFS.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                textRandomFSKeyTyped(evt);
-            }
-        });
 
         labelRandomFS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelRandomFS.setText("features");
@@ -1443,11 +1327,6 @@ public class RunApp extends javax.swing.JFrame {
 
         jComboBox_SaveFormat.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Mulan .arff", "Meka .arff" }));
         jComboBox_SaveFormat.setEnabled(false);
-        jComboBox_SaveFormat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox_SaveFormatActionPerformed(evt);
-            }
-        });
 
         panelIS.setBorder(javax.swing.BorderFactory.createTitledBorder("Instance Selection"));
 
@@ -1462,16 +1341,6 @@ public class RunApp extends javax.swing.JFrame {
         textRandomIS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         textRandomIS.setText("500");
         textRandomIS.setEnabled(false);
-        textRandomIS.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textRandomISActionPerformed(evt);
-            }
-        });
-        textRandomIS.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                textRandomISKeyTyped(evt);
-            }
-        });
 
         labelRandomIS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelRandomIS.setText("instances");
@@ -1586,21 +1455,11 @@ public class RunApp extends javax.swing.JFrame {
                 radioExamplesPerLabelMouseClicked(evt);
             }
         });
-        radioExamplesPerLabel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radioExamplesPerLabelActionPerformed(evt);
-            }
-        });
 
         radioExamplesPerLabelset.setText("# Examples per labelset");
         radioExamplesPerLabelset.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 radioExamplesPerLabelsetMouseClicked(evt);
-            }
-        });
-        radioExamplesPerLabelset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radioExamplesPerLabelsetActionPerformed(evt);
             }
         });
 
@@ -1640,6 +1499,7 @@ public class RunApp extends javax.swing.JFrame {
         );
 
         tabsImbalance.setTabPlacement(javax.swing.JTabbedPane.RIGHT);
+        tabsImbalance.setEnabled(false);
         tabsImbalance.setFocusable(false);
         tabsImbalance.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -1784,11 +1644,6 @@ public class RunApp extends javax.swing.JFrame {
 
         TabPrincipal.addTab("Labels", panelImbalance);
 
-        tabsDependences.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tabsDependencesMouseClicked(evt);
-            }
-        });
         tabsDependences.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 tabsDependencesStateChanged(evt);
@@ -1854,11 +1709,6 @@ public class RunApp extends javax.swing.JFrame {
 
             }
         ));
-        tableCoOcurrenceLeft.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tableCoOcurrenceLeftMouseClicked(evt);
-            }
-        });
         jScrollPane7.setViewportView(tableCoOcurrenceLeft);
 
         buttonShowMostFrequent.setText("Show most frequent");
@@ -1869,16 +1719,6 @@ public class RunApp extends javax.swing.JFrame {
         });
 
         textMostFrequent.setText("10");
-        textMostFrequent.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textMostFrequentActionPerformed(evt);
-            }
-        });
-        textMostFrequent.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                textMostFrequentKeyTyped(evt);
-            }
-        });
 
         buttonShowMostRelated.setText("Show most related");
         buttonShowMostRelated.addActionListener(new java.awt.event.ActionListener() {
@@ -1888,16 +1728,6 @@ public class RunApp extends javax.swing.JFrame {
         });
 
         textMostRelated.setText("10");
-        textMostRelated.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textMostRelatedActionPerformed(evt);
-            }
-        });
-        textMostRelated.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                textMostRelatedKeyTyped(evt);
-            }
-        });
 
         javax.swing.GroupLayout panelCoOcurrenceLayout = new javax.swing.GroupLayout(panelCoOcurrence);
         panelCoOcurrence.setLayout(panelCoOcurrenceLayout);
@@ -1970,11 +1800,6 @@ public class RunApp extends javax.swing.JFrame {
 
             }
         ));
-        tableHeatmapLeft.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tableHeatmapLeftMouseClicked(evt);
-            }
-        });
         jScrollPane8.setViewportView(tableHeatmapLeft);
 
         panelHeatmap.setName("jpanel10"); // NOI18N
@@ -2012,28 +1837,8 @@ public class RunApp extends javax.swing.JFrame {
         });
 
         textMostRelatedHeatMap.setText("10");
-        textMostRelatedHeatMap.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textMostRelatedHeatMapActionPerformed(evt);
-            }
-        });
-        textMostRelatedHeatMap.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                textMostRelatedHeatMapKeyTyped(evt);
-            }
-        });
 
         textMostFrequentHeatMap.setText("10");
-        textMostFrequentHeatMap.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textMostFrequentHeatMapActionPerformed(evt);
-            }
-        });
-        textMostFrequentHeatMap.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                textMostFrequentHeatMapKeyTyped(evt);
-            }
-        });
 
         javax.swing.GroupLayout panelHeatmapGraphLayout = new javax.swing.GroupLayout(panelHeatmapGraph);
         panelHeatmapGraph.setLayout(panelHeatmapGraphLayout);
@@ -2206,7 +2011,6 @@ public class RunApp extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-
     private void buttonRemoveMultipleDatasetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRemoveMultipleDatasetsActionPerformed
         // TODO add your handling code here:
         int current = listMultipleDatasetsLeft.getSelectedIndex();
@@ -2226,7 +2030,6 @@ public class RunApp extends javax.swing.JFrame {
         lista.remove(current);
     }//GEN-LAST:event_buttonRemoveMultipleDatasetsActionPerformed
 
-    //AGREGAR LOS DATASETS EN LA PESTAÑA MULTIPLES DATASET
     private void buttonAddMultipleDatasetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddMultipleDatasetsActionPerformed
         // TODO add your handling code here:
 
@@ -2266,7 +2069,6 @@ public class RunApp extends javax.swing.JFrame {
         
         if (returnVal == JFileChooser.OPEN_DIALOG)
         {
-            //File f1 = chooser.getSelectedFile();
             File [] files = chooser.getSelectedFiles();
             
             for(File f1 : files){
@@ -2303,13 +2105,9 @@ public class RunApp extends javax.swing.JFrame {
 
                     if(es_meka)
                     {
-                        //System.out.println("el dataset es de tipo MEKA");
                         es_de_tipo_meka = true;
 
-                        int label_count = util.Extract_labels_from_arff(sCadena);
-                        //System.out.println("label_count: " + label_count);
-                        //label_names_found = new String[label_count];                    
-
+                        int label_count = util.Extract_labels_from_arff(sCadena);                
 
                         //---------------
 
@@ -2346,7 +2144,6 @@ public class RunApp extends javax.swing.JFrame {
                             }
 
                             for(int i=0; i<label_count; i++){
-                                //System.out.println("sCadenas[" + i + "]: -" + sCadenas[i] + "-");
                                 label_name = util.Extract_label_name_from_String(sCadenas[i]);
 
                                 if(label_name!= null)
@@ -2360,38 +2157,18 @@ public class RunApp extends javax.swing.JFrame {
 
                         //---------------
 
-
-
-
-                        /*while(label_found < label_count)
-                        {
-                            sCadena = bf.readLine();
-                            label_name = util.Extract_label_name_from_String(sCadena);
-
-                            if(label_name!= null)
-                            {
-                                label_names_found[label_found]=label_name;
-                                label_found++;
-
-                            }
-
-                        }*/
-                        //util.Recorre_Arreglo(label_names_found);
-
                         BufferedWriter bw_xml= new BufferedWriter(new FileWriter(filename_database_xml_path1));
                         PrintWriter wr_xml = new PrintWriter(bw_xml);
 
-                        util.Write_into_xml_file(wr_xml, label_names_found); //crea el xml para el caso de MEKA
+                        util.Write_into_xml_file(wr_xml, label_names_found);
 
                         bw_xml.close();
                         wr_xml.close();
 
-                        filename_database_xml = util.Get_file_name_xml(filename_database_xml_path1); //carga el xml creado...
-
+                        filename_database_xml = util.Get_file_name_xml(filename_database_xml_path1);
                     }
                     else
                     {
-                        //System.out.println("el dataset NO es de tipo MEKA");
                         es_de_tipo_meka= false;
                     }
                 }
@@ -2411,59 +2188,39 @@ public class RunApp extends javax.swing.JFrame {
 
                     if(es_meka){
                         File f2 = new File(filename_database_xml);
-                       //System.out.println("f2: " + f2.getAbsolutePath());
                         f2.delete();
                     }
-
-                    /*if(util.Esta_dataset(list_dataset, current.getDataSet().relationName()))
-                    {
-                       //System.out.println("Dataset name: " + dataset_name);
-                        JOptionPane.showMessageDialog(null, "The dataset is duplicated.", "alert", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }*/
 
                     list_dataset.add(current);
                     Dataset_names.add(dataset_name);
                     lista.addElement(dataset_name );
-
-                   //System.out.println("current: " + current + " ; dataset_name: " + dataset_name);
-
                 }
                 catch (InvalidDataFormatException ex) {
                     Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            }
-
-            
+        }            
         
         return 1;
     }
     
     private void tabsDependencesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabsDependencesStateChanged
-
-        //System.out.println(jTabbedPane4.getSelectedIndex());
-        if(tabsDependences.getSelectedIndex() == 0) {jLabelChiFi_text.setVisible(true);}
-        else {jLabelChiFi_text.setVisible(false);}
-
+        if(tabsDependences.getSelectedIndex() == 0) {
+            jLabelChiFi_text.setVisible(true);
+        }
+        else {
+            jLabelChiFi_text.setVisible(false);
+        }
     }//GEN-LAST:event_tabsDependencesStateChanged
 
-    private void tabsDependencesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabsDependencesMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tabsDependencesMouseClicked
-
     private void panelCoOcurrenceMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelCoOcurrenceMouseReleased
-        // TODO add your handling code here:
-
         if(evt.getButton() == MouseEvent.BUTTON3 )
         {
-            // //System.out.println("se dio el clic derecho");
-
             jPopupMenu1.removeAll();
 
-            JMenuItem salvar = new JMenuItem("Save as...");
+            JMenuItem saver = new JMenuItem("Save as...");
 
-            salvar.addActionListener(new java.awt.event.ActionListener() {
+            saver.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     try {
                         save_as_ActionPerformed(evt);
@@ -2475,13 +2232,12 @@ public class RunApp extends javax.swing.JFrame {
                 }
             });
 
-            jPopupMenu1.add(salvar);
+            jPopupMenu1.add(saver);
             jPopupMenu1.show(evt.getComponent(), evt.getX(), evt.getY());
         }
     }//GEN-LAST:event_panelCoOcurrenceMouseReleased
 
     private void buttonShowCoOcurrenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowCoOcurrenceActionPerformed
-
         if(lista_pares== null) 
         {
             JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
@@ -2501,88 +2257,29 @@ public class RunApp extends javax.swing.JFrame {
         {
             seleccionados.add((tableCoOcurrenceLeft.getValueAt(selecteds[i], 0).toString()));
         }
-        
-       //System.out.println("seleccionados: " + seleccionados.toString());
-        
-        
 
         ArrayList<pares_atributos> pares_seleccionados =  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
 
         String[] labelname=util.pasa_valores_al_arreglo(seleccionados);//solo cambia el tipo de estructura de datos.
 
         graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
-
-        //LANZAR LA VENTANA EMERGENTE CON LOS PARE SELECCIONADOS
-
-        double[][] pares_freq= util.Get_pares_seleccionados(labelname, pares_seleccionados, num_instancias);
-
-        int posx = this.getBounds().x;
-        int posy = this.getBounds().y;
-
-        //jframe_temp mo = new jframe_temp(pares_freq, labelname,posx,posy);
-        //mo.setVisible(true);
-        //util.Recorre_Arreglo(labelname);
-        // util.Recorre_Arreglo_2_dimensiones(pares_freq);
-
     }//GEN-LAST:event_buttonShowCoOcurrenceActionPerformed
-
-    private void tableCoOcurrenceLeftMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableCoOcurrenceLeftMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tableCoOcurrenceLeftMouseClicked
-
-    private void radioExamplesPerLabelsetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioExamplesPerLabelsetActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_radioExamplesPerLabelsetActionPerformed
 
     private void radioExamplesPerLabelsetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioExamplesPerLabelsetMouseClicked
         // TODO add your handling code here:
         tableImbalance.clearSelection();
 
         if(labelset_frequency == null) return;
-
-        //util.Recorre_Arreglo(labelset_frequency);
-
+        
         HeapSort.sort(labelset_frequency);
 
-        cp_box.getChart().setTitle("# Examples per Labelset");//cambia el titulo del charpanel
+        cp_box.getChart().setTitle("# Examples per Labelset");
         cp_box.getChart().getXYPlot().clearAnnotations();
 
         util.update_values_xydataset(cp_box, HeapSort.get_array_sorted());
     }//GEN-LAST:event_radioExamplesPerLabelsetMouseClicked
 
-    private void radioExamplesPerLabelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioExamplesPerLabelActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_radioExamplesPerLabelActionPerformed
-
-    private void radioExamplesPerLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioExamplesPerLabelMouseClicked
-        // TODO add your handling code here:
-        tableImbalance.clearSelection();
-        if(label_frenquency == null) return;
-
-        double [] label_frenquency_values = util.get_label_frequency(label_frenquency);
-
-        //util.Recorre_Arreglo(label_frenquency_values);
-
-        HeapSort.sort(label_frenquency_values);
-
-        cp_box.getChart().setTitle("# Examples per Label");//cambia el titulo del charpanel
-        cp_box.getChart().getXYPlot().clearAnnotations();
-
-        util.update_values_xydataset(cp_box, HeapSort.get_array_sorted());
-
-    }//GEN-LAST:event_radioExamplesPerLabelMouseClicked
-
-    private void textRandomFSKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textRandomFSKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textRandomFSKeyTyped
-
-    private void textRandomFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textRandomFSActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textRandomFSActionPerformed
-
     private void radioRandomFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomFSActionPerformed
-        // TODO add your handling code here:
-        
         textBRFS.setEnabled(false);
         labelBRFS_Comb.setEnabled(false);
         jComboBox_BRFS_Comb.setEnabled(false);
@@ -2596,29 +2293,7 @@ public class RunApp extends javax.swing.JFrame {
         jComboBox_SaveFormat.setEnabled(false);
     }//GEN-LAST:event_radioRandomFSActionPerformed
 
-    private void jComboBox_BRFS_OutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_BRFS_OutActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox_BRFS_OutActionPerformed
-
-    private void jComboBox_BRFS_NormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_BRFS_NormActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox_BRFS_NormActionPerformed
-
-    private void jComboBox_BRFS_CombActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_BRFS_CombActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox_BRFS_CombActionPerformed
-
-    private void textBRFSKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textBRFSKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textBRFSKeyTyped
-
-    private void textBRFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textBRFSActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textBRFSActionPerformed
-
     private void radioBRFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioBRFSActionPerformed
-        // TODO add your handling code here:
-        
         textBRFS.setEnabled(true);
         labelBRFS_Comb.setEnabled(true);
         jComboBox_BRFS_Comb.setEnabled(true);
@@ -2630,13 +2305,9 @@ public class RunApp extends javax.swing.JFrame {
 
         jButtonSaveDatasets.setEnabled(false);
         jComboBox_SaveFormat.setEnabled(false);
-        //button_calculate2_train.setEnabled(false);
-        //button_save_train.setEnabled(false);
     }//GEN-LAST:event_radioBRFSActionPerformed
 
     private void jButtonSaveDatasetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveDatasetsActionPerformed
-        // TODO add your handling code here:
-        
         try{
             /*
                 If only FS is selected, save FS dataset
@@ -2694,7 +2365,6 @@ public class RunApp extends javax.swing.JFrame {
                                 bw_train = new BufferedWriter(new FileWriter(dataPath));
                                 PrintWriter wr_train = new PrintWriter(bw_train);
 
-                                //System.out.println("longitud del train es "+dataset_train.getNumInstances());
                                 util.Save_dataset_Meka_in_the_file(wr_train, dataset, name_dataset+"_MekaConverted");
 
                                 wr_train.close();
@@ -2711,7 +2381,6 @@ public class RunApp extends javax.swing.JFrame {
                                 bw_train = new BufferedWriter(new FileWriter(dataPath));
                                 PrintWriter wr_train = new PrintWriter(bw_train);
 
-                                //System.out.println("longitud del train es "+dataset_train.getNumInstances());
                                 util.Save_dataset_in_the_file(wr_train, dataset, name_dataset+"_MulanConverted");
 
                                 wr_train.close();
@@ -2762,7 +2431,6 @@ public class RunApp extends javax.swing.JFrame {
                                 bw_train = new BufferedWriter(new FileWriter(dataPath));
                                 PrintWriter wr_train = new PrintWriter(bw_train);
 
-                                //System.out.println("longitud del train es "+dataset_train.getNumInstances());
                                 util.Save_dataset_Meka_in_the_file(wr_train, preprocessedDataset, name_dataset + preprocessedType);
 
                                 wr_train.close();
@@ -2779,7 +2447,6 @@ public class RunApp extends javax.swing.JFrame {
                                 bw_train = new BufferedWriter(new FileWriter(dataPath));
                                 PrintWriter wr_train = new PrintWriter(bw_train);
 
-                                //System.out.println("longitud del train es "+dataset_train.getNumInstances());
                                 util.Save_dataset_in_the_file(wr_train, preprocessedDataset, name_dataset+ preprocessedType);
 
                                 wr_train.close();
@@ -2830,7 +2497,6 @@ public class RunApp extends javax.swing.JFrame {
                                 bw_train = new BufferedWriter(new FileWriter(path_train));
                                 PrintWriter wr_train = new PrintWriter(bw_train);
 
-                                //System.out.println("longitud del train es "+dataset_train.getNumInstances());
                                 util.Save_dataset_Meka_in_the_file(wr_train, dataset_train);
 
                                 wr_train.close();
@@ -2839,7 +2505,6 @@ public class RunApp extends javax.swing.JFrame {
                                 BufferedWriter bw_test = new BufferedWriter(new FileWriter(path_test));
                                 PrintWriter wr_test = new PrintWriter(bw_test);
 
-                                ////System.out.println("longitud del test es "+dataset_test.getNumInstances());
                                 util.Save_dataset_Meka_in_the_file(wr_test, dataset_test);
 
                                 wr_test.close();
@@ -2849,7 +2514,6 @@ public class RunApp extends javax.swing.JFrame {
                                 bw_train = new BufferedWriter(new FileWriter(path_train));
                                 PrintWriter wr_train = new PrintWriter(bw_train);
 
-                                //System.out.println("longitud del train es "+dataset_train.getNumInstances());
                                 util.Save_dataset_in_the_file(wr_train, dataset_train);
 
                                 wr_train.close();
@@ -2858,7 +2522,6 @@ public class RunApp extends javax.swing.JFrame {
                                 BufferedWriter bw_test = new BufferedWriter(new FileWriter(path_test));
                                 PrintWriter wr_test = new PrintWriter(bw_test);
 
-                                ////System.out.println("longitud del test es "+dataset_test.getNumInstances());
                                 util.Save_dataset_in_the_file(wr_test, dataset_test);
 
                                 wr_test.close();
@@ -2912,7 +2575,6 @@ public class RunApp extends javax.swing.JFrame {
                                 BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
                                 PrintWriter wr_xml = new PrintWriter(bw_xml);
 
-                               //System.out.println("filename_database_xml_path: " + filename_database_xml_path);
                                 util.Save_xml_in_the_file(wr_xml,list_dataset_train.get(0));
 
                                 wr_xml.close();
@@ -2922,7 +2584,7 @@ public class RunApp extends javax.swing.JFrame {
                             JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
 
                         }
-                        catch(Exception e1){
+                        catch(IOException | HeadlessException e1){
                             JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
                             e1.printStackTrace();
                         }
@@ -2942,10 +2604,7 @@ public class RunApp extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jButtonSaveDatasetsActionPerformed
 
-    // COMIENZA A CALCULAR LAS METRICAS SEGUN LA OPCION DEL train/TEST (BOTON "start")
     private void jButtonStartPreprocessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartPreprocessActionPerformed
-
-        
         progressBar.setIndeterminate(true);
         progressFrame.setVisible(true);
         progressFrame.repaint();
@@ -2978,7 +2637,6 @@ public class RunApp extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonStartPreprocessActionPerformed
 
     private int preprocess(){
-        
         list_dataset_train = new ArrayList();
         list_dataset_test = new ArrayList();
 
@@ -2991,13 +2649,6 @@ public class RunApp extends javax.swing.JFrame {
         }
         
         MultiLabelInstances preprocessDataset = dataset;
-
-        
-        //First check that any option is selected
-        if(radioNoSplit.isSelected() && radioNoFS.isSelected() && radioNoIS.isSelected()){
-            //JOptionPane.showMessageDialog(null, "Select at least one option.", "alert", JOptionPane.ERROR_MESSAGE);
-            //return;
-        }
         
         if(! radioNoIS.isSelected()){
             //Do Instance Selection
@@ -3018,23 +2669,17 @@ public class RunApp extends javax.swing.JFrame {
                 try {
                     Randomize randomize = new Randomize();                
                     dataIS = dataset.getDataSet();
-                    
-                   //System.out.println("dataIS.get(0): " + dataIS.get(0));
-                    
+
                     randomize.setInputFormat(dataIS);
                     dataIS = Filter.useFilter(dataIS, randomize);
                     randomize.batchFinished();
-                    
-                   //System.out.println("dataIS.get(0): " + dataIS.get(0));
-                    
+
                     RemoveRange removeRange = new RemoveRange();
                     removeRange.setInputFormat(dataIS);
-                   //System.out.println((nInstances+1) + "-last");
                     removeRange.setInstancesIndices((nInstances+1) + "-last");
                     
                     dataIS = Filter.useFilter(dataIS, removeRange);
                     removeRange.batchFinished();
-                   //System.out.println("dataIS.numInstances(): " + dataIS.numInstances());
                     
                     preprocessDataset = dataset.reintegrateModifiedDataSet(dataIS);
                 } catch (Exception ex) {
@@ -3049,9 +2694,6 @@ public class RunApp extends javax.swing.JFrame {
                 }
 
                 preprocessedDataset = preprocessDataset;
-                
-               //System.out.println("preprocessedDataset.getNumInstances(): " + preprocessedDataset.getNumInstances());
-
             }
         }
         
@@ -3090,15 +2732,6 @@ public class RunApp extends javax.swing.JFrame {
                 }
                 
                 preprocessDataset = preprocessedDataset;
-
-                /*holdout_random =false;
-                cv_ramdon =false;
-                holdout_iterative_stratified =false;
-                cv_iterative_stratified =false;
-                holdout_LP_stratified =false;
-                cv_LP_stratified =false;
-                feature_selection_br = true;
-                feature_selection_random = false;*/
             }
             else if(radioRandomFS.isSelected()){
                 int nFeatures = Integer.parseInt(textRandomFS.getText());
@@ -3131,15 +2764,6 @@ public class RunApp extends javax.swing.JFrame {
                 }
                 
                 preprocessDataset = preprocessedDataset;
-
-                /*holdout_random =false;
-                cv_ramdon =false;
-                holdout_iterative_stratified =false;
-                cv_iterative_stratified =false;
-                holdout_LP_stratified =false;
-                cv_LP_stratified =false;
-                feature_selection_br = false;
-                feature_selection_random = true;*/
             }
         }
 
@@ -3161,23 +2785,8 @@ public class RunApp extends javax.swing.JFrame {
                     
                     MultiLabelInstances [] partitions = pre.split(preprocessDataset, percent_split);
 
-                    //dataset_train = new MultiLabelInstances(trainDataSet, dataset.getLabelsMetaData());
-                    //dataset_test = new MultiLabelInstances(testDataSet, dataset.getLabelsMetaData());
-
                     dataset_train = partitions[0];
                     dataset_test = partitions[1];
-
-                    /*holdout_random =true;
-                    cv_ramdon =false;
-                    holdout_iterative_stratified =false;
-                    cv_iterative_stratified =false;
-                    holdout_LP_stratified =false;
-                    cv_LP_stratified =false;
-                    feature_selection_br = false;
-                    feature_selection_random = false;*/
-                    //calculte metric selected
-
-                    //button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7);// HOLDOUT percentage
                 }
 
                 catch (InvalidDataFormatException ex) {
@@ -3245,22 +2854,9 @@ public class RunApp extends javax.swing.JFrame {
                             }
                         }
                         test.addAll(foldsCV[i]);
-
-                       //System.out.println("train: " + train.numInstances());
-                       //System.out.println("test: " + test.numInstances());
-
                         list_dataset_train.add(new MultiLabelInstances(train, preprocessDataset.getLabelsMetaData()));
                         list_dataset_test.add(new MultiLabelInstances(test, preprocessDataset.getLabelsMetaData()));
                     }
-
-                    /*holdout_random =false;
-                    cv_ramdon =true;
-                    holdout_iterative_stratified =false;
-                    cv_iterative_stratified =false;
-                    holdout_LP_stratified =false;
-                    cv_LP_stratified =false;
-                    feature_selection_br = false;
-                    feature_selection_random = false;*/
                 }
 
                 catch (Exception ex) {
@@ -3282,18 +2878,6 @@ public class RunApp extends javax.swing.JFrame {
 
                     dataset_train = partitions[0];
                     dataset_test = partitions[1];
-
-                    /*holdout_random =false;
-                    cv_ramdon =false;
-                    holdout_iterative_stratified =true;
-                    cv_iterative_stratified =false;
-                    holdout_LP_stratified =false;
-                    cv_LP_stratified =false;
-                    feature_selection_br = false;
-                    feature_selection_random = false;*/
-                    //calculte metric selected
-
-                    //button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7);// HOLDOUT percentage
                 }
                 catch (Exception ex) {
                     Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -3375,18 +2959,6 @@ public class RunApp extends javax.swing.JFrame {
 
                     dataset_train = partitions[0];
                     dataset_test = partitions[1];
-
-                    /*holdout_random =false;
-                    cv_ramdon =false;
-                    holdout_iterative_stratified =false;
-                    cv_iterative_stratified =false;
-                    holdout_LP_stratified =true;
-                    cv_LP_stratified =false;
-                    feature_selection_br = false;
-                    feature_selection_random = false;*/
-                    //calculte metric selected
-
-                    //button_calculateActionPerformed1(evt, jTable5, jTable6, jTable7);// HOLDOUT percentage
                 }
                 catch (Exception ex) {
                     Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -3443,169 +3015,67 @@ public class RunApp extends javax.swing.JFrame {
                         Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-
-                /*holdout_random =false;
-                cv_ramdon =false;
-                holdout_iterative_stratified =false;
-                cv_iterative_stratified =false;
-                holdout_LP_stratified =false;
-                cv_LP_stratified =true;
-                feature_selection_br = false;
-                feature_selection_random = false;*/
             }
 
         }
 
             jButtonSaveDatasets.setEnabled(true);
             jComboBox_SaveFormat.setEnabled(true);
-            //button_calculate2_train.setEnabled(true);
-            //button_save_train.setEnabled(false);
-
-            /*
-            if(!(radioNoFS.isSelected() && radioNoSplit.isSelected())){
-                JOptionPane.showMessageDialog(null, "Datasets have been generated succesfully.", "Successful", JOptionPane.INFORMATION_MESSAGE);
-            }
-            
-            Toolkit.getDefaultToolkit().beep();
-            */
             
         return 1;
     }
     
-    private void textLPStratifiedCVKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textLPStratifiedCVKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textLPStratifiedCVKeyTyped
-
-    private void textLPStratifiedCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textLPStratifiedCVActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textLPStratifiedCVActionPerformed
-
     private void radioLPStratifiedCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioLPStratifiedCVActionPerformed
-        // TODO add your handling code here:
         textRandomHoldout.setEnabled(false);
         textIterativeStratifiedHoldout.setEnabled(false);
         textLPStratifiedHoldout.setEnabled(false);
-        //buttonChooseSuppliedTest.setEnabled(false);
         textRandomCV.setEnabled(false);
         textIterativeStratifiedCV.setEnabled(false);
         textLPStratifiedCV.setEnabled(true);
 
         jButtonSaveDatasets.setEnabled(false);
         jComboBox_SaveFormat.setEnabled(false);
-        //button_calculate2_train.setEnabled(false);
-        //button_save_train.setEnabled(false);
     }//GEN-LAST:event_radioLPStratifiedCVActionPerformed
 
-    private void textLPStratifiedHoldoutKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textLPStratifiedHoldoutKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textLPStratifiedHoldoutKeyTyped
-
-    private void textLPStratifiedHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textLPStratifiedHoldoutActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textLPStratifiedHoldoutActionPerformed
-
     private void radioLPStratifiedHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioLPStratifiedHoldoutActionPerformed
-        // TODO add your handling code here:
         textRandomHoldout.setEnabled(false);
         textIterativeStratifiedHoldout.setEnabled(false);
         textLPStratifiedHoldout.setEnabled(true);
-        //buttonChooseSuppliedTest.setEnabled(false);
         textRandomCV.setEnabled(false);
         textIterativeStratifiedCV.setEnabled(false);
         textLPStratifiedCV.setEnabled(false);
 
         jButtonSaveDatasets.setEnabled(false);
         jComboBox_SaveFormat.setEnabled(false);
-        //button_calculate2_train.setEnabled(false);
-        //button_save_train.setEnabled(false);
     }//GEN-LAST:event_radioLPStratifiedHoldoutActionPerformed
 
-    //FILTRA LOS NUMEROS SOLAMENTE
-    private void textIterativeStratifiedHoldoutKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textIterativeStratifiedHoldoutKeyTyped
-        // TODO add your handling code here:
-        char c = evt.getKeyChar();
-        if(!Character.isDigit(c))
-        {
-            getToolkit().beep();
-            evt.consume();
-        }
-    }//GEN-LAST:event_textIterativeStratifiedHoldoutKeyTyped
-
-    private void textIterativeStratifiedHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textIterativeStratifiedHoldoutActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textIterativeStratifiedHoldoutActionPerformed
-
-    private void textRandomCVKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textRandomCVKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textRandomCVKeyTyped
-
-    private void textRandomCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textRandomCVActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textRandomCVActionPerformed
-
-    private void textIterativeStratifiedCVKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textIterativeStratifiedCVKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textIterativeStratifiedCVKeyTyped
-
-    private void textIterativeStratifiedCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textIterativeStratifiedCVActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textIterativeStratifiedCVActionPerformed
-
     private void radioIterativeStratifiedCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioIterativeStratifiedCVActionPerformed
-        // TODO add your handling code here:
-
         textRandomHoldout.setEnabled(false);
         textIterativeStratifiedHoldout.setEnabled(false);
         textLPStratifiedHoldout.setEnabled(false);
-        //buttonChooseSuppliedTest.setEnabled(false);
         textRandomCV.setEnabled(false);
         textIterativeStratifiedCV.setEnabled(true);
         textLPStratifiedCV.setEnabled(false);
 
         jButtonSaveDatasets.setEnabled(false);
         jComboBox_SaveFormat.setEnabled(false);
-        //button_calculate2_train.setEnabled(false);
-        //button_save_train.setEnabled(false);
     }//GEN-LAST:event_radioIterativeStratifiedCVActionPerformed
 
     private void radioRandomCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomCVActionPerformed
-        // TODO add your handling code here:
         textRandomHoldout.setEnabled(false);
         textIterativeStratifiedHoldout.setEnabled(false);
         textLPStratifiedHoldout.setEnabled(false);
-        //buttonChooseSuppliedTest.setEnabled(false);
         textRandomCV.setEnabled(true);
         textIterativeStratifiedCV.setEnabled(false);
         textLPStratifiedCV.setEnabled(false);
 
         jButtonSaveDatasets.setEnabled(false);
         jComboBox_SaveFormat.setEnabled(false);
-        //button_calculate2_train.setEnabled(false);
-        //button_save_train.setEnabled(false);
     }//GEN-LAST:event_radioRandomCVActionPerformed
 
-//FILTRA LOS NUMEROS SOLAMENTE
-    private void textRandomHoldoutKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textRandomHoldoutKeyTyped
-        // TODO add your handling code here:
-
-        char c = evt.getKeyChar();
-        if(!Character.isDigit(c))
-        {
-            getToolkit().beep();
-            evt.consume();
-        }
-    }//GEN-LAST:event_textRandomHoldoutKeyTyped
-
-    private void textRandomHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textRandomHoldoutActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textRandomHoldoutActionPerformed
-
-    //CUANDO ESTA ACTIVO "Stratification split" EN LA PESTAÑA TEST
     private void radioIterativeStratifiedHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioIterativeStratifiedHoldoutActionPerformed
-        // TODO add your handling code here:
         textIterativeStratifiedHoldout.setEnabled(true);
         textRandomHoldout.setEnabled(false);
-        //buttonChooseSuppliedTest.setEnabled(false);
         textRandomCV.setEnabled(false);
         textIterativeStratifiedCV.setEnabled(false);
         textLPStratifiedHoldout.setEnabled(false);
@@ -3613,16 +3083,11 @@ public class RunApp extends javax.swing.JFrame {
 
         jButtonSaveDatasets.setEnabled(false);
         jComboBox_SaveFormat.setEnabled(false);
-        //button_calculate2_train.setEnabled(false);
-        //button_save_train.setEnabled(false);
     }//GEN-LAST:event_radioIterativeStratifiedHoldoutActionPerformed
 
-  //OPTION "Ramdon  split"  
     private void radioRandomHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomHoldoutActionPerformed
-        // TODO add your handling code here:
         textRandomHoldout.setEnabled(true);
         textIterativeStratifiedHoldout.setEnabled(false);
-        // buttonChooseSuppliedTest.setEnabled(false);
         textRandomCV.setEnabled(false);
         textIterativeStratifiedCV.setEnabled(false);
         textLPStratifiedHoldout.setEnabled(false);
@@ -3630,63 +3095,19 @@ public class RunApp extends javax.swing.JFrame {
 
         jButtonSaveDatasets.setEnabled(false);
         jComboBox_SaveFormat.setEnabled(false);
-        //button_calculate2_train.setEnabled(false);
-        //button_save_train.setEnabled(false);
     }//GEN-LAST:event_radioRandomHoldoutActionPerformed
 
-    // CAPTURA LA DIRECCION DEL XML EN EL JTEXTFIELD DE LA 1ra pestaña para cargar el dataset.
     private void textChooseFileKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textChooseFileKeyPressed
-
         if(evt.getKeyCode() == KeyEvent.VK_ENTER)
         {
-            //--------------------------------------------------------------
-            //INVOCAR EL PROGRESS BAR
-            /*
-            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
-            progress_bar new_progress = new progress_bar();
-            task = new Task(new_progress);
-            new_progress.setVisible(true);
-
-            task.addPropertyChangeListener(new_progress);
-            task.execute();
-            //--------------------------------------------------------------
-            */
-
             String filename_database_arff = textChooseFile.getText();
-
             filename_database_xml = util.Get_xml_string(filename_database_arff);
-
             filename_database_xml = util.Get_file_name_xml(filename_database_xml);
-
             Load_dataset(filename_database_arff, filename_database_xml);
         }
     }//GEN-LAST:event_textChooseFileKeyPressed
 
-    private void textChooseFileFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textChooseFileFocusLost
-
-        // CUANDO EL TEXTFIELD PIERDE EL FOCUS
-        /*
-        String filename_database_arff = jTextField2.getText();
-
-        filename_database_xml = filename_database_arff.substring(0,filename_database_arff.length()-5)+".xml";
-
-        filename_database_xml = util.Get_file_name_xml(filename_database_xml);
-
-        Load_dataset(filename_database_arff, filename_database_xml);
-
-        */
-    }//GEN-LAST:event_textChooseFileFocusLost
-
-    private void textChooseFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textChooseFileActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textChooseFileActionPerformed
-
-    
-    // carga el dataset buscandolo por el filechooser
     private void buttonChooseFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonChooseFileActionPerformed
-        // TODO add your handling code here:
-        
         final JFileChooser jfile1 = new JFileChooser();
         FileNameExtensionFilter fname = new FileNameExtensionFilter(".arff", "arff");
         jfile1.setFileFilter(fname);
@@ -3720,7 +3141,6 @@ public class RunApp extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonChooseFileActionPerformed
 
     private int loadDataset(int returnVal, JFileChooser jfile1, boolean deleteXML){
-        
         if (returnVal == JFileChooser.OPEN_DIALOG)
         {
             File f1 = jfile1.getSelectedFile();
@@ -3734,8 +3154,8 @@ public class RunApp extends javax.swing.JFrame {
 
             File  file_temp = new File(filename_database_xml_path);
 
-            
             //-------------------------------------------------------------------------------------------------------
+            
             FileReader fr;
             try
             {
@@ -3750,8 +3170,7 @@ public class RunApp extends javax.swing.JFrame {
                 if(util.Es_de_tipo_MEKA(sCadena))
                 {
                     deleteXML = true;
-                    
-                   //System.out.println("el dataset es de tipo MEKA");
+
                     es_de_tipo_meka = true;
 
                     int label_count = util.Extract_labels_from_arff(sCadena);
@@ -3789,7 +3208,6 @@ public class RunApp extends javax.swing.JFrame {
                         }
                         
                         for(int i=0; i<label_count; i++){
-                           //System.out.println("sCadenas[" + i + "]: -" + sCadenas[i] + "-");
                             label_name = util.Extract_label_name_from_String(sCadenas[i]);
 
                             if(label_name!= null)
@@ -3800,24 +3218,21 @@ public class RunApp extends javax.swing.JFrame {
                             }
                         }
                     }
-                    
-                    //util.Recorre_Arreglo(label_names_found);
 
                     BufferedWriter bw_xml= new BufferedWriter(new FileWriter(filename_database_xml_path));
                     PrintWriter wr_xml = new PrintWriter(bw_xml);
 
-                    util.Write_into_xml_file(wr_xml, label_names_found); //crea el xml para el caso de MEKA
+                    util.Write_into_xml_file(wr_xml, label_names_found);
 
                     bw_xml.close();
                     wr_xml.close();
 
-                    filename_database_xml = util.Get_file_name_xml(filename_database_xml_path); //carga el xml creado...
+                    filename_database_xml = util.Get_file_name_xml(filename_database_xml_path);
                     file_temp = new File(filename_database_xml_path);
                 }
 
                 else
                 {
-                   //System.out.println("el dataset NO es de tipo MEKA");
                     es_de_tipo_meka= false;
 
                 }
@@ -3832,15 +3247,11 @@ public class RunApp extends javax.swing.JFrame {
 
             //-------------------------------------------------------------------------------------------------------
 
-            //-------------------------------------------------------------------------------------------------------
-
-            if(!file_temp.exists()) //SI NO EXISTE EL XML
+            if(!file_temp.exists())
             {
                 filename_database_xml_path = util.Get_xml_string(filename_database_arff);
                 filename_database_xml = util.Get_file_name_xml(filename_database_xml_path);
             }
-
-           //System.out.println("Choosefilename_database_xml_path: " + filename_database_xml_path);
 
             try {
                 File f = new File(filename_database_xml);
@@ -3851,9 +3262,6 @@ public class RunApp extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "File could not be loaded.", "alert", JOptionPane.ERROR_MESSAGE); 
                     return -1;
                 }
-
-                //System.out.println("prueba xml "+filename_database_xml);
-                //velocidad =util.get_velocidad(dataset_temp);
             } catch (InvalidDataFormatException ex) {
                 Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
                 progressBar.setVisible(false);
@@ -3861,19 +3269,11 @@ public class RunApp extends javax.swing.JFrame {
                 progressFrame.repaint();
                 return -1;
             }
-            
-            
-
-            //--------------------------------------------------------------
-            
 
             //--------------------------------------------------------------
 
-            initializeTableMetrics();
-            initializeTableMetricsCommon();
-            initializeTableMetricsTrainTest();
+            initTableMetrics();
             clearTable_metrics_principal();
-            clearTable_metrics_traintest();
             
             File f = new File(filename_database_xml);
             if(f.exists() && !f.isDirectory()) { 
@@ -3884,10 +3284,9 @@ public class RunApp extends javax.swing.JFrame {
             }
 
             if(deleteXML){
-                    File f2 = new File(filename_database_xml);
-                   //System.out.println("f2: " + f2.getAbsolutePath());
-                    f2.delete();
-                }
+                File f2 = new File(filename_database_xml);
+                f2.delete();
+            }
 
             textChooseFile.setText(filename_database_arff);
 
@@ -3896,12 +3295,7 @@ public class RunApp extends javax.swing.JFrame {
         return 1;
     }
     
-    private void tableHeatmapLeftMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableHeatmapLeftMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tableHeatmapLeftMouseClicked
-
     private void buttonShowMostFrequentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostFrequentActionPerformed
-
         int n = Integer.parseInt(textMostFrequent.getText());
         
         if(n > dataset.getNumLabels()){
@@ -3918,8 +3312,7 @@ public class RunApp extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
             return;
         }
-        
-        
+
         tableCoOcurrenceLeft.setRowSelectionInterval(0, n-1);
         
         ArrayList<String> seleccionados= new  ArrayList();
@@ -3933,58 +3326,15 @@ public class RunApp extends javax.swing.JFrame {
             }
             else break;
         }
-        
 
         ArrayList<pares_atributos> pares_seleccionados =  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
 
-        String[] labelname=util.pasa_valores_al_arreglo(seleccionados);//solo cambia el tipo de estructura de datos.
+        String[] labelname=util.pasa_valores_al_arreglo(seleccionados);
 
         graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
-
-        //LANZAR LA VENTANA EMERGENTE CON LOS PARE SELECCIONADOS
-
-        double[][] pares_freq= util.Get_pares_seleccionados(labelname, pares_seleccionados, num_instancias);
-
-        int posx = this.getBounds().x;
-        int posy = this.getBounds().y;
-
-        //jframe_temp mo = new jframe_temp(pares_freq, labelname,posx,posy);
-        //mo.setVisible(true);
-        //util.Recorre_Arreglo(labelname);
-        // util.Recorre_Arreglo_2_dimensiones(pares_freq);
-
     }//GEN-LAST:event_buttonShowMostFrequentActionPerformed
 
-    
-    private int[] getFrequencySortedLabels(int n){
-        
-        int nLabels = dataset.getNumLabels();
-        
-        int [] freqSorted = new int[n];
-        
-        for(int i=0; i<n; i++){
-            freqSorted[i] = -1;
-        }
-        
-        String labelName;
-        for(int i=0; i<n; i++){
-            labelName = tableCoOcurrenceLeft.getValueAt(i, 0).toString();
-            freqSorted[i] = getLabelIndex(labelName);
-        }
-        
-        //System.out.println("freqSorted: " + Arrays.toString(freqSorted));
-                
-        return freqSorted;
-    }
-    
-    private int[] getFrequencySortedLabels(){
-
-        return getFrequencySortedLabels(dataset.getNumLabels());
-    }
-    
-    
     private int getLabelIndex(String name){
-     
         for(int i=0; i<jTable11.getColumnCount(); i++){
             if(jTable11.getColumnName(i).equals(name)){
                 return(i);
@@ -3994,22 +3344,6 @@ public class RunApp extends javax.swing.JFrame {
         return(-1);
     }
     
-    private void textMostFrequentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textMostFrequentActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textMostFrequentActionPerformed
-
-    private void textMostFrequentKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textMostFrequentKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textMostFrequentKeyTyped
-
-    private void textMostRelatedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textMostRelatedActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textMostRelatedActionPerformed
-
-    private void textMostRelatedKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textMostRelatedKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textMostRelatedKeyTyped
-
     private void buttonShowMostRelatedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostRelatedActionPerformed
 
         int n = Integer.parseInt(textMostRelated.getText());
@@ -4035,39 +3369,25 @@ public class RunApp extends javax.swing.JFrame {
 
         ArrayList<pares_atributos> pares_seleccionados =  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
 
-        String[] labelname=util.pasa_valores_al_arreglo(seleccionados);//solo cambia el tipo de estructura de datos.
+        String[] labelname=util.pasa_valores_al_arreglo(seleccionados);
 
         graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
-
-        //LANZAR LA VENTANA EMERGENTE CON LOS PARE SELECCIONADOS
-
-        double[][] pares_freq= util.Get_pares_seleccionados(labelname, pares_seleccionados, num_instancias);
-
-        int posx = this.getBounds().x;
-        int posy = this.getBounds().y;
-
-        //jframe_temp mo = new jframe_temp(pares_freq, labelname,posx,posy);
-        //mo.setVisible(true);
     }//GEN-LAST:event_buttonShowMostRelatedActionPerformed
 
     private void radioNoSplitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioNoSplitActionPerformed
-        // TODO add your handling code here:
         textRandomHoldout.setEnabled(false);
         textIterativeStratifiedHoldout.setEnabled(false);
         textLPStratifiedHoldout.setEnabled(false);
-        //buttonChooseSuppliedTest.setEnabled(false);
         textRandomCV.setEnabled(false);
         textIterativeStratifiedCV.setEnabled(false);
         textLPStratifiedCV.setEnabled(false);
 
-        
         jButtonSaveDatasets.setEnabled(false);
         jComboBox_SaveFormat.setEnabled(false);        
         
     }//GEN-LAST:event_radioNoSplitActionPerformed
 
     private void radioNoFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioNoFSActionPerformed
-        // TODO add your handling code here:
         textBRFS.setEnabled(false);
         labelBRFS_Comb.setEnabled(false);
         jComboBox_BRFS_Comb.setEnabled(false);
@@ -4081,64 +3401,29 @@ public class RunApp extends javax.swing.JFrame {
         jComboBox_SaveFormat.setEnabled(false);
     }//GEN-LAST:event_radioNoFSActionPerformed
 
-    private void jComboBox_SaveFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_SaveFormatActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox_SaveFormatActionPerformed
-
     private void buttonShowHeatMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowHeatMapActionPerformed
-
         showHeatMap();
     }//GEN-LAST:event_buttonShowHeatMapActionPerformed
 
-    private void textMostRelatedHeatMapKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textMostRelatedHeatMapKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textMostRelatedHeatMapKeyTyped
-
-    private void textMostRelatedHeatMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textMostRelatedHeatMapActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textMostRelatedHeatMapActionPerformed
-
     private void buttonShowMostRelatedHeatMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostRelatedHeatMapActionPerformed
-        // TODO add your handling code here:
         int n = Integer.parseInt(textMostRelatedHeatMap.getText());
         showMostRelatedHeatMap(n);
     }//GEN-LAST:event_buttonShowMostRelatedHeatMapActionPerformed
 
-    private void textMostFrequentHeatMapKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textMostFrequentHeatMapKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textMostFrequentHeatMapKeyTyped
-
-    private void textMostFrequentHeatMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textMostFrequentHeatMapActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textMostFrequentHeatMapActionPerformed
-
     private void buttonShowMostFrequentHeatMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostFrequentHeatMapActionPerformed
-        // TODO add your handling code here:
-
         int n = Integer.parseInt(textMostFrequentHeatMap.getText());
         showMostFrequentsHeatMap(n);
     }//GEN-LAST:event_buttonShowMostFrequentHeatMapActionPerformed
 
-    private void jButtonStartPreprocessMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonStartPreprocessMouseEntered
-
-    }//GEN-LAST:event_jButtonStartPreprocessMouseEntered
-
     private void tableImbalanceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableImbalanceMouseClicked
-        // evento cuando se da un click en el jtable de la pestaña class imbalance
-
-        for(int i=0; i<tabsImbalance.getTabCount(); i++){
-           //System.out.println("i: " + i + " - " + tabsImbalance.getTitleAt(i));
-        }
-
         //#Examples per labelset
-        if(tabsImbalance.getSelectedIndex()==1) // si esta activado el panel de los labelcoumb
+        if(tabsImbalance.getSelectedIndex()==1)
         {
-            //System.out.println("Se ha tocado");
             int seleccionada = tableImbalance.getSelectedRow();
 
-            if(labelsets_sorted == null) return;
-
-            // String[] labels_info = util.Labelcommb_information(stat1, seleccionada);
+            if(labelsets_sorted == null){
+                return;
+            }
 
             ArrayList<String> label_names= util.Get_labelnames_x_labelcombination(dataset, labelsets_sorted[seleccionada].get_name());
 
@@ -4150,16 +3435,13 @@ public class RunApp extends javax.swing.JFrame {
             int posx = this.getBounds().x;
             int posy = this.getBounds().y;
 
-            //System.out.println(posx+" "+posy);
-
             metric_output mo = new metric_output(dataset, posx, posy+50,args,label_names,label_x_frequency, es_de_tipo_meka);
 
             mo.setVisible(true);
         }
 
-        else if(tabsImbalance.getSelectedIndex()==5) // si esta activado el panel de los BOX DIAGRAM
+        else if(tabsImbalance.getSelectedIndex()==5)
         {
-            //BUTTON GROUP
             jRadioButton8.setSelected(true);
 
             int seleccionada = tableImbalance.getSelectedRow();
@@ -4174,7 +3456,7 @@ public class RunApp extends javax.swing.JFrame {
 
             HeapSort.sort(valores_attr);
 
-            cp_box.getChart().setTitle(attr_current.name());//cambia el titulo del charpanel
+            cp_box.getChart().setTitle(attr_current.name());
 
             cp_box.getChart().getXYPlot().clearAnnotations();
 
@@ -4182,15 +3464,11 @@ public class RunApp extends javax.swing.JFrame {
 
         }
 
-        else if(tabsImbalance.getSelectedIndex()==6) // si esta activado el panel del IR per Labelset
+        else if(tabsImbalance.getSelectedIndex()==6)
         {
-
-            //System.out.println("Se ha tocado");
             int seleccionada = tableImbalance.getSelectedRow();
 
             if(labelsets_sorted_IR == null) return;
-
-            // String[] labels_info = util.Labelcommb_information(stat1, seleccionada);
 
             ArrayList<String> label_names= util.Get_labelnames_x_labelcombination(dataset, labelsets_sorted_IR[seleccionada].get_name());
 
@@ -4202,68 +3480,14 @@ public class RunApp extends javax.swing.JFrame {
             int posx = this.getBounds().x;
             int posy = this.getBounds().y;
 
-            //System.out.println(posx+" "+posy);
-
             metric_output mo = new metric_output(dataset, posx, posy+50,args,label_names,label_x_frequency, es_de_tipo_meka);
 
             mo.setVisible(true);
         }
 
-        else if(tabsImbalance.getSelectedIndex()==3) // si esta activado el panel del IR per Label intra class
-        {
-            //System.out.println("Se ha tocado");
-            //int seleccionada = tableImbalance.getSelectedRow();
-
-            //if(id_x_IR == null) return;
-
-            //int cant_labels = Integer.parseInt((String)tableImbalance.getValueAt(seleccionada, 1));
-            //int cant_labels = dataset.getNumLabels();
-            // //System.out.println(" hay "+cant_labels +" etiquetas");
-
-            //double ir = Double.parseDouble(tableImbalance.getValueAt(seleccionada, 1).toString());
-            // //System.out.println(" el ir es de "+ir +" ");
-
-            //ArrayList<String> label_names= util.Get_labelnames_x_IR_intra_class(ir,cant_labels,label_imbalanced);
-
-            //int posx = this.getBounds().x;
-            //int posy = this.getBounds().y;
-
-            //metric_output mo = new metric_output(dataset, posx, posy+50,label_names,label_x_frequency, es_de_tipo_meka);
-
-            //mo.setVisible(true);
-
-        }
-
     }//GEN-LAST:event_tableImbalanceMouseClicked
 
     private void comboBoxLabelsInformationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxLabelsInformationActionPerformed
-        // TODO add your handling code here:
-        
-        /*
-        comboBoxLabelsInformation:
-            0) Label frequency
-            1) Labelset frequency
-            2) #Labels per example
-            3) Box diagram
-            4) IR per label inter class
-            5) #Labels/IR per label inter class
-            6) IR per label intra class
-            7) #Labels/IR per label intra class
-            8) IR per labelset
-            9) -Metrics-
-        
-        tabbedPane:
-            0) Label frequency
-            1) Labelset frequency
-            2) #Labels per example
-            3) #Labels/IR per label intra class
-            4) IR per label intra class
-            5) IR per labelset
-            6) -Metrics-
-            7) Box diagram
-            8) IR per label inter class
-            9) #Labels/IR per label inter class
-        */
         
         if(comboBoxLabelsInformation.getSelectedIndex() == 0){
                 tabsImbalance.setSelectedIndex(0);
@@ -4319,44 +3543,21 @@ public class RunApp extends javax.swing.JFrame {
                 jLabelIR.setVisible(true);
                 jLabelIR.repaint();
         }
-        /*
-        else if(comboBoxLabelsInformation.getSelectedIndex() == 7){
-                tabsImbalance.setSelectedIndex(4);
-                jButton1.setVisible(true);
-                jButton1.repaint();
-        }
-        else if(comboBoxLabelsInformation.getSelectedIndex() == 8){
-                tabsImbalance.setSelectedIndex(5);
-                jButton1.setVisible(true);
-                jButton1.repaint();
-        }
-        else if(comboBoxLabelsInformation.getSelectedIndex() == 9){
-                tabsImbalance.setSelectedIndex(6);
-                jButton1.setVisible(true);
-                jButton1.repaint();
-        }
-        */
     }//GEN-LAST:event_comboBoxLabelsInformationActionPerformed
 
     private void tabsImbalanceStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabsImbalanceStateChanged
-        // jtabbpane de la pestaña class imbalance
-        if(tm_BR1 !=null && tm_LP1!=null){
 
-           //System.out.println(" id "+ tabsImbalance.getSelectedIndex());
+        if(tm_BR1 !=null && tm_LP1!=null){
 
             if(tabsImbalance.getSelectedIndex()==1)
             {
                 tableImbalance.setModel(tm_LP1);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset frequency"));
 
-                //jPanel15.setVisible(false);
                 radioExamplesPerLabel.setVisible(false);
                 radioExamplesPerLabelset.setVisible(false);
                 
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
-
-                //labelIR1.setVisible(false);
-                //labelIR2.setVisible(false);
             }
 
             else if (tabsImbalance.getSelectedIndex()==4)
@@ -4368,12 +3569,8 @@ public class RunApp extends javax.swing.JFrame {
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
 
-                //jPanel15.setVisible(false);
                 radioExamplesPerLabel.setVisible(false);
                 radioExamplesPerLabelset.setVisible(false);
-
-                //labelIR1.setVisible(true);
-                //labelIR2.setVisible(true);
             }
             else if (tabsImbalance.getSelectedIndex()==0)
             {
@@ -4384,13 +3581,8 @@ public class RunApp extends javax.swing.JFrame {
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
 
-                //jPanel15.setVisible(false);
                 radioExamplesPerLabel.setVisible(false);
                 radioExamplesPerLabelset.setVisible(false);
-
-                //labelIR1.setVisible(false);
-                //labelIR2.setVisible(false);
-
             }
             
             else if (tabsImbalance.getSelectedIndex()==3)
@@ -4402,13 +3594,8 @@ public class RunApp extends javax.swing.JFrame {
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
 
-                //jPanel15.setVisible(false);
                 radioExamplesPerLabel.setVisible(false);
                 radioExamplesPerLabelset.setVisible(false);
-
-                //labelIR1.setVisible(true);
-                //labelIR2.setVisible(true);
-
             }
             else if (tabsImbalance.getSelectedIndex()==2)
             {
@@ -4419,26 +3606,8 @@ public class RunApp extends javax.swing.JFrame {
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
 
-                //jPanel15.setVisible(false);
                 radioExamplesPerLabel.setVisible(false);
                 radioExamplesPerLabelset.setVisible(false);
-
-                //labelIR1.setVisible(false);
-                //labelIR2.setVisible(false);
-                /*
-                jTable4.setModel(tm_ir_per_label_inter_class);
-                jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder("Number of labels inter class per IR"));
-
-                jTable4.setDefaultRenderer(Object.class, new Mi_Render_IR(2));
-                jPanel17.repaint();
-                jPanel17.validate();
-
-                jPanel15.setVisible(false);
-
-                jLabel27.setVisible(true);
-                jLabel28.setVisible(true);
-                */
-
             }
 
             else if (tabsImbalance.getSelectedIndex()==6)
@@ -4450,13 +3619,8 @@ public class RunApp extends javax.swing.JFrame {
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
 
-                //jPanel15.setVisible(false);
                 radioExamplesPerLabel.setVisible(false);
                 radioExamplesPerLabelset.setVisible(false);
-
-                //labelIR1.setVisible(true);
-                //labelIR2.setVisible(true);
-
             }
 
             else if (tabsImbalance.getSelectedIndex()==5)
@@ -4467,15 +3631,8 @@ public class RunApp extends javax.swing.JFrame {
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
-                //jRadioButton6.setVisible(true);
-                //jRadioButton7.setVisible(true);
-                //jPanel15.setVisible(true);
                 radioExamplesPerLabel.setVisible(true);
                 radioExamplesPerLabelset.setVisible(true);
-
-                //labelIR1.setVisible(false);
-                //labelIR2.setVisible(false);
-
             }
 
             else
@@ -4487,39 +3644,23 @@ public class RunApp extends javax.swing.JFrame {
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
 
-                //jPanel15.setVisible(false);
                 radioExamplesPerLabel.setVisible(false);
                 radioExamplesPerLabelset.setVisible(false);
-
-                //labelIR1.setVisible(false);
-                //labelIR2.setVisible(false);
-
             }
 
             tableImbalance.repaint();
             tableImbalance.validate();
-            // //System.out.println("SE HA PRESIONADO el "+jTabbedPane2.getSelectedIndex() );
         }
     }//GEN-LAST:event_tabsImbalanceStateChanged
 
     private void radioRandomISActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomISActionPerformed
-        // TODO add your handling code here:
         textRandomIS.setEnabled(true);
 
         jButtonSaveDatasets.setEnabled(false);
         jComboBox_SaveFormat.setEnabled(false);
     }//GEN-LAST:event_radioRandomISActionPerformed
 
-    private void textRandomISActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textRandomISActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textRandomISActionPerformed
-
-    private void textRandomISKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textRandomISKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textRandomISKeyTyped
-
     private void radioNoISActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioNoISActionPerformed
-        // TODO add your handling code here:
         textRandomIS.setEnabled(false);
 
         jButtonSaveDatasets.setEnabled(false);
@@ -4527,9 +3668,22 @@ public class RunApp extends javax.swing.JFrame {
     }//GEN-LAST:event_radioNoISActionPerformed
 
     private void export2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_export2ActionPerformed
-        // TODO add your handling code here:
         button_export_ActionPerformed(evt, tableImbalance);
     }//GEN-LAST:event_export2ActionPerformed
+
+    private void radioExamplesPerLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioExamplesPerLabelMouseClicked
+        tableImbalance.clearSelection();
+        if(label_frenquency == null) return;
+
+        double [] label_frenquency_values = util.get_label_frequency(label_frenquency);
+
+        HeapSort.sort(label_frenquency_values);
+
+        cp_box.getChart().setTitle("# Examples per Label");
+        cp_box.getChart().getXYPlot().clearAnnotations();
+
+        util.update_values_xydataset(cp_box, HeapSort.get_array_sorted());
+    }//GEN-LAST:event_radioExamplesPerLabelMouseClicked
 
     private void showHeatMap(){
         if(lista_pares== null) 
@@ -4554,14 +3708,10 @@ public class RunApp extends javax.swing.JFrame {
         {
             seleccionados.add((tableHeatmapLeft.getValueAt(selecteds[i], 0).toString()));
             selectedIndex.add(getLabelIndex((tableHeatmapLeft.getValueAt(selecteds[i], 0).toString())));
-           // selectedIndex.add(selecteds[i]);
-            //System.out.println(dataset.getLabelNames()[i]);
-            //selectedIndex.add(getLabelIndex(tableHeatmapLeft.getValueAt(selecteds[i], 0).toString()));
         }
           
         Collections.sort(selectedIndex);
-       //System.out.println("Show Heatmap selected: " + Arrays.toString(selectedIndex.toArray()));
-        
+
         double [][] newCoeffs = new double[selectedIndex.size()][selectedIndex.size()];
 
         
@@ -4615,9 +3765,7 @@ public class RunApp extends javax.swing.JFrame {
         }
         
         Arrays.sort(selectedIndex);
-        
-       //System.out.println("HEatmap selectedindex: " + Arrays.toString(selectedIndex));
-          
+ 
         double [][] newCoeffs = new double[n][n];
 
         
@@ -4649,12 +3797,8 @@ public class RunApp extends javax.swing.JFrame {
         }
 
         Vector<Integer> selectedIndex = new Vector<Integer>();
-        //tableHeatmapLeft.setRowSelectionInterval(0, n-1);
         int[] selecteds = getTopRelatedHeatmap(n);
         Arrays.sort(selecteds);
-        //tableHeatmapLeft.setRowSelectionInterval(selecteds[0], selecteds[n-1]);
-       //System.out.println("selecteds: " + Arrays.toString(selecteds));
-
         
         for(int i=0;i<selecteds.length; i++)
         {
@@ -4673,7 +3817,7 @@ public class RunApp extends javax.swing.JFrame {
         heatMap = Create_heatmap_graph(panelHeatmap, newCoeffs, null, heatMap);
     }
     
-    private void initializeTableMetrics(){
+    private void initTableMetrics(){
         ArrayList<String> metricsList = util.Get_all_metrics();
         
         tableMetrics.clear();
@@ -4683,7 +3827,7 @@ public class RunApp extends javax.swing.JFrame {
         }
     }
     
-    private void initializeTableMetricsMulti(String dataName){
+    private void initTableMetricsMulti(String dataName){
         ArrayList<String> metricsList = util.Get_metrics_multi();
         
         tableMetricsMulti.get(dataName).clear();
@@ -4693,38 +3837,13 @@ public class RunApp extends javax.swing.JFrame {
         }
     }
     
-    private void initializeTableMetricsCommon(){
-        ArrayList<String> metricsList = util.Get_common_metrics();
-        
-        tableMetrics_common.clear();
-        
-        for(int i=0; i<metricsList.size(); i++){
-            tableMetrics_common.put(metricsList.get(i), "-");
-        }
-    }
-    
-    private void initializeTableMetricsTrainTest(){
-        ArrayList<String> metricsList = util.Get_test_metrics();
-        
-        tableMetrics_train.clear();
-        tableMetrics_test.clear();
-        
-        for(int i=0; i<metricsList.size(); i++){
-            tableMetrics_train.put(metricsList.get(i), "-");
-            tableMetrics_test.put(metricsList.get(i), "-");
-        }
-    }
-    
-       private void save_as_ActionPerformed1(java.awt.event.ActionEvent evt) throws AWTException, IOException
+    private void save_as_ActionPerformed1(java.awt.event.ActionEvent evt) throws AWTException, IOException
     {
         BufferedImage image = new Robot().createScreenCapture(new Rectangle(panelHeatmap.getLocationOnScreen().x, panelHeatmap.getLocationOnScreen().y, panelHeatmap.getWidth(), panelHeatmap.getHeight()));
+        JFileChooser fc= new JFileChooser();
+        
+        FileNameExtensionFilter fname1 = new FileNameExtensionFilter(".png", "png");
 
-       // JFILECHOOSER SAVE
-         JFileChooser fc= new JFileChooser();
-        
-         FileNameExtensionFilter fname1 = new FileNameExtensionFilter(".png", "png");
-        
-        //eliminar el que tiene por defecto
         fc.removeChoosableFileFilter(fc.getChoosableFileFilters()[0]);
 
         fc.setFileFilter(fname1);
@@ -4735,10 +3854,6 @@ public class RunApp extends javax.swing.JFrame {
         if (returnVal == JFileChooser.APPROVE_OPTION)
         {                               
             File file =new File(fc.getSelectedFile().getAbsolutePath()+".png");
-                  
-            // TODO add your handling code here:
-            //jpanel25
-                
             ImageIO.write(image, "png", file);
                 
             JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
@@ -4748,15 +3863,12 @@ public class RunApp extends javax.swing.JFrame {
     
     private void save_as_ActionPerformed(java.awt.event.ActionEvent evt) throws AWTException, IOException
     {
-        
         BufferedImage image = new Robot().createScreenCapture(new Rectangle(panelCoOcurrenceRight.getLocationOnScreen().x, panelCoOcurrenceRight.getLocationOnScreen().y, panelCoOcurrenceRight.getWidth(), panelCoOcurrenceRight.getHeight()));
-         
-       // JFILECHOOSER SAVE
-         JFileChooser fc= new JFileChooser();
+
+        JFileChooser fc= new JFileChooser();
         
-         FileNameExtensionFilter fname1 = new FileNameExtensionFilter(".png", "png");
-        
-        //eliminar el que tiene por defecto
+        FileNameExtensionFilter fname1 = new FileNameExtensionFilter(".png", "png");
+
         fc.removeChoosableFileFilter(fc.getChoosableFileFilters()[0]);
 
         fc.setFileFilter(fname1);
@@ -4766,33 +3878,23 @@ public class RunApp extends javax.swing.JFrame {
          
         if (returnVal == JFileChooser.APPROVE_OPTION)
         {                               
-              
-                  File file =new File(fc.getSelectedFile().getAbsolutePath()+".png");
-                  
-              // TODO add your handling code here:
-              //jpanel25
-               
-                ImageIO.write(image, "png", file);
+            File file =new File(fc.getSelectedFile().getAbsolutePath()+".png");
+
+            ImageIO.write(image, "png", file);
                 
-                JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                Toolkit.getDefaultToolkit().beep();
-            
-              
-        }
-        
-        
+            JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+            Toolkit.getDefaultToolkit().beep();     
+        } 
     }
     
     private void start_config_multiples_datasets()
     {
-      lista_son_meka = new ArrayList();
-      list_dataset = new ArrayList();
-      Dataset_names = new ArrayList();
-      listMultipleDatasetsLeft.setModel(lista);
+        lista_son_meka = new ArrayList();
+        list_dataset = new ArrayList();
+        Dataset_names = new ArrayList();
+        listMultipleDatasetsLeft.setModel(lista);
     }
     
-    
-    //CREA EL GRAFO EN LA PESTAÑA "vISUALIZE"/"GRAPH CO-OCURRENCE"
     private mxGraphComponent Create_jgraphx(JPanel jpanel , ArrayList<pares_atributos> mi_lista, String[] Label_name,mxGraphComponent graphComponent_viejo )
     {
         mxGraph graph = new mxGraph();
@@ -4810,21 +3912,19 @@ public class RunApp extends javax.swing.JFrame {
         atributo current;
         double freq;
         
-        int min = 0; //util.get_valor_min_entre_pares_atrr(mi_lista);
-        int max = 1; //util.get_valor_max_entre_pares_atrr(mi_lista);
+        int min = 0;
+        int max = 1;
         int cant_intervalos = 10;           
         int fortaleza;
   
         try
         {
-            //create vertexs
+            //create vertices
             for(int i=0;i<Label_name.length;i++)
             {
                 current = util.Get_label_x_labelname(Label_name[i],label_x_frequency);
-                freq = current.get_frequency()/(dataset.getNumInstances()*1.0);//# de ocurrencia 
-                
-                //System.out.println("cantidad de veces que se repite "+Label_name[i]+" es "+freq );
-                
+                freq = current.get_frequency()/(dataset.getNumInstances()*1.0);
+
                 fortaleza =  util.get_valor_fortaleza(min, max, cant_intervalos, freq);
                 
                 if(fortaleza==1)lista_vertices[i]= graph.insertVertex(parent, null,Label_name[i], aleatorio.nextInt(430), aleatorio.nextInt(280), Label_name[i].length()*6,20);      
@@ -4836,69 +3936,59 @@ public class RunApp extends javax.swing.JFrame {
                 else if (fortaleza==7) lista_vertices[i]= graph.insertVertex(parent, null,Label_name[i], aleatorio.nextInt(430), aleatorio.nextInt(280), Label_name[i].length()*5,20,"strokeWidth=7");      
                 else if (fortaleza==8) lista_vertices[i]= graph.insertVertex(parent, null,Label_name[i], aleatorio.nextInt(430), aleatorio.nextInt(280), Label_name[i].length()*5,20,"strokeWidth=8");      
                 else if (fortaleza==9) lista_vertices[i]= graph.insertVertex(parent, null,Label_name[i], aleatorio.nextInt(430), aleatorio.nextInt(280), Label_name[i].length()*5,20,"strokeWidth=9");      
-                else lista_vertices[i]= graph.insertVertex(parent, null,Label_name[i], aleatorio.nextInt(430), aleatorio.nextInt(280), Label_name[i].length()*5,20,"strokeWidth=10");      
-                    
-                    
+                else lista_vertices[i]= graph.insertVertex(parent, null,Label_name[i], aleatorio.nextInt(430), aleatorio.nextInt(280), Label_name[i].length()*5,20,"strokeWidth=10");       
             }
             
             ArrayList<String> lista_del_otro_par;
-            //create edges 
             
-            if(!mi_lista.isEmpty()){
+            //create edges             
+            if(!mi_lista.isEmpty()){         
+            
+                pares_atributos temp;
 
-          
-            
-            pares_atributos temp;
-            
-            for(int i=0;i<Label_name.length;i++)
-            {
-                lista_del_otro_par=util.Get_lista_vertices_del_par(Label_name[i], mi_lista);//devuelve el extremo que forma el par de etiquetas
-                
-                 
-                for(String actual : lista_del_otro_par)
+                for(int i=0;i<Label_name.length;i++)
                 {
-                    int index = util.devuelve_indice(Label_name, actual);
-                    
-                    temp =util.Search_and_get(Label_name[i], actual, mi_lista);
-                    freq = temp.get_cant_veces()/(dataset.getNumInstances()*1.0);
-                    
-                    fortaleza =  util.get_valor_fortaleza(min, max, cant_intervalos,freq );
-                    
-                    //System.out.println("pares a buscar "+ Label_name[i]+" "+ actual);
-                    //System.out.println("fortaleza ="+fortaleza);
-                    
-                    if(fortaleza==1) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=1");
-                    else if (fortaleza==2) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=2");
-                    else if (fortaleza==3) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=3");
-                    else if (fortaleza==4) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=4");
-                    else if (fortaleza==5) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=5");
-                    else if (fortaleza==6) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=6");
-                    else if (fortaleza==7) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=7");
-                    else if (fortaleza==8) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=8");
-                    else if (fortaleza==9) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=9");
-                    else graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=3");
-                }
-                
-            }           
-              }
+                    lista_del_otro_par=util.Get_lista_vertices_del_par(Label_name[i], mi_lista);
+
+                    for(String actual : lista_del_otro_par)
+                    {
+                        int index = util.devuelve_indice(Label_name, actual);
+
+                        temp =util.Search_and_get(Label_name[i], actual, mi_lista);
+                        freq = temp.get_cant_veces()/(dataset.getNumInstances()*1.0);
+
+                        fortaleza =  util.get_valor_fortaleza(min, max, cant_intervalos,freq );
+
+                        if(fortaleza==1) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=1");
+                        else if (fortaleza==2) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=2");
+                        else if (fortaleza==3) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=3");
+                        else if (fortaleza==4) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=4");
+                        else if (fortaleza==5) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=5");
+                        else if (fortaleza==6) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=6");
+                        else if (fortaleza==7) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=7");
+                        else if (fortaleza==8) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=8");
+                        else if (fortaleza==9) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=9");
+                        else graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=3");
+                    }
+                }           
+            }
         }
         finally
         {
             graph.getModel().endUpdate();
         }
         
-        if(graphComponent_viejo !=null) jpanel.remove(graphComponent_viejo); // esto es el santo grial!! 
+        if(graphComponent_viejo !=null) jpanel.remove(graphComponent_viejo);
        
         
         graph.setCellsEditable(false);
-        graph.setAllowDanglingEdges(false); //deshabilita que las aristas se desprendan
+        graph.setAllowDanglingEdges(false);
         
 	mxGraphComponent graphComponent = new mxGraphComponent(graph);               
         graphComponent.getGraph().getModel().endUpdate();
                 
  
         jpanel.setLayout(new BorderLayout());
-        //jpanel.setPreferredSize(new Dimension(584, 399));//POR FIN!!
         jpanel.setPreferredSize(new Dimension(550, 425));
         jpanel.add(graphComponent,BorderLayout.CENTER);
         
@@ -4911,7 +4001,6 @@ public class RunApp extends javax.swing.JFrame {
  
     }
     
-    
     private HeatMap Create_heatmap_graph(JPanel jpanel, double [][] coefficients, ArrayList<pares_atributos> mi_lista, HeatMap old_heatmap)
     {
         Color [] colors = new Color[256];
@@ -4919,8 +4008,7 @@ public class RunApp extends javax.swing.JFrame {
         for(int i=0; i<colors.length; i++){
             colors[i] = new Color(i, i, i);
         }
-        
-        
+
         HeatMap heatMap = null;
         
         double [][] newCoefs = coefficients.clone();
@@ -4951,11 +4039,6 @@ public class RunApp extends javax.swing.JFrame {
                     newCoefs[i][j] = coefficients[(int)sortedSelected.get(i)][(int)sortedSelected.get(j)];
                 }
             }
-            
-           //System.out.println("NEWCOEFS");
-            for(int i=0; i<sortedSelected.size(); i++){
-               //System.out.println(Arrays.toString(newCoefs[i]));
-            }
         }
         
         heatMap = new HeatMap(newCoefs, false, colors);
@@ -4965,7 +4048,6 @@ public class RunApp extends javax.swing.JFrame {
         }
             
         jpanel.setLayout(new BorderLayout());
-        //jpanel.setPreferredSize(new Dimension(584, 399));//POR FIN!!
         jpanel.setPreferredSize(new Dimension(550, 425));
         jpanel.add(heatMap,BorderLayout.CENTER);
 
@@ -4975,114 +4057,75 @@ public class RunApp extends javax.swing.JFrame {
         return heatMap;
     }
     
-    
-    
-    // UNA VEZ CARGADO EL DATASET, COMIENZA A MOSTRAR LAS PRIMERAS METRICAS SELECCIONADAS EN LA PESTAÑA 
     private void Load_dataset(String filename_database_arff, String filename_database_xml )
     {
-        //System.out.println(filename_database_arff);
- 
         try {        
-             export2.setVisible(true); //boton salvar de la tabla de la izquierda en class imbalance
-            
+            export2.setVisible(true);
+                         
+            if(tabsDependences.getSelectedIndex()==0){
+                jLabelChiFi_text.setVisible(true);
+            }
+            else{
+                jLabelChiFi_text.setVisible(false);
+            }
+ 
+            if(tabsImbalance.getSelectedIndex()==5){
+               radioExamplesPerLabel.setVisible(true);
+               radioExamplesPerLabelset.setVisible(true);
+            }
+            else {
+               radioExamplesPerLabel.setVisible(false);
+               radioExamplesPerLabelset.setVisible(false);
+            }
              
-             if(tabsDependences.getSelectedIndex()==0)jLabelChiFi_text.setVisible(true);
-             else jLabelChiFi_text.setVisible(false);
-            
-             
-             //para el box diagram
-             if(tabsImbalance.getSelectedIndex()==5){
-                 //jPanel15.setVisible(true);
-                radioExamplesPerLabel.setVisible(true);
-                radioExamplesPerLabelset.setVisible(true);
-             }
-             else {
-                 //jPanel15.setVisible(false);
-                radioExamplesPerLabel.setVisible(false);
-                radioExamplesPerLabelset.setVisible(false);
-             }
-            
-             if(tabsImbalance.getSelectedIndex()==3
-                     || tabsImbalance.getSelectedIndex()==4) 
-             {
-                 //labelIR1.setVisible(true);
-                 //labelIR2.setVisible(true);
-             }
-             else 
-             {
-                 //labelIR1.setVisible(false);
-                 //labelIR2.setVisible(false);
-             }
-             
-             
-            //restableciendo valores
             dataset_train= null;
             dataset_test= null;
-            filename_database_arff_test=null;//es el encargado de cargar un test
+            filename_database_arff_test=null;
             
-             //new Instances
+            //new Instances
               
             if(filename_database_xml == null){
                 MekaToMulan m = new MekaToMulan();
-               //System.out.println(filename_database_arff);
                 m.convertir(filename_database_arff, filename_database_arff+"_mulan");
-            
                 dataset = new MultiLabelInstances(filename_database_arff+"_mulan.arff", filename_database_arff+"_mulan.xml");
-                
-                /*File f = new File(filename_database_arff+"_mulan.arff");
-                f.delete();*/
                 File f2 = new File(filename_database_arff+"_mulan.xml");
-               //System.out.println("f2: " + f2.getAbsolutePath());
                 f2.delete();
             }
             else{
                 dataset = new MultiLabelInstances(filename_database_arff, filename_database_xml);
             }
-            
-              
-             label_frenquency = util.Get_Frequency_x_label(dataset);
-             label_frenquency = util.Ordenar_freq_x_attr(label_frenquency);// ordena de mayor a menor
+
+            label_frenquency = util.Get_Frequency_x_label(dataset);
+            label_frenquency = util.Ordenar_freq_x_attr(label_frenquency);
              
-             label_imbalanced = util.Get_data_imbalanced_x_label_inter_class(dataset,label_frenquency);
+            label_imbalanced = util.Get_data_imbalanced_x_label_inter_class(dataset,label_frenquency);
              
-             IR_intra_class = util.get_ir_values_intra_class(label_imbalanced);
-             HeapSort.sort(IR_intra_class);
-             IR_intra_class = HeapSort.get_array_sorted();
-             
-             //    }
-           
+            IR_intra_class = util.get_ir_values_intra_class(label_imbalanced);
+            HeapSort.sort(IR_intra_class);
+            IR_intra_class = HeapSort.get_array_sorted();
+
             stat1 = new Statistics();
             stat1.calculateStats(dataset);
                                     
             radio=  metrics.DistincLabelset(stat1) /(double)dataset.getNumInstances();
 
             num_instancias = dataset.getNumInstances();
-            
-            //Print_Metrics(dataset);
+
             Print_main_metric_dataset(dataset, stat1);
-             
-            // graphic label_x_frequency jchart
-             label_x_frequency = util.Get_Frequency_x_label(dataset);
+
+            label_x_frequency = util.Get_Frequency_x_label(dataset);
              
 
-             
-             //actualiza label distribution bar BR a pestaña class imbalance
-             CategoryPlot temp1 = cp3.getChart().getCategoryPlot();
-             temp1.clearRangeMarkers();
-             util.update_values_bar_chart(label_x_frequency,num_instancias,temp1); //actualiza los valores del dataset
-             
-             //actualiza label distribution line pestaña class imbalance
-              HashMap<Integer,Integer> labels_x_example = Get_labelset_x_values(stat1);
+            CategoryPlot temp1 = cp3.getChart().getCategoryPlot();
+            temp1.clearRangeMarkers();
+            util.update_values_bar_chart(label_x_frequency,num_instancias,temp1);
+
+            HashMap<Integer,Integer> labels_x_example = Get_labelset_x_values(stat1);
                             
-             util.update_values_line_chart(num_instancias,cp11.getChart().getCategoryPlot(),labels_x_example); //actualiza los valores del dataset
-             
-             
-             //print frequency´s table         
-             //jtable_frequency(jTable2,dataset);
+            util.update_values_line_chart(num_instancias,cp11.getChart().getCategoryPlot(),labels_x_example);
                    
-             temp1 = cp22.getChart().getCategoryPlot();
-             temp1.clearRangeMarkers();
-             //actualiza label distribution bar LP a pestaña class imbalance 
+            temp1 = cp22.getChart().getCategoryPlot();
+            temp1.clearRangeMarkers();
             tm_LP1= jchart_and_jtable_label_combination_freq(tableImbalance,dataset,stat1,temp1);
 
             tm_IR = jtable_imbalanced(tableImbalance,dataset);  
@@ -5093,8 +4136,7 @@ public class RunApp extends javax.swing.JFrame {
             tm_heapmap_graph = jtable_label_graph(tableCoOcurrenceLeft, dataset);
             tm_labelxExamples = jtable_lablelsxExamples(tableImbalance, labels_x_example);
             
-            
-            tm_ir_per_label_intra_class = jtable_ir_per_label_intra_class(tableImbalance);   //tiene que ejecutarse despues del jtable_imbalanced para que cargue los datos imbabalanced.
+            tm_ir_per_label_intra_class = jtable_ir_per_label_intra_class(tableImbalance); 
             tm_ir_per_label_inter_class = jtable_ir_per_label_inter_class(tableImbalance);  
             
             tm_ir_per_label_inter_class_only = jtable_ir_per_label_inter_class_only(tableImbalance);
@@ -5103,17 +4145,7 @@ public class RunApp extends javax.swing.JFrame {
             temp1=cp_per_labelset.getChart().getCategoryPlot();
             temp1.clearRangeMarkers();
             tm_ir_per_labelset = jchart_and_jtable_label_set_IR(tableImbalance,dataset,stat1,cp_per_labelset.getChart().getCategoryPlot());
-            
-            
-            //temp1 = cp_ir_x_label_intra_class.getChart().getCategoryPlot();
-            //temp1.clearRangeMarkers();
-            //util.update_values_line_chart(id_x_IR, id_x_nums_label, cp_ir_x_label_intra_class.getChart().getCategoryPlot()); //tiene que ejecutarse despues del jtable_ir_per_label_intra_class para que cargue los datos imbabalanced.
-            
-            //temp1 = cp_ir_x_label_inter_class.getChart().getCategoryPlot();
-            //temp1.clearRangeMarkers();
-            
-            //util.update_values_line_chart(ir_veces.Get_Id_x_IR(), ir_veces.Get_Id_x_Cant_veces(), cp_ir_x_label_inter_class.getChart().getCategoryPlot()); //tiene que ejecutarse despues del jtable_ir_per_label_intra_class para que cargue los datos imbabalanced.
-            
+
             //ir per label inter class only
             temp1= cp_ir_x_label_inter_class_only.getChart().getCategoryPlot();
             temp1.clearRangeMarkers();
@@ -5127,1342 +4159,457 @@ public class RunApp extends javax.swing.JFrame {
             
             if(tm_BR1 !=null && tm_LP1!=null)
             {               
-                
-            if(tabsImbalance.getSelectedIndex()==1)
-            {
-                tableImbalance.setModel(tm_LP1);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset frequency"));
-                
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
+                if(tabsImbalance.getSelectedIndex()==1)
+                {
+                    tableImbalance.setModel(tm_LP1);
+                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset frequency"));
 
-            }
-            else if (tabsImbalance.getSelectedIndex()==4) // ir per labelset
-            {
-                tableImbalance.setModel(tm_ir_per_labelset);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelsets Imbalance Ratio"));
-                
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-                
-                /*
-                jTable4.setModel(tm_IR);
-                
-                jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder("Imabalance ratio per label"));
-                jTable4.setDefaultRenderer(Object.class, new Mi_Render_IR(1,2));
-                jPanel17.repaint();
-                jPanel17.validate();
-                */
-            }
-            
-            else if (tabsImbalance.getSelectedIndex()==0)
-            {
-                tableImbalance.setModel(tm_BR1);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Label frequency"));
-                
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-            }
-           
-            else if (tabsImbalance.getSelectedIndex()==3)
-            {
-                tableImbalance.setModel(tm_ir_per_label_intra_class_only);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance Ratio intra class"));
-                
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-            }
-            
-            else if (tabsImbalance.getSelectedIndex()==2)
-            {
-                tableImbalance.setModel(tm_labelxExamples);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels histogram"));
-                
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-                
-               /* jTable4.setModel(tm_ir_per_label_inter_class);
-                jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder("Number of labels inter class per IR"));
-                
-                jTable4.setDefaultRenderer(Object.class, new Mi_Render_IR(2));
-                jPanel17.repaint();
-                jPanel17.validate();*/
-            }
-                       
-            else if (tabsImbalance.getSelectedIndex()==6)
-            {
-                tableImbalance.setModel(tm_ir_per_label_inter_class_only);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance ratio inter class"));
-                
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-            }
-            
-            
-            else if (tabsImbalance.getSelectedIndex()==5)
-            {
-                tableImbalance.setModel(tm_attr);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Numeric attributes"));
-                
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-                
-            }
-            
-            else
-            {
-                tableImbalance.setModel(tm_labelxExamples);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels histogram"));
-                
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-            }
+                    tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
+                    panelImbalanceLeft.repaint();
+                    panelImbalanceLeft.validate();
 
-            tableImbalance.repaint();
-            tableImbalance.validate();
-            // //System.out.println("SE HA PRESIONADO el "+jTabbedPane2.getSelectedIndex() );
-        }
+                }
+                else if (tabsImbalance.getSelectedIndex()==4) // ir per labelset
+                {
+                    tableImbalance.setModel(tm_ir_per_labelset);
+                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelsets Imbalance Ratio"));
+
+                    tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
+                    panelImbalanceLeft.repaint();
+                    panelImbalanceLeft.validate();
+
+                }
+                else if (tabsImbalance.getSelectedIndex()==0)
+                {
+                    tableImbalance.setModel(tm_BR1);
+                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Label frequency"));
+
+                    tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
+                    panelImbalanceLeft.repaint();
+                    panelImbalanceLeft.validate();
+                }
+                else if (tabsImbalance.getSelectedIndex()==3)
+                {
+                    tableImbalance.setModel(tm_ir_per_label_intra_class_only);
+                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance Ratio intra class"));
+
+                    tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
+                    panelImbalanceLeft.repaint();
+                    panelImbalanceLeft.validate();
+                }
+                else if (tabsImbalance.getSelectedIndex()==2)
+                {
+                    tableImbalance.setModel(tm_labelxExamples);
+                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels histogram"));
+
+                    tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
+                    panelImbalanceLeft.repaint();
+                    panelImbalanceLeft.validate();
+                }
+                else if (tabsImbalance.getSelectedIndex()==6)
+                {
+                    tableImbalance.setModel(tm_ir_per_label_inter_class_only);
+                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance ratio inter class"));
+
+                    tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
+                    panelImbalanceLeft.repaint();
+                    panelImbalanceLeft.validate();
+                }
+                else if (tabsImbalance.getSelectedIndex()==5)
+                {
+                    tableImbalance.setModel(tm_attr);
+                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Numeric attributes"));
+
+                    tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
+                    panelImbalanceLeft.repaint();
+                    panelImbalanceLeft.validate();
+
+                }
+                else
+                {
+                    tableImbalance.setModel(tm_labelxExamples);
+                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels histogram"));
+
+                    tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
+                    panelImbalanceLeft.repaint();
+                    panelImbalanceLeft.validate();
+                }
+                tableImbalance.repaint();
+                tableImbalance.validate();
+            }
             
             
-            // Tabla de chi y fi cuadrado.
-            jtable_chi_fi_coefficient(dataset); //jtable de chi & fi coefficient
+            jtable_chi_phi_coefficient(dataset);
             
             double critical_value = 6.635;
-            
-            //jTable10.setModel(tm_coefficient);
-            //cambia los colores de la celda creando una instancia de la clase MiRender
+
             jTable10.setDefaultRenderer(Object.class, new MiRender("chi_fi",critical_value ));
             fixedTable.setDefaultRenderer(Object.class, new MiRender("chi_fi_fixed", critical_value));
             
-            
             panelChiPhi.repaint();
             panelChiPhi.validate();
-           
-            
-             //tm_coocurrences   
-              lista_pares = util.Get_pares_atributos(dataset);   
-             
-             //tm_coocurrences = jtable_coefficient_values(dataset, lista_pares,"coocurrence");
-            // jTable11.setModel(tm_coocurrences);
-              
-             jtable_coefficient_values(dataset, lista_pares,"coocurrence");
-             jTable11.setDefaultRenderer(Object.class, new MiRender("estandar",Double.MAX_VALUE));
-             fixedTable1.setDefaultRenderer(Object.class, new MiRender("chi_fi_fixed",Double.MAX_VALUE));
-           
-             panelCoOcurrenceValues.repaint();
-             panelCoOcurrenceValues.validate();
 
-             //tm heapmap values
-             //tm_heapmap_values = jtable_coefficient_values(dataset, lista_pares, "heapmap");
-             //jTable12.setModel(tm_heapmap_values);
+            //tm_coocurrences   
+            lista_pares = util.Get_pares_atributos(dataset);   
              
-             jtable_coefficient_values(dataset, lista_pares,"heapmap");
-             jTable12.setDefaultRenderer(Object.class, new MiRender("estandar",Double.MAX_VALUE));
-             fixedTable2.setDefaultRenderer(Object.class, new MiRender("chi_fi_fixed",Double.MAX_VALUE));
+            jtable_coefficient_values(dataset, lista_pares,"coocurrence");
+            jTable11.setDefaultRenderer(Object.class, new MiRender("estandar",Double.MAX_VALUE));
+            fixedTable1.setDefaultRenderer(Object.class, new MiRender("chi_fi_fixed",Double.MAX_VALUE));
+           
+            panelCoOcurrenceValues.repaint();
+            panelCoOcurrenceValues.validate();
+
+            jtable_coefficient_values(dataset, lista_pares,"heapmap");
+            jTable12.setDefaultRenderer(Object.class, new MiRender("estandar",Double.MAX_VALUE));
+            fixedTable2.setDefaultRenderer(Object.class, new MiRender("chi_fi_fixed",Double.MAX_VALUE));
              
-             panelHeatmapValues.repaint();
-             panelHeatmapValues.validate();
-            
-             //graph co-ocurrence           
-             //String[] labelname= dataset.getLabelNames();
-             
+            panelHeatmapValues.repaint();
+            panelHeatmapValues.validate();
+
             tableCoOcurrenceLeft.setRowSelectionAllowed(true);
             tableCoOcurrenceLeft.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
               
-            tableCoOcurrenceLeft.setModel(tm_jgraph); //tabla del grafo coocurrence
-            tableHeatmapLeft.setModel(tm_heapmap_graph); //tabla del heapmap graph
-            
-         //escoger los 6 primeros labels mas frequentes de la tabla
-             
-         ArrayList<String> seleccionados= new  ArrayList();
+            tableCoOcurrenceLeft.setModel(tm_jgraph);
+            tableHeatmapLeft.setModel(tm_heapmap_graph);
 
-         int primeros_seleccionados=10;
-        if(primeros_seleccionados> dataset.getNumLabels()) {
-            primeros_seleccionados = dataset.getNumLabels();
-        }
+            ArrayList<String> seleccionados= new  ArrayList();
+
+            int primeros_seleccionados=10;
+            if(primeros_seleccionados> dataset.getNumLabels()) {
+                primeros_seleccionados = dataset.getNumLabels();
+            }
          
-        String current=null; 
-               
-        for(int i=0;i<primeros_seleccionados; i++)
-        {
-            current = (tableCoOcurrenceLeft.getValueAt(i, 0).toString());
-            if(current != null){
-                seleccionados.add(current);
-            }
-            else break;
-        }
-        
-        seleccionados = selectTopCoocurrenceLabels(10, true);
+            String current=null; 
 
-       ArrayList<pares_atributos> pares_seleccionados = util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
+            for(int i=0;i<primeros_seleccionados; i++)
+            {
+                current = (tableCoOcurrenceLeft.getValueAt(i, 0).toString());
+                if(current != null){
+                    seleccionados.add(current);
+                }
+                else break;
+            }
         
-       String[] labelname1=util.pasa_valores_al_arreglo(seleccionados);
+            seleccionados = selectTopCoocurrenceLabels(10, true);
+
+            ArrayList<pares_atributos> pares_seleccionados = util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
+        
+            String[] labelname1=util.pasa_valores_al_arreglo(seleccionados);
        
+            graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname1,graphComponent);
 
-      graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname1,graphComponent);
-
-            
-            ////System.out.println("dimensiones del panel jpanel25 "+jPanel25.getBounds().width+ " , "+ jPanel25.getBounds().height);
-        //    graphComponent  =  Create_jgraphx(jPanel10,lista_pares,labelname,graphComponent);// balanced
-            //create_button_export(jPanel25 ,export6,350,370);
-
-
-            //System.out.println("dimensiones son "+ jLabel20.getBounds().width+" ancho ,"+ jLabel20.getBounds().height+" alto ");
-            
             label_indices_seleccionados = dataset.getLabelIndices();
-            //jheat_chart= create_heapmap(labelHeatmapGraph, dataset); // balanced
-            //create_heatmap(panelHeatmap);
             heatMap = Create_heatmap_graph(panelHeatmap, getHeatMapCoefficients(), null, heatMap);
-            
-            
-             //util.get_chi_fi_coefficient(dataset);
         
-             // jpanel8 box diagram
-              cp_box.getChart().getXYPlot().clearAnnotations();
+            // jpanel8 box diagram
+             cp_box.getChart().getXYPlot().clearAnnotations();
                
-              DefaultXYDataset xyseriescollection = new DefaultXYDataset();
-              DefaultXYDataset xyseriescollection1 = new DefaultXYDataset();
+            DefaultXYDataset xyseriescollection = new DefaultXYDataset();
+            DefaultXYDataset xyseriescollection1 = new DefaultXYDataset();
               
-              cp_box.getChart().getXYPlot().setDataset(xyseriescollection);             
-              cp_box.getChart().getXYPlot().setDataset(1, xyseriescollection1);
+            cp_box.getChart().getXYPlot().setDataset(xyseriescollection);             
+            cp_box.getChart().getXYPlot().setDataset(1, xyseriescollection1);
             
-              //TRAIN TEST
-              jButtonSaveDatasets.setEnabled(false);
-              jComboBox_SaveFormat.setEnabled(false);
-              //button_calculate2_train.setEnabled(false);
-              //button_save_train.setEnabled(false);
-             
-            }
-        catch (InvalidDataFormatException ex) {
+            //TRAIN TEST
+            jButtonSaveDatasets.setEnabled(false);
+            jComboBox_SaveFormat.setEnabled(false);
+        } catch (InvalidDataFormatException ex) {
             Logger.getLogger(CrossValidationExperiment.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(null,ex.getMessage(),"Error",JOptionPane.INFORMATION_MESSAGE);
-           //System.out.println("Error: " + ex);
             Logger.getLogger(CrossValidationExperiment.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     public ArrayList<String> selectTopCoocurrenceLabels(int n, boolean selectInTable){
             
-            LabelsPairValue p = new LabelsPairValue();
+        LabelsPairValue p = new LabelsPairValue();
             
-            ArrayList<String> pares = new ArrayList<String>();
+        ArrayList<String> pares = new ArrayList<String>();
             
-            ArrayList<LabelsPairValue> pairs = new ArrayList<LabelsPairValue>();
-            for(int i=0; i<coocurrence_coefficients.length; i++){
-                for(int j=0; j<coocurrence_coefficients.length; j++){
-                    if(coocurrence_coefficients[i][j] >= 0){
-                        pairs.add(new LabelsPairValue(i, j, coocurrence_coefficients[i][j]));
-                    }
+        ArrayList<LabelsPairValue> pairs = new ArrayList<LabelsPairValue>();
+        for(int i=0; i<coocurrence_coefficients.length; i++){
+            for(int j=0; j<coocurrence_coefficients.length; j++){
+                if(coocurrence_coefficients[i][j] >= 0){
+                    pairs.add(new LabelsPairValue(i, j, coocurrence_coefficients[i][j]));
                 }
             }
-            Collections.sort(pairs, Collections.reverseOrder());
-            
-           //System.out.println("COCURRENCE-> " + Arrays.toString(pairs.toArray()));
+        }
+        Collections.sort(pairs, Collections.reverseOrder());
 
-            int numLabels = n;
-            int currentSelectedLabels = 0;
+        int numLabels = n;
+        int currentSelectedLabels = 0;
 
-            Vector<Integer> selectedLabels = new Vector<Integer>();
+        Vector<Integer> selectedLabels = new Vector<Integer>();
 
-            do{
-                if(!selectedLabels.contains(pairs.get(0).label1)){
-                    selectedLabels.add(pairs.get(0).label1);
-                   //System.out.println("Add " + pairs.get(0).label1);
+        do{
+            if(!selectedLabels.contains(pairs.get(0).label1)){
+                selectedLabels.add(pairs.get(0).label1);
+                currentSelectedLabels++;
+            }
+                
+            if(currentSelectedLabels < numLabels){
+                if(!selectedLabels.contains(pairs.get(0).label2)){
+                    selectedLabels.add(pairs.get(0).label2);
                     currentSelectedLabels++;
                 }
-                
-                if(currentSelectedLabels < numLabels){
-                    if(!selectedLabels.contains(pairs.get(0).label2)){
-                        selectedLabels.add(pairs.get(0).label2);
-                       //System.out.println("Add " + pairs.get(0).label2);
-                        currentSelectedLabels++;
-                    }
-                }
-                
-                pairs.remove(pairs.get(0));
-            }while((pairs.size() > 0) && (currentSelectedLabels < numLabels));
-
-            String s = new String();
-            
-            for(int i=0; i<selectedLabels.size(); i++){
-                s = jTable11.getColumnName(selectedLabels.get(i));
-
-                if(s != null){
-                    pares.add(s);
-                }
             }
-            
-            if(selectInTable){
-                tableCoOcurrenceLeft.clearSelection();
                 
-                String labelName;
-                for(int i=0; i<selectedLabels.size(); i++){
-                    //Get label name
-                    labelName = dataset.getLabelNames()[selectedLabels.get(i)];
-                    for(int r=0; r<tableCoOcurrenceLeft.getRowCount(); r++){
-                        if(tableCoOcurrenceLeft.getValueAt(r, 0).equals(labelName)){
-                            tableCoOcurrenceLeft.addRowSelectionInterval(r, r);
-                        }
-                    }
-                    //tableCoOcurrenceLeft.addRowSelectionInterval(selectedLabels.get(i), selectedLabels.get(i));
-                }
-            }
+            pairs.remove(pairs.get(0));
+        }while((pairs.size() > 0) && (currentSelectedLabels < numLabels));
 
-             return pares;
+        String s = new String();
+            
+        for(int i=0; i<selectedLabels.size(); i++){
+            s = jTable11.getColumnName(selectedLabels.get(i));
+
+            if(s != null){
+                pares.add(s);
+            }
         }
-    
-    
+        
+        if(selectInTable){
+            tableCoOcurrenceLeft.clearSelection();
+                
+            String labelName;
+            for(int i=0; i<selectedLabels.size(); i++){
+                labelName = dataset.getLabelNames()[selectedLabels.get(i)];
+                for(int r=0; r<tableCoOcurrenceLeft.getRowCount(); r++){
+                    if(tableCoOcurrenceLeft.getValueAt(r, 0).equals(labelName)){
+                        tableCoOcurrenceLeft.addRowSelectionInterval(r, r);
+                    }
+                }   
+            }
+        }
+        return pares;
+    }
+     
     public ArrayList<String> selectTopHeatmapLabels(int n, boolean selectInTable){
             
-            LabelsPairValue p = new LabelsPairValue();
+        LabelsPairValue p = new LabelsPairValue();
             
-            ArrayList<String> pares = new ArrayList<String>();
+        ArrayList<String> pares = new ArrayList<String>();
             
-            ArrayList<LabelsPairValue> pairs = new ArrayList<LabelsPairValue>();
-            for(int i=0; i<heatmap_coefficients.length; i++){
-                for(int j=0; j<heatmap_coefficients.length; j++){
-                    if(heatmap_coefficients[i][j] >= 0){
-                        pairs.add(new LabelsPairValue(i, j, heatmap_coefficients[i][j]));
-                    }
+        ArrayList<LabelsPairValue> pairs = new ArrayList<LabelsPairValue>();
+        for(int i=0; i<heatmap_coefficients.length; i++){
+            for(int j=0; j<heatmap_coefficients.length; j++){
+                if(heatmap_coefficients[i][j] >= 0){
+                    pairs.add(new LabelsPairValue(i, j, heatmap_coefficients[i][j]));
                 }
             }
-            Collections.sort(pairs, Collections.reverseOrder());
-            
-           //System.out.println("HEATMAP-> " + Arrays.toString(pairs.toArray()));
-
-            int numLabels = n;
-            int currentSelectedLabels = 0;
-
-            Vector<Integer> selectedLabels = new Vector<Integer>();
-
-            do{
-                if(!selectedLabels.contains(pairs.get(0).label1)){
-                    selectedLabels.add(pairs.get(0).label1);
-                   //System.out.println("Add " + pairs.get(0).label1);
-                    currentSelectedLabels++;
-                }
-                
-                if(currentSelectedLabels < numLabels){
-                    if(!selectedLabels.contains(pairs.get(0).label2)){
-                        selectedLabels.add(pairs.get(0).label2);
-                       //System.out.println("Add " + pairs.get(0).label2);
-                        currentSelectedLabels++;
-                    }
-                }
-                
-                pairs.remove(pairs.get(0));
-            }while((pairs.size() > 0) && (currentSelectedLabels < numLabels));
-
-            String s = new String();
-            
-            for(int i=0; i<selectedLabels.size(); i++){
-                s = jTable12.getColumnName(selectedLabels.get(i));
-
-                if(s != null){
-                    pares.add(s);
-                }
-            }
-            
-            if(selectInTable){
-                tableHeatmapLeft.clearSelection();
-                
-                String labelName;
-                for(int i=0; i<selectedLabels.size(); i++){
-                    //Get label name
-                    labelName = dataset.getLabelNames()[selectedLabels.get(i)];
-                    for(int r=0; r<tableHeatmapLeft.getRowCount(); r++){
-                        if(tableHeatmapLeft.getValueAt(r, 0).equals(labelName)){
-                            tableHeatmapLeft.addRowSelectionInterval(r, r);
-                        }
-                    }
-                    //tableCoOcurrenceLeft.addRowSelectionInterval(selectedLabels.get(i), selectedLabels.get(i));
-                }
-            }
-
-             return pares;
         }
+        Collections.sort(pairs, Collections.reverseOrder());
+        
+        int numLabels = n;
+        int currentSelectedLabels = 0;
+
+        Vector<Integer> selectedLabels = new Vector<Integer>();
+
+        do{
+            if(!selectedLabels.contains(pairs.get(0).label1)){
+                selectedLabels.add(pairs.get(0).label1);
+                currentSelectedLabels++;
+            }
+                
+            if(currentSelectedLabels < numLabels){
+                if(!selectedLabels.contains(pairs.get(0).label2)){
+                    selectedLabels.add(pairs.get(0).label2);
+                        currentSelectedLabels++;
+                }
+            }
+                
+            pairs.remove(pairs.get(0));
+        }while((pairs.size() > 0) && (currentSelectedLabels < numLabels));
+
+        String s = new String();
+            
+        for(int i=0; i<selectedLabels.size(); i++){
+            s = jTable12.getColumnName(selectedLabels.get(i));
+
+            if(s != null){
+                pares.add(s);
+            }
+        }
+            
+        if(selectInTable){
+            tableHeatmapLeft.clearSelection();
+                
+            String labelName;
+            for(int i=0; i<selectedLabels.size(); i++){
+                //Get label name
+                labelName = dataset.getLabelNames()[selectedLabels.get(i)];
+                for(int r=0; r<tableHeatmapLeft.getRowCount(); r++){
+                    if(tableHeatmapLeft.getValueAt(r, 0).equals(labelName)){
+                        tableHeatmapLeft.addRowSelectionInterval(r, r);
+                    }
+                }
+            }
+        }
+        
+        return pares;
+    }
     
     private void Print_main_metric_dataset(MultiLabelInstances dataset, Statistics stat1 )
     {
-        /*
-        MLDataEvaluator mldEvaluator = new MLDataEvaluator(dataset);
-        
-        mldEvaluator.addMetric("Instances");
-        mldEvaluator.addMetric("Attributes");
-        mldEvaluator.addMetric("Labels");
-        mldEvaluator.addMetric("Density");
-        mldEvaluator.addMetric("Cardinality");
-        mldEvaluator.addMetric("Diversity");
-        mldEvaluator.addMetric("Bound");
-        mldEvaluator.addMetric("Distinct labelsets");
-        mldEvaluator.addMetric("Labels x instances x features");
-        
-        mldEvaluator.calculate();
-        
-        String valueInstances = String.valueOf(mldEvaluator.getMetric("Instances").getValue());
-        String valueAttributes = String.valueOf(mldEvaluator.getMetric("Attributes").getValue());
-        String valueLabels = String.valueOf(mldEvaluator.getMetric("Labels").getValue());
-        String valueDensity = String.valueOf(mldEvaluator.getMetric("Density").getValue());
-        String valueCardinality = String.valueOf(mldEvaluator.getMetric("Cardinality").getValue());
-        String valueDiversity = String.valueOf(mldEvaluator.getMetric("Diversity").getValue());
-        String valueBound = String.valueOf(mldEvaluator.getMetric("Bound").getValue());
-        String valueDistinct = String.valueOf(mldEvaluator.getMetric("Distinct labelsets").getValue());
-        String valueLIF = String.valueOf(mldEvaluator.getMetric("Labels x instances x features").getValue());
-        labelInstancesValue.setText(util.getValueFormatted("Instances", valueInstances));
-        labelAttributesValue.setText(util.getValueFormatted("Attributes", valueAttributes));
-        labelLabelsValue.setText(util.getValueFormatted("Labels", valueLabels));
-        labelDensityValue.setText(util.getValueFormatted("Density", valueDensity));
-        labelCardinalityValue.setText(util.getValueFormatted("Cardinality", valueCardinality));
-        labelDiversityValue.setText(util.getValueFormatted("Diversity", valueDiversity));
-        labelBoundValue.setText(util.getValueFormatted("Bound", valueBound));
-        labelDistinctValue.setText(util.getValueFormatted("Distinct labelsets", valueDistinct));
-        labelLxIxFValue.setText(util.getValueFormatted("Labels x instances x features", valueLIF));
-        */
-        
-            //Instances i1= dataset.getDataSet();
+        //Relation
+        if(dataset_current_name.length() > 30){
+            labelRelationValue.setText(dataset_current_name.substring(0, 28) + "...");
+        }
+        else{
+            labelRelationValue.setText(dataset_current_name);
+        }
 
-                     
-            //Relation
-            if(dataset_current_name.length() > 30){
-                labelRelationValue.setText(dataset_current_name.substring(0, 28) + "...");
-            }
-            else{
-                labelRelationValue.setText(dataset_current_name);
-            }
+        //Instances
+        String num_instancias = util.get_value_metric("Instances", dataset, es_de_tipo_meka);
+        labelInstancesValue.setText(util.getValueFormatted("Instances", num_instancias));
             
+        //Attributes
+        String num_atributos = util.get_value_metric("Attributes", dataset, es_de_tipo_meka);
+        labelAttributesValue.setText(util.getValueFormatted("Attributes", num_atributos));
             
-            //Instances
-            String num_instancias = util.get_value_metric("Instances", dataset, es_de_tipo_meka);
-            labelInstancesValue.setText(util.getValueFormatted("Instances", num_instancias));
+        //Labels
+        labelLabelsValue.setText(util.getValueFormatted("Labels", util.get_value_metric("Labels", dataset, es_de_tipo_meka)));
             
-            //Attributes
-            String num_atributos = util.get_value_metric("Attributes", dataset, es_de_tipo_meka);
-            labelAttributesValue.setText(util.getValueFormatted("Attributes", num_atributos));
-            
-            //Labels
-            labelLabelsValue.setText(util.getValueFormatted("Labels", util.get_value_metric("Labels", dataset, es_de_tipo_meka)));
-            
-            //Density
-            String density = util.get_value_metric("Density", dataset, es_de_tipo_meka);
-            labelDensityValue.setText(util.getValueFormatted("Density", density));
+        //Density
+        String density = util.get_value_metric("Density", dataset, es_de_tipo_meka);
+        labelDensityValue.setText(util.getValueFormatted("Density", density));
                       
-            //Cardinality
-            String cardinality = util.get_value_metric("Cardinality", dataset, es_de_tipo_meka);
-            labelCardinalityValue.setText(util.getValueFormatted("Cardinality", cardinality));
+        //Cardinality
+        String cardinality = util.get_value_metric("Cardinality", dataset, es_de_tipo_meka);
+        labelCardinalityValue.setText(util.getValueFormatted("Cardinality", cardinality));
             
-            //Diversity      
-            String diversity = util.get_value_metric("Diversity", dataset, es_de_tipo_meka);
-            labelDiversityValue.setText(util.getValueFormatted("Diversity", diversity));
+        //Diversity      
+        String diversity = util.get_value_metric("Diversity", dataset, es_de_tipo_meka);
+        labelDiversityValue.setText(util.getValueFormatted("Diversity", diversity));
             
-            //Bound
-            String bound = util.get_value_metric("Bound", dataset, es_de_tipo_meka);
-            labelBoundValue.setText(util.getValueFormatted("Bound", bound));
+        //Bound
+        String bound = util.get_value_metric("Bound", dataset, es_de_tipo_meka);
+        labelBoundValue.setText(util.getValueFormatted("Bound", bound));
             
-            //Distinct labelset     
-            String distinct_labelset = util.get_value_metric("Distinct labelsets", dataset, es_de_tipo_meka);
-            labelDistinctValue.setText(util.getValueFormatted("Distinct labelsets", distinct_labelset));
+        //Distinct labelset     
+        String distinct_labelset = util.get_value_metric("Distinct labelsets", dataset, es_de_tipo_meka);
+        labelDistinctValue.setText(util.getValueFormatted("Distinct labelsets", distinct_labelset));
             
-            //LxIxF
-            String LIF = util.get_value_metric("Labels x instances x features", dataset, es_de_tipo_meka);
-            labelLxIxFValue.setText(util.getValueFormatted("Labels x instances x features", LIF));
-            
+        //LxIxF
+        String LIF = util.get_value_metric("Labels x instances x features", dataset, es_de_tipo_meka);
+        labelLxIxFValue.setText(util.getValueFormatted("Labels x instances x features", LIF));    
     }
   
-    
-    private void button_calculateActionPerformed1_general(java.awt.event.ActionEvent evt, JTable jtable, JTable jtable1, JTable jtable2)
+    private void button_saveActionPerformed_principal(java.awt.event.ActionEvent evt, JTable jtable) throws IOException
     {
-
-    }
-    
-    
-    // CALCULA LAS METRICAS SELECCIONADAS EN LA PESTAÑA TEST
-    private void button_calculateActionPerformed1(java.awt.event.ActionEvent evt, JTable jtable, JTable jtable1, JTable jtable2)
-    {
-       ArrayList<String> metric_list_commun = Get_metrics_selected_principal(jtable);
-       ArrayList<String> metric_list_train = Get_metrics_selected_test(jtable2);
-       ArrayList<String> metric_list_test = Get_metrics_selected_test(jtable2);
-       
-       if(dataset == null) {
-           JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
+        ArrayList<String> metric_list = Get_metrics_selected_principal(jtable);
+                
+        if(dataset == null) {
+            JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
             return; 
-       }
-
-       boolean flag=true;
-        
-       if(!list_dataset_train.isEmpty()){
-           flag=false;
-       }
-       
-       
-       if((dataset_train ==null || dataset_test == null) && flag ){
-            JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE); 
-            return;
-       }
-       
-       
-       if((dataset_train ==null || dataset_test == null))
-       {
-            JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE); 
-            return;
-       }
-         
-       
-       String value = new String();
-       //Common metrics
-        for(String metric : metric_list_commun)
-        {
-            //If metric value exists, don't calculate
-           if((tableMetrics_common.get(metric) == null) || (tableMetrics_common.get(metric).equals("-"))){
-               value= util.get_value_metric(metric, dataset_train, es_de_tipo_meka); //can  be dataset_test too
-                      
-                if(value.equals("-1.000") || value.equals("-1,000")){
-                    value = util.get_alternative_metric(metric, dataset_train, dataset_test);
-                }
-
-                tableMetrics_common.put(metric, value.replace(",", "."));
-           }           
         }
         
-        //Train metrics
-        atributo[] label_frenquency = util.Get_Frequency_x_label(dataset_train);
-        label_frenquency = util.Ordenar_freq_x_attr(label_frenquency);// ordena de mayor a menor
-             
-        atributo[] imbalanced_data =  util.Get_data_imbalanced_x_label_inter_class(dataset_train,label_frenquency);
+        JFileChooser fc= new JFileChooser();
         
-        for(String metric : metric_list_train)
-        {
-            //If metric value exists, don't calculate
-            if((tableMetrics_train.get(metric) == null) || (tableMetrics_train.get(metric).equals("-"))){
-                value= util.get_value_metric(metric, dataset_train, es_de_tipo_meka);
-                if(value.equals("-1.000") || value.equals("-1,000")) {
-                    value = util.get_value_metric_imbalanced(metric, dataset_train, imbalanced_data);
-                }
-                if(value.equals("-1.000") || value.equals("-1,000")) {
-                    value ="NaN";
-                }
-                tableMetrics_train.put(metric, value.replace(",", "."));
-            }
-        }
-        
-        //Test metrics
-        label_frenquency = util.Get_Frequency_x_label(dataset_test);
-        label_frenquency = util.Ordenar_freq_x_attr(label_frenquency);// ordena de mayor a menor
-        
-        imbalanced_data = util.Get_data_imbalanced_x_label_inter_class(dataset_test,label_frenquency);
-        
-        for(String metric : metric_list_test)
-        {
-           //If metric value exists, don't calculate
-           if((tableMetrics_test.get(metric) == null) || (tableMetrics_test.get(metric).equals("-"))){
-               value= util.get_value_metric(metric, dataset_test, es_de_tipo_meka);
-                if(value.equals("-1.000") || value.equals("-1,000")) {
-                    value = util.get_alternative_metric(metric, dataset_train, dataset_test);
-                }
-                if(value.equals("-1.000") || value.equals("-1,000")) {
-                    value = util.get_value_metric_imbalanced(metric, dataset_test, imbalanced_data);
-                }
-                if(value.equals("-1.000") || value.equals("-1,000")) {
-                    value ="NaN";
-                }
-                tableMetrics_test.put(metric, value.replace(",", "."));
-           }
-        }
-       
-        TableModel model = jtable.getModel();
-        
-        for(int i=0; i<model.getRowCount(); i++){
-            model.setValueAt(tableMetrics_common.get(model.getValueAt(i, 0).toString()), i, 1);
-        }
-        
-        jtable.repaint();
-        
-        model = jtable2.getModel();
-        
-        for(int i=0; i<model.getRowCount(); i++){
-            model.setValueAt(tableMetrics_train.get(model.getValueAt(i, 0).toString()), i, 1);
-            model.setValueAt(tableMetrics_test.get(model.getValueAt(i, 0).toString()), i, 2);
-        }
-        
-        jtable2.repaint();
-       
-       //metric_output mo = new metric_output(metric_list_commun,metric_list_train,metric_list_test,dataset_train,dataset_test, posx, posy,es_de_tipo_meka);
-       //mo.setVisible(true);
-
-       
-
-    } 
-    
-    
-     // CALCULA LAS METRICAS SELECCIONADAS EN LA PESTAÑA TEST PARA CROSS VALIDATION
-    private void button_calculateActionPerformed1(java.awt.event.ActionEvent evt, JTable jtable, JTable jtable1, JTable jtable2, ArrayList<MultiLabelInstances> list_datasets_train, ArrayList<MultiLabelInstances> list_datasets_test )
-    {       
-       ArrayList<String> metric_list_commun = Get_metrics_selected_principal(jtable);
-       ArrayList<String> metric_list_train = Get_metrics_selected_test(jtable2);
-       ArrayList<String> metric_list_test = Get_metrics_selected_test(jtable2);
-       
-       if(dataset == null) {
-           JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
-           return; 
-       }
-       
-       
-       boolean flag=true;
-       
-       String temp,temp1,value="";
-       
-       ArrayList<Double> lista_valores;
-       double current_double;
-       
-       MultiLabelInstances current;
-        
-        for(String metric : metric_list_commun)
-        {
-            //If metric value exists, don't calculate
-           if((tableMetrics_common.get(metric) == null) || (tableMetrics_common.get(metric).equals("-"))){
-               value= metric+ util.get_tabs_multi_datasets(metric);
-
-                lista_valores= new ArrayList();
-                current_double=-1.0;
-
-                for(int n=0; n<list_datasets_train.size();n++)
-                {
-                     temp = util.get_value_metric(metric, list_datasets_train.get(n), es_de_tipo_meka); //can  be dataset_test too
-
-                     if(temp.equals( "-1.000" ) || temp.equals( "-1,000" )) {
-                         temp = util.get_alternative_metric(metric, list_datasets_train.get(n), list_datasets_test.get(n));
-                     }
-
-                     //System.out.println(temp);
-                     temp=temp.replace(",", ".");
-                     //System.out.println(temp);
-                     current_double = Double.parseDouble(temp);
-
-                     if(Double.isNaN(current_double) || current_double==-1.0){
-                         break;
-                     }
-
-                     lista_valores.add(current_double);
-
-                }    
-                tableMetrics_common.put(metric, Double.toString(util.Get_media(lista_valores)).replace(",", "."));     
-           }         
-        }
-        
-        
-        
-        atributo[] imbalanced_data,imbalanced_data1, label_frequency,label_frequency1;
-        flag =true;
-        
-
-        
-        //Train metrics
-        for(String metric : metric_list_train)
-        {
-            //If metric value exists, don't calculate
-           if((tableMetrics_train.get(metric) == null) || (tableMetrics_train.get(metric).equals("-"))){
-               value= metric+ util.get_tabs_multi_datasets(metric);
-            
-                lista_valores= new ArrayList();
-                current_double=-1.0;
-
-                for(int n=0; n<list_datasets_train.size();n++)
-                {
-                    current = list_datasets_train.get(n);
-
-                    label_frequency = util.Get_Frequency_x_label(current);
-                    label_frequency = util.Ordenar_freq_x_attr(label_frequency);// ordena de mayor a menor
-
-                    imbalanced_data = util.Get_data_imbalanced_x_label_inter_class(current,label_frequency);
-
-                     temp= util.get_value_metric(metric, list_datasets_train.get(n), es_de_tipo_meka); 
-                    //System.out.println(temp);              
-
-                    if(temp.equals( "-1.0" )){
-                        temp = util.get_value_metric_imbalanced(metric, list_datasets_train.get(n), imbalanced_data);
-                       //System.out.println(temp);
-                    }
-                    if(temp.equals( "-1.0" )) {
-                        temp ="NaN";
-                       //System.out.println(temp);
-                    }
-
-                    temp=temp.replace(",", ".");
-                    current_double = Double.parseDouble(temp);
-
-                    if(Double.isNaN(current_double) || current_double==-1.0){
-                        break;
-                    }
-
-                    lista_valores.add(current_double);
-
-                }         
-
-                tableMetrics_train.put(metric, Double.toString(util.Get_media(lista_valores)).replace(",", "."));
-           }
-        }
-        
-        
-        //Test metrics
-        for(String metric : metric_list_test)
-        {
-            //If metric value exists, don't calculate
-           if((tableMetrics_test.get(metric) == null) || (tableMetrics_test.get(metric).equals("-"))){
-               value= metric+ util.get_tabs_multi_datasets(metric);
-            
-                lista_valores= new ArrayList();
-                current_double=-1.0;
-
-                for(int n=0; n<list_datasets_test.size();n++)
-                {
-                    current = list_datasets_test.get(n);
-
-                    label_frequency = util.Get_Frequency_x_label(current);
-                    label_frequency = util.Ordenar_freq_x_attr(label_frequency);// ordena de mayor a menor
-
-                    imbalanced_data = util.Get_data_imbalanced_x_label_inter_class(current,label_frequency);
-
-                     temp= util.get_value_metric(metric, list_datasets_test.get(n), es_de_tipo_meka); 
-
-                    if(temp.equals( "-1.0" )){
-                        temp = util.get_value_metric_imbalanced(metric, list_datasets_test.get(n), imbalanced_data);
-                    }
-                    if(temp.equals( "-1.0" )) {
-                        temp ="NaN";
-                    }
-
-                    temp=temp.replace(",", ".");
-                    current_double = Double.parseDouble(temp);
-
-                    if(Double.isNaN(current_double) || current_double==-1.0){
-                        break;
-                    }
-
-                    lista_valores.add(current_double);
-
-                }         
-
-                tableMetrics_test.put(metric, Double.toString(util.Get_media(lista_valores)).replace(",", "."));
-           }
-
-        }
-        
-        
-        TableModel model = jtable.getModel();
-        
-        for(int i=0; i<model.getRowCount(); i++){
-            model.setValueAt(tableMetrics_common.get(model.getValueAt(i, 0).toString()), i, 1);
-        }
-        
-        jtable.repaint();
-        
-        model = jtable2.getModel();
-        
-        for(int i=0; i<model.getRowCount(); i++){
-            model.setValueAt(tableMetrics_train.get(model.getValueAt(i, 0).toString()), i, 1);
-            model.setValueAt(tableMetrics_test.get(model.getValueAt(i, 0).toString()), i, 2);
-        }
-        
-        jtable2.repaint();
-       
-    }   
-    
-    //SALVAR EN LA PESTAÑA TRAIN/TEST DATASET
-     private void button_saveActionPerformed1(java.awt.event.ActionEvent evt, JTable jtable, JTable jtable1, JTable jtable2) throws IOException
-    {
-       ArrayList<String> metric_list_commun = Get_metrics_selected_principal(jtable);
-       ArrayList<String> metric_list_train = Get_metrics_selected_test(jtable2);
-       ArrayList<String> metric_list_test = Get_metrics_selected_test(jtable2);
-      
-       String dataset_name11;
-      
-       if(dataset == null ) {
-           JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
-           return; }
-       
-       if((dataset_train ==null || dataset_test == null )&& list_dataset_train.isEmpty()){
-            JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE); 
-            return;}
-       
-       
-       
-       // JFILECHOOSER SAVE
-         JFileChooser fc= new JFileChooser();
-        
-         // extension txt
+        // extension txt
         FileNameExtensionFilter fname = new FileNameExtensionFilter(".txt", "txt");
-        FileNameExtensionFilter fname1 = new FileNameExtensionFilter(".csv", "csv");
-        FileNameExtensionFilter fname2 = new FileNameExtensionFilter("MEKA-arff", "MEKA-arff");
-        FileNameExtensionFilter fname3 = new FileNameExtensionFilter("MULAN-arff", "MULAN-arff");
+        FileNameExtensionFilter fname2 = new FileNameExtensionFilter(".csv", "csv");
+        FileNameExtensionFilter fname3 = new FileNameExtensionFilter(".arff", ".arff");
+        FileNameExtensionFilter fname4 = new FileNameExtensionFilter(".tex", ".tex");
         
-        //eliminar el que tiene por defecto
+        //Remove default
         fc.removeChoosableFileFilter(fc.getChoosableFileFilters()[0]);
+
+        fc.addChoosableFileFilter(fname);
+        fc.addChoosableFileFilter(fname2);
+        fc.addChoosableFileFilter(fname3);
+        fc.addChoosableFileFilter(fname4);
         
         fc.setFileFilter(fname);
-        fc.setFileFilter(fname2);
-        fc.setFileFilter(fname3);
-        fc.setFileFilter(fname1);
-        
-        fc.addChoosableFileFilter(fname);
-        String path;
         
         int returnVal = fc.showSaveDialog(this);
          
         if (returnVal == JFileChooser.APPROVE_OPTION)
         {
-               File file = fc.getSelectedFile();
-                FileFilter f1 = fc.getFileFilter();
+            File file = fc.getSelectedFile();
+            FileFilter f1 = fc.getFileFilter();
                 
-              if(f1.getDescription().equals(".txt"))
-                {
-               
-                //This is where a real application would save the file.
-               ////System.out.println("Saving: "  + file.getName()+ " ruta "+file.getAbsolutePath());
-                
-                // BufferedWriter AND  PrintWriter
-                path = file.getAbsolutePath() +".txt";
+            if(f1.getDescription().equals(".txt"))
+            {
+                String path = file.getAbsolutePath() +".txt";
                 
                 BufferedWriter bw = new BufferedWriter(new FileWriter(path));
                 PrintWriter wr = new PrintWriter(bw);
                 
-                if(radioRandomCV.isSelected() || radioIterativeStratifiedCV.isSelected())//CV STRATIFIED AND RAMDON
-                {
-                    //System.out.println("se va a guardar los txt");
-                    util.Save_in_the_file_txt(wr,metric_list_commun,metric_list_train,metric_list_test,list_dataset_train,list_dataset_test, es_de_tipo_meka);
-                }
-               // util.Save_in_the_file(wr, metric_list, dataset, stat1);
-                else{
-                util.Save_in_the_file(wr, metric_list_commun, metric_list_train, metric_list_test, dataset_train, dataset_test, es_de_tipo_meka);
-                }
+                util.Save_text_file(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
                 
-                JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                 wr.close();
-                bw.close();      
-                }
-              
-              else if(f1.getDescription().equals(".csv"))
-               {
+                bw.close(); 
+                    
+                JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);     
+            }
+            else if(f1.getDescription().equals(".tex"))
+            {
+                String path = file.getAbsolutePath() +".tex";
                 
-                  if(radioRandomCV.isSelected() || radioIterativeStratifiedCV.isSelected())//CV STRATIFIED AND RAMDON
-                    {
-                      try
-                        {
-                            dataset_name11 = dataset_name1.substring(0,dataset_name1.length()-5);
-                            path = file.getAbsolutePath() +".csv";
-                            
-                            Exporter exp = new Exporter(new File(path), metric_list_commun,metric_list_train,metric_list_test);
-                     
-                             if(exp.exporta(list_dataset_train,list_dataset_test,dataset_name11,es_de_tipo_meka))
-                                 {
-                                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                                 }
-                        }
+                BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+                PrintWriter wr = new PrintWriter(bw);
+                
+                util.Save_tex_file(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
+                
+                wr.close();
+                bw.close(); 
+                    
+                JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+            }
+            else if(f1.getDescription().equals(".csv"))
+            {
+                String path = file.getAbsolutePath() +".csv";
 
-                      catch(Exception e1)
-                        {
-                           //System.out.println("Error: " +  e1.getMessage());
-                            JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
-                        }   
-                        
-                      //util.Save_in_the_file_csv(wr,metric_list_commun,metric_list_train,metric_list_test,list_dataset_train,list_dataset_test,dataset_current_name);
-                    }
-                  
-                  else //holdout STRATIFIED AND RAMDON
-                  {
-                      try
-                        {
-                            dataset_name11 = dataset_name1.substring(0,dataset_name1.length()-5);
-                            path = file.getAbsolutePath() +".csv";
-                            
-                            Exporter exp = new Exporter(new File(path), metric_list_commun,metric_list_train,metric_list_test);
-                     
-                             if(exp.exporta(dataset_train,dataset_test,dataset_name11,es_de_tipo_meka))
-                                 {
-                                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                                 }
-                        }
-
-                      catch(Exception e1)
-                        {
-                           //System.out.println("este es el mensaje "+e1.getMessage());
-                            JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
-                        }   
-                      //util.Save_in_the_file_csv(wr, metric_list_commun, metric_list_train, metric_list_test, dataset_train, dataset_test,dataset_current_name);
-                  }
-
-               }
-              
-              else if (f1.getDescription().equals("MEKA-arff"))
-                {
+                BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+                PrintWriter wr = new PrintWriter(bw);
+                
+                util.Save_csv_file(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
+                
+                wr.close();
+                bw.close(); 
                     
-                    path = file.getAbsolutePath() +".arff";
+                JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+            }
+            else if (f1.getDescription().equals(".arff"))
+            {
+                String path = file.getAbsolutePath() +".arff";
                 
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                    PrintWriter wr = new PrintWriter(bw);
+                BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+                PrintWriter wr = new PrintWriter(bw);
+                
+                util.Save_meka_file(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
+                
+                wr.close();
+                bw.close(); 
                     
-                    //adaptar el metric_list y el list_dataset
-                    
-                    ArrayList<String> metric_list_all = new ArrayList(metric_list_commun);
-                    
-                    for(String current : metric_list_test)
-                        metric_list_all.add(current);
-                    
-                    if(radioRandomCV.isSelected() || radioIterativeStratifiedCV.isSelected())//CV STRATIFIED AND RAMDON
-                    {
-                         util.Save_in_the_file_arff_meka(wr, metric_list_all, list_dataset_train,list_dataset_test,file.getName(),es_de_tipo_meka);
-                    }
-                    else
-                    {
-                        util.Save_in_the_file_arff_meka(wr, metric_list_all, dataset_train, dataset_test, dataset_name1, es_de_tipo_meka);
-                    }
-                                   
-                    
-                    
-                    wr.close();
-                    bw.close();      
-                    
-                   JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                   
-                }
-              
-                else if (f1.getDescription().equals("MULAN-arff"))
-                {
-                    
-                    path = file.getAbsolutePath() +".arff";
+                JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                 
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                    PrintWriter wr = new PrintWriter(bw);
-                    
-                    //adaptar el metric_list y el list_dataset
-                    
-                    ArrayList<String> metric_list_all = new ArrayList(metric_list_commun);
-                    
-                    for(String current : metric_list_test)
-                        metric_list_all.add(current);
-                    
-                    if(radioRandomCV.isSelected() || radioIterativeStratifiedCV.isSelected())//CV STRATIFIED AND RAMDON
-                    {
-                         util.Save_in_the_file_arff_mulan(wr, metric_list_all, list_dataset_train,list_dataset_test,file.getName(), es_de_tipo_meka);
-                    }
-                    else
-                    {
-                        util.Save_in_the_file_arff_mulan(wr, metric_list_all, dataset_train, dataset_test, dataset_name1, es_de_tipo_meka);
-                    }
-                                   
-                    
-                    
-                    wr.close();
-                    bw.close();      
-                    
-                   JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                   
-                }
+            }
                 
-        } 
-    }
-     
-     //BOTON GRAPHIC EN LA PESTAÑA MULTIDATASET
-     private void button_graphicActionPerformed_multidatasets(java.awt.event.ActionEvent evt)throws IOException
-     {
-        //PieChart demo = new PieChart("Comparison", "Which operating system are you using?");
-         
-           
-       if(list_dataset.isEmpty()) {
-           JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
-           return; 
-       }
-                    
-         grapchics demo = new grapchics(list_dataset, Dataset_names);
-         demo.setVisible(true);
-     }
-     
-     // BOTON SALVAR EN LA PESTAÑA MULTI DATASET
-     private void button_saveActionPerformed_multidatasets(java.awt.event.ActionEvent evt, JTable jtable) throws IOException
-    {
-        ArrayList<String> metric_list = Get_metrics_selected(jtable);
-        
-        
-       if(list_dataset.isEmpty()) {
-           JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
-           return; 
-       }
-                 
-       // JFILECHOOSER SAVE
-         JFileChooser fc= new JFileChooser();
-        
-         // extension txt
-        FileNameExtensionFilter fname = new FileNameExtensionFilter(".csv", "csv");
-        FileNameExtensionFilter fname1 = new FileNameExtensionFilter(".xls", "xls");
-        FileNameExtensionFilter fname2 = new FileNameExtensionFilter("MULAN-arff", "MULAN-arff");
-        FileNameExtensionFilter fname3 = new FileNameExtensionFilter("MEKA-arff", "MEKA-arff");
-        
-        //eliminar el que tiene por defecto
-        fc.removeChoosableFileFilter(fc.getChoosableFileFilters()[0]);
-        
-        fc.addChoosableFileFilter(fname);
-        fc.addChoosableFileFilter(fname1);
-        fc.addChoosableFileFilter(fname2);          
-        fc.addChoosableFileFilter(fname3);   
-        
-        //fc.setFileFilter(fname);
-        
-        int returnVal = fc.showSaveDialog(this);
-        
-               
-        //String FilePath = SomeFile.getPath();  
-         
-        if (returnVal == JFileChooser.APPROVE_OPTION  )
-        {
-            
-                File file = fc.getSelectedFile();
-                FileFilter f1 = fc.getFileFilter();
-                
-               //System.out.println("escogio la opcion "+f1.getDescription());
-               
-                if(f1.getDescription().equals(".csv"))
-                {
-                      String path = file.getAbsolutePath() +".csv";
-                      Exporter exp = new Exporter(new File(path));
-                     
-                     if(exp.exporta(metric_list,list_dataset,Dataset_names,es_de_tipo_meka))
-                     {
-                     }
-                     
-                }
-                
-                else if(f1.getDescription().equals(".xls"))
-                {
-                      String path = file.getAbsolutePath() +".xls";
-                      Exporter exp = new Exporter(new File(path));
-                     
-                     if(exp.exporta(metric_list,list_dataset,Dataset_names,es_de_tipo_meka))
-                     {
-                         
-                     }
-                     
-                }
-                
-                else if (f1.getDescription().equals("MULAN-arff"))
-                {
-                    
-                    String path = file.getAbsolutePath() +".arff";
-                
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                    PrintWriter wr = new PrintWriter(bw);
-                                   
-                    util.Save_in_the_file_arff(wr, metric_list, list_dataset,file.getName(), es_de_tipo_meka);
-                    
-                    wr.close();
-                    bw.close();      
-                    
-                
-                }
-                
-                 else if (f1.getDescription().equals("MEKA-arff"))
-                {
-                    
-                    String path = file.getAbsolutePath() +".arff";
-                
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                    PrintWriter wr = new PrintWriter(bw);
-                                   
-                    util.Save_in_the_file_arff_meka(wr, metric_list, list_dataset,file.getName(), es_de_tipo_meka);
-                    
-                    wr.close();
-                    bw.close();      
-                    
-                
-                }
-                
-           JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
-           Toolkit.getDefaultToolkit().beep();
-                
-        } 
-
-        
-    }
-             
-             
-             
-     //BOTON SALVAR EN LA PESTAÑA DATABASE
-     private void button_saveActionPerformed(java.awt.event.ActionEvent evt, JTable jtable) throws IOException
-    {
-        ArrayList<String> metric_list = Get_metrics_selected(jtable);
-        
-        
-         if(dataset == null) {
-           JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
-           return; 
-       }
-             
-        
-       // JFILECHOOSER SAVE
-         JFileChooser fc= new JFileChooser();
-        
-         // extension txt
-        FileNameExtensionFilter fname = new FileNameExtensionFilter(".txt", "txt");
-        FileNameExtensionFilter fname1 = new FileNameExtensionFilter(".csv", "csv");
-        FileNameExtensionFilter fname3 = new FileNameExtensionFilter("MEKA-arff", "MEKA-arff");
-        
-        //eliminar el que tiene por defecto
-        fc.removeChoosableFileFilter(fc.getChoosableFileFilters()[0]);
-        
-        fc.setFileFilter(fname);
-        fc.setFileFilter(fname3);
-        fc.setFileFilter(fname1);
-        
-        
-        fc.addChoosableFileFilter(fname);
-        
-        int returnVal = fc.showSaveDialog(this);
-         
-        if (returnVal == JFileChooser.APPROVE_OPTION)
-        {
-                File file = fc.getSelectedFile();
-                FileFilter f1 = fc.getFileFilter();
-                
-                if(f1.getDescription().equals(".txt"))
-                {
-                     String path = file.getAbsolutePath() +".txt";
-                
-                     BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                     PrintWriter wr = new PrintWriter(bw);
-                
-                     util.Save_in_the_file(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka);
-                
-                    wr.close();
-                    bw.close(); 
-                    
-                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                    
-                }
-                
-               else if(f1.getDescription().equals(".csv"))
-               {
-              
-                try
-                 {
-                     dataset_name1 = dataset_name1.substring(0,dataset_name1.length()-5);
-                     String path = file.getAbsolutePath() +".csv";
-                      Exporter exp = new Exporter(new File(path), dataset_name1);
-                     
-                     if(exp.exporta(metric_list,dataset,es_de_tipo_meka))
-                     {
-                         JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                     }
-                 }
-                 catch(Exception e1)
-                 {
-                     JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
-                 }   
-                
-               }
-                
-                //COMPROBAR SI TIENE SENTIDO SALVAR UNA SOLA LINEA.
-               else if (f1.getDescription().equals("MEKA-arff"))
-                {
-                    
-                    String path = file.getAbsolutePath() +".arff";
-                
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                    PrintWriter wr = new PrintWriter(bw);
-                    
-                    ArrayList<MultiLabelInstances> list_dataset1 = new ArrayList();
-                    list_dataset1.add(dataset);
-                                   
-                    util.Save_in_the_file_arff_meka(wr, metric_list, list_dataset1,file.getName(), es_de_tipo_meka);
-                    
-                    wr.close();
-                    bw.close();      
-                    
-                  JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);     
-                }
-                
-           Toolkit.getDefaultToolkit().beep();
-        } 
-
-            
-        
-    }
-     
-     
-      private void button_saveActionPerformed_principal(java.awt.event.ActionEvent evt, JTable jtable) throws IOException
-    {
-        ArrayList<String> metric_list = Get_metrics_selected_principal(jtable);
-        
-        
-         if(dataset == null) {
-           JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
-           return; 
-       }
-             
-        
-       // JFILECHOOSER SAVE
-         JFileChooser fc= new JFileChooser();
-        
-         // extension txt
-        FileNameExtensionFilter fname = new FileNameExtensionFilter(".txt", "txt");
-        FileNameExtensionFilter fname2 = new FileNameExtensionFilter(".csv", "csv");
-        FileNameExtensionFilter fname3 = new FileNameExtensionFilter(".arff", ".arff");
-        FileNameExtensionFilter fname4 = new FileNameExtensionFilter(".tex", ".tex");
-        
-        //eliminar el que tiene por defecto
-        fc.removeChoosableFileFilter(fc.getChoosableFileFilters()[0]);
-
-        fc.addChoosableFileFilter(fname);
-        fc.addChoosableFileFilter(fname2);
-        fc.addChoosableFileFilter(fname3);
-        fc.addChoosableFileFilter(fname4);
-        
-        fc.setFileFilter(fname);
-
-        
-        int returnVal = fc.showSaveDialog(this);
-         
-        if (returnVal == JFileChooser.APPROVE_OPTION)
-        {
-                File file = fc.getSelectedFile();
-                FileFilter f1 = fc.getFileFilter();
-                
-                if(f1.getDescription().equals(".txt"))
-                {
-                    String path = file.getAbsolutePath() +".txt";
-                
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                    PrintWriter wr = new PrintWriter(bw);
-                
-                    util.Save_text_file(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
-                
-                    wr.close();
-                    bw.close(); 
-                    
-                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                    
-                }
-                
-                else if(f1.getDescription().equals(".tex"))
-                {
-                    String path = file.getAbsolutePath() +".tex";
-                
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                    PrintWriter wr = new PrintWriter(bw);
-                
-                    util.Save_tex_file(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
-                
-                    wr.close();
-                    bw.close(); 
-                    
-                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                    
-                }
-                
-               else if(f1.getDescription().equals(".csv"))
-               {
-              
-                   String path = file.getAbsolutePath() +".csv";
-                
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                    PrintWriter wr = new PrintWriter(bw);
-                
-                    util.Save_csv_file(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
-                
-                    wr.close();
-                    bw.close(); 
-                    
-                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                /*
-                try
-                 {
-                     dataset_name1 = dataset_name1.substring(0,dataset_name1.length()-5);
-                     String path = file.getAbsolutePath() +".csv";
-                      Exporter exp = new Exporter(new File(path), dataset_name1);
-                     
-                     if(exp.exporta(metric_list,dataset,es_de_tipo_meka))
-                     {
-                         JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                     }
-                 }
-                 catch(Exception e1)
-                 {
-                     JOptionPane.showMessageDialog(null, "File NOT Saved correctly", "Error", JOptionPane.ERROR_MESSAGE); 
-                 }   
-                   */
-                
-               }
-                
-               
-               else if (f1.getDescription().equals(".arff"))
-                {
-                    String path = file.getAbsolutePath() +".arff";
-                
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                    PrintWriter wr = new PrintWriter(bw);
-                
-                    util.Save_meka_file(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
-                
-                    wr.close();
-                    bw.close(); 
-                    
-                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                    
-                    /*
-                    String path = file.getAbsolutePath() +".arff";
-                
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                    PrintWriter wr = new PrintWriter(bw);
-                    
-                    ArrayList<MultiLabelInstances> list_dataset1 = new ArrayList();
-                    list_dataset1.add(dataset);
-                                   
-                    util.Save_in_the_file_arff_meka(wr, metric_list, list_dataset1,file.getName(), es_de_tipo_meka);
-                    
-                    wr.close();
-                    bw.close();      
-                    
-                  JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE);   
-                    */
-                }
-                
-           Toolkit.getDefaultToolkit().beep();
-        } 
-
-            
-        
+            Toolkit.getDefaultToolkit().beep();
+        }
     }
       
-      
-      
-      
-      private void button_saveActionPerformed_multi(java.awt.event.ActionEvent evt, JTable jtable) throws IOException
+    private void button_saveActionPerformed_multi(java.awt.event.ActionEvent evt, JTable jtable) throws IOException
     {
         ArrayList<String> metric_list = Get_metrics_selected_multi(jtable);
         
-        
-         if(list_dataset == null || list_dataset.isEmpty() || Dataset_names.isEmpty()) {
+        if(list_dataset == null || list_dataset.isEmpty() || Dataset_names.isEmpty()) {
            JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
            return; 
-       }
+        }
              
+        // JFILECHOOSER SAVE
+        JFileChooser fc= new JFileChooser();
         
-       // JFILECHOOSER SAVE
-         JFileChooser fc= new JFileChooser();
-        
-         // extension txt
+        // extension txt
         FileNameExtensionFilter fname = new FileNameExtensionFilter(".txt", "txt");
         FileNameExtensionFilter fname2 = new FileNameExtensionFilter(".csv", "csv");
         FileNameExtensionFilter fname3 = new FileNameExtensionFilter(".arff", ".arff");
         FileNameExtensionFilter fname4 = new FileNameExtensionFilter(".tex", ".tex");
         
-        //eliminar el que tiene por defecto
+        //Remove default
         fc.removeChoosableFileFilter(fc.getChoosableFileFilters()[0]);
 
         fc.addChoosableFileFilter(fname);
@@ -6472,178 +4619,92 @@ public class RunApp extends javax.swing.JFrame {
         
         fc.setFileFilter(fname);
 
-        
         int returnVal = fc.showSaveDialog(this);
          
         if (returnVal == JFileChooser.APPROVE_OPTION)
         {
-                File file = fc.getSelectedFile();
-                FileFilter f1 = fc.getFileFilter();
+            File file = fc.getSelectedFile();
+            FileFilter f1 = fc.getFileFilter();
                 
-                if(f1.getDescription().equals(".txt"))
-                {
-                    String path = file.getAbsolutePath() +".txt";
+            if(f1.getDescription().equals(".txt"))
+            {
+                String path = file.getAbsolutePath() +".txt";
                 
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                    PrintWriter wr = new PrintWriter(bw);
+                BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+                PrintWriter wr = new PrintWriter(bw);
                 
-                    util.Save_text_file_multi(wr, metric_list, Dataset_names, tableMetricsMulti);
+                util.Save_text_file_multi(wr, metric_list, Dataset_names, tableMetricsMulti);
                 
-                    wr.close();
-                    bw.close(); 
+                wr.close();
+                bw.close(); 
                     
-                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                     
-                }
+            }
+            else if(f1.getDescription().equals(".tex"))
+            {
+                String path = file.getAbsolutePath() +".tex";
                 
-                else if(f1.getDescription().equals(".tex"))
-                {
-                    String path = file.getAbsolutePath() +".tex";
+                BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+                PrintWriter wr = new PrintWriter(bw);
                 
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                    PrintWriter wr = new PrintWriter(bw);
+                util.Save_tex_file_multi(wr, metric_list, Dataset_names, tableMetricsMulti);
                 
-                    util.Save_tex_file_multi(wr, metric_list, Dataset_names, tableMetricsMulti);
-                
-                    wr.close();
-                    bw.close(); 
+                wr.close();
+                bw.close(); 
                     
-                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                     
-                }
+            }
+            else if(f1.getDescription().equals(".csv"))
+            {
+                String path = file.getAbsolutePath() +".csv";
                 
-               else if(f1.getDescription().equals(".csv"))
-               {
-              
-                   String path = file.getAbsolutePath() +".csv";
+                BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+                PrintWriter wr = new PrintWriter(bw);
                 
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                    PrintWriter wr = new PrintWriter(bw);
+                util.Save_csv_file_multi(wr, metric_list, Dataset_names, tableMetricsMulti);
                 
-                    util.Save_csv_file_multi(wr, metric_list, Dataset_names, tableMetricsMulti);
-                
-                    wr.close();
-                    bw.close(); 
+                wr.close();
+                bw.close(); 
                     
-                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                /*
-                try
-                 {
-                     dataset_name1 = dataset_name1.substring(0,dataset_name1.length()-5);
-                     String path = file.getAbsolutePath() +".csv";
-                      Exporter exp = new Exporter(new File(path), dataset_name1);
-                     
-                     if(exp.exporta(metric_list,dataset,es_de_tipo_meka))
-                     {
-                         JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                     }
-                 }
-                 catch(Exception e1)
-                 {
-                     JOptionPane.showMessageDialog(null, "File NOT Saved correctly", "Error", JOptionPane.ERROR_MESSAGE); 
-                 }   
-                   */
+                JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                 
-               }
+            }
+            else if (f1.getDescription().equals(".arff"))
+            {
+                String path = file.getAbsolutePath() +".arff";
                 
-               
-               else if (f1.getDescription().equals(".arff"))
-                {
-                    String path = file.getAbsolutePath() +".arff";
+                BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+                PrintWriter wr = new PrintWriter(bw);
                 
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                    PrintWriter wr = new PrintWriter(bw);
+                util.Save_meka_file_multi(wr, metric_list, Dataset_names, tableMetricsMulti);
                 
-                    util.Save_meka_file_multi(wr, metric_list, Dataset_names, tableMetricsMulti);
-                
-                    wr.close();
-                    bw.close(); 
+                wr.close();
+                bw.close(); 
                     
-                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                    
-                    /*
-                    String path = file.getAbsolutePath() +".arff";
+                JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+            }
                 
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                    PrintWriter wr = new PrintWriter(bw);
-                    
-                    ArrayList<MultiLabelInstances> list_dataset1 = new ArrayList();
-                    list_dataset1.add(dataset);
-                                   
-                    util.Save_in_the_file_arff_meka(wr, metric_list, list_dataset1,file.getName(), es_de_tipo_meka);
-                    
-                    wr.close();
-                    bw.close();      
-                    
-                  JOptionPane.showMessageDialog(null, "File Saved", "Successful", JOptionPane.INFORMATION_MESSAGE);   
-                    */
-                }
-                
-           Toolkit.getDefaultToolkit().beep();
+            Toolkit.getDefaultToolkit().beep();
         } 
-
-            
-        
     }
      
-     
-     //CALCULA LAS METRICAS ESPECIFICADAS
-     private void button_calculateActionPerformed_datasets(java.awt.event.ActionEvent evt, JTable jtable)
-    {
-       ArrayList<String> metric_list = Get_metrics_selected(jtable);
-        
-       
-       if(list_dataset.isEmpty()) {
-           JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
-           return; 
-       }
-              
-           
-       
-       metric_output mo = new metric_output(metric_list,list_dataset, Dataset_names, lista_son_meka );
-       
-       mo.setVisible(true);
-     
-    }   
-     
-     
-     //CALCULA LAS METRICAS ESPECIFICADAS
-     private void button_calculateActionPerformed(java.awt.event.ActionEvent evt, JTable jtable)
-    {
-       ArrayList<String> metric_list = Get_metrics_selected(jtable);
-        
-       if(dataset == null) {
-           JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
-           return; 
-       }
-       
-       
-       int posx = this.getBounds().x;
-       int posy = this.getBounds().y;
-       
-       
-       metric_output mo = new metric_output(metric_list,dataset, posx, posy, es_de_tipo_meka);
-       
-       mo.setVisible(true);
-     
-    }   
-     
-
     private void button_calculateActionPerformed_principal(java.awt.event.ActionEvent evt, JTable jtable)
     {
-       ArrayList<String> metric_list = Get_metrics_selected_principal(jtable);
+        ArrayList<String> metric_list = Get_metrics_selected_principal(jtable);
 
-       if(dataset == null) {
-           JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
-           return; 
-       }
-       else if(metric_list.size()==0){
-           JOptionPane.showMessageDialog(null, "You must select any metric.", "Warning", JOptionPane.ERROR_MESSAGE);
-           return; 
-       }
+        if(dataset == null) {
+            JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
+            return; 
+        }
+        else if(metric_list.size()==0){
+            JOptionPane.showMessageDialog(null, "You must select any metric.", "Warning", JOptionPane.ERROR_MESSAGE);
+            return; 
+        }
 
-       atributo[] label_frenquency = util.Get_Frequency_x_label(dataset);
-       label_frenquency = util.Ordenar_freq_x_attr(label_frenquency);// ordena de mayor a menor
+        atributo[] label_frenquency = util.Get_Frequency_x_label(dataset);
+        label_frenquency = util.Ordenar_freq_x_attr(label_frenquency);// ordena de mayor a menor
                 
         atributo[] imbalanced_data = util.Get_data_imbalanced_x_label_inter_class(dataset,label_frenquency);
         
@@ -6677,27 +4738,24 @@ public class RunApp extends javax.swing.JFrame {
             model.setValueAt(util.getValueFormatted(model.getValueAt(i, 0).toString(), tableMetrics.get(model.getValueAt(i, 0).toString())), i, 1);
         }
 
-       jtable.repaint();
+        jtable.repaint();
     }   
-    
-    
+
     private void button_calculateActionPerformed_multi(java.awt.event.ActionEvent evt, JTable jtable)
     {
-       ArrayList<String> metric_list = Get_metrics_selected_multi(jtable);
+        ArrayList<String> metric_list = Get_metrics_selected_multi(jtable);
 
-       if(list_dataset == null || list_dataset.size() < 1) {
-           JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
-           return; 
-       }
-       else if(metric_list.isEmpty()){
-           JOptionPane.showMessageDialog(null, "You must select any metric.", "Warning", JOptionPane.ERROR_MESSAGE);
-           return; 
-       }
+        if(list_dataset == null || list_dataset.size() < 1) {
+            JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
+            return; 
+        }
+        else if(metric_list.isEmpty()){
+            JOptionPane.showMessageDialog(null, "You must select any metric.", "Warning", JOptionPane.ERROR_MESSAGE);
+            return; 
+        }
 
-       atributo[] label_frenquency;
-                
-        atributo[] imbalanced_data;
-        
+        atributo[] label_frenquency;      
+        atributo[] imbalanced_data;        
         String value = new String();
 
         progressBar.setMinimum(0);
@@ -6707,16 +4765,13 @@ public class RunApp extends javax.swing.JFrame {
         
         int d = 0;
         for(String dataName : Dataset_names){
-
             label_frenquency = util.Get_Frequency_x_label(list_dataset.get(d));
             label_frenquency = util.Ordenar_freq_x_attr(label_frenquency);
             imbalanced_data = util.Get_data_imbalanced_x_label_inter_class(list_dataset.get(d), label_frenquency);
             
-            
             if(!tableMetricsMulti.contains(dataName)){
-                
                 tableMetricsMulti.put(dataName, new Hashtable<String, String>());
-                initializeTableMetricsMulti(dataName);
+                initTableMetricsMulti(dataName);
             }
             
             for(String metric : metric_list)
@@ -6730,9 +4785,7 @@ public class RunApp extends javax.swing.JFrame {
                         value = util.get_value_metric_imbalanced(metric, list_dataset.get(d), imbalanced_data);
                     } 	
 
-                   //System.out.println(metric + " --- " + value + " --> " + value.replace(",", "."));
                     tableMetricsMulti.get(dataName).put(metric, value.replace(",", "."));
-                    //jTextArea1.append(metric + util.get_tabs_multi_datasets(metric) + value + "\n"); 
                } 
                
                v++;
@@ -6741,40 +4794,16 @@ public class RunApp extends javax.swing.JFrame {
             d++;
         }
 
-        for(int i=0; i<Dataset_names.size(); i++){
-           //System.out.println("DATASET: " + Dataset_names.get(i));
-            for(int m=0; m<metric_list.size(); m++){
-               //System.out.println("\t" + metric_list.get(m) + tableMetricsMulti.get(Dataset_names.get(i)).get(metric_list.get(m)));
-            }
-        }
-        
-        //TableModel model = jtable.getModel();
-        
-        /*
-        TableModel model = new Table_model_metrics(util.Get_row_data_multi(Dataset_names.size()), "multi", Dataset_names.size()+2);
-       //System.out.println("model columns: " + model.getColumnCount());
-        
-        for(int i=0; i<metric_list.size(); i++){
-            //model.setValueAt(util.getValueFormatted(model.getValueAt(i, 0).toString(), tableMetrics.get(model.getValueAt(i, 0).toString())), i, 1);
-            for(int j=0; j<Dataset_names.size(); j++){
-                model.setValueAt(tableMetricsMulti.get(Dataset_names.get(i)).get(metric_list.get(i)), i, j+2);
-            }
-        }
-        */
-
-       jtable.repaint();
+        jtable.repaint();
     }   
-      
-      
-      
+
     private void clearTable_metrics_principal()
     {
-       ArrayList<String> metric_list = util.Get_all_metrics();
+        ArrayList<String> metric_list = util.Get_all_metrics();
 
-        String value;
         for(String metric : metric_list)
         {
-           tableMetrics.put(metric, "-");
+            tableMetrics.put(metric, "-");
         }
        
         TableModel model = jTable1.getModel();
@@ -6785,364 +4814,165 @@ public class RunApp extends javax.swing.JFrame {
         
         jTable1.repaint();
     } 
-    
-    
-    private void clearTable_metrics_traintest()
+     
+    private ArrayList<String> Get_metrics_selected_principal(JTable jtable)
     {
-        ArrayList<String> metric_list = util.Get_all_metrics();
+        ArrayList<String> result= new ArrayList();
+        TableModel tmodel = jtable.getModel();
 
-        String value;
-      
-        ArrayList<String> metric_list_common = util.Get_common_metrics();
-
-        for(String metric : metric_list_common)
+        for(int i=0; i<tmodel.getRowCount();i++)
         {
-           tableMetrics_common.put(metric, "-");
-        }
-       
-        TableModel model = jTable5.getModel();
-        
-        for(int i=0; i<model.getRowCount(); i++){
-            model.setValueAt(tableMetrics_common.get(model.getValueAt(i, 0).toString()), i, 1);
-        }
-        
-        jTable5.repaint();
-        
-        ArrayList<String> metric_list_test = util.Get_test_metrics();
+            if((Boolean)tmodel.getValueAt(i, 2))
+            {
+                String selected =(String)tmodel.getValueAt(i, 0);
+                result.add(selected);                      
+            }                
+        }   
+        return result;
+    }
 
-        for(String metric : metric_list_test)
+    private ArrayList<String> Get_metrics_selected_multi(JTable jtable)
+    {
+        ArrayList<String> result= new ArrayList();
+        TableModel tmodel = jtable.getModel();
+
+        for(int i=0; i<tmodel.getRowCount();i++)
         {
-           tableMetrics_test.put(metric, "-");
-           tableMetrics_train.put(metric, "-");
-        }
-       
-        model = jTable7.getModel();
-        
-        for(int i=0; i<model.getRowCount(); i++){
-            model.setValueAt(tableMetrics_train.get(model.getValueAt(i, 0).toString()), i, 1);
-            model.setValueAt(tableMetrics_test.get(model.getValueAt(i, 0).toString()), i, 2);
-        }
-        
-        jTable7.repaint();
-    } 
-         
-    
-     private ArrayList<String> Get_metrics_selected(JTable jtable)
-     {
-       ArrayList<String> result= new ArrayList();
-       TableModel tmodel = jtable.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-       {
-           if((Boolean)tmodel.getValueAt(i, 1))
-           {
-               String selected =(String)tmodel.getValueAt(i, 0);
-               result.add(selected);                      
-           }                
-       }   
-       return result;
-     }
-     
-     private ArrayList<String> Get_metrics_selected_test(JTable jtable)
-     {
-       ArrayList<String> result= new ArrayList();
-       TableModel tmodel = jtable.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-       {
-           if((Boolean)tmodel.getValueAt(i, 3))
-           {
-               String selected =(String)tmodel.getValueAt(i, 0);
-               result.add(selected);                      
-           }                
-       }   
-       return result;
-     }
-     
-     private ArrayList<String> Get_metrics_selected_principal(JTable jtable)
-     {
-       ArrayList<String> result= new ArrayList();
-       TableModel tmodel = jtable.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-       {
-           if((Boolean)tmodel.getValueAt(i, 2))
-           {
-               String selected =(String)tmodel.getValueAt(i, 0);
-               result.add(selected);                      
-           }                
-       }   
-       return result;
-     }
-     
-     
-     private ArrayList<String> Get_metrics_selected_multi(JTable jtable)
-     {
-       ArrayList<String> result= new ArrayList();
-       TableModel tmodel = jtable.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-       {
-           if((Boolean)tmodel.getValueAt(i, 1))
-           {
-               String selected =(String)tmodel.getValueAt(i, 0);
-               result.add(selected);                      
-           }                
-       }   
-       return result;
-     }
-     
-     
-     private void button_invertActionPerformed(java.awt.event.ActionEvent evt,JTable jtable )
+            if((Boolean)tmodel.getValueAt(i, 1))
+            {
+                String selected =(String)tmodel.getValueAt(i, 0);
+                result.add(selected);                      
+            }                
+        }   
+        return result;
+    }
+
+    private void button_invertActionPerformed_principal(java.awt.event.ActionEvent evt,JTable jtable )
     {
-       TableModel tmodel = jtable.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-       {
-           if((Boolean)tmodel.getValueAt(i, 1)) tmodel.setValueAt(Boolean.FALSE, i, 1);
-           else  tmodel.setValueAt(Boolean.TRUE, i, 1);          
-       }      
-       
-       jtable.setModel(tmodel);
-       jtable.repaint();
-       
+        TableModel tmodel = jtable.getModel();
+
+        for(int i=0; i<tmodel.getRowCount();i++)
+        {
+            if((Boolean)tmodel.getValueAt(i, 2)) {
+                tmodel.setValueAt(Boolean.FALSE, i, 2);
+            }
+            else  {
+                tmodel.setValueAt(Boolean.TRUE, i, 2);
+            }          
+        }      
+
+        jtable.setModel(tmodel);
+        jtable.repaint();
     }     
-     
-     private void button_invertActionPerformed_principal(java.awt.event.ActionEvent evt,JTable jtable )
+
+    private void button_invertActionPerformed_multi(java.awt.event.ActionEvent evt,JTable jtable )
     {
-       TableModel tmodel = jtable.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-       {
-           if((Boolean)tmodel.getValueAt(i, 2)) {
-               tmodel.setValueAt(Boolean.FALSE, i, 2);
-           }
-           else  {
-               tmodel.setValueAt(Boolean.TRUE, i, 2);
-           }          
-       }      
-       
-       jtable.setModel(tmodel);
-       jtable.repaint();
-       
-    }     
-     
-     
-     private void button_invertActionPerformed_multi(java.awt.event.ActionEvent evt,JTable jtable )
-    {
-       TableModel tmodel = jtable.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-       {
-           if((Boolean)tmodel.getValueAt(i, 1)) {
-               tmodel.setValueAt(Boolean.FALSE, i, 1);
-           }
-           else  {
-               tmodel.setValueAt(Boolean.TRUE, i, 1);
-           }          
-       }      
-       
-       jtable.setModel(tmodel);
-       jtable.repaint();
-       
-    }     
-    
-    private void button_invertActionPerformed2(java.awt.event.ActionEvent evt,JTable jtable,JTable jtable1,JTable jtable2 )
-    {
-       TableModel tmodel = jtable.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-       {
-           if((Boolean)tmodel.getValueAt(i, 2)) {
-               tmodel.setValueAt(Boolean.FALSE, i, 2);
-           }
-           else  tmodel.setValueAt(Boolean.TRUE, i, 2);          
-       }      
-       
-       jtable.setModel(tmodel);
-       jtable.repaint();
-       
-       tmodel = jtable1.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-       {
-           if((Boolean)tmodel.getValueAt(i, 3)) {
-               tmodel.setValueAt(Boolean.FALSE, i, 3);
-           }
-           else  tmodel.setValueAt(Boolean.TRUE, i, 3);          
-       }      
-       
-       jtable1.setModel(tmodel);
-       jtable1.repaint();
-       
-       
-        tmodel = jtable2.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-       {
-           if((Boolean)tmodel.getValueAt(i, 3)) {
-               tmodel.setValueAt(Boolean.FALSE, i, 3);
-           }
-           else  tmodel.setValueAt(Boolean.TRUE, i, 3);          
-       }      
-       
-       jtable2.setModel(tmodel);
-       jtable2.repaint();
-    }  
-     
-    
-    private void button_noneActionPerformed(java.awt.event.ActionEvent evt,JTable jtable)
-    {
-      TableModel tmodel = jtable.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-           tmodel.setValueAt(Boolean.FALSE, i, 1);
-             
-       jtable.setModel(tmodel);
-       jtable.repaint();
+        TableModel tmodel = jtable.getModel();
+
+        for(int i=0; i<tmodel.getRowCount();i++)
+        {
+            if((Boolean)tmodel.getValueAt(i, 1)) {
+                tmodel.setValueAt(Boolean.FALSE, i, 1);
+            }
+            else  {
+                tmodel.setValueAt(Boolean.TRUE, i, 1);
+            }          
+        }      
+
+        jtable.setModel(tmodel);
+        jtable.repaint();
     }     
     
     private void button_noneActionPerformed_principal(java.awt.event.ActionEvent evt,JTable jtable)
     {
-
-      TableModel tmodel = jtable.getModel();
+        TableModel tmodel = jtable.getModel();
        
-       for(int i=0; i<tmodel.getRowCount();i++)
-       {
-           tmodel.setValueAt(Boolean.FALSE, i, 2);
-       }
-             
-       jtable.setModel(tmodel);
-       jtable.repaint();
-       //frame.setVisible(false);
+        for(int i=0; i<tmodel.getRowCount();i++)
+        {
+            tmodel.setValueAt(Boolean.FALSE, i, 2);
+        }
+
+        jtable.setModel(tmodel);
+        jtable.repaint();
     }      
     
     private void button_noneActionPerformed_multi(java.awt.event.ActionEvent evt,JTable jtable)
     {
+        TableModel tmodel = jtable.getModel();
+       
+        for(int i=0; i<tmodel.getRowCount();i++)
+        {
+            tmodel.setValueAt(Boolean.FALSE, i, 1);
+        }
 
-      TableModel tmodel = jtable.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-       {
-           tmodel.setValueAt(Boolean.FALSE, i, 1);
-       }
-             
-       jtable.setModel(tmodel);
-       jtable.repaint();
-       //frame.setVisible(false);
+        jtable.setModel(tmodel);
+        jtable.repaint();
     }      
-    
-        private void button_noneActionPerformed2(java.awt.event.ActionEvent evt,JTable jtable,JTable jtable1,JTable jtable2)
-    {
-      TableModel tmodel = jtable.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-           tmodel.setValueAt(Boolean.FALSE, i, 2);
-       
-       jtable.setModel(tmodel);
-       jtable.repaint();
-       
-       tmodel = jtable1.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-           tmodel.setValueAt(Boolean.FALSE, i, 3);
-       
-       jtable1.setModel(tmodel);
-       jtable1.repaint();
-       
-       
-       tmodel = jtable2.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-           tmodel.setValueAt(Boolean.FALSE, i, 3);
-       
-       jtable2.setModel(tmodel);
-       jtable2.repaint();
-    }        
-            
-    private void button_allActionPerformed(java.awt.event.ActionEvent evt ,JTable jtable)
-    {
-       TableModel tmodel = jtable.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-           tmodel.setValueAt(Boolean.TRUE, i, 1);
-             
-       jtable.setModel(tmodel);
-       jtable.repaint();
-    }
     
     private void button_allActionPerformed_principal(java.awt.event.ActionEvent evt ,JTable jtable)
     {
-       TableModel tmodel = jtable.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-           tmodel.setValueAt(Boolean.TRUE, i, 2);
-             
-       jtable.setModel(tmodel);
-       jtable.repaint();
+        TableModel tmodel = jtable.getModel();
+
+        for(int i=0; i<tmodel.getRowCount();i++)
+            tmodel.setValueAt(Boolean.TRUE, i, 2);
+
+        jtable.setModel(tmodel);
+        jtable.repaint();
     }
     
     private void button_allActionPerformed_multi(java.awt.event.ActionEvent evt ,JTable jtable)
     {
-       TableModel tmodel = jtable.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-           tmodel.setValueAt(Boolean.TRUE, i, 1);
-             
-       jtable.setModel(tmodel);
-       jtable.repaint();
+        TableModel tmodel = jtable.getModel();
+
+        for(int i=0; i<tmodel.getRowCount();i++)
+            tmodel.setValueAt(Boolean.TRUE, i, 1);
+
+        jtable.setModel(tmodel);
+        jtable.repaint();
     }
-    
     
     private void button_clearActionPerformed_principal(java.awt.event.ActionEvent evt ,JTable jtable)
     {
-       TableModel tmodel = jtable.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-       {
-           tmodel.setValueAt(Boolean.FALSE, i, 2);
-       }
-             
-       clearTable_metrics_principal();
+        TableModel tmodel = jtable.getModel();
 
+        for(int i=0; i<tmodel.getRowCount();i++)
+        {
+            tmodel.setValueAt(Boolean.FALSE, i, 2);
+        }
+
+        clearTable_metrics_principal();
     }
-    
 
-    
     private void button_export_ActionPerformed(java.awt.event.ActionEvent evt ,JTable jtable)
     {
-          if(jtable.getRowCount()==0 || dataset == null)
-          {
-              JOptionPane.showMessageDialog(null, "The table is empty.", "Error", JOptionPane.ERROR_MESSAGE); 
-              return;
-          }
+        if(jtable.getRowCount()==0 || dataset == null)
+        {
+            JOptionPane.showMessageDialog(null, "The table is empty.", "Error", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+
+        JFileChooser fc= new JFileChooser();
         
-         // JFILECHOOSER SAVE
-         JFileChooser fc= new JFileChooser();
-        
-         // extension 
+        // extension 
         //FileNameExtensionFilter fname = new FileNameExtensionFilter(".xls", "xls"); 
         FileNameExtensionFilter fname1 =  new FileNameExtensionFilter(".csv", "csv");
         
-        //eliminar el que tiene por defecto
+        //Remove default
         fc.removeChoosableFileFilter(fc.getChoosableFileFilters()[0]);
         
-        //fc.setFileFilter(fname);
         fc.setFileFilter(fname1);
-        //fc.addChoosableFileFilter(fname);
         
         int returnVal = fc.showSaveDialog(this);
          
         if (returnVal == JFileChooser.APPROVE_OPTION)
         {
-               File file = fc.getSelectedFile();
-                FileFilter f1 = fc.getFileFilter();
+            File file = fc.getSelectedFile();
+            FileFilter f1 = fc.getFileFilter();
                 
-              if(f1.getDescription().equals(".csv"))
-                {
-               
+            if(f1.getDescription().equals(".csv"))
+            {  
                 try
-                 {
+                {
                     String path = file.getAbsolutePath() +".csv";
                      
                     BufferedWriter bw = new BufferedWriter(new FileWriter(path));
@@ -7153,69 +4983,35 @@ public class RunApp extends javax.swing.JFrame {
                     wr.close();
                     bw.close(); 
                     
-                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                    
-                     //Exporter exp = new Exporter(new File(path), jtable, "prueba");
-                     
-                     /*if(exp.exporta())
-                     {
-                         JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                     }*/
-                    
-                 }
-                 catch(Exception e1)
-                 {
-                     JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
-                 }   
-                             
+                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);                     
                 }
-              
-              /*else if(f1.getDescription().equals(".xls"))
-               {                             
-                               
-                 try
-                 {
-                     String path = file.getAbsolutePath() +".xls";
-                     Exporter exp = new Exporter(new File(path), jtable, "prueba");
-                     
-                     if(exp.exporta())
-                     {
-                         JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                     }
-                 }
-                 catch(Exception e1)
-                 {
-                     JOptionPane.showMessageDialog(null, "File not Saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
-                 }
-               
-               }*/
-                
-        } 
-        
-        
+                catch(Exception e1)
+                {
+                    JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
+                }   
+                             
+            }
+        }
     }
     
-     private void button_export_ActionPerformed(java.awt.event.ActionEvent evt ,JTable jtable, JTable columns, String table)
+    private void button_export_ActionPerformed(java.awt.event.ActionEvent evt ,JTable jtable, JTable columns, String table)
     {
-          if(jtable.getRowCount()==0 || dataset == null)
-          {
-              JOptionPane.showMessageDialog(null, "The table is empty.", "Error", JOptionPane.ERROR_MESSAGE); 
-              return;
-          }
+        if(jtable.getRowCount()==0 || dataset == null)
+        {
+            JOptionPane.showMessageDialog(null, "The table is empty.", "Error", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
         
-         // JFILECHOOSER SAVE
-         JFileChooser fc= new JFileChooser();
+        JFileChooser fc= new JFileChooser();
         
-         // extension 
+        // extension 
         //FileNameExtensionFilter fname = new FileNameExtensionFilter(".xls", "xls"); 
         FileNameExtensionFilter fname1 =  new FileNameExtensionFilter(".csv", "csv");
         
-        //eliminar el que tiene por defecto
+        //Remove default
         fc.removeChoosableFileFilter(fc.getChoosableFileFilters()[0]);
-        
-        //fc.setFileFilter(fname);
+
         fc.setFileFilter(fname1);
-        //fc.addChoosableFileFilter(fname);
         
         int returnVal = fc.showSaveDialog(this);
          
@@ -7231,7 +5027,7 @@ public class RunApp extends javax.swing.JFrame {
                 PrintWriter wr = null;
                 
                 try
-                 {
+                {
                     String path = file.getAbsolutePath() +".csv";
                     bw = new BufferedWriter(new FileWriter(path));
                     wr = new PrintWriter(bw);
@@ -7249,90 +5045,48 @@ public class RunApp extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
                     }
                     
-                    
                     wr.close();
                     bw.close();  
                     
                     JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                 }
-                 catch(Exception e1)
-                 {
+                }
+                catch(Exception e1)
+                {
                     //System.out.println("otro mensaje "+e1.toString());
-                     JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
-                 }   
-                             
-             }              
-             else if(f1.getDescription().equals(".xls"))
-             {                                        
-                 try
-                 {
-                     String path = file.getAbsolutePath() +".xls";
-                     Exporter exp = new Exporter(new File(path), jtable, "prueba");
+                    JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
+                }         
+            }              
+            else if(f1.getDescription().equals(".xls"))
+            {                                        
+                try
+                {
+                    String path = file.getAbsolutePath() +".xls";
+                    Exporter exp = new Exporter(new File(path), jtable, "prueba");
                      
-                     if(exp.exporta(columns))
-                     {
-                         JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                     }
-                 }
-                 catch(Exception e1)
-                 {
-                     JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
-                 }
-               
-               }
-                
-        } 
-        
-        
+                    if(exp.exporta(columns))
+                    {
+                        JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+                    }
+                }
+                catch(Exception e1)
+                {
+                    JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
+                }
+            }
+        }  
     }
-    
-    
-    
-      private void button_allActionPerformed2(java.awt.event.ActionEvent evt ,JTable jtable,JTable jtable1,JTable jtable2 )
-    {
-       TableModel tmodel = jtable.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-           tmodel.setValueAt(Boolean.TRUE, i, 2);
-       
-       jtable.setModel(tmodel);
-       jtable.repaint();
-       
-       tmodel = jtable1.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-           tmodel.setValueAt(Boolean.TRUE, i, 3);
-       
-       jtable1.setModel(tmodel);
-       jtable1.repaint();
-       
-       
-       tmodel = jtable2.getModel();
-       
-       for(int i=0; i<tmodel.getRowCount();i++)
-           tmodel.setValueAt(Boolean.TRUE, i, 3);
-       
-       jtable2.setModel(tmodel);
-       jtable2.repaint();
-       
 
-    }
-    
-       
-  private ChartPanel generaGrafico(JPanel jpanel) 
-  {
-     XYDataset xydataset  = new DefaultXYDataset();
-     JFreeChart jfreechart = ChartFactory.createXYLineChart("Box diagram", "Distribution of numeric values", "", xydataset, PlotOrientation.VERTICAL, false, true, false);
+    private ChartPanel createGraph(JPanel jpanel) 
+    {
+        XYDataset xydataset  = new DefaultXYDataset();
+        JFreeChart jfreechart = ChartFactory.createXYLineChart("Box diagram", "Distribution of numeric values", "", xydataset, PlotOrientation.VERTICAL, false, true, false);
  
-         XYPlot xyplot = (XYPlot) jfreechart.getPlot();
-         xyplot.setBackgroundPaint(Color.white);
-         xyplot.setDomainGridlinePaint(Color.gray);
-         xyplot.setRangeGridlinePaint(Color.gray);
+        XYPlot xyplot = (XYPlot) jfreechart.getPlot();
+        xyplot.setBackgroundPaint(Color.white);
+        xyplot.setDomainGridlinePaint(Color.gray);
+        xyplot.setRangeGridlinePaint(Color.gray);
          
-     //XYLineAndShapeRenderer xylineandshaperenderer =  (XYLineAndShapeRenderer) xyplot.getRenderer();
-     //xylineandshaperenderer.setBaseShapesVisible(true);
-         
-        //ocultar el eje de las y
+        //Hide Y axis
         xyplot.getRangeAxis().setTickLabelsVisible(false);  
  
         ChartPanel cp1 = new ChartPanel(jfreechart);
@@ -7349,65 +5103,56 @@ public class RunApp extends javax.swing.JFrame {
         jpanel.validate();
         
         return cp1;       
- }
-  
-  
+    }
     
-    
-    private ChartPanel create_jchart(JPanel jpanel, String type, String title_x_axis, String title_y_axis, boolean show_x_axis)
+    private ChartPanel createJChart(JPanel jpanel, String type, String title_x_axis, String title_y_axis, boolean show_x_axis)
     {
         DefaultCategoryDataset my_data = new DefaultCategoryDataset();
         JFreeChart chart1;
-            //"Number of labels per Examples"
-      //  chart1 = ChartFactory.createLineChart(" ", title_x_axis, "Relative frequency ", my_data, PlotOrientation.VERTICAL, false, true, false);
-        
+
         CategoryPlot plot1;
         
         //hide horizontal axis
-        if(type =="bar")
+        if(type.equals("bar"))
         {
-          chart1 = ChartFactory.createBarChart(" ", title_x_axis, title_y_axis, my_data, PlotOrientation.VERTICAL, false, true, false);
-        
-          plot1 =  chart1.getCategoryPlot();
-          plot1.setRangeGridlinePaint(Color.black);
+            chart1 = ChartFactory.createBarChart(" ", title_x_axis, title_y_axis, my_data, PlotOrientation.VERTICAL, false, true, false);
 
+            plot1 =  chart1.getCategoryPlot();
+            plot1.setRangeGridlinePaint(Color.black);
         }
-        else if(type =="line_2_axis")
+        else if(type.equals("line_2_axis"))
         {
-          chart1 = ChartFactory.createLineChart(" ",title_x_axis,title_y_axis , my_data, PlotOrientation.VERTICAL, true, true, false);
-          
-          plot1 =  chart1.getCategoryPlot();
-          plot1.setRangeGridlinePaint(Color.black);
-         
-          //para mostrar mini rectangulos
-          LineAndShapeRenderer lineandshaperenderer = (LineAndShapeRenderer)plot1.getRenderer();
-          lineandshaperenderer.setBaseShapesVisible(true);
-          
-          CategoryAxis domainAxis = plot1.getDomainAxis();
-          domainAxis.setCategoryLabelPositions(CategoryLabelPositions.DOWN_45);
-          ValueAxis axis2 = new NumberAxis("# Labels");
-          plot1.setRangeAxis(1, axis2);
-          plot1.mapDatasetToRangeAxis(1, 1);
-        
-          LineAndShapeRenderer renderer2 = new LineAndShapeRenderer();
-          plot1.setRenderer(1, renderer2);
+            chart1 = ChartFactory.createLineChart(" ",title_x_axis,title_y_axis , my_data, PlotOrientation.VERTICAL, true, true, false);
+
+            plot1 =  chart1.getCategoryPlot();
+            plot1.setRangeGridlinePaint(Color.black);
+
+            //show little rectangles
+            LineAndShapeRenderer lineandshaperenderer = (LineAndShapeRenderer)plot1.getRenderer();
+            lineandshaperenderer.setBaseShapesVisible(true);
+
+            CategoryAxis domainAxis = plot1.getDomainAxis();
+            domainAxis.setCategoryLabelPositions(CategoryLabelPositions.DOWN_45);
+            ValueAxis axis2 = new NumberAxis("# Labels");
+            plot1.setRangeAxis(1, axis2);
+            plot1.mapDatasetToRangeAxis(1, 1);
+
+            LineAndShapeRenderer renderer2 = new LineAndShapeRenderer();
+            plot1.setRenderer(1, renderer2);
         }
-        
-        
         else //type == "line")
         {
-          chart1 = ChartFactory.createLineChart(" ",title_x_axis,title_y_axis , my_data, PlotOrientation.VERTICAL, false, true, false);
-          
-          plot1 =  chart1.getCategoryPlot();
-          plot1.setRangeGridlinePaint(Color.black);
-         
-          //para mostrar mini rectangulos
-          LineAndShapeRenderer lineandshaperenderer = (LineAndShapeRenderer)plot1.getRenderer();
-          lineandshaperenderer.setBaseShapesVisible(true);
-                        
+            chart1 = ChartFactory.createLineChart(" ",title_x_axis,title_y_axis , my_data, PlotOrientation.VERTICAL, false, true, false);
+
+            plot1 =  chart1.getCategoryPlot();
+            plot1.setRangeGridlinePaint(Color.black);
+
+            //show little rectangles
+            LineAndShapeRenderer lineandshaperenderer = (LineAndShapeRenderer)plot1.getRenderer();
+            lineandshaperenderer.setBaseShapesVisible(true);        
         }
         
-        //ocultar el eje de las x
+        //Hide X axis
         plot1.getDomainAxis().setTickLabelsVisible(show_x_axis);     
                  
         ChartPanel cp1 = new ChartPanel(chart1);
@@ -7426,8 +5171,7 @@ public class RunApp extends javax.swing.JFrame {
         return cp1;       
     }
     
-    
-    public static int get_Mayor(Set<LabelSet> keysets ,HashMap<LabelSet,Integer> result)
+    public static int getMax(Set<LabelSet> keysets ,HashMap<LabelSet,Integer> result)
     {
         int mayor=0;
         
@@ -7437,25 +5181,23 @@ public class RunApp extends javax.swing.JFrame {
         return mayor;
     }
    
-     //JTABLE AND JCHART VISUALIZE-LP
     private TableModel jchart_and_jtable_label_set_IR(JTable jtable, MultiLabelInstances dataset ,Statistics stat1, CategoryPlot cp ) throws Exception
     {
-        //grafico
+        //graph
         DefaultTableModel table_model1= new DefaultTableModel()
-                          {
+        {
             public boolean isCellEditable(int row, int column)
             {
                 return false;//This causes all cells to be not editable
             }
-          };
+        };
 
         DefaultCategoryDataset my_data = new DefaultCategoryDataset();
                
         table_model1.addColumn("Labelset id");
         table_model1.addColumn("IR values");
-        
 
-        //CALCULA LA FRECUENCIA DE LOS LABEL-COMBINATION
+        //Labelsets frequency
         HashMap<LabelSet,Integer> result = stat1.labelCombCount();
         
         Set<LabelSet> keysets = result.keySet();
@@ -7464,29 +5206,28 @@ public class RunApp extends javax.swing.JFrame {
         
         int count=1;
         double IR_labelset;
-        int mayor = get_Mayor(keysets, result);
+        int mayor = getMax(keysets, result);
         
         ArrayList<atributo> lista1 = new ArrayList();
         atributo temp;
-       ////System.out.println("TESTING CODE");
+
         int value;
         
-         for(LabelSet current : keysets)
+        for(LabelSet current : keysets)
         {
-              value=  result.get(current); //es la cantidad de veces que aparece el labelset en el dataset
-              IR_labelset = mayor /(value*1.0);
-              String temp1 =util.Truncate_value(IR_labelset, 4);
-              IR_labelset = Double.parseDouble(temp1);
-              
-              //System.out.println(" labelname "+current.toString());
-              temp = new atributo(current.toString(), value,IR_labelset);
-              lista1.add(temp);
+            value=  result.get(current); //es la cantidad de veces que aparece el labelset en el dataset
+            IR_labelset = mayor /(value*1.0);
+            String temp1 =util.Truncate_value(IR_labelset, 4);
+            IR_labelset = Double.parseDouble(temp1);
+            
+            temp = new atributo(current.toString(), value,IR_labelset);
+            lista1.add(temp);
         }      
          
-         labelsets_sorted_IR = new atributo[lista1.size()];
-         labelset_per_ir = new double[lista1.size()]; //guarda los ir por labelset
+        labelsets_sorted_IR = new atributo[lista1.size()];
+        labelset_per_ir = new double[lista1.size()]; //stores IR per labelset
          
-         String truncate;
+        String truncate;
          
         while(!lista1.isEmpty())
         {
@@ -7494,67 +5235,61 @@ public class RunApp extends javax.swing.JFrame {
             
             labelsets_sorted_IR[count-1]= temp;
             labelset_per_ir[count-1]=temp.get_ir();
-            //String label_name = current.toString();
-            
-             fila[0]=count;    
+
+            fila[0]=count;    
              
-             truncate = Double.toString(temp.get_ir());
-             fila[1]= util.Truncate_values_aprox_zero(truncate,5);
+            truncate = Double.toString(temp.get_ir());
+            fila[1]= util.Truncate_values_aprox_zero(truncate,5);
              
-             table_model1.addRow(fila);
+            table_model1.addRow(fila);
              
-              my_data.setValue(temp.get_ir(), "",Integer.toString(count));
+            my_data.setValue(temp.get_ir(), "",Integer.toString(count));
               
-              count++;
-              lista1.remove(temp);
+            count++;
+            lista1.remove(temp);
         }
         
-          jtable.setModel(table_model1);
-          jtable.setBounds(jtable.getBounds());
+        jtable.setModel(table_model1);
+        jtable.setBounds(jtable.getBounds());
           
-           //RESIZE COLUMNS! jtable
-            TableColumnModel tcm = jtable.getColumnModel();
+        //RESIZE COLUMNS! jtable
+        TableColumnModel tcm = jtable.getColumnModel();
             
-            tcm.getColumn(0).setPreferredWidth(50);
-            tcm.getColumn(1).setPreferredWidth(50);
+        tcm.getColumn(0).setPreferredWidth(50);
+        tcm.getColumn(1).setPreferredWidth(50);
             
-            //grafico
-          cp.setDataset(my_data);
+        //graph
+        cp.setDataset(my_data);
           
-          //get mean
-          double sum=0;
-          for(int i=0; i<labelsets_sorted_IR.length;i++)
-          {
-              sum+= labelsets_sorted_IR[i].get_ir();
-          }
+        //get mean
+        double sum=0;
+        for(int i=0; i<labelsets_sorted_IR.length;i++)
+        {
+            sum+= labelsets_sorted_IR[i].get_ir();
+        }
           sum = sum/labelsets_sorted_IR.length;
-
          
-          // add a labelled marker for the bid start price...
+        // add a labelled marker for the bid start price...
           
-            Marker start = new ValueMarker(sum);
-            start.setPaint(Color.blue);
-            start.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
-            start.setLabel("                        Mean: "+util.Truncate_value(sum, 4));
-            cp.addRangeMarker(start);
+        Marker start = new ValueMarker(sum);
+        start.setPaint(Color.blue);
+        start.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
+        start.setLabel("                        Mean: "+util.Truncate_value(sum, 4));
+        cp.addRangeMarker(start);
                         
-        
-          return jtable.getModel();
+        return jtable.getModel();
     }
- 
-    
-    
-    //JTABLE AND JCHART VISUALIZE-LP
+
     private TableModel jchart_and_jtable_label_combination_freq(JTable jtable, MultiLabelInstances dataset ,Statistics stat1, CategoryPlot cp ) throws Exception
     {
-        //grafico
+        //graph
         DefaultTableModel table_model1= new DefaultTableModel()
-                          {
+        {
             public boolean isCellEditable(int row, int column)
             {
                 return false;//This causes all cells to be not editable
             }
-          };
+        };
 
         DefaultCategoryDataset my_data = new DefaultCategoryDataset();
                
@@ -7564,7 +5299,7 @@ public class RunApp extends javax.swing.JFrame {
                       
         double freq ;
         
-        //CALCULA LA FRECUENCIA DE LOS LABEL-COMBINATION
+        //Labelsets frequency
         HashMap<LabelSet,Integer> result = stat1.labelCombCount();
         
         double sum=0.0;
@@ -7576,122 +5311,83 @@ public class RunApp extends javax.swing.JFrame {
         
         ArrayList<atributo> lista1 = new ArrayList();
         atributo temp;
-       ////System.out.println("TESTING CODE");
+
         int value;
-         for(LabelSet current : keysets)
+        for(LabelSet current : keysets)
         {
-              value=  result.get(current); //es la cantidad de veces que aparece el labelset en el dataset
-            // //System.out.println(" value "+ value);
-              temp = new atributo(current.toString(), value);
-              lista1.add(temp);
+            value = result.get(current);
+            temp = new atributo(current.toString(), value);
+            lista1.add(temp);
         }      
         
-         
-         labelsets_sorted = new atributo[lista1.size()];
-         labelset_frequency = new double[lista1.size()];
+        labelsets_sorted = new atributo[lista1.size()];
+        labelset_frequency = new double[lista1.size()];
          
         while(!lista1.isEmpty())
         {
             temp = util.Devuelve_mayor(lista1);
-            //temp = util.Devuelve_menor(lista1);
-            
-           
-            
             labelsets_sorted[count-1]= temp;
-            
-            
-            //String label_name = current.toString();
-            
-            value = temp.get_frequency();
-            
-            labelset_frequency[count-1]= value;
-                    
-            fila[0]=count;
+            value = temp.get_frequency();            
+            labelset_frequency[count-1]= value;                    
+            fila[0]=count;             
+            freq =value*1.0/dataset.getNumInstances();             
+            sum += freq;             
+            String value_freq =Double.toString(freq);             
+            fila[1]= value;             
+            fila[2]= util.Truncate_values_aprox_zero(value_freq,4);           
+            table_model1.addRow(fila);
+
+            String id = "ID: "+Integer.toString(count)+" , "+"Labelset: ";
              
-             freq =value*1.0/dataset.getNumInstances();
+            my_data.setValue(freq, id + temp.get_name(),"");
              
-              sum += freq;
-             
-             String value_freq =Double.toString(freq);
-             
-             fila[1]= value;
-             
-             fila[2]= util.Truncate_values_aprox_zero(value_freq,4);
-             
-             
-              
-             table_model1.addRow(fila);
-             
-             
-             
-             // representar en el grafico
-             String id = "ID: "+Integer.toString(count)+" , "+"Labelset: ";
-             
-              my_data.setValue(freq, id + temp.get_name(),"");
-              
-              count++;
-              lista1.remove(temp);
+            count++;
+            lista1.remove(temp);
         }
         
-          jtable.setModel(table_model1);
-          jtable.setBounds(jtable.getBounds());
+        jtable.setModel(table_model1);
+        jtable.setBounds(jtable.getBounds());
           
-           //RESIZE COLUMNS! jtable
-            TableColumnModel tcm = jtable.getColumnModel();
-            
-            tcm.getColumn(0).setPreferredWidth(50);
-            tcm.getColumn(1).setPreferredWidth(50);
-            tcm.getColumn(2).setPreferredWidth(60);
-            
-            //grafico
-          cp.setDataset(my_data);
+        TableColumnModel tcm = jtable.getColumnModel();
+        tcm.getColumn(0).setPreferredWidth(50);
+        tcm.getColumn(1).setPreferredWidth(50);
+        tcm.getColumn(2).setPreferredWidth(60);
+
+        //graph
+        cp.setDataset(my_data);
           
-          
-          // add a labelled marker for the bid start price...
-            sum = sum/keysets.size();
-            Marker start = new ValueMarker(sum);
-            start.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
-            start.setLabel("                        Mean: "+util.Truncate_value(sum, 4));
-            start.setPaint(Color.red);
-            cp.addRangeMarker(start);
-                             
-        
-          return jtable.getModel();
+        // add a labelled marker for the bid start price...
+        sum = sum/keysets.size();
+        Marker start = new ValueMarker(sum);
+        start.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
+        start.setLabel("                        Mean: "+util.Truncate_value(sum, 4));
+        start.setPaint(Color.red);
+        cp.addRangeMarker(start);
+
+        return jtable.getModel();
     }
-    
-    
-    
-    
+
     private void jtable_coefficient_values(MultiLabelInstances dataset ,ArrayList<pares_atributos> lista_pares,String tipo_tabla)
     {
-         //Object[] fila ;
-         double[][] pair_label_values;
+        double[][] pair_label_values;
          
-        //si la tabla es coocurrence values
-         if(tipo_tabla.equals("coocurrence")) {
-             pair_label_values =util.get_pair_label_values(dataset, lista_pares);
-             coocurrence_coefficients = pair_label_values;
-         }
-         //si la tabla es heatmap values "heatmap"
-         else {
-            //pair_label_values =util.get_heatmap_values(dataset, lista_pares);
-            pair_label_values = getHeatMapCoefficients();
-             heatmap_coefficients = pair_label_values.clone();
-             
-             /*
-            //System.out.println("HEATMAP");
-             for(int i=0; i<heatmap_coefficients.length; i++){
-                //System.out.println(Arrays.toString(heatmap_coefficients[i]));
-             }
-             */
+        //coocurrence values table
+        if(tipo_tabla.equals("coocurrence")) {
+            pair_label_values =util.get_pair_label_values(dataset, lista_pares);
+            coocurrence_coefficients = pair_label_values;
         }
-      
-   //-----------------------------------------------------------------------------------
-   //-----------------------------------------------------------------------------------
-         data = new Object[pair_label_values.length][pair_label_values.length+1];
-         column = new Object[data.length+1];
+        //heatmap values table
+        else {
+            pair_label_values = getHeatMapCoefficients();
+            heatmap_coefficients = pair_label_values.clone();
+        }
+
+        //-----------------------------------------------------------------------------------
+        
+        data = new Object[pair_label_values.length][pair_label_values.length+1];
+        column = new Object[data.length+1];
          
-         if(tipo_tabla.equals("coocurrence")) {
+        if(tipo_tabla.equals("coocurrence")) {
             for(int num_fila=0;  num_fila< pair_label_values.length;num_fila++)
             {            
                 for(int num_col=0; num_col < pair_label_values.length; num_col++){
@@ -7705,8 +5401,7 @@ public class RunApp extends javax.swing.JFrame {
                     else if(num_col > num_fila){
                         data[num_fila][num_col] = "";
                     }
-                    else{
-                        //data[num_fila][num_col] = pair_label_values[num_fila][num_col];                        
+                    else{             
                         if(pair_label_values[num_col-1][num_fila] <= 0.0){
                             data[num_fila][num_col] = "";
                         }
@@ -7715,14 +5410,11 @@ public class RunApp extends javax.swing.JFrame {
                         }
                     }
                 }
-                //data[num_fila]  = util.Get_values_x_fila(num_fila, pair_label_values,dataset.getLabelNames()[num_fila]);
             }
-         }
-         else{
+        }
+        else{
             for(int num_fila=0;  num_fila< pair_label_values.length;num_fila++)
-            {            
-                //data[num_fila]  = util.Get_values_x_fila(num_fila, pair_label_values,dataset.getLabelNames()[num_fila]);
-            
+            {
                 for(int num_col=0; num_col < pair_label_values.length+1; num_col++){
                     
                     if(num_col == 0){
@@ -7732,202 +5424,163 @@ public class RunApp extends javax.swing.JFrame {
                         data[num_fila][num_col] = "---";
                     }
                     else{
-                        //data[num_fila][num_col] = pair_label_values[num_fila][num_col];                        
                         if(pair_label_values[num_col-1][num_fila] <= 0.0){
                             data[num_fila][num_col] = "";
                         }
                         else{
                             NumberFormat formatter = new DecimalFormat("#0.000"); 
                             data[num_fila][num_col] = formatter.format(pair_label_values[num_col-1][num_fila]).replace(",", ".");
-                    
                         }
                     }
                 }
-            
             } 
-            
-         }
+        }
          
-       
-           for(int i = 0; i< column.length;i++)
-         {
-             if(i==0) {
-                 column[i]="Labels";
-             }
-             else {
-                 column[i]=(dataset.getLabelNames()[i-1]);
-             }
-         } 
+        for(int i = 0; i< column.length;i++)
+        {
+            if(i==0) {
+                column[i]="Labels";
+            }
+            else {
+                column[i]=(dataset.getLabelNames()[i-1]);
+            }
+        } 
           
         AbstractTableModel1 fixedModel = new AbstractTableModel1(data, column);
         AbstractTableModel2 model = new AbstractTableModel2(data, column);   
         
+        JTable temp,fixedTable_temp;
+        JPanel jpanel_temp;
        
-       JTable temp,fixedTable_temp;
-       JPanel jpanel_temp;
-       
-       if(tipo_tabla.equals("coocurrence")){
-           temp=jTable11; 
-           jpanel_temp=panelCoOcurrenceValues; 
-           fixedTable_temp=fixedTable1;
-       }
-       else {
-           temp=jTable12;
-           jpanel_temp=panelHeatmapValues; 
-           fixedTable_temp=fixedTable2;
-       }
+        if(tipo_tabla.equals("coocurrence")){
+            temp=jTable11; 
+            jpanel_temp=panelCoOcurrenceValues; 
+            fixedTable_temp=fixedTable1;
+        }
+        else {
+            temp=jTable12;
+            jpanel_temp=panelHeatmapValues; 
+            fixedTable_temp=fixedTable2;
+        }
 
-       fixedTable_temp.setModel(fixedModel);
-       temp.setModel(model);
+        fixedTable_temp.setModel(fixedModel);
+        temp.setModel(model);
        
-       JScrollPane scroll = new JScrollPane(temp);
-    JViewport viewport = new JViewport();
-    viewport.setView(fixedTable_temp);
-    viewport.setPreferredSize(fixedTable_temp.getPreferredSize());
-    scroll.setRowHeaderView(viewport);
+        JScrollPane scroll = new JScrollPane(temp);
+        JViewport viewport = new JViewport();
+        viewport.setView(fixedTable_temp);
+        viewport.setPreferredSize(fixedTable_temp.getPreferredSize());
+        scroll.setRowHeaderView(viewport);
     
-    scroll.setBounds(20, 20, 780, 390);
+        scroll.setBounds(20, 20, 780, 390);
+
+        scroll.setCorner(JScrollPane.UPPER_LEFT_CORNER, fixedTable_temp.getTableHeader());
+
+        temp.setBorder(BorderFactory.createLineBorder(Color.black));
     
-    scroll.setCorner(JScrollPane.UPPER_LEFT_CORNER, fixedTable_temp
-        .getTableHeader());
-        
-    temp.setBorder(BorderFactory.createLineBorder(Color.black));
-    
-    
-    jpanel_temp.remove(0); //una curiosa manera de resolver el problema
-    jpanel_temp.add(scroll, BorderLayout.CENTER, 0);
-    
-    
-    
+        jpanel_temp.remove(0);
+        jpanel_temp.add(scroll, BorderLayout.CENTER, 0);
     }
     
-  
-    
-    //JTABLE DE LOS COEFICIENTES DE CHI Y FI.
-    private void jtable_chi_fi_coefficient(MultiLabelInstances dataset )
+    private void jtable_chi_phi_coefficient(MultiLabelInstances dataset )
     {
-
-       chi_fi_coefficient = util.get_chi_fi_coefficient(dataset);
-      
-       data = new Object[chi_fi_coefficient.length][chi_fi_coefficient.length+1];        
-       
-       column = new Object[data.length+1];
+        chi_fi_coefficient = util.get_chi_fi_coefficient(dataset);
+        data = new Object[chi_fi_coefficient.length][chi_fi_coefficient.length+1];        
+        column = new Object[data.length+1];
                           
         for(int num_fila=0;  num_fila< chi_fi_coefficient.length;num_fila++)
         {            
-              data[num_fila]  = util.Get_values_x_fila(num_fila, chi_fi_coefficient,dataset.getLabelNames()[num_fila]);
+            data[num_fila]  = util.Get_values_x_fila(num_fila, chi_fi_coefficient,dataset.getLabelNames()[num_fila]);
         }
         
-        
-      for(int i = 0; i< column.length;i++)//se le agrega 1 pq realmente se emieza en 1 y no en 0.
-         {
-             if(i==0) column[i]="Labels"; //table_model1.addColumn("Labels");
-             else column[i]=(dataset.getLabelNames()[i-1]);
-         }    
+        for(int i = 0; i< column.length;i++)//se le agrega 1 pq realmente se emieza en 1 y no en 0.
+        {
+            if(i==0) column[i]="Labels"; //table_model1.addColumn("Labels");
+            else column[i]=(dataset.getLabelNames()[i-1]);
+        }    
      
-       AbstractTableModel1 fixedModel = new AbstractTableModel1(data, column);
-       AbstractTableModel2 model = new AbstractTableModel2(data, column);
+        AbstractTableModel1 fixedModel = new AbstractTableModel1(data, column);
+        AbstractTableModel2 model = new AbstractTableModel2(data, column);
        
-       fixedTable.setModel(fixedModel);
-       jTable10.setModel(model);
-
+        fixedTable.setModel(fixedModel);
+        jTable10.setModel(model);
       
-    JScrollPane scroll = new JScrollPane(jTable10);
-    JViewport viewport = new JViewport();
-    viewport.setView(fixedTable);
-    viewport.setPreferredSize(fixedTable.getPreferredSize());
-    scroll.setRowHeaderView(viewport);
-    
-    scroll.setBounds(20, 20, 780, 390);
-    
-    scroll.setCorner(JScrollPane.UPPER_LEFT_CORNER, fixedTable
-        .getTableHeader());
-    
-    jTable10.setBorder(BorderFactory.createLineBorder(Color.black));
-    
-    if(first_time_chi){panelChiPhi.add(scroll, BorderLayout.CENTER, 0); first_time_chi=false; return; }
+        JScrollPane scroll = new JScrollPane(jTable10);
+        JViewport viewport = new JViewport();
+        viewport.setView(fixedTable);
+        viewport.setPreferredSize(fixedTable.getPreferredSize());
+        scroll.setRowHeaderView(viewport);
+
+        scroll.setBounds(20, 20, 780, 390);
+
+        scroll.setCorner(JScrollPane.UPPER_LEFT_CORNER, fixedTable.getTableHeader());
+
+        jTable10.setBorder(BorderFactory.createLineBorder(Color.black));
+
+        if(first_time_chi){
+            panelChiPhi.add(scroll, BorderLayout.CENTER, 0); first_time_chi=false; 
+            return; 
+        }
         
-        
-    panelChiPhi.remove(0); //una curiosa manera de resolver el problema
-    panelChiPhi.add(scroll, BorderLayout.CENTER, 0);
-       
+        panelChiPhi.remove(0); //una curiosa manera de resolver el problema
+        panelChiPhi.add(scroll, BorderLayout.CENTER, 0); 
     }
   
-
     private TableModel jtable_label_graph(JTable jtable, MultiLabelInstances dataset )
     {
-         DefaultTableModel table_model1= new DefaultTableModel()
-                           {
+        DefaultTableModel table_model1= new DefaultTableModel()
+        {
             public boolean isCellEditable(int row, int column)
             {
                 return false;//This causes all cells to be not editable
             }
-          };
+        };
 
-               
         table_model1.addColumn("Label");
         table_model1.addColumn("# Examples");
         table_model1.addColumn("Frequency");
-        
-       //devuelve una lista de atributos que contiene el nombre y su frecuencia
 
-        
-        //util.Recorre_Arreglo(label_frenquency);
-        
         Object[] fila = new Object[3];
         
         atributo current;
         double freq ;
         String truncate;
-        
-       ////System.out.println("TEST JTABLE_FREQUENCY");
-        //RECORRE LAS ETIQUETAS
-                     
+
         for(int i=0;i<dataset.getNumLabels();i++)
         {
             current = label_frenquency[i];
             
             fila[0]=current.get_name();
             freq =current.get_frequency()*1.0/dataset.getNumInstances();
-            
-            //System.out.println( "( "+current.get_frequency()+ " / "+dataset.getNumInstances()+")"+" = "+freq );
-            
+
             fila[1]= current.get_frequency();
             
             truncate = Double.toString(freq);
             fila[2]= util.Truncate_values_aprox_zero(truncate, 4);
-            
-            
-          // //System.out.println(fila[1]);
-            
+
             table_model1.addRow(fila);
         }
         
         jtable.setModel(table_model1);
-        
-        //RESIZE COLUMNS! jtable
-            TableColumnModel tcm = jtable.getColumnModel();
+
+        TableColumnModel tcm = jtable.getColumnModel();
             
-            tcm.getColumn(0).setPreferredWidth(80);
-            tcm.getColumn(1).setPreferredWidth(70);
-            tcm.getColumn(2).setPreferredWidth(70);
+        tcm.getColumn(0).setPreferredWidth(80);
+        tcm.getColumn(1).setPreferredWidth(70);
+        tcm.getColumn(2).setPreferredWidth(70);
             
         return jtable.getModel();
-    
-    
-    
     }
-    
     
     private TableModel jtable_attributes(JTable jtable, MultiLabelInstances dataset )
     {
         DefaultTableModel table_model1= new DefaultTableModel()
-                          {
+        {
             public boolean isCellEditable(int row, int column)
             {
                 return false;//This causes all cells to be not editable
             }
-          };
+        };
                
         table_model1.addColumn("Attribute");
 
@@ -7940,7 +5593,7 @@ public class RunApp extends javax.swing.JFrame {
         
         int cant_attr =num_atributos -numero_etiquetas;
          
-         Attribute att;
+        Attribute att;
         for (int i=0;i<cant_attr;i++) 
         {
             att = instancias.attribute(i);
@@ -7953,23 +5606,19 @@ public class RunApp extends javax.swing.JFrame {
         }
         
         jtable.setModel(table_model1);
-        
-            
+
         return jtable.getModel();
-        
     }
     
-   
-       
     private TableModel jtable_ir_per_label_intra_class(JTable jtable)
     {
         DefaultTableModel table_model1= new DefaultTableModel()
-                          {
+        {
             public boolean isCellEditable(int row, int column)
             {
                 return false;//This causes all cells to be not editable
             }
-          };
+        };
                
         table_model1.addColumn("Label id");
         table_model1.addColumn("# Labels");
@@ -7983,7 +5632,6 @@ public class RunApp extends javax.swing.JFrame {
         
         id_x_nums_label = new int [label_imbalanced.length];
         id_x_IR = new double [label_imbalanced.length];
-        
         
         for(int i=0; i< label_imbalanced.length ; i++)
         {
@@ -8006,32 +5654,26 @@ public class RunApp extends javax.swing.JFrame {
 
             id++;
         }
-        
-        
+
         jtable.setModel(table_model1);
         
-        //RESIZE COLUMNS! jtable
-            TableColumnModel tcm = jtable.getColumnModel();
-            
-            tcm.getColumn(0).setPreferredWidth(80);
-            tcm.getColumn(1).setPreferredWidth(50);
-            tcm.getColumn(2).setPreferredWidth(60);
+        TableColumnModel tcm = jtable.getColumnModel();
+        tcm.getColumn(0).setPreferredWidth(80);
+        tcm.getColumn(1).setPreferredWidth(50);
+        tcm.getColumn(2).setPreferredWidth(60);
             
         return jtable.getModel();
-        
-        
     }
     
-    
-     private TableModel jtable_ir_per_label_intra_class_only(JTable jtable)
+    private TableModel jtable_ir_per_label_intra_class_only(JTable jtable)
     {
         DefaultTableModel table_model1= new DefaultTableModel()
-                          {
+        {
             public boolean isCellEditable(int row, int column)
             {
                 return false;//This causes all cells to be not editable
             }
-          };
+        };
                
         table_model1.addColumn("Label");
         table_model1.addColumn("IR");
@@ -8039,46 +5681,36 @@ public class RunApp extends javax.swing.JFrame {
         Object[] fila = new Object[2];
 
         String truncate;
-                
-            //la lista que tiene los valores IR intra class es el label_imbalanced
-              
-       
-        //representalos en la tabla
+
         for(int i=0; i<label_imbalanced.length; i++)
-        {
-                                    
+        {                       
             truncate = Double.toString(label_imbalanced[i].get_ir());
             
             fila[0]= label_imbalanced[i].get_name();          
             fila[1]=util.Truncate_values_aprox_zero(truncate, 5);
-            
-                        
+      
             table_model1.addRow(fila);
-            
         }
 
         jtable.setModel(table_model1);
-        
-        //RESIZE COLUMNS! jtable
-            TableColumnModel tcm = jtable.getColumnModel();
+
+        TableColumnModel tcm = jtable.getColumnModel();
             
-            tcm.getColumn(0).setPreferredWidth(80);
-            tcm.getColumn(1).setPreferredWidth(50);
-            
+        tcm.getColumn(0).setPreferredWidth(80);
+        tcm.getColumn(1).setPreferredWidth(50);
             
         return jtable.getModel();
-        
     }
     
-     private TableModel jtable_ir_per_label_inter_class_only(JTable jtable)
+    private TableModel jtable_ir_per_label_inter_class_only(JTable jtable)
     {
         DefaultTableModel table_model1= new DefaultTableModel()
-                          {
+        {
             public boolean isCellEditable(int row, int column)
             {
                 return false;//This causes all cells to be not editable
             }
-          };
+        };
                
         table_model1.addColumn("Label");
         table_model1.addColumn("IR");
@@ -8086,47 +5718,38 @@ public class RunApp extends javax.swing.JFrame {
         Object[] fila = new Object[2];
 
         String truncate;
-                
-             
-         IR_inter_class= util.get_ir_values_inter_class(label_frenquency); //calcula el ir inter class
+ 
+        IR_inter_class= util.get_ir_values_inter_class(label_frenquency); //calcula el ir inter class
         
           int temp = IR_inter_class.length-1;
-        //representalos en la tabla
-        for(int i=temp; i>=0; i--)//recorrido inverso de la lista para pq en este caso la etiqueta mas frecuente es la de menor IR.
-        {
-                                    
+        for(int i=temp; i>=0; i--)
+        {                  
             truncate = Double.toString(IR_inter_class[i]);
             
             fila[0]= label_frenquency[i].get_name();          
             fila[1]=util.Truncate_values_aprox_zero(truncate, 5);
-            
                         
             table_model1.addRow(fila);
-            
         }
 
         jtable.setModel(table_model1);
         
-        //RESIZE COLUMNS! jtable
-            TableColumnModel tcm = jtable.getColumnModel();
-            
-            tcm.getColumn(0).setPreferredWidth(80);
-            tcm.getColumn(1).setPreferredWidth(50);
-            
-            
+        TableColumnModel tcm = jtable.getColumnModel();
+        tcm.getColumn(0).setPreferredWidth(80);
+        tcm.getColumn(1).setPreferredWidth(50);
+             
         return jtable.getModel();
-        
     }
   
     private TableModel jtable_ir_per_label_inter_class(JTable jtable)
     {
         DefaultTableModel table_model1= new DefaultTableModel()
-                          {
+        {
             public boolean isCellEditable(int row, int column)
             {
                 return false;//This causes all cells to be not editable
             }
-          };
+        };
                
         table_model1.addColumn("Label id");
         table_model1.addColumn("# Labels");
@@ -8141,8 +5764,7 @@ public class RunApp extends javax.swing.JFrame {
         id_x_nums_label_inter_class = new int [label_frenquency.length];
         id_x_IR_inter_class = new double [label_frenquency.length];
         
-        double[] IR_inter_class= util.get_ir_values_inter_class(label_frenquency); //calcula el ir inter class
-        
+        double[] IR_inter_class= util.get_ir_values_inter_class(label_frenquency);
         
         for(int i=0; i< label_frenquency.length ; i++)
         {
@@ -8164,12 +5786,7 @@ public class RunApp extends javax.swing.JFrame {
         
         id_x_nums_label_inter_class = ir_veces.Get_Id_x_Cant_veces();
         id_x_IR_inter_class = ir_veces.Get_Id_x_IR();
-        
-       //System.out.println("Recorre tabla inter class");
-        //util.Recorre_Arreglo(id_x_nums_label_inter_class);
-        //util.Recorre_Arreglo( id_x_IR_inter_class);
-        
-        //representalos en la tabla
+
         for(int i=0; i<id_x_IR_inter_class.length; i++)
         {
             if(id_x_nums_label_inter_class[i] ==0) continue;
@@ -8181,49 +5798,41 @@ public class RunApp extends javax.swing.JFrame {
             fila[2]= util.Truncate_values_aprox_zero(truncate, 5);
                         
             table_model1.addRow(fila);
-            
         }
 
         jtable.setModel(table_model1);
         
-        //RESIZE COLUMNS! jtable
-            TableColumnModel tcm = jtable.getColumnModel();
+        TableColumnModel tcm = jtable.getColumnModel();
             
-            tcm.getColumn(0).setPreferredWidth(80);
-            tcm.getColumn(1).setPreferredWidth(50);
-            tcm.getColumn(2).setPreferredWidth(60);
+        tcm.getColumn(0).setPreferredWidth(80);
+        tcm.getColumn(1).setPreferredWidth(50);
+        tcm.getColumn(2).setPreferredWidth(60);
             
         return jtable.getModel();
-        
     }
-    
-    //CREA LA TABLA DE datos imbalanceados
+
     private TableModel jtable_imbalanced(JTable jtable, MultiLabelInstances dataset )
     {
         DefaultTableModel table_model1= new DefaultTableModel()
-          {
+        {
             public boolean isCellEditable(int row, int column)
             {
                 return false;//This causes all cells to be not editable
             }
-          };
+        };
                
         table_model1.addColumn("Label");
         table_model1.addColumn("IR intra class");
         table_model1.addColumn("IR inter class");
         table_model1.addColumn("STDEV intra class");
-       //devuelve una lista de atributos que contiene el nombre y su frecuencia
-       // label_imbalanced = util.Get_data_imbalanced_x_label_inter_class(dataset,label_frenquency);
         label_imbalanced = util.Sort_data_imbalance_Mayor_IR_intra_class(label_imbalanced);
-        
-               
+
         Object[] fila = new Object[4];
         double std;
         String truncate;
         
         atributo current;
      
-                     
         for(int i=0;i<dataset.getNumLabels();i++)
         {
             current = label_imbalanced[i];
@@ -8244,27 +5853,24 @@ public class RunApp extends javax.swing.JFrame {
         
         jtable.setModel(table_model1);
         
-        //RESIZE COLUMNS! jtable
-            TableColumnModel tcm = jtable.getColumnModel();
-            
-            tcm.getColumn(0).setPreferredWidth(100);
-            tcm.getColumn(1).setPreferredWidth(20);
-            tcm.getColumn(2).setPreferredWidth(80);
-            tcm.getColumn(3).setPreferredWidth(40);
+        TableColumnModel tcm = jtable.getColumnModel();
+        tcm.getColumn(0).setPreferredWidth(100);
+        tcm.getColumn(1).setPreferredWidth(20);
+        tcm.getColumn(2).setPreferredWidth(80);
+        tcm.getColumn(3).setPreferredWidth(40);
             
         return jtable.getModel();
     }
-    
-    
+
     private TableModel jtable_lablelsxExamples(JTable jtable , HashMap<Integer,Integer> labels_x_example)
     {
         DefaultTableModel table_model1= new DefaultTableModel()
-                          {
+        {
             public boolean isCellEditable(int row, int column)
             {
                 return false;//This causes all cells to be not editable
             }
-          };
+        };
                
         table_model1.addColumn("# Labels");
         table_model1.addColumn("# Examples");
@@ -8275,67 +5881,57 @@ public class RunApp extends javax.swing.JFrame {
         double freq ;
         int freq_current;
         String truncate;
-       ////System.out.println("TEST JTABLE_FREQUENCY");
-        //RECORRE LAS ETIQUETAS
-        
+
         int max = util.Maxim_key(labels_x_example);
 				 
 				            
 	for(int i=1; i<=max ; i++)
-            {
-		freq_current=0;
-		if(labels_x_example.get(i)!=null) freq_current=labels_x_example.get(i);
-               
-                freq= freq_current*1.0/dataset.getNumInstances();
-                
-                
-                fila[0]= i;
-                fila[1]=freq_current;
-                truncate = Double.toString(freq);
-                fila[2]=util.Truncate_values_aprox_zero(truncate, 5);
-                
-                table_model1.addRow(fila);
+        {
+            freq_current=0;
+            if(labels_x_example.get(i)!=null){
+                freq_current=labels_x_example.get(i);
             }
+               
+            freq= freq_current*1.0/dataset.getNumInstances();
+            
+            fila[0]= i;
+            fila[1]=freq_current;
+            truncate = Double.toString(freq);
+            fila[2]=util.Truncate_values_aprox_zero(truncate, 5);
+                
+            table_model1.addRow(fila);
+        }
         
         jtable.setModel(table_model1);
         
-        //RESIZE COLUMNS! jtable
-            TableColumnModel tcm = jtable.getColumnModel();
-            
-            tcm.getColumn(0).setPreferredWidth(80);
-            tcm.getColumn(1).setPreferredWidth(50);
-            tcm.getColumn(2).setPreferredWidth(70);
-        
+        TableColumnModel tcm = jtable.getColumnModel();
+        tcm.getColumn(0).setPreferredWidth(80);
+        tcm.getColumn(1).setPreferredWidth(50);
+        tcm.getColumn(2).setPreferredWidth(70);
             
         return jtable.getModel();
-    
     }
-  
-    //CREA LA TABLA DE ETIQUETAS X FRECUENCIA
+
     private TableModel jtable_frequency(JTable jtable, MultiLabelInstances dataset )
     {
         DefaultTableModel table_model1= new DefaultTableModel()
-          {
+        {
             public boolean isCellEditable(int row, int column)
             {
                 return false;//This causes all cells to be not editable
             }
-          };
-
-               
+        };
+      
         table_model1.addColumn("Label");
         table_model1.addColumn("# Examples");
         table_model1.addColumn("Frequency");
-        
         
         Object[] fila = new Object[3];
         
         atributo current;
         double freq ;
         String truncate;
-       ////System.out.println("TEST JTABLE_FREQUENCY");
-        //RECORRE LAS ETIQUETAS
-                     
+
         for(int i=0;i<dataset.getNumLabels();i++)
         {
             current = label_frenquency[i];
@@ -8343,160 +5939,70 @@ public class RunApp extends javax.swing.JFrame {
             fila[0]=current.get_name();
             freq =current.get_frequency()*1.0/dataset.getNumInstances();
             
-            //System.out.println( "( "+current.get_frequency()+ " / "+dataset.getNumInstances()+")"+" = "+freq );
             fila[1]= current.get_frequency(); //numero de ejemplos
             
             truncate = Double.toString(freq);
             fila[2]= util.Truncate_values_aprox_zero(truncate, 5);
-            
-            
-            
-          // //System.out.println(fila[1]);
-            
+
             table_model1.addRow(fila);
         }
         
         jtable.setModel(table_model1);
-        
-        //RESIZE COLUMNS! jtable
-            TableColumnModel tcm = jtable.getColumnModel();
-            
-            tcm.getColumn(0).setPreferredWidth(80);
-            tcm.getColumn(1).setPreferredWidth(70);
-            tcm.getColumn(2).setPreferredWidth(50);
+
+        TableColumnModel tcm = jtable.getColumnModel();
+        tcm.getColumn(0).setPreferredWidth(80);
+        tcm.getColumn(1).setPreferredWidth(70);
+        tcm.getColumn(2).setPreferredWidth(50);
             
         return jtable.getModel();
     }
-    
-    
-     public void create_jtable_metric(JTable table,JPanel jpanel , Object rowData[][], int posx, int posy, int width,int height)
-     {
-            
+     
+    public void create_jtable_metric_principal(JTable table,JPanel jpanel , Object rowData[][], int posx, int posy, int width,int height)
+    {
         TableModel model = new Table_model_metrics(rowData);
         
         table.setModel(model);
-       
-        //table.setPreferredScrollableViewportSize(table.getPreferredSize());
-        //JScrollPane scrollPane = new JScrollPane(table);
-        //jPanel13.add(scrollPane);
-        
-       TableColumnModel tcm = table.getColumnModel();
+
+        TableColumnModel tcm = table.getColumnModel();
             
-       tcm.getColumn(0).setPreferredWidth(440);
-       tcm.getColumn(1).setPreferredWidth(30);
-        
-       JScrollPane scrollPane = new JScrollPane(table);
-        
-        //table.setBounds(20, 100, 200, 100);
+        tcm.getColumn(0).setPreferredWidth(420);
+        tcm.getColumn(1).setPreferredWidth(70);
+
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        tcm.getColumn(1).setCellRenderer(rightRenderer);
+
+        tcm.getColumn(2).setPreferredWidth(50);
+        tcm.getColumn(2).setMaxWidth(50);
+        tcm.getColumn(2).setMinWidth(50);
+
+        JScrollPane scrollPane = new JScrollPane(table);
        
         scrollPane.setBounds(posx, posy, width, height);
         
         table.setBorder(BorderFactory.createLineBorder(Color.black));
         
-        //jpanel.add(scrollPane, BorderLayout.CENTER);
-        
-        /*jpanel.repaint();
+        jpanel.add(scrollPane, BorderLayout.CENTER);
+        jpanel.repaint();
         jpanel.validate();
-*/
-  
     }
      
-     
-     public void create_jtable_metric_train_test(JTable table,JPanel jpanel , Object rowData[][], int posx, int posy, int width,int height)
-     {
-            
-        TableModel model = new Table_model_metrics(rowData, "train-test");
+    public void create_jtable_metric_multi(JTable table,JPanel jpanel , Object rowData[][], int posx, int posy, int width,int height)
+    {
+        TableModel model = new Table_model_metrics(rowData, "multi");
         
         table.setModel(model);
-       
-        //table.setPreferredScrollableViewportSize(table.getPreferredSize());
-        //JScrollPane scrollPane = new JScrollPane(table);
-        //jPanel13.add(scrollPane);
-        
-       TableColumnModel tcm = table.getColumnModel();
-            
-       tcm.getColumn(0).setPreferredWidth(350);
-       tcm.getColumn(1).setPreferredWidth(70);
-       tcm.getColumn(2).setPreferredWidth(70);
-       tcm.getColumn(3).setPreferredWidth(30);
-       tcm.getColumn(3).setMinWidth(30);
-       tcm.getColumn(3).setMaxWidth(30);
-        
-       JScrollPane scrollPane = new JScrollPane(table);
-        
-        //table.setBounds(20, 100, 200, 100);
-       
-        scrollPane.setBounds(posx, posy, width, height);
-        
-        table.setBorder(BorderFactory.createLineBorder(Color.black));
-        
-        jpanel.add(scrollPane, BorderLayout.CENTER);
-        jpanel.repaint();
-        jpanel.validate();
 
-  
-    }
-     
-     
-     public void create_jtable_metric_principal(JTable table,JPanel jpanel , Object rowData[][], int posx, int posy, int width,int height)
-     {
-            
-        TableModel model = new Table_model_metrics(rowData);
-        
-        table.setModel(model);
-       
-        //table.setPreferredScrollableViewportSize(table.getPreferredSize());
-        //JScrollPane scrollPane = new JScrollPane(table);
-        //jPanel13.add(scrollPane);
-        
-       TableColumnModel tcm = table.getColumnModel();
-            
-       tcm.getColumn(0).setPreferredWidth(420);
-       tcm.getColumn(1).setPreferredWidth(70);
+        TableColumnModel tcm = table.getColumnModel();
 
-       DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-       rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
-       tcm.getColumn(1).setCellRenderer(rightRenderer);
+        tcm.getColumn(0).setPreferredWidth(320);
 
-       tcm.getColumn(2).setPreferredWidth(50);
-       tcm.getColumn(2).setMaxWidth(50);
-       tcm.getColumn(2).setMinWidth(50);
-        
-       JScrollPane scrollPane = new JScrollPane(table);
-        
-        //table.setBounds(20, 100, 200, 100);
-       
-        scrollPane.setBounds(posx, posy, width, height);
-        
-        table.setBorder(BorderFactory.createLineBorder(Color.black));
-        
-        jpanel.add(scrollPane, BorderLayout.CENTER);
-        jpanel.repaint();
-        jpanel.validate();
+        tcm.getColumn(1).setPreferredWidth(40);
+        tcm.getColumn(1).setMaxWidth(40);
+        tcm.getColumn(1).setMinWidth(40);
 
-  
-    }
-     
-     
-     public void create_jtable_metric_multi(JTable table,JPanel jpanel , Object rowData[][], int posx, int posy, int width,int height)
-     {
-            
-       TableModel model = new Table_model_metrics(rowData, "multi");
+        JScrollPane scrollPane = new JScrollPane(table);
         
-       table.setModel(model);
-        
-       TableColumnModel tcm = table.getColumnModel();
-            
-       tcm.getColumn(0).setPreferredWidth(320);
-
-       tcm.getColumn(1).setPreferredWidth(40);
-       tcm.getColumn(1).setMaxWidth(40);
-       tcm.getColumn(1).setMinWidth(40);
-        
-       JScrollPane scrollPane = new JScrollPane(table);
-        
-        //table.setBounds(20, 100, 200, 100);
-       
         scrollPane.setBounds(posx, posy, width, height);
         
         table.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -8505,19 +6011,13 @@ public class RunApp extends javax.swing.JFrame {
         jpanel.repaint();
         jpanel.validate();
     }
-     
-     
-     private double[][] getHeatMapCoefficients(){
+
+    private double[][] getHeatMapCoefficients(){
          
-         atributo [] label_frenquency = util.Get_Frequency_x_label(dataset);;
-         double [] label_frenquency_values = util.get_label_frequency(label_frenquency);
+        atributo [] label_frenquency = util.Get_Frequency_x_label(dataset);;
+        double [] label_frenquency_values = util.get_label_frequency(label_frenquency);
          
-         double [][] coeffs = new double[dataset.getNumLabels()][dataset.getNumLabels()];
-         
-        //System.out.println("COOCURRENCE");
-         for(int i=0; i<dataset.getNumLabels(); i++){
-            //System.out.println(Arrays.toString(coocurrence_coefficients[i]));
-         }
+        double [][] coeffs = new double[dataset.getNumLabels()][dataset.getNumLabels()];
          
         for(int i=0; i<dataset.getNumLabels(); i++){
             for(int j=0; j<dataset.getNumLabels(); j++){
@@ -8531,12 +6031,10 @@ public class RunApp extends javax.swing.JFrame {
                 else{
                     if(coocurrence_coefficients[i][j] > 0){
                         coeffs[i][j] = coocurrence_coefficients[i][j] / label_frenquency_values[j];
-                       //System.out.println("1. coocurrence[" + i + "][" + j + "]: " + coocurrence_coefficients[i][j] + " ; frequency[" + i + "]: " + label_frenquency_values[j]);
                     }
                     else{
                         if(coocurrence_coefficients[j][i] > 0){
                             coeffs[i][j] = coocurrence_coefficients[j][i] / label_frenquency_values[j];
-                           //System.out.println("2. coocurrence[" + j + "][" + i + "]: " + coocurrence_coefficients[j][i] + " ; frequency[" + i + "]: " + label_frenquency_values[j]);
                         }
                         else{
                            coeffs[i][j] = 0; 
@@ -8547,108 +6045,83 @@ public class RunApp extends javax.swing.JFrame {
                 
             }
         }
-        
-       //System.out.println("HEATMAP TABLE");
-         for(int p=0; p<coeffs.length; p++){
-            //System.out.println(Arrays.toString(coeffs[p]));
-         }
-         
-         return coeffs;
-     }
-     
 
-     public int[] getTopRelatedHeatmap(int n){
+        return coeffs;
+    }
+
+    public int[] getTopRelatedHeatmap(int n){   
+        
+        LabelsPairValue p = new LabelsPairValue();
             
-            LabelsPairValue p = new LabelsPairValue();
+        ArrayList<String> pares = new ArrayList<String>();
             
-            ArrayList<String> pares = new ArrayList<String>();
-            
-            ArrayList<LabelsPairValue> pairs = new ArrayList<LabelsPairValue>();
-            for(int i=0; i<heatmap_coefficients.length; i++){
-                for(int j=0; j<heatmap_coefficients.length; j++){
-                    if(heatmap_coefficients[i][j] > 0){
-                        pairs.add(new LabelsPairValue(i, j, heatmap_coefficients[i][j]));
-                    }
+        ArrayList<LabelsPairValue> pairs = new ArrayList<LabelsPairValue>();
+        for(int i=0; i<heatmap_coefficients.length; i++){
+            for(int j=0; j<heatmap_coefficients.length; j++){
+                if(heatmap_coefficients[i][j] > 0){
+                    pairs.add(new LabelsPairValue(i, j, heatmap_coefficients[i][j]));
                 }
             }
-            Collections.sort(pairs, Collections.reverseOrder());
-            
-           //System.out.println(Arrays.toString(pairs.toArray()));
+        }
+        Collections.sort(pairs, Collections.reverseOrder());
+        
+        int numLabels = n;
+        int currentSelectedLabels = 0;
 
-            int numLabels = n;
-            int currentSelectedLabels = 0;
+        Vector<Integer> selectedLabels = new Vector<Integer>();
 
-            Vector<Integer> selectedLabels = new Vector<Integer>();
-
-            do{
-                if(!selectedLabels.contains(pairs.get(0).label1)){
-                    selectedLabels.add(pairs.get(0).label1);
-                   //System.out.println("Add " + pairs.get(0).label1);
+        do{
+            if(!selectedLabels.contains(pairs.get(0).label1)){
+                selectedLabels.add(pairs.get(0).label1);
+                currentSelectedLabels++;
+            }
+                
+            if(currentSelectedLabels < numLabels){
+                if(!selectedLabels.contains(pairs.get(0).label2)){
+                    selectedLabels.add(pairs.get(0).label2);
                     currentSelectedLabels++;
                 }
-                
-                if(currentSelectedLabels < numLabels){
-                    if(!selectedLabels.contains(pairs.get(0).label2)){
-                        selectedLabels.add(pairs.get(0).label2);
-                       //System.out.println("Add " + pairs.get(0).label2);
-                        currentSelectedLabels++;
-                    }
-                }
-                
-                pairs.remove(pairs.get(0));
-            }while((pairs.size() > 0) && (currentSelectedLabels < numLabels));
-
-            
-           //System.out.println("-----");
-            
-            int [] labelIndices = new int[n];
-            
-            String s = new String();
-
-            if(selectedLabels.size() < n){
-                //tableHeatmapLeft.setRowSelectionInterval(0, dataset.getNumLabels()-1);
-                //int[] selectedsFreq = tableHeatmapLeft.getSelectedRows();
-                
-                int[] selectedsFreq = new int[dataset.getNumLabels()];
-                for(int i=0; i<selectedsFreq.length; i++){
-                    selectedsFreq[i] = i;
-                }
-                
-               //System.out.println("selectedsFreq: " + Arrays.toString(selectedsFreq));
-                
-                int i = 0;
-                do{
-                    if(!selectedLabels.contains((int)selectedsFreq[i])){
-                        selectedLabels.add(selectedsFreq[i]);
-                    }
-
-                    i++;
-                }while(selectedLabels.size() < n);
             }
-             
-            for(int i=0; i<selectedLabels.size(); i++){
-                s = jTable12.getColumnName(selectedLabels.get(i));
-                if(s != null){
-                    pares.add(s);
-                    labelIndices[i] = selectedLabels.get(i);
-                   //System.out.println("Adding " + labelIndices[i]);
-                }
-                else{
-                   //System.out.println("NULL");
-                }
-            }
+                
+            pairs.remove(pairs.get(0));
+        }while((pairs.size() > 0) && (currentSelectedLabels < numLabels));
+
+        int [] labelIndices = new int[n];
             
-            return labelIndices;
+        String s = new String();
+
+        if(selectedLabels.size() < n){
+            int[] selectedsFreq = new int[dataset.getNumLabels()];
+            for(int i=0; i<selectedsFreq.length; i++){
+                selectedsFreq[i] = i;
+            }
+ 
+            int i = 0;
+            do{
+                if(!selectedLabels.contains((int)selectedsFreq[i])){
+                    selectedLabels.add(selectedsFreq[i]);
+                }
+
+                i++;
+            }while(selectedLabels.size() < n);
         }
-     
-     
-     
+             
+        for(int i=0; i<selectedLabels.size(); i++){
+            s = jTable12.getColumnName(selectedLabels.get(i));
+            if(s != null){
+                pares.add(s);
+                labelIndices[i] = selectedLabels.get(i);
+            }
+        }
+            
+        return labelIndices;
+    }
+
     /**
      * @param args the command line arguments
      */
     
-      
-    
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
