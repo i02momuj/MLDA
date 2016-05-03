@@ -379,7 +379,6 @@ public class RunApp extends javax.swing.JFrame {
         cp_per_labelset = create_jchart(panelIRperLabelset, "bar", "Labelset id","IR per labelset",false);
       
         create_jtable_metrics_jpanel1_principal(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save, button_clear, 30,190,780,280,"database"); //tab Database //35,155,500,355
-       // create_jtable_metrics_jpanel14(jTable8,panelMultipleDatasets,button_all_2,button_none_2,button_invert_2,button_calculate_2,button_save2,290,35,565,400); //
 
         create_jtable_metrics_multi(jTableMulti,jPanelMulti,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save, 25,15,510,420); //tab Multi
 
@@ -488,67 +487,100 @@ public class RunApp extends javax.swing.JFrame {
         jpanel.add(jbutton_export);
     }
   
-
-    private void create_jtable_metrics_jpanel1(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_calculate,JButton button_save, int posx,int posy, int width, int heigh,String info)
+    
+    private void create_jtable_metrics_jpanel1_principal(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_calculate,JButton button_save, JButton button_clear, int posx,int posy, int width, int heigh,String info)
     {
-        if(info.equals("imbalanced"))
-        {
-            create_jtable_metric(jtable,jpanel, util.Get_row_data_imbalanced(),posx,posy,width,heigh);
-        }  
-        
-        if(info.equals("database"))
-        {
-            create_jtable_metric(jtable,jpanel, util.Get_row_data(),posx,posy,width,heigh);
-        }  
+        create_jtable_metric_principal(jtable,jpanel, util.Get_row_data_principal(),posx,posy,width,heigh);        
         
         //button ALL
         button_all = new JButton("All");
         button_all.setBounds(posx, posy+heigh+5, 80, 20);
-
+        button_all.setToolTipText("Select all metrics");
+              //PRINCIPAL_ALL
         button_all.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_allActionPerformed(evt,jtable );
-            }
-        });
+              public void actionPerformed(java.awt.event.ActionEvent evt) {
+                  button_allActionPerformed_principal(evt,jtable );
+                              }
+          });
         jpanel.add(button_all);
-
+      
+      
         //button NONE
         button_none = new JButton("None");
-        button_none.setBounds(posx+100, posy+heigh+5, 80, 20);
+        button_none.setToolTipText("Deselect all metrics");
+        button_none.setBounds(posx+90, posy+heigh+5, 80, 20);
 
         button_none.addActionListener(new java.awt.event.ActionListener() {
               public void actionPerformed(java.awt.event.ActionEvent evt) {
-                  button_noneActionPerformed(evt,jtable);
+                  button_noneActionPerformed_principal(evt,jtable);
                               }
           });
         jpanel.add(button_none);
-      
+
         //button INVERT
         button_invert = new JButton("Invert");
-        button_invert.setBounds(posx+200, posy+heigh+5, 80, 20);
+        button_invert.setToolTipText("Invert selection");
+        button_invert.setBounds(posx+180, posy+heigh+5, 80, 20);
 
         button_invert.addActionListener(new java.awt.event.ActionListener() {
               public void actionPerformed(java.awt.event.ActionEvent evt) {
-                  button_invertActionPerformed(evt,jtable);
+                  button_invertActionPerformed_principal(evt,jtable);
                               }
           });
         jpanel.add(button_invert);
-      
-         //button CALCULATE
-        button_calculate = new JButton("Show");
-        button_calculate.setBounds(posx+420, posy+heigh+5, 80, 20);
 
-        button_calculate.addActionListener(new java.awt.event.ActionListener() {
+        //button CLEAR
+        button_clear = new JButton("Clear");
+        button_clear.setToolTipText("Clear selection and metric values");
+        button_clear.setBounds(posx+270, posy+heigh+5, 80, 20);
+
+        button_clear.addActionListener(new java.awt.event.ActionListener() {
               public void actionPerformed(java.awt.event.ActionEvent evt) {
-                  button_calculateActionPerformed(evt,jtable);
+                  button_clearActionPerformed_principal(evt,jtable);
                               }
           });
+        jpanel.add(button_clear);
+
+           //button CALCULATE
+        button_calculate = new JButton("Calculate");
+        button_calculate.setBounds(posx+590, posy+heigh+5, 95, 25);
+        button_calculate.setToolTipText("Calculate selected metrics");
+
+        button_calculate.addActionListener(new java.awt.event.ActionListener() {
+              public void actionPerformed(final java.awt.event.ActionEvent evt) {
+
+                  progressBar.setIndeterminate(false);
+                  progressFrame.setVisible(true);
+
+                  progressFrame.repaint();
+
+                  new Thread(new Runnable() {
+                      @Override
+                      public void run() {
+                          // do the long-running work here
+                          button_calculateActionPerformed_principal(evt,jtable);
+                          // at the end:
+                          SwingUtilities.invokeLater(new Runnable() {
+                              @Override
+                              public void run() {
+                                  progressBar.setIndeterminate(false);
+                                  progressFrame.setVisible(false);
+                                  progressFrame.repaint();
+                              }//run
+                          }); //invokeLater
+                      }}
+                  ).start(); //Thread
+
+                  //button_calculateActionPerformed_principal(evt,jtable);
+              } //actionPerformed
+          });//ActionListener
         jpanel.add(button_calculate);
-      
-      
-        //button SAVE
+
+
+         //button SAVE
         button_save = new JButton("Save");
-        button_save.setBounds(posx+420, posy+heigh+25, 80, 20);
+        button_save.setBounds(posx+695, posy+heigh+5, 80, 25);
+        button_save.setToolTipText("Save selected metrics in a file");
 
         button_save.addActionListener(new java.awt.event.ActionListener() {
               public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -564,305 +596,101 @@ public class RunApp extends javax.swing.JFrame {
     }
     
     
-    private void create_jtable_metrics_jpanel1_principal(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_calculate,JButton button_save, JButton button_clear, int posx,int posy, int width, int heigh,String info)
-    {
-        if(info.equals("imbalanced"))
-        create_jtable_metric(jtable,jpanel, util.Get_row_data_imbalanced(),posx,posy,width,heigh);  
-        
-        if(info.equals("database"))
-        create_jtable_metric_principal(jtable,jpanel, util.Get_row_data_principal(),posx,posy,width,heigh);  
-        
-        
-       //button ALL
-      button_all = new JButton("All");
-      button_all.setBounds(posx, posy+heigh+5, 80, 20);
-      button_all.setToolTipText("Select all metrics");
-            //PRINCIPAL_ALL
-      button_all.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_allActionPerformed_principal(evt,jtable );
-                            }
-        });
-      jpanel.add(button_all);
-      
-      
-     //button NONE
-      button_none = new JButton("None");
-      button_none.setToolTipText("Deselect all metrics");
-      button_none.setBounds(posx+90, posy+heigh+5, 80, 20);
-            
-      button_none.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_noneActionPerformed_principal(evt,jtable);
-                            }
-        });
-      jpanel.add(button_none);
-      
-      //button INVERT
-      button_invert = new JButton("Invert");
-      button_invert.setToolTipText("Invert selection");
-      button_invert.setBounds(posx+180, posy+heigh+5, 80, 20);
-            
-      button_invert.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_invertActionPerformed_principal(evt,jtable);
-                            }
-        });
-      jpanel.add(button_invert);
-      
-      //button CLEAR
-      button_clear = new JButton("Clear");
-      button_clear.setToolTipText("Clear selection and metric values");
-      button_clear.setBounds(posx+270, posy+heigh+5, 80, 20);
-            
-      button_clear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_clearActionPerformed_principal(evt,jtable);
-                            }
-        });
-      jpanel.add(button_clear);
-      
-         //button CALCULATE
-      button_calculate = new JButton("Calculate");
-      button_calculate.setBounds(posx+590, posy+heigh+5, 95, 25);
-      button_calculate.setToolTipText("Calculate selected metrics");
-            
-      button_calculate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(final java.awt.event.ActionEvent evt) {
-
-                progressBar.setIndeterminate(false);
-                progressFrame.setVisible(true);
-
-                progressFrame.repaint();
-                //System.out.println("progressFrame.getX(): " + progressFrame.getX());
-                //System.out.println("progressFrame.getY(): " + progressFrame.getY());
-                //System.out.println("progressFrame.getWidth(): " + progressFrame.getWidth());
-                //System.out.println("progressFrame.getHeight(): " + progressFrame.getHeight());
-                
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // do the long-running work here
-                        button_calculateActionPerformed_principal(evt,jtable);
-                        // at the end:
-                        SwingUtilities.invokeLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                progressBar.setIndeterminate(false);
-                                progressFrame.setVisible(false);
-                                progressFrame.repaint();
-                            }//run
-                        }); //invokeLater
-                    }}
-                ).start(); //Thread
-                
-                //button_calculateActionPerformed_principal(evt,jtable);
-            } //actionPerformed
-        });//ActionListener
-      jpanel.add(button_calculate);
-      
-      
-       //button SAVE
-      button_save = new JButton("Save");
-      button_save.setBounds(posx+695, posy+heigh+5, 80, 25);
-      button_save.setToolTipText("Save selected metrics in a file");
-            
-      button_save.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    button_saveActionPerformed_principal(evt,jtable);
-                } catch (IOException ex) {
-                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                            }
-        });
-      jpanel.add(button_save);
-      
-    }
-    
-    
     
     private void create_jtable_metrics_multi(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_calculate,JButton button_save, int posx,int posy, int width, int heigh)
     {
 
-      create_jtable_metric_multi(jtable,jpanel, util.Get_row_data_multi(),posx,posy,width,heigh);  
+        create_jtable_metric_multi(jtable,jpanel, util.Get_row_data_multi(),posx,posy,width,heigh);  
         
-       //button ALL
-      button_all = new JButton("All");
-      button_all.setBounds(posx, posy+heigh+5, 80, 20);
-      button_all.setToolTipText("Select all metrics");
-            //PRINCIPAL_ALL
-      button_all.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_allActionPerformed_multi(evt,jtable );
-                            }
-        });
-      jpanel.add(button_all);
+        //button ALL
+        button_all = new JButton("All");
+        button_all.setBounds(posx, posy+heigh+5, 80, 20);
+        button_all.setToolTipText("Select all metrics");
+              //PRINCIPAL_ALL
+        button_all.addActionListener(new java.awt.event.ActionListener() {
+              public void actionPerformed(java.awt.event.ActionEvent evt) {
+                  button_allActionPerformed_multi(evt,jtable );
+                              }
+          });
+        jpanel.add(button_all);
       
-      
-     //button NONE
-      button_none = new JButton("None");
-      button_none.setToolTipText("Deselect all metrics");
-      button_none.setBounds(posx+90, posy+heigh+5, 80, 20);
-            
-      button_none.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_noneActionPerformed_multi(evt,jtable);
-                            }
-        });
-      jpanel.add(button_none);
-      
-      //button INVERT
-      button_invert = new JButton("Invert");
-      button_invert.setToolTipText("Invert selection");
-      button_invert.setBounds(posx+180, posy+heigh+5, 80, 20);
-            
-      button_invert.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_invertActionPerformed_multi(evt,jtable);
-                            }
-        });
-      jpanel.add(button_invert);
-      
-      
-         //button CALCULATE
-      button_calculate = new JButton("Calculate");
-      button_calculate.setBounds(posx+320, posy+heigh+5, 95, 20);
-      button_calculate.setToolTipText("Calculate selected metrics");
-            
-      button_calculate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                progressFrame.setVisible(true);
-                progressFrame.repaint();
-                progressBar.setIndeterminate(false);
+        //button NONE
+        button_none = new JButton("None");
+        button_none.setToolTipText("Deselect all metrics");
+        button_none.setBounds(posx+90, posy+heigh+5, 80, 20);
 
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // do the long-running work here
-                        button_calculateActionPerformed_multi(evt,jtable);
-                        // at the end:
-                        SwingUtilities.invokeLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                progressBar.setIndeterminate(false);
-                                progressFrame.setVisible(false);
-                                progressFrame.repaint();
-                                JOptionPane.showMessageDialog(null, "Metrics have been calculated succesfully.", "Successful", JOptionPane.INFORMATION_MESSAGE);
-                                
-                            }//run
-                        }); //invokeLater
-                    }}
-                ).start(); //Thread
-            }
-        });
-      jpanel.add(button_calculate);
+        button_none.addActionListener(new java.awt.event.ActionListener() {
+              public void actionPerformed(java.awt.event.ActionEvent evt) {
+                  button_noneActionPerformed_multi(evt,jtable);
+                              }
+          });
+        jpanel.add(button_none);
+
+        //button INVERT
+        button_invert = new JButton("Invert");
+        button_invert.setToolTipText("Invert selection");
+        button_invert.setBounds(posx+180, posy+heigh+5, 80, 20);
+
+        button_invert.addActionListener(new java.awt.event.ActionListener() {
+              public void actionPerformed(java.awt.event.ActionEvent evt) {
+                  button_invertActionPerformed_multi(evt,jtable);
+                              }
+          });
+        jpanel.add(button_invert);
       
       
-       //button SAVE
-      button_save = new JButton("Save");
-      button_save.setBounds(posx+425, posy+heigh+5, 80, 20);
-      button_save.setToolTipText("Save selected metrics in a file");
-            
-      button_save.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    button_saveActionPerformed_multi(evt,jtable);
-                } catch (IOException ex) {
-                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                            }
-        });
-      jpanel.add(button_save);
+        //button CALCULATE
+        button_calculate = new JButton("Calculate");
+        button_calculate.setBounds(posx+320, posy+heigh+5, 95, 20);
+        button_calculate.setToolTipText("Calculate selected metrics");
+
+        button_calculate.addActionListener(new java.awt.event.ActionListener() {
+              public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                  progressFrame.setVisible(true);
+                  progressFrame.repaint();
+                  progressBar.setIndeterminate(false);
+
+                  new Thread(new Runnable() {
+                      @Override
+                      public void run() {
+                          // do the long-running work here
+                          button_calculateActionPerformed_multi(evt,jtable);
+                          // at the end:
+                          SwingUtilities.invokeLater(new Runnable() {
+                              @Override
+                              public void run() {
+                                  progressBar.setIndeterminate(false);
+                                  progressFrame.setVisible(false);
+                                  progressFrame.repaint();
+                                  JOptionPane.showMessageDialog(null, "Metrics have been calculated succesfully.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+
+                              }//run
+                          }); //invokeLater
+                      }}
+                  ).start(); //Thread
+              }
+          });
+        jpanel.add(button_calculate);
+
+
+         //button SAVE
+        button_save = new JButton("Save");
+        button_save.setBounds(posx+425, posy+heigh+5, 80, 20);
+        button_save.setToolTipText("Save selected metrics in a file");
+
+        button_save.addActionListener(new java.awt.event.ActionListener() {
+              public void actionPerformed(java.awt.event.ActionEvent evt) {
+                  try {
+                      button_saveActionPerformed_multi(evt,jtable);
+                  } catch (IOException ex) {
+                      Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                  }
+                              }
+          });
+        jpanel.add(button_save);
       
     }
 
-
-  //"choose datasets" PESTAÑA
-    
-    private void create_jtable_metrics_jpanel14(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_calculate,JButton button_save, int posx,int posy, int width, int heigh)
-    {
-        
-        create_jtable_metric(jtable,jpanel, util.Get_row_data_multi_datasets(),posx,posy,width,heigh);  
-       //button ALL
-     /* button_all = new JButton("All");
-      button_all.setBounds(posx, posy+405, 80, 20);
-            
-      button_all.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_allActionPerformed(evt,jtable );
-                            }
-        });
-      jpanel.add(button_all);*/
-      
-      /*
-     //button NONE
-      button_none = new JButton("None");
-      button_none.setBounds(posx+100, posy+405, 80, 20);
-            
-      button_none.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_noneActionPerformed(evt,jtable);
-                            }
-        });
-      jpanel.add(button_none);
-      
-      //button INVERT
-      button_invert = new JButton("Invert");
-      button_invert.setBounds(posx+200, posy+405, 80, 20);
-            
-      button_invert.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_invertActionPerformed(evt,jtable);
-                            }
-        });
-      jpanel.add(button_invert);
-      
-         //button CALCULATE
-      button_calculate = new JButton("Show");
-      button_calculate.setBounds(posx+480, posy+405, 80, 20);
-            
-      button_calculate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_calculateActionPerformed_datasets(evt,jtable);
-                            }
-        });
-      jpanel.add(button_calculate);
-      
-      
-       //button SAVE
-      button_save = new JButton("Save");
-      button_save.setBounds(posx+480, posy+425, 80, 20);
-            
-      button_save.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    button_saveActionPerformed_multidatasets(evt,jtable);
-                } catch (IOException ex) {
-                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                            }
-        });
-      jpanel.add(button_save);
-      
-      
-             //button Graphics
-      button_save = new JButton("# Labels per example");
-      button_save.setBounds(posx+390, posy+445,170, 20);
-            
-      button_save.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    button_graphicActionPerformed_multidatasets(evt);
-                } catch (IOException ex) {
-                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                            }
-        });
-      jpanel.add(button_save);*/
-      
-    }
 
 
     @SuppressWarnings("unchecked")
@@ -2378,7 +2206,7 @@ public class RunApp extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    //ELIMINAR DATASET SELECCIONADO
+
     private void buttonRemoveMultipleDatasetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRemoveMultipleDatasetsActionPerformed
         // TODO add your handling code here:
         int current = listMultipleDatasetsLeft.getSelectedIndex();
@@ -2394,12 +2222,6 @@ public class RunApp extends javax.swing.JFrame {
         lista_son_meka.remove(current);
 
         tableMetricsMulti.remove(dataName);
-        /*
-       //System.out.println("");
-        for(MultiLabelInstances actual : list_dataset)
-       //System.out.print(", "+actual.getDataSet().relationName());
-       //System.out.println("");
-        */
 
         lista.remove(current);
     }//GEN-LAST:event_buttonRemoveMultipleDatasetsActionPerformed
@@ -2408,12 +2230,13 @@ public class RunApp extends javax.swing.JFrame {
     private void buttonAddMultipleDatasetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddMultipleDatasetsActionPerformed
         // TODO add your handling code here:
 
-        // ESCOGER EL DATASET
-        final JFileChooser jfile1 = new JFileChooser();
+        //Choose dataset
+        final JFileChooser chooser = new JFileChooser();
+        chooser.setMultiSelectionEnabled(true);
         FileNameExtensionFilter fname = new FileNameExtensionFilter(".arff", "arff");
-        jfile1.setFileFilter(fname);
+        chooser.setFileFilter(fname);
 
-        final int returnVal = jfile1.showOpenDialog(this);
+        final int returnVal = chooser.showOpenDialog(this);
         
         progressBar.setIndeterminate(true);
         progressFrame.setVisible(true);
@@ -2423,7 +2246,7 @@ public class RunApp extends javax.swing.JFrame {
             @Override
             public void run() {
                 // do the long-running work here
-                loadMultiDataset(returnVal, jfile1);
+                loadMultiDataset(returnVal, chooser);
                 // at the end:
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
@@ -2439,60 +2262,108 @@ public class RunApp extends javax.swing.JFrame {
         
     }//GEN-LAST:event_buttonAddMultipleDatasetsActionPerformed
 
-    private int loadMultiDataset(int returnVal, JFileChooser jfile1){
+    private int loadMultiDataset(int returnVal, JFileChooser chooser){
         
         if (returnVal == JFileChooser.OPEN_DIALOG)
         {
-
-            File f1 = jfile1.getSelectedFile();
-
-            String dataset_name = f1.getName();
-            dataset_name = dataset_name.substring(0,dataset_name.length()-5);
+            //File f1 = chooser.getSelectedFile();
+            File [] files = chooser.getSelectedFiles();
             
-            if(Dataset_names.contains(dataset_name))
-            {
-                JOptionPane.showMessageDialog(null, "The dataset is duplicated.", "alert", JOptionPane.ERROR_MESSAGE);
-                return -1;
-            }
+            for(File f1 : files){
+                String dataset_name = f1.getName();
+                dataset_name = dataset_name.substring(0,dataset_name.length()-5);
 
-            String filename_database_arff = f1.getAbsolutePath();
-            filename_database_xml = util.Get_xml_string(filename_database_arff);
-            filename_database_xml = util.Get_file_name_xml(filename_database_xml);
-
-            boolean es_meka=false;
-
-            String filename_database_xml_path1=  filename_database_arff.substring(0,filename_database_arff.length()-5)+".xml";
-            //-------------------------------------------------------------------------------------------------------
-            FileReader fr;
-            try
-            {
-                fr = new FileReader(filename_database_arff);
-                BufferedReader bf = new BufferedReader(fr);
-
-                String sCadena = bf.readLine();
-                int label_found=0;
-                String label_name;
-                String[] label_names_found;
-
-                es_meka = util.Es_de_tipo_MEKA(sCadena);
-                lista_son_meka.add(es_meka);
-
-                if(es_meka)
+                if(Dataset_names.contains(dataset_name))
                 {
-                    //System.out.println("el dataset es de tipo MEKA");
-                    es_de_tipo_meka = true;
+                    JOptionPane.showMessageDialog(null, "The dataset is duplicated.", "alert", JOptionPane.ERROR_MESSAGE);
+                    return -1;
+                }
 
-                    int label_count = util.Extract_labels_from_arff(sCadena);
-                    //System.out.println("label_count: " + label_count);
-                    //label_names_found = new String[label_count];                    
-                    
-                    
-                    //---------------
-                    
-                    if(label_count > 0){
-                        label_names_found = new String[label_count];
+                String filename_database_arff = f1.getAbsolutePath();
+                filename_database_xml = util.Get_xml_string(filename_database_arff);
+                filename_database_xml = util.Get_file_name_xml(filename_database_xml);
 
-                        while(label_found < label_count)
+                boolean es_meka=false;
+
+                String filename_database_xml_path1=  filename_database_arff.substring(0,filename_database_arff.length()-5)+".xml";
+                //-------------------------------------------------------------------------------------------------------
+                FileReader fr;
+                try
+                {
+                    fr = new FileReader(filename_database_arff);
+                    BufferedReader bf = new BufferedReader(fr);
+
+                    String sCadena = bf.readLine();
+                    int label_found=0;
+                    String label_name;
+                    String[] label_names_found;
+
+                    es_meka = util.Es_de_tipo_MEKA(sCadena);
+                    lista_son_meka.add(es_meka);
+
+                    if(es_meka)
+                    {
+                        //System.out.println("el dataset es de tipo MEKA");
+                        es_de_tipo_meka = true;
+
+                        int label_count = util.Extract_labels_from_arff(sCadena);
+                        //System.out.println("label_count: " + label_count);
+                        //label_names_found = new String[label_count];                    
+
+
+                        //---------------
+
+                        if(label_count > 0){
+                            label_names_found = new String[label_count];
+
+                            while(label_found < label_count)
+                            {
+                                sCadena = bf.readLine();
+                                label_name = util.Extract_label_name_from_String(sCadena);
+
+                                if(label_name!= null)
+                                {
+                                    label_names_found[label_found]=label_name;
+                                    label_found++;
+
+                                }
+
+                            }
+                        }
+                        else{
+                            label_count = Math.abs(label_count);
+                            label_names_found = new String[label_count];
+
+                            String [] sCadenas = new String[label_count];
+
+                            while(!(sCadena = bf.readLine()).contains("@data")){
+                                if(!sCadena.trim().equals("")){
+                                    for(int s=0; s<label_count-1; s++){
+                                        sCadenas[s] = sCadenas[s+1];
+                                    }
+                                    sCadenas[label_count-1] = sCadena;
+                                }
+                            }
+
+                            for(int i=0; i<label_count; i++){
+                                //System.out.println("sCadenas[" + i + "]: -" + sCadenas[i] + "-");
+                                label_name = util.Extract_label_name_from_String(sCadenas[i]);
+
+                                if(label_name!= null)
+                                {
+                                    label_names_found[label_found]=label_name;
+                                    label_found++;
+
+                                }
+                            }
+                        }
+
+                        //---------------
+
+
+
+
+                        /*while(label_found < label_count)
                         {
                             sCadena = bf.readLine();
                             label_name = util.Extract_label_name_from_String(sCadena);
@@ -2504,111 +2375,67 @@ public class RunApp extends javax.swing.JFrame {
 
                             }
 
-                        }
+                        }*/
+                        //util.Recorre_Arreglo(label_names_found);
+
+                        BufferedWriter bw_xml= new BufferedWriter(new FileWriter(filename_database_xml_path1));
+                        PrintWriter wr_xml = new PrintWriter(bw_xml);
+
+                        util.Write_into_xml_file(wr_xml, label_names_found); //crea el xml para el caso de MEKA
+
+                        bw_xml.close();
+                        wr_xml.close();
+
+                        filename_database_xml = util.Get_file_name_xml(filename_database_xml_path1); //carga el xml creado...
+
                     }
-                    else{
-                        label_count = Math.abs(label_count);
-                        label_names_found = new String[label_count];
-                        
-                        String [] sCadenas = new String[label_count];
-                        
-                        while(!(sCadena = bf.readLine()).contains("@data")){
-                            if(!sCadena.trim().equals("")){
-                                for(int s=0; s<label_count-1; s++){
-                                    sCadenas[s] = sCadenas[s+1];
-                                }
-                                sCadenas[label_count-1] = sCadena;
-                            }
-                        }
-                        
-                        for(int i=0; i<label_count; i++){
-                            //System.out.println("sCadenas[" + i + "]: -" + sCadenas[i] + "-");
-                            label_name = util.Extract_label_name_from_String(sCadenas[i]);
-
-                            if(label_name!= null)
-                            {
-                                label_names_found[label_found]=label_name;
-                                label_found++;
-
-                            }
-                        }
-                    }
-                    
-                    //---------------
-                    
-                    
-                    
-
-                    /*while(label_found < label_count)
+                    else
                     {
-                        sCadena = bf.readLine();
-                        label_name = util.Extract_label_name_from_String(sCadena);
+                        //System.out.println("el dataset NO es de tipo MEKA");
+                        es_de_tipo_meka= false;
+                    }
+                }
+                catch (FileNotFoundException ex) {
+                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-                        if(label_name!= null)
-                        {
-                            label_names_found[label_found]=label_name;
-                            label_found++;
+                //-------------------------------------------------------------------------------------------------------
 
-                        }
+                //-------------------------------------------------------------------------------------------------------
 
+                try {
+
+                    MultiLabelInstances current = new MultiLabelInstances(filename_database_arff, filename_database_xml);
+
+                    if(es_meka){
+                        File f2 = new File(filename_database_xml);
+                       //System.out.println("f2: " + f2.getAbsolutePath());
+                        f2.delete();
+                    }
+
+                    /*if(util.Esta_dataset(list_dataset, current.getDataSet().relationName()))
+                    {
+                       //System.out.println("Dataset name: " + dataset_name);
+                        JOptionPane.showMessageDialog(null, "The dataset is duplicated.", "alert", JOptionPane.ERROR_MESSAGE);
+                        return;
                     }*/
-                    //util.Recorre_Arreglo(label_names_found);
 
-                    BufferedWriter bw_xml= new BufferedWriter(new FileWriter(filename_database_xml_path1));
-                    PrintWriter wr_xml = new PrintWriter(bw_xml);
+                    list_dataset.add(current);
+                    Dataset_names.add(dataset_name);
+                    lista.addElement(dataset_name );
 
-                    util.Write_into_xml_file(wr_xml, label_names_found); //crea el xml para el caso de MEKA
+                   //System.out.println("current: " + current + " ; dataset_name: " + dataset_name);
 
-                    bw_xml.close();
-                    wr_xml.close();
-
-                    filename_database_xml = util.Get_file_name_xml(filename_database_xml_path1); //carga el xml creado...
-                    
                 }
-                else
-                {
-                    //System.out.println("el dataset NO es de tipo MEKA");
-                    es_de_tipo_meka= false;
+                catch (InvalidDataFormatException ex) {
+                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            catch (FileNotFoundException ex) {
-                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            //-------------------------------------------------------------------------------------------------------
-
-            //-------------------------------------------------------------------------------------------------------
-
-            try {
-
-                MultiLabelInstances current = new MultiLabelInstances(filename_database_arff, filename_database_xml);
-
-                if(es_meka){
-                    File f2 = new File(filename_database_xml);
-                   //System.out.println("f2: " + f2.getAbsolutePath());
-                    f2.delete();
-                }
-                
-                /*if(util.Esta_dataset(list_dataset, current.getDataSet().relationName()))
-                {
-                   //System.out.println("Dataset name: " + dataset_name);
-                    JOptionPane.showMessageDialog(null, "The dataset is duplicated.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }*/
-
-                list_dataset.add(current);
-                Dataset_names.add(dataset_name);
-                lista.addElement(dataset_name );
-                
-               //System.out.println("current: " + current + " ; dataset_name: " + dataset_name);
-
-            }
-            catch (InvalidDataFormatException ex) {
-                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+            
         
         return 1;
     }
