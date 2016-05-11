@@ -5995,7 +5995,7 @@ public class RunApp extends javax.swing.JFrame {
         int max = util.Maxim_key(labels_x_example);
 				 
 				            
-	for(int i=1; i<=max ; i++)
+	for(int i=0; i<=max ; i++)
         {
             freq_current=0;
             if(labels_x_example.get(i)!=null){

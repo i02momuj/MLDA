@@ -3801,7 +3801,7 @@ public class util {
                 
                 line += value;
                 
-                for(int j=0; j<maxName.length()-value.length(); j++){ 
+                for(int j=0; j<dataNames.get(i).length()-value.length(); j++){ 
                     line += " ";
                 }
             }
