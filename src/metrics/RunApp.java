@@ -397,6 +397,7 @@ public class RunApp extends javax.swing.JFrame {
         jTable1 = setMetricsHelp(jTable1);
         create_jtable_metrics_principal(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save, button_clear, 30,190,780,280,"database"); //tab Database //35,155,500,355
 
+        jTableMulti = setMetricsHelp(jTableMulti);
         create_jtable_metrics_multi(jTableMulti,jPanelMulti,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save, 25,15,510,420); //tab Multi
 
         jButtonSaveDatasets.setEnabled(false);
