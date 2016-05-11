@@ -377,7 +377,7 @@ public class util {
         return result;
     }
     
-     public static void update_values_bar_chart(atributo[] label_x_frequency, int cant_instancias, CategoryPlot cp )
+    public static void update_values_bar_chart(atributo[] label_x_frequency, int cant_instancias, CategoryPlot cp )
     {
             DefaultCategoryDataset my_data = new DefaultCategoryDataset();
       
@@ -409,6 +409,85 @@ public class util {
             //return cp;
               
             
+    }
+    
+    
+    public static void update_values_bar_chart_IR(atributo[] label_x_frequency, double[] IR, CategoryPlot cp)
+    {
+            DefaultCategoryDataset my_data = new DefaultCategoryDataset();
+      
+            double prob = 0;
+            
+            label_x_frequency = util.Ordenar_freq_x_attr(label_x_frequency);
+            
+            double sum = 0.0;
+            for(int i=label_x_frequency.length-1; i>=0; i--)
+            {
+                prob= IR[i];           
+                sum += prob;
+                my_data.setValue(prob, label_x_frequency[i].get_name()," ");      
+            }
+          
+            cp.setDataset(my_data);
+            
+            // add a labelled marker for the bid start price...
+            sum = sum/label_x_frequency.length;
+            Marker meanMark = new ValueMarker(sum);
+            meanMark.setPaint(Color.red);
+            meanMark.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
+            meanMark.setLabel("                        Mean: "+util.Truncate_value(sum, 3));
+            cp.addRangeMarker(meanMark);
+            
+            Marker limitMark = new ValueMarker(1.5);
+            limitMark.setPaint(Color.black);
+            limitMark.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
+            
+            if((sum < 1.3) || (sum > 1.7)){
+                limitMark.setLabel("                                                Imbalance limit (IR=1.5)");
+            }            
+            cp.addRangeMarker(limitMark);
+            
+            //return cp;
+              
+            
+    }
+    
+    
+    public static void update_values_bar_chart_IR(atributo[] labelset_x_IR, CategoryPlot cp)
+    {
+            DefaultCategoryDataset my_data = new DefaultCategoryDataset();
+      
+            double prob = 0;
+            
+            //label_x_frequency = util.Ordenar_freq_x_attr(label_x_frequency);
+            
+            double sum = 0.0;
+            for(int i=labelset_x_IR.length-1; i>=0; i--)
+            {
+                //prob= IR[i];   
+                prob = labelset_x_IR[i].get_ir_inter_class();
+                sum += prob;
+                my_data.setValue(prob, labelset_x_IR[i].get_name()," ");      
+            }
+          
+            cp.setDataset(my_data);
+            
+            // add a labelled marker for the bid start price...
+            sum = sum/labelset_x_IR.length;
+            Marker meanMark = new ValueMarker(sum);
+            meanMark.setPaint(Color.red);
+            meanMark.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
+            meanMark.setLabel("                        Mean: "+util.Truncate_value(sum, 3));
+            cp.addRangeMarker(meanMark);
+            
+            Marker limitMark = new ValueMarker(1.5);
+            limitMark.setPaint(Color.black);
+            limitMark.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
+            
+            if((sum < 1.3) || (sum > 1.7)){
+                limitMark.setLabel("                                                Imbalance limit (IR=1.5)");
+            }            
+            cp.addRangeMarker(limitMark);
     }
      
      
@@ -862,13 +941,11 @@ public class util {
            }
            
        }
+
            
-           
-           
-        if(ir_values.length>50) cp.getDomainAxis().setTickLabelsVisible(false);   
-        else{cp.getDomainAxis().setTickLabelsVisible(true);   }
+        cp.getDomainAxis().setTickLabelsVisible(false);
         
-        cp.setDataset(my_data);      
+        cp.setDataset(my_data); 
         
         double sum = get_mean(ir_values);
         
@@ -3633,39 +3710,22 @@ public class util {
      }
    
    
-   public static void Save_text_file(PrintWriter wr,ArrayList<String> metric_list, MultiLabelInstances dataset, atributo[] imbalanced_data, boolean  es_de_tipo_meka, Hashtable<String, String> tableMetrics)
-     {
-         
+    public static void Save_text_file(PrintWriter wr,ArrayList<String> metric_list, MultiLabelInstances dataset, atributo[] imbalanced_data, boolean  es_de_tipo_meka, Hashtable<String, String> tableMetrics)
+    {
          Instances i1= dataset.getDataSet();
-                 
-          wr.write("Relation Name:"+ "\t"+i1.relationName());
-          wr.write(System.getProperty("line.separator"));  
-    
-          //cant de atributos
-          int num_atributos= i1.numAttributes();
-          int numero_etiquetas = dataset.getNumLabels();
-          int num_instances = dataset.getNumInstances();
-          
-          //Attributes
-          wr.write("Attributes:"+"\t"+"\t"+Integer.toString(num_atributos-numero_etiquetas));
-          wr.write(System.getProperty("line.separator"));   
-                  
-         //cant de etiquetas
-          wr.write("Labels:"+"\t"+"\t"+"\t"+Integer.toString(numero_etiquetas));
-          wr.write(System.getProperty("line.separator"));   
-          
-          wr.write("Instances:"+"\t"+"\t"+Integer.toString(num_instances));
-          wr.write(System.getProperty("line.separator"));   
-          
-          wr.write("--------------------------------------------------------------------------------");
-          wr.write(System.getProperty("line.separator"));   
-            
-        //atributo[] imbalanced_data =  util.Get_data_imbalanced_x_label(dataset);
         
-        String maxString = "Average of unconditionally dependent label pairs by chi-square test";
+        //String maxString = "Average of unconditionally dependent label pairs by chi-square test";
+        String maxString = new String();
+        for(String s : metric_list){
+            if(s.length() > maxString.length()){
+                maxString = s;
+            }
+        }
         double maxLength = maxString.length();
-        String value = new String();
-          
+        
+        wr.write("Relation name:"+ "\t"+i1.relationName());
+        wr.write(System.getProperty("line.separator"));  
+
         for(String metric : metric_list)
         {
             //wr.write(metric + ":" + get_tabs(metric) + tableMetrics.get(metric).replace(",", "."));
@@ -3846,9 +3906,9 @@ public class util {
         
         s = " ";
         for(String name : dataNames){
-            s = s + "& " + name + " ";
+            s = s + "& " + name.replaceAll("_", "\\\\\\_") + " ";
         }
-        s += " \\";
+        s += " \\\\";
         
         wr.write(s);       
         wr.write(System.getProperty("line.separator"));
@@ -3898,25 +3958,8 @@ public class util {
                  
         wr.write("Relation Name"+ ";" + i1.relationName());
         wr.write(System.getProperty("line.separator"));  
-    
-          //cant de atributos
-          int num_atributos= i1.numAttributes();
-          int numero_etiquetas = dataset.getNumLabels();
-          int num_instances = dataset.getNumInstances();
-          
-          //Attributes
-          wr.write("Attributes"+ ";" +Integer.toString(num_atributos-numero_etiquetas));
-          wr.write(System.getProperty("line.separator"));   
-                  
-         //cant de etiquetas
-          wr.write("Labels"+ ";" +Integer.toString(numero_etiquetas));
-          wr.write(System.getProperty("line.separator"));   
-          
-          wr.write("Instances"+ ";" +Integer.toString(num_instances));
-          wr.write(System.getProperty("line.separator"));   
-          
-          wr.write("");
-          wr.write(System.getProperty("line.separator"));   
+
+        wr.write(System.getProperty("line.separator"));   
             
         //atributo[] imbalanced_data =  util.Get_data_imbalanced_x_label(dataset);
         
@@ -3955,6 +3998,59 @@ public class util {
             for(int j=0; j<table.getColumnCount(); j++){
                 line += table.getValueAt(i, j) + "; ";
             }
+            wr.write(line);
+            wr.write(System.getProperty("line.separator"));  
+        }
+     }
+
+    
+    public static void Save_table_labelsets_frequency_csv(PrintWriter wr, JTable table, ArrayList<String> labelsetStrings)
+    {                 
+        String line = new String();
+        
+        line = "";
+
+        line += "Labelset id" + "; " +
+                "Labelset string" + "; " +
+                "#Examples" + "; " + 
+                "Frequency" + "; ";
+        
+        wr.write(line);
+        wr.write(System.getProperty("line.separator"));  
+                
+        for(int i=0; i<table.getRowCount(); i++){
+            line = "";
+            
+            line += table.getValueAt(i, 0) + "; " + 
+                    "\"" + labelsetStrings.get(i) + "\"" + "; " +
+                    table.getValueAt(i, 1) + "; " + 
+                    table.getValueAt(i, 2) + "; ";
+
+            wr.write(line);
+            wr.write(System.getProperty("line.separator"));  
+        }
+     }
+    
+    public static void Save_table_labelsets_IR_csv(PrintWriter wr, JTable table, ArrayList<String> labelsetStrings)
+    {                 
+        String line = new String();
+        
+        line = "";
+
+        line += "Labelset id" + "; " +
+                "Labelset string" + "; " +
+                "IR" + "; ";
+        
+        wr.write(line);
+        wr.write(System.getProperty("line.separator"));  
+                
+        for(int i=0; i<table.getRowCount(); i++){
+            line = "";
+            
+            line += table.getValueAt(i, 0) + "; " + 
+                    "\"" + labelsetStrings.get(i) + "\"" + "; " +
+                    table.getValueAt(i, 1) + "; ";
+
             wr.write(line);
             wr.write(System.getProperty("line.separator"));  
         }
@@ -5046,14 +5142,21 @@ public class util {
     
     public static Object[][] Get_row_data_principal()
     {
-        ArrayList metrics = Get_all_metrics();
+        ArrayList<String> metrics = Get_all_metrics();
         
         Object rowData[][] = new Object[metrics.size()][3];
         
         for(int i=0; i<metrics.size(); i++){
-            rowData[i][0] = metrics.get(i);
-            rowData[i][1] = "-";
-            rowData[i][2]= Boolean.FALSE;
+            if(metrics.get(i).charAt(0) != '<'){
+                rowData[i][0] = metrics.get(i);
+                rowData[i][1] = "-";
+                rowData[i][2]= Boolean.FALSE;
+            }
+            else{
+                rowData[i][0] = metrics.get(i);
+                rowData[i][1] = "";
+                rowData[i][2] = Boolean.TRUE;
+            }
         }
         
         return rowData;
@@ -5094,74 +5197,402 @@ public class util {
     
     public static ArrayList<String> Get_all_metrics()
     {
-       ArrayList<String> result= new ArrayList();
-       
-       result.add("Attributes");
-       result.add("Instances");
-       result.add("Labels");
-       result.add("Distinct labelsets");
-       result.add("Labels x instances x features");
-       result.add("Ratio of number of instances to the number of attributes");
-       
-       result.add("Cardinality");
-       result.add("Density");
-       result.add("Standard deviation of label cardinality");
-       result.add("Minimal entropy of labels");
-       result.add("Maximal entropy of labels");
-       result.add("Mean of entropies of labels");
-       
-       result.add("Diversity");
-       result.add("Bound");
-       result.add("SCUMBLE");
-       result.add("Proportion of distinct labelsets");
-       result.add("Number of labelsets up to 2 examples");
-       result.add("Number of labelsets up to 5 examples");
-       result.add("Number of labelsets up to 10 examples");
-       result.add("Number of labelsets up to 50 examples");
-       result.add("Ratio of number of labelsets up to 2 examples");
-       result.add("Ratio of number of labelsets up to 5 examples");
-       result.add("Ratio of number of labelsets up to 10 examples");
-       result.add("Ratio of number of labelsets up to 50 examples");
-       result.add("Average examples per labelset");
-       result.add("Standard deviation of examples per labelset");
-       result.add("Number of unique labelsets");
-       result.add("Ratio of labelsets with number of examples < half of the attributes");
-       result.add("Number of unconditionally dependent label pairs by chi-square test");
-       result.add("Average of unconditionally dependent label pairs by chi-square test");
-       result.add("Ratio of unconditionally dependent label pairs by chi-square test");
-       
-       result.add("Mean of IR per label intra class");
-       result.add("Mean of IR per label inter class");
-       result.add("Mean of IR per labelset");
-       result.add("Max IR per label inter class");
-       result.add("Max IR per label intra class");
-       result.add("Max IR per labelset");
-       result.add("Mean of standard deviation of IR per label intra class");
-       result.add("Kurtosis cardinality");
-       result.add("Skewness cardinality");
-       result.add("CVIR inter class");
-       result.add("Proportion of maxim label combination (PMax)");
-       result.add("Proportion of unique label combination (PUniq)");
-       result.add("Mean of kurtosis");
-       result.add("Mean of skewness of numeric attributes");
-       
-       result.add("Number of binary attributes");
-       result.add("Number of nominal attributes");
-       result.add("Proportion of binary attributes");
-       result.add("Proportion of nominal attributes");
-       result.add("Proportion of numeric attributes with outliers");
-       result.add("Mean of entropies of nominal attributes");
-       result.add("Mean of mean of numeric attributes");
-       result.add("Mean of standard deviation of numeric attributes");
-       result.add("Average gain ratio");
-       result.add("Average absolute correlation between numeric attributes");
+        return(Get_all_metrics_alpha_ordered());
+    }
+    
+    public static ArrayList<String> Get_all_metrics_type_ordered()
+    {
+        ArrayList<String> result= new ArrayList();
 
-       return result;
+        //result.add("<html><b>Size metrics</b></html>");
+        result.add("Attributes");
+        result.add("Instances");
+        result.add("Labels");
+        result.add("Distinct labelsets");
+        result.add("Labels x instances x features");
+        result.add("Ratio of number of instances to the number of attributes");
+
+        //result.add("<html><b>Label distribution</b></html>");
+        result.add("Cardinality");
+        result.add("Density");
+        result.add("Maximal entropy of labels");
+        result.add("Mean of entropies of labels");
+        result.add("Minimal entropy of labels");
+        result.add("Standard deviation of label cardinality");
+
+        //result.add("<html><b>Relationship among labels</b></html>");
+        result.add("Average examples per labelset");
+        result.add("Average of unconditionally dependent label pairs by chi-square test");
+        result.add("Bound");
+        result.add("Diversity");
+        result.add("Number of labelsets up to 2 examples");
+        result.add("Number of labelsets up to 5 examples");
+        result.add("Number of labelsets up to 10 examples");
+        result.add("Number of labelsets up to 50 examples");
+        result.add("Number of unconditionally dependent label pairs by chi-square test");
+        result.add("Number of unique labelsets");
+        result.add("Proportion of distinct labelsets");
+        result.add("Ratio of labelsets with number of examples < half of the attributes");
+        result.add("Ratio of unconditionally dependent label pairs by chi-square test");
+        result.add("Ratio of number of labelsets up to 2 examples");
+        result.add("Ratio of number of labelsets up to 5 examples");
+        result.add("Ratio of number of labelsets up to 10 examples");
+        result.add("Ratio of number of labelsets up to 50 examples");
+        result.add("SCUMBLE");
+        result.add("Standard deviation of examples per labelset");
+
+        //result.add("<html><b>Imbalance metrics</b></html>");
+        result.add("CVIR inter class");
+        result.add("Kurtosis cardinality");
+        result.add("Max IR per label inter class");
+        result.add("Max IR per label intra class");
+        result.add("Max IR per labelset");
+        result.add("Mean of IR per label inter class");
+        result.add("Mean of IR per label intra class");       
+        result.add("Mean of IR per labelset");       
+        result.add("Mean of kurtosis");
+        result.add("Mean of skewness of numeric attributes");
+        result.add("Mean of standard deviation of IR per label intra class");
+        result.add("Proportion of maxim label combination (PMax)");
+        result.add("Proportion of unique label combination (PUniq)");
+        result.add("Skewness cardinality");
+
+        //result.add("<html><b>Attributes metrics</b></html>");
+        result.add("Average absolute correlation between numeric attributes");
+        result.add("Average gain ratio");
+        result.add("Mean of entropies of nominal attributes");
+        result.add("Mean of mean of numeric attributes");
+        result.add("Mean of standard deviation of numeric attributes");
+        result.add("Number of binary attributes");
+        result.add("Number of nominal attributes");
+        result.add("Proportion of binary attributes");
+        result.add("Proportion of nominal attributes");
+        result.add("Proportion of numeric attributes with outliers");
+
+        return result;
+    }
+    
+    public static ArrayList<String> Get_all_metrics_alpha_ordered()
+    {
+        ArrayList<String> result= new ArrayList();
+
+        result.add("Attributes");
+        result.add("Average absolute correlation between numeric attributes");
+        result.add("Average examples per labelset");
+        result.add("Average gain ratio");
+        result.add("Average of unconditionally dependent label pairs by chi-square test");
+        result.add("Bound");
+        result.add("Cardinality");
+        result.add("CVIR inter class");
+        result.add("Density");
+        result.add("Distinct labelsets");
+        result.add("Diversity");
+        result.add("Instances");
+        result.add("Kurtosis cardinality");
+        result.add("Labels");
+        result.add("Labels x instances x features");
+        result.add("Max IR per label inter class");
+        result.add("Max IR per label intra class");
+        result.add("Max IR per labelset");
+        result.add("Maximal entropy of labels");
+        result.add("Mean of entropies of labels");
+        result.add("Mean of entropies of nominal attributes");
+        result.add("Mean of IR per label inter class");
+        result.add("Mean of IR per label intra class");       
+        result.add("Mean of IR per labelset");
+        result.add("Mean of kurtosis");
+        result.add("Mean of mean of numeric attributes");
+        result.add("Mean of skewness of numeric attributes");
+        result.add("Mean of standard deviation of IR per label intra class");
+        result.add("Mean of standard deviation of numeric attributes");
+        result.add("Minimal entropy of labels");
+        result.add("Number of binary attributes");
+        result.add("Number of labelsets up to 2 examples");
+        result.add("Number of labelsets up to 5 examples");
+        result.add("Number of labelsets up to 10 examples");
+        result.add("Number of labelsets up to 50 examples");
+        result.add("Number of nominal attributes");
+        result.add("Number of unconditionally dependent label pairs by chi-square test");
+        result.add("Number of unique labelsets");
+        result.add("Proportion of binary attributes");
+        result.add("Proportion of distinct labelsets");
+        result.add("Proportion of maxim label combination (PMax)");
+        result.add("Proportion of nominal attributes");
+        result.add("Proportion of numeric attributes with outliers");
+        result.add("Proportion of unique label combination (PUniq)");
+        result.add("Ratio of labelsets with number of examples < half of the attributes");
+        result.add("Ratio of number of instances to the number of attributes");
+        result.add("Ratio of unconditionally dependent label pairs by chi-square test");
+        result.add("Ratio of number of labelsets up to 2 examples");
+        result.add("Ratio of number of labelsets up to 5 examples");
+        result.add("Ratio of number of labelsets up to 10 examples");
+        result.add("Ratio of number of labelsets up to 50 examples");
+        result.add("SCUMBLE");
+        result.add("Skewness cardinality");
+        result.add("Standard deviation of examples per labelset");
+        result.add("Standard deviation of label cardinality");
+
+        return result;
+    }
+    
+    
+    public static String Get_metric_tooltip(String metric)
+    {
+        String tooltip = new String();
+        
+        switch (metric) {
+            case "Attributes":
+                tooltip = "Number of attributes";
+                break;
+            case "Instances":
+                tooltip = "Number of instances";
+                break;
+            case "Labels":
+                tooltip = "Number of labels";
+                break;
+            case "Distinct labelsets":
+                tooltip = "Number of distinct labelsets";
+                break;
+            case "Labels x instances x features":
+                tooltip = "Number of labels * number of instances * number of attributes";
+                break;
+            case "Ratio of number of instances to the number of attributes":
+                tooltip = "Number of instances / number of attributes";
+                break;
+
+            case "Cardinality":
+                tooltip = "Average number of labels per instance";
+                break;
+            case "Density":
+                tooltip = "Cardinality / number of labels";
+                break;
+            case "Maximal entropy of labels":
+                tooltip = "Maximal uncertainty value among the labels";
+                break;
+            case "Mean of entropies of labels":
+                tooltip = "Average uncertainty among the labels";
+                break;
+            case "Minimal entropy of labels":
+                tooltip = "Minimal uncertainty value among the labels";
+                break;
+            case "Standard deviation of label cardinality":
+                tooltip = "Standard deviation of the number of labels for each instance";
+                break;
+
+            case "Average examples per labelset":
+                tooltip = "Average number of instances per labelset";
+                break;
+            case "Average of unconditionally dependent label pairs by chi-square test":
+                tooltip = "Average of chi-square test values for each pair of labels";
+                break;
+            case "Bound":
+                tooltip = "Maximum number of possible labelsets";
+                break;
+            case "Diversity":
+                tooltip = "Ratio of labelsets existing in the dataset (distinct labelset / bound)";
+                break;
+            case "Number of labelsets up to 2 examples":
+                tooltip = "Number of labelsets with number of instances less or equal to 2";
+                break;
+            case "Number of labelsets up to 5 examples":
+                tooltip = "Number of labelsets with number of instances less or equal to 5";
+                break;
+            case "Number of labelsets up to 10 examples":
+                tooltip = "Number of labelsets with number of instances less or equal to 10";
+                break;
+            case "Number of labelsets up to 50 examples":
+                tooltip = "Number of labelsets with number of instances less or equal to 50";
+                break;
+            case "Number of unconditionally dependent label pairs by chi-square test":
+                tooltip = "Number of pairs of labels that are unconditionally dependent by chi-square test";
+                break;
+            case "Number of unique labelsets":
+                tooltip = "Number of labelsets with only one instance";
+                break;
+            case "Proportion of distinct labelsets":
+                tooltip = "Number of distinct labelsets / number of instances";
+                break;
+            case "Ratio of labelsets with number of examples < half of the attributes":
+                tooltip = "Ratio of labelsets with number of instances less than half ot the number of attributes";
+                break;
+            case "Ratio of unconditionally dependent label pairs by chi-square test":
+                tooltip = "Ratio of pairs of labels that are unconditionally dependent by chi-square test, indicating the level of interdependencies among labels";
+                break;
+            case "Ratio of number of labelsets up to 2 examples":
+                tooltip = "Ratio of labelsets with number of instances less or equal to 2";
+                break;
+            case "Ratio of number of labelsets up to 5 examples":
+                tooltip = "Ratio of labelsets with number of instances less or equal to 5";
+                break;
+            case "Ratio of number of labelsets up to 10 examples":
+                tooltip = "Ratio of labelsets with number of instances less or equal to 10";
+                break;
+            case "Ratio of number of labelsets up to 50 examples":
+                tooltip = "Ratio of labelsets with number of instances less or equal to 50";
+                break;
+            case "SCUMBLE":
+                tooltip = "Measures the concurrence level among frequent and infrequent labels";
+                break;
+            case "Standard deviation of examples per labelset":
+                tooltip = "Standard deviation of number of instances per labelset";
+                break;
+
+            case "CVIR inter class":
+                tooltip = "Coefficient of variation of the IR per label inter class";
+                break;
+            case "Kurtosis cardinality":
+                tooltip = "Kurtosis of the label cardinality";
+                break;
+            case "Max IR per label inter class":
+                tooltip = "Maximum value of IR per label inter class";
+                break;
+            case "Max IR per label intra class":
+                tooltip = "Maximum value of IR per label intra class";
+                break;
+            case "Max IR per labelset":
+                tooltip = "Maximum value of IR per labelset";
+                break;
+            case "Mean of IR per label inter class":
+                tooltip = "Average value of IR per label inter class";
+                break;
+            case "Mean of IR per label intra class":
+                tooltip = "Average value of IR per label intra class";
+                break;       
+            case "Mean of IR per labelset":
+                tooltip = "Average value of IR per labelset";
+                break;       
+            case "Mean of kurtosis":
+                tooltip = "Average value of kurtosis of all numeric attributes";
+                break;
+            case "Mean of skewness of numeric attributes":
+                tooltip = "Average value of skewness of all numeric attributes";
+                break;
+            case "Mean of standard deviation of IR per label intra class":
+                tooltip = "Average value of standard deviation of IR per label intra class values";
+                break;
+            case "Proportion of maxim label combination (PMax)":
+                tooltip = "Proportion of instances associated with the most frequent labelset";
+                break;
+            case "Proportion of unique label combination (PUniq)":
+                tooltip = "Proportion of instances associated with labelsets appearing only once";
+                break;
+            case "Skewness cardinality":
+                tooltip = "Skewness of the label cardinality";
+                break;
+
+            case "Average absolute correlation between numeric attributes":
+                tooltip = "Average of absolute correlation values between numeric attributes, indicating robustness to irrelevant attributes";
+                break;
+            case "Average gain ratio":
+                tooltip = "The average information gain ratio is obtained by splitting the data accordint to each target attribute";
+                break;
+            case "Mean of entropies of nominal attributes":
+                tooltip = "Average value of entropies of nominal attributes";
+                break;
+            case "Mean of mean of numeric attributes":
+                tooltip = "Average of average values of all numeric attributes";
+                break;
+            case "Mean of standard deviation of numeric attributes":
+                tooltip = "Average value of standard deviation of numeric attributes";
+                break;
+            case "Number of binary attributes":
+                tooltip = "Number of binary attributes";
+                break;
+            case "Number of nominal attributes":
+                tooltip = "Number of nominal attributes";
+                break;
+            case "Proportion of binary attributes":
+                tooltip = "Proportion of attributes that are binary";
+                break;
+            case "Proportion of nominal attributes":
+                tooltip = "Proportion of attributes that are nominal";
+                break;
+            case "Proportion of numeric attributes with outliers":
+                tooltip = "Proportion of numeric attributes having outliers";
+                break;
+
+            default:
+                tooltip = metric;
+                break;
+        }
+
+        
+        ArrayList<String> result= new ArrayList();
+
+        //result.add("<html><b>Size metrics</b></html>");
+        result.add("Attributes");
+        result.add("Instances");
+        result.add("Labels");
+        result.add("Distinct labelsets");
+        result.add("Labels x instances x features");
+        result.add("Ratio of number of instances to the number of attributes");
+
+        //result.add("<html><b>Label distribution</b></html>");
+        result.add("Cardinality");
+        result.add("Density");
+        result.add("Maximal entropy of labels");
+        result.add("Mean of entropies of labels");
+        result.add("Minimal entropy of labels");
+        result.add("Standard deviation of label cardinality");
+
+        //result.add("<html><b>Relationship among labels</b></html>");
+        result.add("Average examples per labelset");
+        result.add("Average of unconditionally dependent label pairs by chi-square test");
+        result.add("Bound");
+        result.add("Diversity");
+        result.add("Number of labelsets up to 2 examples");
+        result.add("Number of labelsets up to 5 examples");
+        result.add("Number of labelsets up to 10 examples");
+        result.add("Number of labelsets up to 50 examples");
+        result.add("Number of unconditionally dependent label pairs by chi-square test");
+        result.add("Number of unique labelsets");
+        result.add("Proportion of distinct labelsets");
+        result.add("Ratio of labelsets with number of examples < half of the attributes");
+        result.add("Ratio of unconditionally dependent label pairs by chi-square test");
+        result.add("Ratio of number of labelsets up to 2 examples");
+        result.add("Ratio of number of labelsets up to 5 examples");
+        result.add("Ratio of number of labelsets up to 10 examples");
+        result.add("Ratio of number of labelsets up to 50 examples");
+        result.add("SCUMBLE");
+        result.add("Standard deviation of examples per labelset");
+
+        //result.add("<html><b>Imbalance metrics</b></html>");
+        result.add("CVIR inter class");
+        result.add("Kurtosis cardinality");
+        result.add("Max IR per label inter class");
+        result.add("Max IR per label intra class");
+        result.add("Max IR per labelset");
+        result.add("Mean of IR per label inter class");
+        result.add("Mean of IR per label intra class");       
+        result.add("Mean of IR per labelset");       
+        result.add("Mean of kurtosis");
+        result.add("Mean of skewness of numeric attributes");
+        result.add("Mean of standard deviation of IR per label intra class");
+        result.add("Proportion of maxim label combination (PMax)");
+        result.add("Proportion of unique label combination (PUniq)");
+        result.add("Skewness cardinality");
+
+        //result.add("<html><b>Attributes metrics</b></html>");
+        result.add("Average absolute correlation between numeric attributes");
+        result.add("Average gain ratio");
+        result.add("Mean of entropies of nominal attributes");
+        result.add("Mean of mean of numeric attributes");
+        result.add("Mean of standard deviation of numeric attributes");
+        result.add("Number of binary attributes");
+        result.add("Number of nominal attributes");
+        result.add("Proportion of binary attributes");
+        result.add("Proportion of nominal attributes");
+        result.add("Proportion of numeric attributes with outliers");
+
+        
+        return(tooltip);
     }
     
     
     public static ArrayList<String> Get_metrics_multi()
-     {
+    {
+        return(Get_all_metrics());
+        /*
        ArrayList<String> result= new ArrayList();
 
        result.add("Attributes");
@@ -5231,6 +5662,7 @@ public class util {
        result.add("Standard deviation of examples per labelset");
 
        return result;
+        */
      }
     
 
@@ -6044,6 +6476,42 @@ public class util {
             //Decimal numbers
             else{
                 NumberFormat formatter = new DecimalFormat("#0.000"); 
+                formattedValue = formatter.format(Double.parseDouble(value));
+            } 
+
+            formattedValue = formattedValue.replace(",", ".");
+            return formattedValue;
+        }
+        
+        
+        public static String getValueFormatted(String value, int nDecimals){
+            String formattedValue = new String();
+
+            value = value.replace(",", ".");
+
+            if(value.equals("-")){
+                return value;
+            }
+
+            if(value.equals("NaN")){
+                return "---";
+            }
+
+            //Scientific notation numbers
+            if( (((Math.abs(Double.parseDouble(value)*1000) < 1.0)) && 
+                        ((Math.abs(Double.parseDouble(value)*1000) > 0.0))) ||
+                    (Math.abs(Double.parseDouble(value)/1000.0) > 10)){
+                NumberFormat formatter = new DecimalFormat("0.###E0");
+                formattedValue = formatter.format(Double.parseDouble(value));
+            }
+            //Decimal numbers
+            else{
+                String f = "#0.";
+                for(int i=0; i<nDecimals; i++){
+                    f += "0";
+                }
+                
+                NumberFormat formatter = new DecimalFormat(f); 
                 formattedValue = formatter.format(Double.parseDouble(value));
             } 
 

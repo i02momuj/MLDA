@@ -36,7 +36,14 @@ public class Mi_Render_IR extends DefaultTableCellRenderer
        //System.out.println("posicion_IR_2: " + posicion_IR_2);
        //System.out.println("table.getValueAt(row, posicion_IR).toString(): " + table.getValueAt(row, posicion_IR).toString());
        
-       double ir_current = Double.parseDouble(table.getValueAt(row, posicion_IR).toString());
+       double ir_current;
+       if(table.getValueAt(row, posicion_IR).toString().contains("-")){
+           ir_current = -1;
+       }
+       else{
+           ir_current = Double.parseDouble(table.getValueAt(row, posicion_IR).toString());
+       }
+        
        double ir_current2=-1;
        
        if(posicion_IR_2!=-1){

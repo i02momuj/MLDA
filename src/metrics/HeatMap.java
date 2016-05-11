@@ -153,6 +153,14 @@ public class HeatMap extends JPanel {
     // needed, saving us a lot of time in the end.
     drawData();
   }
+  
+  public BufferedImage getImage(){
+      return bufferedImage;
+  }
+  
+  public Graphics2D getBufferedGraphics(){
+      return bufferedGraphics;
+  }
 
   /**
    * Specify the coordinate bounds for the map. Only used for the axis labels,

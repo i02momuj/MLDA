@@ -5,6 +5,8 @@
  */
 package metrics_API;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -159,6 +161,48 @@ public class MLDataEvaluator {
         return null;
     }
     
+    public String getMetricValueFormatted(String name){
+        String value = new String();
+        NumberFormat formatter;
+        
+        double numericValue = getMetric(name).getValue();
+        
+        //Scientific notation
+        if( ((Math.abs(numericValue*1000) < 1.0) && 
+                (Math.abs(numericValue*1000) > 0.0)) 
+             || (Math.abs(numericValue/1000) > 10))
+        {
+            formatter = new DecimalFormat("0.###E0");
+            value = formatter.format(numericValue);
+        }
+        //Integer values
+        else if((name.toLowerCase().equals("attributes"))
+                    || (name.toLowerCase().equals("bound"))
+                    || (name.toLowerCase().equals("distinct labelsets"))
+                    || (name.toLowerCase().equals("instances"))
+                    || (name.toLowerCase().equals("LIF"))
+                    || (name.toLowerCase().equals("labels"))
+                    || (name.toLowerCase().equals("number of binary attributes"))
+                    || (name.toLowerCase().equals("number of labelsets up to 2 examples"))
+                    || (name.toLowerCase().equals("number of labelsets up to 5 examples"))
+                    || (name.toLowerCase().equals("number of labelsets up to 10 examples"))
+                    || (name.toLowerCase().equals("number of labelsets up to 50 examples"))
+                    || (name.toLowerCase().equals("number of nominal attributes"))
+                    || (name.toLowerCase().equals("number of unique labelsets"))
+                    || (name.toLowerCase().equals("number of unconditionally dependent label pairs by chi-square test")))
+        {
+            formatter = new DecimalFormat("#0");
+            value = formatter.format(numericValue);
+        }
+        //Decimal values
+        else{
+            formatter = new DecimalFormat("#0.000");
+            value = formatter.format(numericValue);
+        }
+        
+        return(value.replace(",", "."));
+    }
+    
     
     public ArrayList<String> getMetricsAvailable(){
         
@@ -168,7 +212,7 @@ public class MLDataEvaluator {
         allMetrics.add("Instances");
         allMetrics.add("Labels");
         allMetrics.add("Distinct labelsets");
-        allMetrics.add("Labels x instances x features");
+        allMetrics.add("LIF");
         allMetrics.add("Ratio of number of instances to the number of attributes");
 
         allMetrics.add("Cardinality");
@@ -268,7 +312,7 @@ public class MLDataEvaluator {
                     metric.setValue(distinctLabelset());
                     break;
 
-                case "Labels x instances x features":
+                case "LIF":
                     metric.setValue(LIF());
                     break;
 
@@ -1035,7 +1079,7 @@ public class MLDataEvaluator {
         int count = 0;
         
         for(int i=0; i<combCounts.length; i++){
-            if(combCounts[i] >= n){
+            if(combCounts[i] <= n){
                 count++;
             }
             else{

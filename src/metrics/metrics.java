@@ -927,7 +927,10 @@ public class metrics
          }
          
          SCUMBLE = SCUMBLE/nInstances;
-         return(SCUMBLE);
+         
+         return-1;
+         
+         //return(SCUMBLE);
      }
           
           

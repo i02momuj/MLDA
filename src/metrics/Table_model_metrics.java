@@ -21,6 +21,8 @@ String columnNames[] = {"Metric","Value", ""};
  public Table_model_metrics(Object rowData[][])
  {
      this.rowData = rowData;
+     
+     
  }
  
  public Table_model_metrics(Object rowData[][], String type)

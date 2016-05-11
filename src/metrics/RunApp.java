@@ -5,9 +5,12 @@ import convertir.MekaToMulan;
 import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.HeadlessException;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
@@ -31,6 +34,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
@@ -47,9 +51,11 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import static metrics.util.Get_labelset_x_values;
+import metrics_API.MLDataEvaluator;
 
 import mulan.data.InvalidDataFormatException;
 import mulan.data.IterativeStratification;
@@ -64,12 +70,15 @@ import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.labels.StandardCategoryToolTipGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.DefaultXYDataset;
 import org.jfree.data.xy.XYDataset;
@@ -130,7 +139,7 @@ public class RunApp extends javax.swing.JFrame {
     JButton export1,export3,export4,export5,export6,export7;
     
     final JTable jTable5,jTable6,jTable7, jTable8,jTable9;
-    final JTable jTable1, jTableMulti;
+    JTable jTable1, jTableMulti;
     JTable jTable10,jTable11,jTable12,fixedTable,fixedTable1,fixedTable2;
     
     TableModel tm_BR,tm_BR1,tm_LP,tm_LP1,tm_IR,tm_coefficient,tm_labelxExamples, tm_coocurrences, tm_heapmap_values, tm_attr, tm_jgraph, tm_heapmap_graph, tm_ir_per_label_intra_class,tm_ir_per_label_inter_class,tm_ir_per_labelset, tm_ir_per_label_inter_class_only, tm_ir_per_label_intra_class_only;
@@ -186,9 +195,15 @@ public class RunApp extends javax.swing.JFrame {
     
     HeatMap heatMap = null; 
     
+    ArrayList<String> labelsetStrings_freq;
+    ArrayList<String> labelsetStrings_IR;
+    
     
     public RunApp() 
     {
+        //For menus language at charts
+        Locale.setDefault(Locale.UK);
+        
         jTable5 = new JTable();
         jTable6 = new JTable();
         jTable7 = new JTable();
@@ -369,15 +384,17 @@ public class RunApp extends javax.swing.JFrame {
         textMostRelatedHeatMap.setToolTipText("Number of most related labels to show");
       
         //Charts
-        cp3 = createJChart(panelExamplesPerLabel,"bar","Labels", "Relative frequency",false);
-        cp11 =  createJChart(panelLabelsPerExample,"bar", "# Labels/example","Relative frequency",false);
+        cp3 = createJChart(panelExamplesPerLabel,"bar","Frequency", "Labels",false, "Label frequency");
+        cp22 = createJChart(panelExamplesPerLabelset, "bar","Frequency","Labelsets",false, "Labelset frequency");
+        cp11 =  createJChart(panelLabelsPerExample,"bar", "Frequency","Number of labels",false, "Labels histogram");
         cp_box =createGraph(panelBoxDiagram);
-        cp22 = createJChart(panelExamplesPerLabelset, "bar","Labelsets","Relative frequency",false);
-        cp_ir_x_label_inter_class_only = createJChart(panelIRperLabelInterClass, "bar", "Label id","IR values",true);
-        cp_ir_x_label_intra_class_only = createJChart(panelIRperLabelIntraClass, "bar", "Label id","IR values",true);
+        
+        cp_ir_x_label_inter_class_only = createJChart(panelIRperLabelInterClass, "bar", "IR inter-class","Labels",false, "IR per label inter class");
+        cp_ir_x_label_intra_class_only = createJChart(panelIRperLabelIntraClass, "bar", "IR intra-class","Labels",false, "IR per label intra class");
 
-        cp_per_labelset = createJChart(panelIRperLabelset, "bar", "Labelset id","IR per labelset",false);
+        cp_per_labelset = createJChart(panelIRperLabelset, "bar", "IR","Labelsets",false, "IR per labelset");
       
+        jTable1 = setMetricsHelp(jTable1);
         create_jtable_metrics_principal(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save, button_clear, 30,190,780,280,"database"); //tab Database //35,155,500,355
 
         create_jtable_metrics_multi(jTableMulti,jPanelMulti,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save, 25,15,510,420); //tab Multi
@@ -489,6 +506,10 @@ public class RunApp extends javax.swing.JFrame {
     private void create_jtable_metrics_principal(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_calculate,JButton button_save, JButton button_clear, int posx,int posy, int width, int heigh,String info)
     {
         create_jtable_metric_principal(jtable,jpanel, util.Get_row_data_principal(),posx,posy,width,heigh);        
+        //jtable.setToolTipText("<html>TOOLTIP<br>Hola<br>Tooltip<br></html>");
+        //TableCellRenderer rTable = jtable.getCellRenderer(posy, posy);
+        //JComponent row = (JComponent) jtable.prepareRenderer(rTable, 0, 0);
+        //row.setToolTipText("TOOLTIP");
         
         //button ALL
         button_all = new JButton("All");
@@ -759,7 +780,6 @@ public class RunApp extends javax.swing.JFrame {
         textRandomFS = new javax.swing.JTextField();
         labelRandomFS = new javax.swing.JLabel();
         radioNoFS = new javax.swing.JRadioButton();
-        labelBRFS1 = new javax.swing.JLabel();
         jComboBox_SaveFormat = new javax.swing.JComboBox();
         panelIS = new javax.swing.JPanel();
         radioRandomIS = new javax.swing.JRadioButton();
@@ -1260,11 +1280,6 @@ public class RunApp extends javax.swing.JFrame {
             }
         });
 
-        labelBRFS1.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        labelBRFS1.setForeground(new java.awt.Color(106, 106, 106));
-        labelBRFS1.setText("//");
-        labelBRFS1.setToolTipText("");
-
         javax.swing.GroupLayout panelFSLayout = new javax.swing.GroupLayout(panelFS);
         panelFS.setLayout(panelFSLayout);
         panelFSLayout.setHorizontalGroup(
@@ -1285,9 +1300,7 @@ public class RunApp extends javax.swing.JFrame {
                         .addComponent(textBRFS, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelBRFS)
-                        .addGap(18, 18, 18)
-                        .addComponent(labelBRFS1)
-                        .addGap(18, 18, 18)
+                        .addGap(44, 44, 44)
                         .addComponent(labelBRFS_Comb)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBox_BRFS_Comb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1299,7 +1312,7 @@ public class RunApp extends javax.swing.JFrame {
                         .addComponent(labelBRFS_Out)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBox_BRFS_Out, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addContainerGap(114, Short.MAX_VALUE))
         );
         panelFSLayout.setVerticalGroup(
             panelFSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1315,8 +1328,7 @@ public class RunApp extends javax.swing.JFrame {
                     .addComponent(labelBRFS_Norm)
                     .addComponent(jComboBox_BRFS_Norm, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelBRFS_Out)
-                    .addComponent(jComboBox_BRFS_Out, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelBRFS1))
+                    .addComponent(jComboBox_BRFS_Out, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelFSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radioRandomFS)
@@ -3823,7 +3835,12 @@ public class RunApp extends javax.swing.JFrame {
         tableMetrics.clear();
         
         for(int i=0; i<metricsList.size(); i++){
-            tableMetrics.put(metricsList.get(i), "-");
+            if(metricsList.get(i).charAt(0) != '<'){
+                tableMetrics.put(metricsList.get(i), "-");
+            }
+            else{
+                tableMetrics.put(metricsList.get(i), "");
+            }
         }
     }
     
@@ -3839,7 +3856,7 @@ public class RunApp extends javax.swing.JFrame {
     
     private void save_as_ActionPerformed1(java.awt.event.ActionEvent evt) throws AWTException, IOException
     {
-        BufferedImage image = new Robot().createScreenCapture(new Rectangle(panelHeatmap.getLocationOnScreen().x, panelHeatmap.getLocationOnScreen().y, panelHeatmap.getWidth(), panelHeatmap.getHeight()));
+        BufferedImage image = new Robot().createScreenCapture(new Rectangle(panelHeatmap.getLocationOnScreen().x+31, panelHeatmap.getLocationOnScreen().y+31, panelHeatmap.getWidth()-61, panelHeatmap.getHeight()-61));
         JFileChooser fc= new JFileChooser();
         
         FileNameExtensionFilter fname1 = new FileNameExtensionFilter(".png", "png");
@@ -3899,8 +3916,7 @@ public class RunApp extends javax.swing.JFrame {
     {
         mxGraph graph = new mxGraph();
         Object parent = graph.getDefaultParent();
-
-         
+        
 	graph.getModel().beginUpdate();
         
         graph.setLabelsClipped(true);
@@ -3983,7 +3999,7 @@ public class RunApp extends javax.swing.JFrame {
         
         graph.setCellsEditable(false);
         graph.setAllowDanglingEdges(false);
-        
+
 	mxGraphComponent graphComponent = new mxGraphComponent(graph);               
         graphComponent.getGraph().getModel().endUpdate();
                 
@@ -4111,7 +4127,7 @@ public class RunApp extends javax.swing.JFrame {
 
             num_instancias = dataset.getNumInstances();
 
-            Print_main_metric_dataset(dataset, stat1);
+            Print_main_metric_dataset(dataset);
 
             label_x_frequency = util.Get_Frequency_x_label(dataset);
              
@@ -4145,16 +4161,19 @@ public class RunApp extends javax.swing.JFrame {
             temp1=cp_per_labelset.getChart().getCategoryPlot();
             temp1.clearRangeMarkers();
             tm_ir_per_labelset = jchart_and_jtable_label_set_IR(tableImbalance,dataset,stat1,cp_per_labelset.getChart().getCategoryPlot());
-
+            //util.update_values_bar_chart_IR(labelsets_sorted_IR,temp1);
+            
             //ir per label inter class only
             temp1= cp_ir_x_label_inter_class_only.getChart().getCategoryPlot();
             temp1.clearRangeMarkers();
-            util.update_values_line_chart(IR_inter_class,temp1,true);
+            //util.update_values_line_chart(IR_inter_class,temp1,true);
+            util.update_values_bar_chart_IR(label_x_frequency, IR_inter_class, temp1);
             
             //ir per label intra class only
             temp1= cp_ir_x_label_intra_class_only.getChart().getCategoryPlot();
             temp1.clearRangeMarkers();
-            util.update_values_line_chart(IR_intra_class,temp1,true);
+            //util.update_values_line_chart(IR_intra_class,temp1,true);
+            util.update_values_bar_chart_IR(label_x_frequency, IR_intra_class, temp1);
             
             
             if(tm_BR1 !=null && tm_LP1!=null)
@@ -4449,7 +4468,7 @@ public class RunApp extends javax.swing.JFrame {
         return pares;
     }
     
-    private void Print_main_metric_dataset(MultiLabelInstances dataset, Statistics stat1 )
+    private void Print_main_metric_dataset(MultiLabelInstances dataset)
     {
         //Relation
         if(dataset_current_name.length() > 30){
@@ -4458,41 +4477,61 @@ public class RunApp extends javax.swing.JFrame {
         else{
             labelRelationValue.setText(dataset_current_name);
         }
+        
+        MLDataEvaluator mldEvaluator = new MLDataEvaluator(dataset);
+        mldEvaluator.addMetric("Instances");
+        mldEvaluator.addMetric("Attributes");
+        mldEvaluator.addMetric("Labels");
+        mldEvaluator.addMetric("Density");
+        mldEvaluator.addMetric("Cardinality");
+        mldEvaluator.addMetric("Diversity");
+        mldEvaluator.addMetric("Bound");
+        mldEvaluator.addMetric("Distinct labelsets");
+        mldEvaluator.addMetric("LIF");
+        mldEvaluator.calculate();
 
         //Instances
-        String num_instancias = util.get_value_metric("Instances", dataset, es_de_tipo_meka);
-        labelInstancesValue.setText(util.getValueFormatted("Instances", num_instancias));
+        //labelInstancesValue.setText(util.getValueFormatted("Instances", num_instancias));
+        labelInstancesValue.setText(mldEvaluator.getMetricValueFormatted("Instances"));
+        //System.out.println("Instances: " + mldEvaluator.getMetricValueFormatted("Instances"));
             
         //Attributes
-        String num_atributos = util.get_value_metric("Attributes", dataset, es_de_tipo_meka);
-        labelAttributesValue.setText(util.getValueFormatted("Attributes", num_atributos));
+        //labelAttributesValue.setText(util.getValueFormatted("Attributes", num_atributos));
+        labelAttributesValue.setText(mldEvaluator.getMetricValueFormatted("Attributes"));
             
         //Labels
-        labelLabelsValue.setText(util.getValueFormatted("Labels", util.get_value_metric("Labels", dataset, es_de_tipo_meka)));
-            
+        //labelLabelsValue.setText(util.getValueFormatted("Labels", util.get_value_metric("Labels", dataset, es_de_tipo_meka)));
+        labelLabelsValue.setText(mldEvaluator.getMetricValueFormatted("Labels"));    
+        
         //Density
-        String density = util.get_value_metric("Density", dataset, es_de_tipo_meka);
-        labelDensityValue.setText(util.getValueFormatted("Density", density));
+        //String density = util.get_value_metric("Density", dataset, es_de_tipo_meka);
+        //labelDensityValue.setText(util.getValueFormatted("Density", density));
+        labelDensityValue.setText(mldEvaluator.getMetricValueFormatted("Density"));
                       
         //Cardinality
-        String cardinality = util.get_value_metric("Cardinality", dataset, es_de_tipo_meka);
-        labelCardinalityValue.setText(util.getValueFormatted("Cardinality", cardinality));
+        //String cardinality = util.get_value_metric("Cardinality", dataset, es_de_tipo_meka);
+        //labelCardinalityValue.setText(util.getValueFormatted("Cardinality", cardinality));
+        labelCardinalityValue.setText(mldEvaluator.getMetricValueFormatted("Cardinality"));
             
         //Diversity      
-        String diversity = util.get_value_metric("Diversity", dataset, es_de_tipo_meka);
-        labelDiversityValue.setText(util.getValueFormatted("Diversity", diversity));
-            
+        //String diversity = util.get_value_metric("Diversity", dataset, es_de_tipo_meka);
+        //labelDiversityValue.setText(util.getValueFormatted("Diversity", diversity));
+        labelDiversityValue.setText(mldEvaluator.getMetricValueFormatted("Diversity"));
+                
         //Bound
-        String bound = util.get_value_metric("Bound", dataset, es_de_tipo_meka);
-        labelBoundValue.setText(util.getValueFormatted("Bound", bound));
-            
+        //String bound = util.get_value_metric("Bound", dataset, es_de_tipo_meka);
+        //labelBoundValue.setText(util.getValueFormatted("Bound", bound));
+        labelBoundValue.setText(mldEvaluator.getMetricValueFormatted("Bound"));
+                
         //Distinct labelset     
-        String distinct_labelset = util.get_value_metric("Distinct labelsets", dataset, es_de_tipo_meka);
-        labelDistinctValue.setText(util.getValueFormatted("Distinct labelsets", distinct_labelset));
-            
+        //String distinct_labelset = util.get_value_metric("Distinct labelsets", dataset, es_de_tipo_meka);
+        //labelDistinctValue.setText(util.getValueFormatted("Distinct labelsets", distinct_labelset));
+        labelDistinctValue.setText(mldEvaluator.getMetricValueFormatted("Distinct labelsets"));
+                
         //LxIxF
-        String LIF = util.get_value_metric("Labels x instances x features", dataset, es_de_tipo_meka);
-        labelLxIxFValue.setText(util.getValueFormatted("Labels x instances x features", LIF));    
+        //String LIF = util.get_value_metric("Labels x instances x features", dataset, es_de_tipo_meka);
+        //labelLxIxFValue.setText(util.getValueFormatted("Labels x instances x features", LIF));    
+        labelLxIxFValue.setText(mldEvaluator.getMetricValueFormatted("LIF"));
     }
   
     private void button_saveActionPerformed_principal(java.awt.event.ActionEvent evt, JTable jtable) throws IOException
@@ -4803,13 +4842,20 @@ public class RunApp extends javax.swing.JFrame {
 
         for(String metric : metric_list)
         {
-            tableMetrics.put(metric, "-");
+            if(metric.charAt(0) != '<'){
+              tableMetrics.put(metric, "-");  
+            }
+            else{
+                tableMetrics.put(metric, "");
+            }
         }
        
         TableModel model = jTable1.getModel();
         
         for(int i=0; i<model.getRowCount(); i++){
-            model.setValueAt(tableMetrics.get(model.getValueAt(i, 0).toString()), i, 1);
+            if(metric_list.get(i).charAt(0) != '<'){
+               model.setValueAt(tableMetrics.get(model.getValueAt(i, 0).toString()), i, 1); 
+            }
         }
         
         jTable1.repaint();
@@ -4978,7 +5024,17 @@ public class RunApp extends javax.swing.JFrame {
                     BufferedWriter bw = new BufferedWriter(new FileWriter(path));
                     PrintWriter wr = new PrintWriter(bw);
                     
-                    util.Save_table_csv(wr, jtable);
+                    if(comboBoxLabelsInformation.getSelectedIndex()==1){
+                        //Labelsets tables
+                        util.Save_table_labelsets_frequency_csv(wr, jtable, labelsetStrings_freq);
+                    }
+                    else if(comboBoxLabelsInformation.getSelectedIndex()==6){
+                        util.Save_table_labelsets_IR_csv(wr, jtable, labelsetStrings_IR);
+                    }
+                    else{
+                        util.Save_table_csv(wr, jtable);
+                    }
+                    
                 
                     wr.close();
                     bw.close(); 
@@ -5105,7 +5161,11 @@ public class RunApp extends javax.swing.JFrame {
         return cp1;       
     }
     
-    private ChartPanel createJChart(JPanel jpanel, String type, String title_x_axis, String title_y_axis, boolean show_x_axis)
+    private ChartPanel createJChart(JPanel jpanel, String type, String title_x_axis, String title_y_axis, boolean show_x_axis){
+        return(createJChart(jpanel, type, title_x_axis, title_y_axis, show_x_axis, ""));
+    }
+    
+    private ChartPanel createJChart(JPanel jpanel, String type, String title_x_axis, String title_y_axis, boolean show_x_axis, String charTitle)
     {
         DefaultCategoryDataset my_data = new DefaultCategoryDataset();
         JFreeChart chart1;
@@ -5115,14 +5175,50 @@ public class RunApp extends javax.swing.JFrame {
         //hide horizontal axis
         if(type.equals("bar"))
         {
-            chart1 = ChartFactory.createBarChart(" ", title_x_axis, title_y_axis, my_data, PlotOrientation.VERTICAL, false, true, false);
-
+            //chart1 = ChartFactory.createBarChart(" ", title_x_axis, title_y_axis, my_data, PlotOrientation.VERTICAL, false, true, false);
+            chart1 = ChartFactory.createBarChart(charTitle, title_y_axis, title_x_axis, my_data, PlotOrientation.VERTICAL, false, true, false);
+            //chart1 = ChartFactory.createBarChart(" ", title_y_axis, title_x_axis, my_data);
+            
             plot1 =  chart1.getCategoryPlot();
+
+            //Custom tooltips
+            BarRenderer renderer = (BarRenderer) plot1.getRenderer();
+            
+            if(charTitle.toLowerCase().equals("label frequency")){
+                renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
+                "{0} = {2}", NumberFormat.getInstance()));
+            }
+            else if(charTitle.toLowerCase().equals("labelset frequency")){
+                renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
+                "{0} = {2}", NumberFormat.getInstance()));
+            }
+            else if(charTitle.toLowerCase().equals("labels histogram")){
+                renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
+                "Instances with {1} labels = {2}", NumberFormat.getInstance()));
+            }
+            else if(charTitle.toLowerCase().equals("ir per label inter class")){
+                renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
+                "{0} = {2}", NumberFormat.getInstance()));
+            }
+            else if(charTitle.toLowerCase().equals("ir per label intra class")){
+                renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
+                "{0} = {2}", NumberFormat.getInstance()));
+            }
+            else if(charTitle.toLowerCase().equals("ir per labelset")){
+                renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
+                "ID: {0} = {2}", NumberFormat.getInstance()));
+            }
+            else{
+                renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator());
+            }
+            
+            
+            plot1.setBackgroundAlpha(0);
             plot1.setRangeGridlinePaint(Color.black);
         }
         else if(type.equals("line_2_axis"))
         {
-            chart1 = ChartFactory.createLineChart(" ",title_x_axis,title_y_axis , my_data, PlotOrientation.VERTICAL, true, true, false);
+            chart1 = ChartFactory.createLineChart(" ",title_x_axis,title_y_axis , my_data, PlotOrientation.VERTICAL, false, true, false);
 
             plot1 =  chart1.getCategoryPlot();
             plot1.setRangeGridlinePaint(Color.black);
@@ -5199,6 +5295,7 @@ public class RunApp extends javax.swing.JFrame {
 
         //Labelsets frequency
         HashMap<LabelSet,Integer> result = stat1.labelCombCount();
+        labelsetStrings_IR = new ArrayList<>(result.size());
         
         Set<LabelSet> keysets = result.keySet();
         
@@ -5239,12 +5336,15 @@ public class RunApp extends javax.swing.JFrame {
             fila[0]=count;    
              
             truncate = Double.toString(temp.get_ir());
-            fila[1]= util.Truncate_values_aprox_zero(truncate,5);
+            fila[1] = util.getValueFormatted(truncate, 3);
+            //fila[1]= util.Truncate_values_aprox_zero(truncate,5);
              
             table_model1.addRow(fila);
              
-            my_data.setValue(temp.get_ir(), "",Integer.toString(count));
-              
+            //my_data.setValue(temp.get_ir(), "",Integer.toString(count));
+            my_data.setValue(temp.get_ir(), Integer.toString(count),"");
+            labelsetStrings_IR.add(temp.get_name());
+            
             count++;
             lista1.remove(temp);
         }
@@ -5301,6 +5401,7 @@ public class RunApp extends javax.swing.JFrame {
         
         //Labelsets frequency
         HashMap<LabelSet,Integer> result = stat1.labelCombCount();
+        labelsetStrings_freq = new ArrayList<>(result.size());
         
         double sum=0.0;
         Set<LabelSet> keysets = result.keySet();
@@ -5334,12 +5435,16 @@ public class RunApp extends javax.swing.JFrame {
             sum += freq;             
             String value_freq =Double.toString(freq);             
             fila[1]= value;             
-            fila[2]= util.Truncate_values_aprox_zero(value_freq,4);           
+            //fila[2]= util.Truncate_values_aprox_zero(value_freq,4);
+            fila[2] = util.getValueFormatted(value_freq, 4);
             table_model1.addRow(fila);
 
-            String id = "ID: "+Integer.toString(count)+" , "+"Labelset: ";
+            //String id = "ID: "+Integer.toString(count)+" , "+"Labelset: ";
+            String id = "ID: " + Integer.toString(count);
              
-            my_data.setValue(freq, id + temp.get_name(),"");
+            //my_data.setValue(freq, id + temp.get_name(),"");
+            my_data.setValue(freq, id,"");
+            labelsetStrings_freq.add(temp.get_name());
              
             count++;
             lista1.remove(temp);
@@ -5366,7 +5471,9 @@ public class RunApp extends javax.swing.JFrame {
 
         return jtable.getModel();
     }
-
+    
+    
+    
     private void jtable_coefficient_values(MultiLabelInstances dataset ,ArrayList<pares_atributos> lista_pares,String tipo_tabla)
     {
         double[][] pair_label_values;
@@ -5687,7 +5794,8 @@ public class RunApp extends javax.swing.JFrame {
             truncate = Double.toString(label_imbalanced[i].get_ir());
             
             fila[0]= label_imbalanced[i].get_name();          
-            fila[1]=util.Truncate_values_aprox_zero(truncate, 5);
+            //fila[1]=util.Truncate_values_aprox_zero(truncate, 5);
+            fila[1] = util.getValueFormatted(truncate, 3);
       
             table_model1.addRow(fila);
         }
@@ -5727,7 +5835,8 @@ public class RunApp extends javax.swing.JFrame {
             truncate = Double.toString(IR_inter_class[i]);
             
             fila[0]= label_frenquency[i].get_name();          
-            fila[1]=util.Truncate_values_aprox_zero(truncate, 5);
+            //fila[1]=util.Truncate_values_aprox_zero(truncate, 5);
+            fila[1] = util.getValueFormatted(truncate, 3);
                         
             table_model1.addRow(fila);
         }
@@ -5897,7 +6006,8 @@ public class RunApp extends javax.swing.JFrame {
             fila[0]= i;
             fila[1]=freq_current;
             truncate = Double.toString(freq);
-            fila[2]=util.Truncate_values_aprox_zero(truncate, 5);
+            fila[2] = util.getValueFormatted(truncate, 4);
+            //fila[2]=util.Truncate_values_aprox_zero(truncate, 5);
                 
             table_model1.addRow(fila);
         }
@@ -5936,13 +6046,16 @@ public class RunApp extends javax.swing.JFrame {
         {
             current = label_frenquency[i];
             
+            
+            
             fila[0]=current.get_name();
             freq =current.get_frequency()*1.0/dataset.getNumInstances();
             
             fila[1]= current.get_frequency(); //numero de ejemplos
             
             truncate = Double.toString(freq);
-            fila[2]= util.Truncate_values_aprox_zero(truncate, 5);
+            //fila[2]= util.Truncate_values_aprox_zero(truncate, 5);
+            fila[2] = util.getValueFormatted(truncate, 4);
 
             table_model1.addRow(fila);
         }
@@ -5959,6 +6072,8 @@ public class RunApp extends javax.swing.JFrame {
      
     public void create_jtable_metric_principal(JTable table,JPanel jpanel , Object rowData[][], int posx, int posy, int width,int height)
     {
+        //table = setMetricsHelp(table);
+        
         TableModel model = new Table_model_metrics(rowData);
         
         table.setModel(model);
@@ -5987,6 +6102,24 @@ public class RunApp extends javax.swing.JFrame {
         jpanel.validate();
     }
      
+    public JTable setMetricsHelp(JTable jtable){
+        jtable = new JTable(jtable.getModel()){
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component c = super.prepareRenderer(renderer, row, column);
+                if (c instanceof JComponent) {
+                    //if(column == 0){
+                        JComponent jc = (JComponent) c;
+                        jc.setToolTipText(util.Get_metric_tooltip(getValueAt(row, 0).toString()));
+                    //}
+                }
+                return c;
+            }
+        };
+        
+        return jtable;
+    }
+    
     public void create_jtable_metric_multi(JTable table,JPanel jpanel , Object rowData[][], int posx, int posy, int width,int height)
     {
         TableModel model = new Table_model_metrics(rowData, "multi");
@@ -6190,7 +6323,6 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JLabel labelAttributes;
     private javax.swing.JLabel labelAttributesValue;
     private javax.swing.JLabel labelBRFS;
-    private javax.swing.JLabel labelBRFS1;
     private javax.swing.JLabel labelBRFS_Comb;
     private javax.swing.JLabel labelBRFS_Norm;
     private javax.swing.JLabel labelBRFS_Out;
