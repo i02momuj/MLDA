@@ -60,9 +60,15 @@ import metrics_API.MLDataEvaluator;
 import mulan.data.InvalidDataFormatException;
 import mulan.data.IterativeStratification;
 import mulan.data.LabelSet;
+import mulan.data.LabelsMetaData;
+import mulan.data.LabelsMetaDataImpl;
 import mulan.data.MultiLabelInstances;
 import mulan.data.Statistics;
 import mulan.examples.CrossValidationExperiment;
+import mulan.transformations.BinaryRelevanceTransformation;
+import mulan.transformations.IncludeLabelsTransformation;
+import mulan.transformations.LabelPowersetTransformation;
+import mulan.transformations.RemoveAllLabels;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -89,6 +95,7 @@ import preprocess.IterativeTrainTest;
 import preprocess.LabelPowersetTrainTest;
 import weka.core.Attribute;
 import weka.core.Instances;
+import weka.core.converters.ArffSaver;
 import weka.filters.Filter;
 import weka.filters.unsupervised.instance.Randomize;
 import weka.filters.unsupervised.instance.RemoveRange;
@@ -119,6 +126,7 @@ public class RunApp extends javax.swing.JFrame {
     //JPanel container;
     MultiLabelInstances dataset,dataset_train, dataset_test;
     MultiLabelInstances preprocessedDataset;
+    ArrayList<Instances> transformedDatasets = new ArrayList<Instances>();
     String filename_database_xml=null,filename_database_xml_path="";
     String filename_database_arff_test;
              
@@ -370,6 +378,22 @@ public class RunApp extends javax.swing.JFrame {
         radioNoIS.setSelected(true);
 
         textRandomHoldout.setEnabled(true);
+        
+        
+        radioBRTrans.setSelected(true);
+        buttonGroup4.add(radioBRTrans);
+        radioBRTrans.setToolTipText("Generates a binary dataset for each label");
+        buttonGroup4.add(radioLPTrans);
+        radioLPTrans.setToolTipText("Generates a multi-class dataset where each class is each one of the labelsets in the MLDataset");
+        buttonGroup4.add(radioIncludeLabelsTrans);
+        radioIncludeLabelsTrans.setToolTipText("<html>Generates a binary dataset, replicating the instance, where each one is augmented <br> with a label name and the class indicates if the label was associated or not</html>");
+        radioIncludeLabelsTrans.setToolTipText("<html>Generates a binary dataset where each instance is replicated as many times as the number of labels.<br>"
+                                                +"Each new instance is augmented with a label name and the class indicates if the label was associated or not.</html>");
+        buttonGroup4.add(radioRemoveLabelsTrans);
+        radioRemoveLabelsTrans.setToolTipText("Remove all the labels of the dataset");
+        jButtonStartTrans.setToolTipText("Start transformation");
+        jButtonSaveDatasetsTrans.setToolTipText("Save dataset files in a folder");
+        
 
         buttonShowCoOcurrence.setToolTipText("Show graph with labels selected in table");
         buttonShowMostFrequent.setToolTipText("Show graph with most frequent labels");
@@ -395,7 +419,7 @@ public class RunApp extends javax.swing.JFrame {
         cp_per_labelset = createJChart(panelIRperLabelset, "bar", "IR","Labelsets",false, "IR per labelset");
       
         jTable1 = setMetricsHelp(jTable1);
-        create_jtable_metrics_principal(jTable1,panelDataset,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save, button_clear, 30,190,780,280,"database"); //tab Database //35,155,500,355
+        create_jtable_metrics_principal(jTable1,panelSummary,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save, button_clear, 30,190,780,280,"database"); //tab Database //35,155,500,355
 
         jTableMulti = setMetricsHelp(jTableMulti);
         create_jtable_metrics_multi(jTableMulti,jPanelMulti,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save, 25,15,510,420); //tab Multi
@@ -720,7 +744,7 @@ public class RunApp extends javax.swing.JFrame {
         jPopupMenu1 = new javax.swing.JPopupMenu();
         buttonGroup5 = new javax.swing.ButtonGroup();
         TabPrincipal = new javax.swing.JTabbedPane();
-        panelDataset = new javax.swing.JPanel();
+        panelSummary = new javax.swing.JPanel();
         buttonChooseFile = new javax.swing.JButton();
         textChooseFile = new javax.swing.JTextField();
         panelCurrentDataset = new javax.swing.JPanel();
@@ -787,7 +811,15 @@ public class RunApp extends javax.swing.JFrame {
         textRandomIS = new javax.swing.JTextField();
         labelRandomIS = new javax.swing.JLabel();
         radioNoIS = new javax.swing.JRadioButton();
-        panelImbalance = new javax.swing.JPanel();
+        panelTransformation = new javax.swing.JPanel();
+        jButtonStartTrans = new javax.swing.JButton();
+        jButtonSaveDatasetsTrans = new javax.swing.JButton();
+        panelTransformationChoose = new javax.swing.JPanel();
+        radioLPTrans = new javax.swing.JRadioButton();
+        radioBRTrans = new javax.swing.JRadioButton();
+        radioIncludeLabelsTrans = new javax.swing.JRadioButton();
+        radioRemoveLabelsTrans = new javax.swing.JRadioButton();
+        panelLabels = new javax.swing.JPanel();
         comboBoxLabelsInformation = new javax.swing.JComboBox();
         panelImbalanceLeft = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -804,7 +836,7 @@ public class RunApp extends javax.swing.JFrame {
         panelBoxDiagram = new javax.swing.JPanel();
         panelIRperLabelInterClass = new javax.swing.JPanel();
         jLabelIR = new javax.swing.JLabel();
-        jPanel21 = new javax.swing.JPanel();
+        panelDependences = new javax.swing.JPanel();
         tabsDependences = new javax.swing.JTabbedPane();
         panelChiPhi = new javax.swing.JPanel();
         jLabelChiFi_text = new javax.swing.JLabel();
@@ -993,25 +1025,25 @@ public class RunApp extends javax.swing.JFrame {
                     .addComponent(labelLxIxFValue, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        javax.swing.GroupLayout panelDatasetLayout = new javax.swing.GroupLayout(panelDataset);
-        panelDataset.setLayout(panelDatasetLayout);
-        panelDatasetLayout.setHorizontalGroup(
-            panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelDatasetLayout.createSequentialGroup()
+        javax.swing.GroupLayout panelSummaryLayout = new javax.swing.GroupLayout(panelSummary);
+        panelSummary.setLayout(panelSummaryLayout);
+        panelSummaryLayout.setHorizontalGroup(
+            panelSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSummaryLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addGroup(panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelCurrentDataset, javax.swing.GroupLayout.PREFERRED_SIZE, 795, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panelDatasetLayout.createSequentialGroup()
+                    .addGroup(panelSummaryLayout.createSequentialGroup()
                         .addComponent(textChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 665, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(buttonChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
-        panelDatasetLayout.setVerticalGroup(
-            panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelDatasetLayout.createSequentialGroup()
+        panelSummaryLayout.setVerticalGroup(
+            panelSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSummaryLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panelSummaryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(textChooseFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(buttonChooseFile))
                 .addGap(7, 7, 7)
@@ -1019,7 +1051,7 @@ public class RunApp extends javax.swing.JFrame {
                 .addContainerGap(329, Short.MAX_VALUE))
         );
 
-        TabPrincipal.addTab("Summary", panelDataset);
+        TabPrincipal.addTab("Summary", panelSummary);
 
         panelSplitting.setBorder(javax.swing.BorderFactory.createTitledBorder("Splitting"));
 
@@ -1437,6 +1469,113 @@ public class RunApp extends javax.swing.JFrame {
 
         TabPrincipal.addTab("Preprocess", panelPreprocess);
 
+        jButtonStartTrans.setText("Transform");
+        jButtonStartTrans.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonStartTransActionPerformed(evt);
+            }
+        });
+
+        jButtonSaveDatasetsTrans.setText("Save");
+        jButtonSaveDatasetsTrans.setEnabled(false);
+        jButtonSaveDatasetsTrans.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSaveDatasetsTransActionPerformed(evt);
+            }
+        });
+
+        panelTransformationChoose.setBorder(javax.swing.BorderFactory.createTitledBorder("Transformation methods"));
+
+        radioLPTrans.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        radioLPTrans.setText("Label Powerset transformation");
+        radioLPTrans.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioLPTransActionPerformed(evt);
+            }
+        });
+
+        radioBRTrans.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        radioBRTrans.setText("Binary Relevance transformation");
+        radioBRTrans.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioBRTransActionPerformed(evt);
+            }
+        });
+
+        radioIncludeLabelsTrans.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        radioIncludeLabelsTrans.setText("Include Labels transformation");
+        radioIncludeLabelsTrans.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioIncludeLabelsTransActionPerformed(evt);
+            }
+        });
+
+        radioRemoveLabelsTrans.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        radioRemoveLabelsTrans.setText("Remove All Labels transformation");
+        radioRemoveLabelsTrans.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioRemoveLabelsTransActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelTransformationChooseLayout = new javax.swing.GroupLayout(panelTransformationChoose);
+        panelTransformationChoose.setLayout(panelTransformationChooseLayout);
+        panelTransformationChooseLayout.setHorizontalGroup(
+            panelTransformationChooseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTransformationChooseLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelTransformationChooseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(radioLPTrans)
+                    .addComponent(radioBRTrans)
+                    .addComponent(radioIncludeLabelsTrans)
+                    .addComponent(radioRemoveLabelsTrans))
+                .addContainerGap(608, Short.MAX_VALUE))
+        );
+        panelTransformationChooseLayout.setVerticalGroup(
+            panelTransformationChooseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTransformationChooseLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(radioBRTrans)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(radioLPTrans)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(radioIncludeLabelsTrans)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(radioRemoveLabelsTrans)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout panelTransformationLayout = new javax.swing.GroupLayout(panelTransformation);
+        panelTransformation.setLayout(panelTransformationLayout);
+        panelTransformationLayout.setHorizontalGroup(
+            panelTransformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTransformationLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelTransformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelTransformationLayout.createSequentialGroup()
+                        .addComponent(panelTransformationChoose, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(panelTransformationLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jButtonStartTrans, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonSaveDatasetsTrans, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        );
+        panelTransformationLayout.setVerticalGroup(
+            panelTransformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTransformationLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelTransformationChoose, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelTransformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonStartTrans)
+                    .addComponent(jButtonSaveDatasetsTrans))
+                .addContainerGap(362, Short.MAX_VALUE))
+        );
+
+        TabPrincipal.addTab("Transformation", panelTransformation);
+
         comboBoxLabelsInformation.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Label frequency", "Labelset frequency", "Labels histogram", "Box diagram", "IR per label inter class", "IR per label intra class", "IR per labelset" }));
         comboBoxLabelsInformation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1617,36 +1756,36 @@ public class RunApp extends javax.swing.JFrame {
         jLabelIR.setText("label IR");
         jLabelIR.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        javax.swing.GroupLayout panelImbalanceLayout = new javax.swing.GroupLayout(panelImbalance);
-        panelImbalance.setLayout(panelImbalanceLayout);
-        panelImbalanceLayout.setHorizontalGroup(
-            panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelImbalanceLayout.createSequentialGroup()
+        javax.swing.GroupLayout panelLabelsLayout = new javax.swing.GroupLayout(panelLabels);
+        panelLabels.setLayout(panelLabelsLayout);
+        panelLabelsLayout.setHorizontalGroup(
+            panelLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLabelsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelImbalanceLayout.createSequentialGroup()
+                .addGroup(panelLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelLabelsLayout.createSequentialGroup()
                         .addComponent(panelImbalanceLeft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(panelImbalanceLayout.createSequentialGroup()
+                    .addGroup(panelLabelsLayout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addComponent(jLabelIR)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(comboBoxLabelsInformation, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tabsImbalance, javax.swing.GroupLayout.PREFERRED_SIZE, 561, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(38, 38, 38))
         );
-        panelImbalanceLayout.setVerticalGroup(
-            panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelImbalanceLayout.createSequentialGroup()
+        panelLabelsLayout.setVerticalGroup(
+            panelLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLabelsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelImbalanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelImbalanceLayout.createSequentialGroup()
+                .addGroup(panelLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelLabelsLayout.createSequentialGroup()
                         .addComponent(comboBoxLabelsInformation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tabsImbalance, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addContainerGap())
-                    .addGroup(panelImbalanceLayout.createSequentialGroup()
+                    .addGroup(panelLabelsLayout.createSequentialGroup()
                         .addComponent(panelImbalanceLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabelIR)
@@ -1655,7 +1794,7 @@ public class RunApp extends javax.swing.JFrame {
 
         panelImbalanceLeft.getAccessibleContext().setAccessibleName("");
 
-        TabPrincipal.addTab("Labels", panelImbalance);
+        TabPrincipal.addTab("Labels", panelLabels);
 
         tabsDependences.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -1911,20 +2050,20 @@ public class RunApp extends javax.swing.JFrame {
 
         tabsDependences.addTab("Heatmap values", panelHeatmapValues);
 
-        javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
-        jPanel21.setLayout(jPanel21Layout);
-        jPanel21Layout.setHorizontalGroup(
-            jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel21Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelDependencesLayout = new javax.swing.GroupLayout(panelDependences);
+        panelDependences.setLayout(panelDependencesLayout);
+        panelDependencesLayout.setHorizontalGroup(
+            panelDependencesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDependencesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(tabsDependences))
         );
-        jPanel21Layout.setVerticalGroup(
-            jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        panelDependencesLayout.setVerticalGroup(
+            panelDependencesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(tabsDependences)
         );
 
-        TabPrincipal.addTab("Dependences", jPanel21);
+        TabPrincipal.addTab("Dependences", panelDependences);
 
         panelMultipleDatasetsLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Choose datasets"));
 
@@ -2027,12 +2166,12 @@ public class RunApp extends javax.swing.JFrame {
     private void buttonRemoveMultipleDatasetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRemoveMultipleDatasetsActionPerformed
         // TODO add your handling code here:
         int current = listMultipleDatasetsLeft.getSelectedIndex();
-        
+
         if(current < 0){
             JOptionPane.showMessageDialog(null, "Select a dataset to remove.", "alert", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         list_dataset.remove(current);
         String dataName = Dataset_names.get(current);
         Dataset_names.remove(current);
@@ -2053,7 +2192,7 @@ public class RunApp extends javax.swing.JFrame {
         chooser.setFileFilter(fname);
 
         final int returnVal = chooser.showOpenDialog(this);
-        
+
         progressBar.setIndeterminate(true);
         progressFrame.setVisible(true);
         progressFrame.repaint();
@@ -2074,9 +2213,1039 @@ public class RunApp extends javax.swing.JFrame {
                 }); //invokeLater
             }
         }
-        ).start();  
-        
+        ).start();
+
     }//GEN-LAST:event_buttonAddMultipleDatasetsActionPerformed
+
+    private void tabsDependencesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabsDependencesStateChanged
+        if(tabsDependences.getSelectedIndex() == 0) {
+            jLabelChiFi_text.setVisible(true);
+        }
+        else {
+            jLabelChiFi_text.setVisible(false);
+        }
+    }//GEN-LAST:event_tabsDependencesStateChanged
+
+    private void buttonShowMostRelatedHeatMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostRelatedHeatMapActionPerformed
+        int n = Integer.parseInt(textMostRelatedHeatMap.getText());
+        showMostRelatedHeatMap(n);
+    }//GEN-LAST:event_buttonShowMostRelatedHeatMapActionPerformed
+
+    private void buttonShowMostFrequentHeatMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostFrequentHeatMapActionPerformed
+        int n = Integer.parseInt(textMostFrequentHeatMap.getText());
+        showMostFrequentsHeatMap(n);
+    }//GEN-LAST:event_buttonShowMostFrequentHeatMapActionPerformed
+
+    private void buttonShowHeatMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowHeatMapActionPerformed
+        showHeatMap();
+    }//GEN-LAST:event_buttonShowHeatMapActionPerformed
+
+    private void panelCoOcurrenceMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelCoOcurrenceMouseReleased
+        if(evt.getButton() == MouseEvent.BUTTON3 )
+        {
+            jPopupMenu1.removeAll();
+
+            JMenuItem saver = new JMenuItem("Save as...");
+
+            saver.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    try {
+                        save_as_ActionPerformed(evt);
+                    } catch (AWTException ex) {
+                        Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+
+            jPopupMenu1.add(saver);
+            jPopupMenu1.show(evt.getComponent(), evt.getX(), evt.getY());
+        }
+    }//GEN-LAST:event_panelCoOcurrenceMouseReleased
+
+    private void buttonShowMostRelatedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostRelatedActionPerformed
+
+        int n = Integer.parseInt(textMostRelated.getText());
+
+        if(n > dataset.getNumLabels()){
+            JOptionPane.showMessageDialog(null, "The number of labels to show must be less than the number of labels in the dataset.", "alert", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if(n < 2){
+            JOptionPane.showMessageDialog(null, "Select at least 2 labels.", "alert", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if(lista_pares== null)
+        {
+            JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        ArrayList<String> seleccionados= new  ArrayList();
+
+        seleccionados = selectTopCoocurrenceLabels(n, true);
+
+        ArrayList<pares_atributos> pares_seleccionados =  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
+
+        String[] labelname=util.pasa_valores_al_arreglo(seleccionados);
+
+        graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
+    }//GEN-LAST:event_buttonShowMostRelatedActionPerformed
+
+    private void buttonShowMostFrequentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostFrequentActionPerformed
+        int n = Integer.parseInt(textMostFrequent.getText());
+
+        if(n > dataset.getNumLabels()){
+            JOptionPane.showMessageDialog(null, "The number of labels to show must be less than the number of labels in the dataset.", "alert", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if(n < 2){
+            JOptionPane.showMessageDialog(null, "Select at least 2 labels.", "alert", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if(lista_pares== null)
+        {
+            JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        tableCoOcurrenceLeft.setRowSelectionInterval(0, n-1);
+
+        ArrayList<String> seleccionados= new  ArrayList();
+
+        String current = new String();
+        for(int i=0;i<n; i++)
+        {
+            current = (tableCoOcurrenceLeft.getValueAt(i, 0).toString());
+            if(current != null){
+                seleccionados.add(current);
+            }
+            else break;
+        }
+
+        ArrayList<pares_atributos> pares_seleccionados =  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
+
+        String[] labelname=util.pasa_valores_al_arreglo(seleccionados);
+
+        graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
+    }//GEN-LAST:event_buttonShowMostFrequentActionPerformed
+
+    private void buttonShowCoOcurrenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowCoOcurrenceActionPerformed
+        if(lista_pares== null)
+        {
+            JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        ArrayList<String> seleccionados= new  ArrayList();
+        int[] selecteds = tableCoOcurrenceLeft.getSelectedRows();
+
+        if(selecteds.length<= 1) {
+            JOptionPane.showMessageDialog(null, "You must choose two or more labels.", "alert", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        for(int i=0;i<selecteds.length; i++)
+        {
+            seleccionados.add((tableCoOcurrenceLeft.getValueAt(selecteds[i], 0).toString()));
+        }
+
+        ArrayList<pares_atributos> pares_seleccionados =  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
+
+        String[] labelname=util.pasa_valores_al_arreglo(seleccionados);//solo cambia el tipo de estructura de datos.
+
+        graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
+    }//GEN-LAST:event_buttonShowCoOcurrenceActionPerformed
+
+    private void tabsImbalanceStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabsImbalanceStateChanged
+
+        if(tm_BR1 !=null && tm_LP1!=null){
+
+            if(tabsImbalance.getSelectedIndex()==1)
+            {
+                tableImbalance.setModel(tm_LP1);
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset frequency"));
+
+                radioExamplesPerLabel.setVisible(false);
+                radioExamplesPerLabelset.setVisible(false);
+
+                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
+            }
+
+            else if (tabsImbalance.getSelectedIndex()==4)
+            {
+                tableImbalance.setModel(tm_ir_per_labelset);
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelsets Imbalance Ratio"));
+
+                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
+                panelImbalanceLeft.repaint();
+                panelImbalanceLeft.validate();
+
+                radioExamplesPerLabel.setVisible(false);
+                radioExamplesPerLabelset.setVisible(false);
+            }
+            else if (tabsImbalance.getSelectedIndex()==0)
+            {
+                tableImbalance.setModel(tm_BR1);
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Label frequency"));
+
+                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
+                panelImbalanceLeft.repaint();
+                panelImbalanceLeft.validate();
+
+                radioExamplesPerLabel.setVisible(false);
+                radioExamplesPerLabelset.setVisible(false);
+            }
+
+            else if (tabsImbalance.getSelectedIndex()==3)
+            {
+                tableImbalance.setModel(tm_ir_per_label_intra_class_only);
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance Ratio intra class"));
+
+                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
+                panelImbalanceLeft.repaint();
+                panelImbalanceLeft.validate();
+
+                radioExamplesPerLabel.setVisible(false);
+                radioExamplesPerLabelset.setVisible(false);
+            }
+            else if (tabsImbalance.getSelectedIndex()==2)
+            {
+                tableImbalance.setModel(tm_labelxExamples);
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels histogram"));
+
+                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
+                panelImbalanceLeft.repaint();
+                panelImbalanceLeft.validate();
+
+                radioExamplesPerLabel.setVisible(false);
+                radioExamplesPerLabelset.setVisible(false);
+            }
+
+            else if (tabsImbalance.getSelectedIndex()==6)
+            {
+                tableImbalance.setModel(tm_ir_per_label_inter_class_only);
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance Ratio inter class"));
+
+                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
+                panelImbalanceLeft.repaint();
+                panelImbalanceLeft.validate();
+
+                radioExamplesPerLabel.setVisible(false);
+                radioExamplesPerLabelset.setVisible(false);
+            }
+
+            else if (tabsImbalance.getSelectedIndex()==5)
+            {
+                tableImbalance.setModel(tm_attr);
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Numeric attributes"));
+
+                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
+                panelImbalanceLeft.repaint();
+                panelImbalanceLeft.validate();
+                radioExamplesPerLabel.setVisible(true);
+                radioExamplesPerLabelset.setVisible(true);
+            }
+
+            else
+            {
+                tableImbalance.setModel(tm_labelxExamples);
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels histogram"));
+
+                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
+                panelImbalanceLeft.repaint();
+                panelImbalanceLeft.validate();
+
+                radioExamplesPerLabel.setVisible(false);
+                radioExamplesPerLabelset.setVisible(false);
+            }
+
+            tableImbalance.repaint();
+            tableImbalance.validate();
+        }
+    }//GEN-LAST:event_tabsImbalanceStateChanged
+
+    private void export2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_export2ActionPerformed
+        button_export_ActionPerformed(evt, tableImbalance);
+    }//GEN-LAST:event_export2ActionPerformed
+
+    private void radioExamplesPerLabelsetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioExamplesPerLabelsetMouseClicked
+        // TODO add your handling code here:
+        tableImbalance.clearSelection();
+
+        if(labelset_frequency == null) return;
+
+        HeapSort.sort(labelset_frequency);
+
+        cp_box.getChart().setTitle("# Examples per Labelset");
+        cp_box.getChart().getXYPlot().clearAnnotations();
+
+        util.update_values_xydataset(cp_box, HeapSort.get_array_sorted());
+    }//GEN-LAST:event_radioExamplesPerLabelsetMouseClicked
+
+    private void radioExamplesPerLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioExamplesPerLabelMouseClicked
+        tableImbalance.clearSelection();
+        if(label_frenquency == null) return;
+
+        double [] label_frenquency_values = util.get_label_frequency(label_frenquency);
+
+        HeapSort.sort(label_frenquency_values);
+
+        cp_box.getChart().setTitle("# Examples per Label");
+        cp_box.getChart().getXYPlot().clearAnnotations();
+
+        util.update_values_xydataset(cp_box, HeapSort.get_array_sorted());
+    }//GEN-LAST:event_radioExamplesPerLabelMouseClicked
+
+    private void tableImbalanceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableImbalanceMouseClicked
+        //#Examples per labelset
+        if(tabsImbalance.getSelectedIndex()==1)
+        {
+            int seleccionada = tableImbalance.getSelectedRow();
+
+            if(labelsets_sorted == null){
+                return;
+            }
+
+            ArrayList<String> label_names= util.Get_labelnames_x_labelcombination(dataset, labelsets_sorted[seleccionada].get_name());
+
+            String[] args = new String[2];
+
+            args[0]= labelsets_sorted[seleccionada].get_name();
+            args[1]= Integer.toString(labelsets_sorted[seleccionada].get_frequency());
+
+            int posx = this.getBounds().x;
+            int posy = this.getBounds().y;
+
+            metric_output mo = new metric_output(dataset, posx, posy+50,args,label_names,label_x_frequency, es_de_tipo_meka);
+
+            mo.setVisible(true);
+        }
+
+        else if(tabsImbalance.getSelectedIndex()==5)
+        {
+            jRadioButton8.setSelected(true);
+
+            int seleccionada = tableImbalance.getSelectedRow();
+
+            String attr= tableImbalance.getValueAt(seleccionada, 0).toString();
+
+            Instances instancias = dataset.getDataSet();
+
+            Attribute attr_current = instancias.attribute(attr);
+
+            double[] valores_attr= instancias.attributeToDoubleArray(attr_current.index());
+
+            HeapSort.sort(valores_attr);
+
+            cp_box.getChart().setTitle(attr_current.name());
+
+            cp_box.getChart().getXYPlot().clearAnnotations();
+
+            util.update_values_xydataset(cp_box, HeapSort.get_array_sorted());
+
+        }
+
+        else if(tabsImbalance.getSelectedIndex()==6)
+        {
+            int seleccionada = tableImbalance.getSelectedRow();
+
+            if(labelsets_sorted_IR == null) return;
+
+            ArrayList<String> label_names= util.Get_labelnames_x_labelcombination(dataset, labelsets_sorted_IR[seleccionada].get_name());
+
+            String[] args = new String[2];
+
+            args[0]= labelsets_sorted_IR[seleccionada].get_name();
+            args[1]= Integer.toString(labelsets_sorted_IR[seleccionada].get_frequency());
+
+            int posx = this.getBounds().x;
+            int posy = this.getBounds().y;
+
+            metric_output mo = new metric_output(dataset, posx, posy+50,args,label_names,label_x_frequency, es_de_tipo_meka);
+
+            mo.setVisible(true);
+        }
+    }//GEN-LAST:event_tableImbalanceMouseClicked
+
+    private void comboBoxLabelsInformationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxLabelsInformationActionPerformed
+
+        if(comboBoxLabelsInformation.getSelectedIndex() == 0){
+            tabsImbalance.setSelectedIndex(0);
+            export2.setVisible(true);
+            export2.repaint();
+            jLabelIR.setVisible(false);
+            jLabelIR.repaint();
+        }
+        else if(comboBoxLabelsInformation.getSelectedIndex() == 1){
+            tabsImbalance.setSelectedIndex(1);
+            export2.setVisible(true);
+            export2.repaint();
+            jLabelIR.setVisible(false);
+            jLabelIR.repaint();
+        }
+        else if(comboBoxLabelsInformation.getSelectedIndex() == 2){
+            tabsImbalance.setSelectedIndex(2);
+            export2.setVisible(true);
+            export2.repaint();
+            jLabelIR.setVisible(false);
+            jLabelIR.repaint();
+        }
+        else if(comboBoxLabelsInformation.getSelectedIndex() == 3){
+            tabsImbalance.setSelectedIndex(5);
+            export2.setVisible(false);
+            export2.repaint();
+            jLabelIR.setVisible(false);
+            jLabelIR.repaint();
+        }
+        else if(comboBoxLabelsInformation.getSelectedIndex() == 4){
+            tabsImbalance.setSelectedIndex(6);
+            export2.setVisible(true);
+            export2.repaint();
+            jLabelIR.setText("<html>When IR > 1.5, the label is <br> imbalanced and it is marked in red</html>");
+            jLabelIR.setVisible(true);
+            jLabelIR.repaint();
+        }
+        else if(comboBoxLabelsInformation.getSelectedIndex() == 5){
+            //tabsImbalance.setSelectedIndex(9);
+            tabsImbalance.setSelectedIndex(3);
+            export2.setVisible(true);
+            export2.repaint();
+            jLabelIR.setText("<html>When IR > 1.5, the label is <br> imbalanced and it is marked in red</html>");
+            jLabelIR.setVisible(true);
+            jLabelIR.repaint();
+        }
+        else if(comboBoxLabelsInformation.getSelectedIndex() == 6){
+            //tabsImbalance.setSelectedIndex(3);
+            tabsImbalance.setSelectedIndex(4);
+            export2.setVisible(true);
+            export2.repaint();
+            jLabelIR.setText("<html>When IR > 1.5, the labelset is <br> imbalanced and it is marked in red</html>");
+            jLabelIR.setVisible(true);
+            jLabelIR.repaint();
+        }
+    }//GEN-LAST:event_comboBoxLabelsInformationActionPerformed
+
+    private void radioRemoveLabelsTransActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRemoveLabelsTransActionPerformed
+        jButtonSaveDatasetsTrans.setEnabled(false);
+    }//GEN-LAST:event_radioRemoveLabelsTransActionPerformed
+
+    private void radioIncludeLabelsTransActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioIncludeLabelsTransActionPerformed
+        jButtonSaveDatasetsTrans.setEnabled(false);
+    }//GEN-LAST:event_radioIncludeLabelsTransActionPerformed
+
+    private void radioBRTransActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioBRTransActionPerformed
+        jButtonSaveDatasetsTrans.setEnabled(false);
+    }//GEN-LAST:event_radioBRTransActionPerformed
+
+    private void radioLPTransActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioLPTransActionPerformed
+        jButtonSaveDatasetsTrans.setEnabled(false);
+    }//GEN-LAST:event_radioLPTransActionPerformed
+
+    private void jButtonSaveDatasetsTransActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveDatasetsTransActionPerformed
+        // TODO add your handling code here:
+        try{
+            if(dataset == null){
+                JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if((transformedDatasets == null || transformedDatasets.isEmpty())){
+                JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            JFileChooser fc= new JFileChooser();
+
+            fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            String path_train, path_test,path_xml;
+
+            int returnVal = fc.showSaveDialog(this);
+
+            if (returnVal == JFileChooser.APPROVE_OPTION)
+            {
+                File file = fc.getSelectedFile();
+                FileFilter f1 = fc.getFileFilter();
+
+                String name_dataset= dataset_name1.substring(0,dataset_name1.length()-5);
+
+                if(fc.isDirectorySelectionEnabled()){
+                    if(radioBRTrans.isSelected()){
+                        for(int i=0; i<transformedDatasets.size(); i++){
+                            ArffSaver saver = new ArffSaver();
+                            saver.setInstances(transformedDatasets.get(i));
+                            saver.setFile(new File(file.getAbsolutePath() + "/" + name_dataset + "_BRTransformed_" + i + ".arff"));
+                            //saver.setDestination(new File("./data/test.arff"));   // **not** necessary in 3.5.4 and later
+                            saver.writeBatch();
+                        }
+                    }
+                    else if(radioLPTrans.isSelected()){
+                        ArffSaver saver = new ArffSaver();
+                        saver.setInstances(transformedDatasets.get(0));
+                        saver.setFile(new File(file.getAbsolutePath() + "/" + name_dataset + "_LPTransformed" + ".arff"));
+                        saver.writeBatch();
+                    }
+                    else if(radioRemoveLabelsTrans.isSelected())
+                    {
+                        ArffSaver saver = new ArffSaver();
+                        saver.setInstances(transformedDatasets.get(0));
+                        saver.setFile(new File(file.getAbsolutePath() + "/" + name_dataset + "_RemoveAllLabelsTransformed" + ".arff"));
+                        saver.writeBatch();
+                    }
+                    else if(radioIncludeLabelsTrans.isSelected())
+                    {
+                        ArffSaver saver = new ArffSaver();
+                        saver.setInstances(transformedDatasets.get(0));
+                        saver.setFile(new File(file.getAbsolutePath() + "/" + name_dataset + "_IncludeLabelsTransformed" + ".arff"));
+                        saver.writeBatch();
+                    }
+
+                    JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }//GEN-LAST:event_jButtonSaveDatasetsTransActionPerformed
+
+    private void jButtonStartTransActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartTransActionPerformed
+        progressBar.setIndeterminate(true);
+        progressFrame.setVisible(true);
+        progressFrame.repaint();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // do the long-running work here
+                final int returnCode = transform();
+                // at the end:
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setIndeterminate(false);
+                        progressFrame.setVisible(false);
+                        progressFrame.repaint();
+
+                        if(returnCode == 1 && (!(radioNoFS.isSelected() && radioNoSplit.isSelected() && radioNoIS.isSelected()))){
+                            JOptionPane.showMessageDialog(null, "Dataset has been transformed succesfully.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                        }
+
+                        Toolkit.getDefaultToolkit().beep();
+                    }//run
+                }); //invokeLater
+            }
+        }
+        ).start();
+    }//GEN-LAST:event_jButtonStartTransActionPerformed
+
+    private void radioNoISActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioNoISActionPerformed
+        textRandomIS.setEnabled(false);
+
+        jButtonSaveDatasets.setEnabled(false);
+        jComboBox_SaveFormat.setEnabled(false);
+    }//GEN-LAST:event_radioNoISActionPerformed
+
+    private void radioRandomISActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomISActionPerformed
+        textRandomIS.setEnabled(true);
+
+        jButtonSaveDatasets.setEnabled(false);
+        jComboBox_SaveFormat.setEnabled(false);
+    }//GEN-LAST:event_radioRandomISActionPerformed
+
+    private void radioNoFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioNoFSActionPerformed
+        textBRFS.setEnabled(false);
+        labelBRFS_Comb.setEnabled(false);
+        jComboBox_BRFS_Comb.setEnabled(false);
+        labelBRFS_Norm.setEnabled(false);
+        jComboBox_BRFS_Norm.setEnabled(false);
+        labelBRFS_Out.setEnabled(false);
+        jComboBox_BRFS_Out.setEnabled(false);
+        textRandomFS.setEnabled(false);
+
+        jButtonSaveDatasets.setEnabled(false);
+        jComboBox_SaveFormat.setEnabled(false);
+    }//GEN-LAST:event_radioNoFSActionPerformed
+
+    private void radioRandomFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomFSActionPerformed
+        textBRFS.setEnabled(false);
+        labelBRFS_Comb.setEnabled(false);
+        jComboBox_BRFS_Comb.setEnabled(false);
+        labelBRFS_Norm.setEnabled(false);
+        jComboBox_BRFS_Norm.setEnabled(false);
+        labelBRFS_Out.setEnabled(false);
+        jComboBox_BRFS_Out.setEnabled(false);
+        textRandomFS.setEnabled(true);
+
+        jButtonSaveDatasets.setEnabled(false);
+        jComboBox_SaveFormat.setEnabled(false);
+    }//GEN-LAST:event_radioRandomFSActionPerformed
+
+    private void radioBRFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioBRFSActionPerformed
+        textBRFS.setEnabled(true);
+        labelBRFS_Comb.setEnabled(true);
+        jComboBox_BRFS_Comb.setEnabled(true);
+        labelBRFS_Norm.setEnabled(true);
+        jComboBox_BRFS_Norm.setEnabled(true);
+        labelBRFS_Out.setEnabled(true);
+        jComboBox_BRFS_Out.setEnabled(true);
+        textRandomFS.setEnabled(false);
+
+        jButtonSaveDatasets.setEnabled(false);
+        jComboBox_SaveFormat.setEnabled(false);
+    }//GEN-LAST:event_radioBRFSActionPerformed
+
+    private void jButtonSaveDatasetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveDatasetsActionPerformed
+        try{
+            /*
+            If only FS is selected, save FS dataset
+            If any splitting method is selected, save the splitted datasets (those are FS too if it has been selected)
+            */
+
+            String format = jComboBox_SaveFormat.getSelectedItem().toString();
+
+            if(dataset == null){
+                JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if(!(radioNoFS.isSelected() && radioNoIS.isSelected() && radioNoSplit.isSelected())){
+                if((list_dataset_train.isEmpty() && list_dataset_test.isEmpty()) && (radioRandomCV.isSelected() || radioIterativeStratifiedCV.isSelected() || radioLPStratifiedCV.isSelected())){
+                    JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if((dataset_train ==null && dataset_test==null) && (radioIterativeStratifiedHoldout.isSelected()|| radioRandomHoldout.isSelected() || radioLPStratifiedHoldout.isSelected())){
+                    JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if((preprocessedDataset == null) && (radioBRFS.isSelected() || radioRandomFS.isSelected())){
+                    JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+
+            // JFILECHOOSER SAVE
+            JFileChooser fc= new JFileChooser();
+
+            fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            String path_train, path_test,path_xml;
+
+            int returnVal = fc.showSaveDialog(this);
+
+            if (returnVal == JFileChooser.APPROVE_OPTION)
+            {
+                File file = fc.getSelectedFile();
+                FileFilter f1 = fc.getFileFilter();
+
+                if(fc.isDirectorySelectionEnabled())
+                {
+                    //Check if none were selected -> Dataset conversion
+                    if(radioNoFS.isSelected() && radioNoIS.isSelected() && radioNoSplit.isSelected())
+                    {
+                        BufferedWriter bw_train = null;
+                        try {
+
+                            String name_dataset= dataset_name1.substring(0,dataset_name1.length()-5);
+
+                            if(format.toLowerCase().contains("meka")){
+                                String dataPath = file.getAbsolutePath()+"/"+name_dataset+"-MekaConverted.arff";
+
+                                bw_train = new BufferedWriter(new FileWriter(dataPath));
+                                PrintWriter wr_train = new PrintWriter(bw_train);
+
+                                util.Save_dataset_Meka_in_the_file(wr_train, dataset, name_dataset+"_MekaConverted");
+
+                                wr_train.close();
+                                bw_train.close();
+                            }
+                            else{
+                                //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+                                //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+                                //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+
+                                String dataPath = file.getAbsolutePath()+"/"+name_dataset+"-MulanConverted.arff";
+                                path_xml = file.getAbsolutePath()+"/"+name_dataset+"-MulanConverted.xml";
+
+                                bw_train = new BufferedWriter(new FileWriter(dataPath));
+                                PrintWriter wr_train = new PrintWriter(bw_train);
+
+                                util.Save_dataset_in_the_file(wr_train, dataset, name_dataset+"_MulanConverted");
+
+                                wr_train.close();
+                                bw_train.close();
+
+                                BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
+                                PrintWriter wr_xml = new PrintWriter(bw_xml);
+
+                                util.Save_xml_in_the_file(wr_xml, dataset);
+
+                                wr_xml.close();
+                                bw_xml.close();
+                            }
+
+                            JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+
+                        } catch (IOException ex) {
+                            JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
+                            Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+
+                    String preprocessedType = new String();
+
+                    if(radioRandomIS.isSelected()){
+                        preprocessedType += "-randomIS";
+                    }
+                    if(radioBRFS.isSelected()){
+                        preprocessedType += "-BR_FS";
+                    }
+                    else if(radioRandomFS.isSelected()){
+                        preprocessedType += "-randomFS";
+                    }
+
+                    //check if only FS and/or IS is selected
+                    if((radioBRFS.isSelected() || radioRandomFS.isSelected() || radioRandomIS.isSelected()) && radioNoSplit.isSelected())//Feature and/or instance selection
+                    {
+
+                        BufferedWriter bw_train = null;
+                        try {
+
+                            String name_dataset= dataset_name1.substring(0,dataset_name1.length()-5);
+
+                            if(format.toLowerCase().contains("meka")){
+                                String dataPath = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".arff";
+
+                                bw_train = new BufferedWriter(new FileWriter(dataPath));
+                                PrintWriter wr_train = new PrintWriter(bw_train);
+
+                                util.Save_dataset_Meka_in_the_file(wr_train, preprocessedDataset, name_dataset + preprocessedType);
+
+                                wr_train.close();
+                                bw_train.close();
+                            }
+                            else{
+                                //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+                                //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+                                //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+
+                                String dataPath = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".arff";
+                                path_xml = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType +".xml";
+
+                                bw_train = new BufferedWriter(new FileWriter(dataPath));
+                                PrintWriter wr_train = new PrintWriter(bw_train);
+
+                                util.Save_dataset_in_the_file(wr_train, preprocessedDataset, name_dataset+ preprocessedType);
+
+                                wr_train.close();
+                                bw_train.close();
+
+                                BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
+                                PrintWriter wr_xml = new PrintWriter(bw_xml);
+
+                                util.Save_xml_in_the_file(wr_xml,preprocessedDataset);
+
+                                wr_xml.close();
+                                bw_xml.close();
+                            }
+
+                            JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+
+                        } catch (IOException ex) {
+                            JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
+                            Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+
+                    if(radioIterativeStratifiedHoldout.isSelected()|| radioRandomHoldout.isSelected() || radioLPStratifiedHoldout.isSelected()) //holdout
+                    {
+                        BufferedWriter bw_train = null;
+                        try {
+
+                            String name_dataset= dataset_name1.substring(0,dataset_name1.length()-5);
+
+                            //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+                            //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+                            //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
+
+                            if(radioNoFS.isSelected() && radioNoIS.isSelected()){
+                                path_train = file.getAbsolutePath()+"/"+name_dataset+"-train.arff";
+                                path_test = file.getAbsolutePath()+"/"+name_dataset+"-test.arff";
+                                path_xml = file.getAbsolutePath()+"/"+name_dataset+".xml";
+                            }
+                            else{
+                                path_train = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + "-train.arff";
+                                path_test = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + "-test.arff";
+                                path_xml = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".xml";
+                            }
+
+                            if(format.toLowerCase().contains("meka")){
+                                bw_train = new BufferedWriter(new FileWriter(path_train));
+                                PrintWriter wr_train = new PrintWriter(bw_train);
+
+                                util.Save_dataset_Meka_in_the_file(wr_train, dataset_train);
+
+                                wr_train.close();
+                                bw_train.close();
+
+                                BufferedWriter bw_test = new BufferedWriter(new FileWriter(path_test));
+                                PrintWriter wr_test = new PrintWriter(bw_test);
+
+                                util.Save_dataset_Meka_in_the_file(wr_test, dataset_test);
+
+                                wr_test.close();
+                                bw_test.close();
+                            }
+                            else{
+                                bw_train = new BufferedWriter(new FileWriter(path_train));
+                                PrintWriter wr_train = new PrintWriter(bw_train);
+
+                                util.Save_dataset_in_the_file(wr_train, dataset_train);
+
+                                wr_train.close();
+                                bw_train.close();
+
+                                BufferedWriter bw_test = new BufferedWriter(new FileWriter(path_test));
+                                PrintWriter wr_test = new PrintWriter(bw_test);
+
+                                util.Save_dataset_in_the_file(wr_test, dataset_test);
+
+                                wr_test.close();
+                                bw_test.close();
+
+                                BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
+                                PrintWriter wr_xml = new PrintWriter(bw_xml);
+
+                                util.Save_xml_in_the_file(wr_xml, dataset_train);
+
+                                wr_xml.close();
+                                bw_xml.close();
+                            }
+
+                            JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+
+                        } catch (IOException ex) {
+                            JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
+                            Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    }
+
+                    else if(radioIterativeStratifiedCV.isSelected()|| radioRandomCV.isSelected() || radioLPStratifiedCV.isSelected())//CROSS VALIDATION
+                    {
+                        try{
+
+                            if(format.toLowerCase().contains("meka")){
+                                if(radioNoFS.isSelected() && radioNoIS.isSelected()){
+                                    util.Save_dataset_Meka_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-train");
+                                    util.Save_dataset_Meka_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-test");
+                                }
+                                else{
+                                    util.Save_dataset_Meka_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
+                                    util.Save_dataset_Meka_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");
+                                }
+                            }
+                            else{
+                                if(radioNoFS.isSelected() && radioNoIS.isSelected()){
+                                    util.Save_dataset_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-train");
+                                    util.Save_dataset_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-test");
+                                    path_xml = file.getAbsolutePath()+"/"+dataset_name1.substring(0,dataset_name1.length()-5)+".xml";
+                                }
+                                else{
+                                    util.Save_dataset_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
+                                    util.Save_dataset_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");
+                                    path_xml = file.getAbsolutePath()+"/"+dataset_name1.substring(0,dataset_name1.length()-5)+ preprocessedType + ".xml";
+                                }
+
+                                BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
+                                PrintWriter wr_xml = new PrintWriter(bw_xml);
+
+                                util.Save_xml_in_the_file(wr_xml,list_dataset_train.get(0));
+
+                                wr_xml.close();
+                                bw_xml.close();
+                            }
+
+                            JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+
+                        }
+                        catch(IOException | HeadlessException e1){
+                            JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
+                            e1.printStackTrace();
+                        }
+
+                    }
+
+                    Toolkit.getDefaultToolkit().beep();
+                }
+
+            }
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+
+    }//GEN-LAST:event_jButtonSaveDatasetsActionPerformed
+
+    private void jButtonStartPreprocessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartPreprocessActionPerformed
+        progressBar.setIndeterminate(true);
+        progressFrame.setVisible(true);
+        progressFrame.repaint();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // do the long-running work here
+                final int returnCode = preprocess();
+                // at the end:
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setIndeterminate(false);
+                        progressFrame.setVisible(false);
+                        progressFrame.repaint();
+
+                        if(returnCode == 1 && (!(radioNoFS.isSelected() && radioNoSplit.isSelected() && radioNoIS.isSelected()))){
+                            JOptionPane.showMessageDialog(null, "Datasets have been generated succesfully.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                        }
+
+                        Toolkit.getDefaultToolkit().beep();
+                    }//run
+                }); //invokeLater
+            }
+        }
+        ).start();
+
+    }//GEN-LAST:event_jButtonStartPreprocessActionPerformed
+
+    private void radioNoSplitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioNoSplitActionPerformed
+        textRandomHoldout.setEnabled(false);
+        textIterativeStratifiedHoldout.setEnabled(false);
+        textLPStratifiedHoldout.setEnabled(false);
+        textRandomCV.setEnabled(false);
+        textIterativeStratifiedCV.setEnabled(false);
+        textLPStratifiedCV.setEnabled(false);
+
+        jButtonSaveDatasets.setEnabled(false);
+        jComboBox_SaveFormat.setEnabled(false);
+
+    }//GEN-LAST:event_radioNoSplitActionPerformed
+
+    private void radioLPStratifiedCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioLPStratifiedCVActionPerformed
+        textRandomHoldout.setEnabled(false);
+        textIterativeStratifiedHoldout.setEnabled(false);
+        textLPStratifiedHoldout.setEnabled(false);
+        textRandomCV.setEnabled(false);
+        textIterativeStratifiedCV.setEnabled(false);
+        textLPStratifiedCV.setEnabled(true);
+
+        jButtonSaveDatasets.setEnabled(false);
+        jComboBox_SaveFormat.setEnabled(false);
+    }//GEN-LAST:event_radioLPStratifiedCVActionPerformed
+
+    private void radioLPStratifiedHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioLPStratifiedHoldoutActionPerformed
+        textRandomHoldout.setEnabled(false);
+        textIterativeStratifiedHoldout.setEnabled(false);
+        textLPStratifiedHoldout.setEnabled(true);
+        textRandomCV.setEnabled(false);
+        textIterativeStratifiedCV.setEnabled(false);
+        textLPStratifiedCV.setEnabled(false);
+
+        jButtonSaveDatasets.setEnabled(false);
+        jComboBox_SaveFormat.setEnabled(false);
+    }//GEN-LAST:event_radioLPStratifiedHoldoutActionPerformed
+
+    private void radioIterativeStratifiedCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioIterativeStratifiedCVActionPerformed
+        textRandomHoldout.setEnabled(false);
+        textIterativeStratifiedHoldout.setEnabled(false);
+        textLPStratifiedHoldout.setEnabled(false);
+        textRandomCV.setEnabled(false);
+        textIterativeStratifiedCV.setEnabled(true);
+        textLPStratifiedCV.setEnabled(false);
+
+        jButtonSaveDatasets.setEnabled(false);
+        jComboBox_SaveFormat.setEnabled(false);
+    }//GEN-LAST:event_radioIterativeStratifiedCVActionPerformed
+
+    private void radioRandomCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomCVActionPerformed
+        textRandomHoldout.setEnabled(false);
+        textIterativeStratifiedHoldout.setEnabled(false);
+        textLPStratifiedHoldout.setEnabled(false);
+        textRandomCV.setEnabled(true);
+        textIterativeStratifiedCV.setEnabled(false);
+        textLPStratifiedCV.setEnabled(false);
+
+        jButtonSaveDatasets.setEnabled(false);
+        jComboBox_SaveFormat.setEnabled(false);
+    }//GEN-LAST:event_radioRandomCVActionPerformed
+
+    private void radioIterativeStratifiedHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioIterativeStratifiedHoldoutActionPerformed
+        textIterativeStratifiedHoldout.setEnabled(true);
+        textRandomHoldout.setEnabled(false);
+        textRandomCV.setEnabled(false);
+        textIterativeStratifiedCV.setEnabled(false);
+        textLPStratifiedHoldout.setEnabled(false);
+        textLPStratifiedCV.setEnabled(false);
+
+        jButtonSaveDatasets.setEnabled(false);
+        jComboBox_SaveFormat.setEnabled(false);
+    }//GEN-LAST:event_radioIterativeStratifiedHoldoutActionPerformed
+
+    private void radioRandomHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomHoldoutActionPerformed
+        textRandomHoldout.setEnabled(true);
+        textIterativeStratifiedHoldout.setEnabled(false);
+        textRandomCV.setEnabled(false);
+        textIterativeStratifiedCV.setEnabled(false);
+        textLPStratifiedHoldout.setEnabled(false);
+        textLPStratifiedCV.setEnabled(false);
+
+        jButtonSaveDatasets.setEnabled(false);
+        jComboBox_SaveFormat.setEnabled(false);
+    }//GEN-LAST:event_radioRandomHoldoutActionPerformed
+
+    private void textChooseFileKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textChooseFileKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            String filename_database_arff = textChooseFile.getText();
+            filename_database_xml = util.Get_xml_string(filename_database_arff);
+            filename_database_xml = util.Get_file_name_xml(filename_database_xml);
+            Load_dataset(filename_database_arff, filename_database_xml);
+        }
+    }//GEN-LAST:event_textChooseFileKeyPressed
+
+    private void buttonChooseFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonChooseFileActionPerformed
+        final JFileChooser jfile1 = new JFileChooser();
+        FileNameExtensionFilter fname = new FileNameExtensionFilter(".arff", "arff");
+        jfile1.setFileFilter(fname);
+
+        final boolean deleteXML = false;
+
+        final int returnVal = jfile1.showOpenDialog(this);
+
+        progressBar.setIndeterminate(true);
+        progressFrame.setVisible(true);
+        progressFrame.repaint();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // do the long-running work here
+                loadDataset(returnVal, jfile1, deleteXML);
+                // at the end:
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setIndeterminate(false);
+                        progressFrame.setVisible(false);
+                        progressFrame.repaint();
+                    }//run
+                }); //invokeLater
+            }
+        }
+        ).start();
+    }//GEN-LAST:event_buttonChooseFileActionPerformed
 
     private int loadMultiDataset(int returnVal, JFileChooser chooser){
         
@@ -2217,438 +3386,6 @@ public class RunApp extends javax.swing.JFrame {
         return 1;
     }
     
-    private void tabsDependencesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabsDependencesStateChanged
-        if(tabsDependences.getSelectedIndex() == 0) {
-            jLabelChiFi_text.setVisible(true);
-        }
-        else {
-            jLabelChiFi_text.setVisible(false);
-        }
-    }//GEN-LAST:event_tabsDependencesStateChanged
-
-    private void panelCoOcurrenceMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelCoOcurrenceMouseReleased
-        if(evt.getButton() == MouseEvent.BUTTON3 )
-        {
-            jPopupMenu1.removeAll();
-
-            JMenuItem saver = new JMenuItem("Save as...");
-
-            saver.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    try {
-                        save_as_ActionPerformed(evt);
-                    } catch (AWTException ex) {
-                        Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
-                        Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            });
-
-            jPopupMenu1.add(saver);
-            jPopupMenu1.show(evt.getComponent(), evt.getX(), evt.getY());
-        }
-    }//GEN-LAST:event_panelCoOcurrenceMouseReleased
-
-    private void buttonShowCoOcurrenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowCoOcurrenceActionPerformed
-        if(lista_pares== null) 
-        {
-            JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
-            return;
-        }
-
-        ArrayList<String> seleccionados= new  ArrayList();
-        int[] selecteds = tableCoOcurrenceLeft.getSelectedRows();
-        
-
-        if(selecteds.length<= 1) {
-            JOptionPane.showMessageDialog(null, "You must choose two or more labels.", "alert", JOptionPane.ERROR_MESSAGE); 
-            return;
-        }
-
-        for(int i=0;i<selecteds.length; i++)
-        {
-            seleccionados.add((tableCoOcurrenceLeft.getValueAt(selecteds[i], 0).toString()));
-        }
-
-        ArrayList<pares_atributos> pares_seleccionados =  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
-
-        String[] labelname=util.pasa_valores_al_arreglo(seleccionados);//solo cambia el tipo de estructura de datos.
-
-        graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
-    }//GEN-LAST:event_buttonShowCoOcurrenceActionPerformed
-
-    private void radioExamplesPerLabelsetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioExamplesPerLabelsetMouseClicked
-        // TODO add your handling code here:
-        tableImbalance.clearSelection();
-
-        if(labelset_frequency == null) return;
-        
-        HeapSort.sort(labelset_frequency);
-
-        cp_box.getChart().setTitle("# Examples per Labelset");
-        cp_box.getChart().getXYPlot().clearAnnotations();
-
-        util.update_values_xydataset(cp_box, HeapSort.get_array_sorted());
-    }//GEN-LAST:event_radioExamplesPerLabelsetMouseClicked
-
-    private void radioRandomFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomFSActionPerformed
-        textBRFS.setEnabled(false);
-        labelBRFS_Comb.setEnabled(false);
-        jComboBox_BRFS_Comb.setEnabled(false);
-        labelBRFS_Norm.setEnabled(false);
-        jComboBox_BRFS_Norm.setEnabled(false);
-        labelBRFS_Out.setEnabled(false);
-        jComboBox_BRFS_Out.setEnabled(false);
-        textRandomFS.setEnabled(true);
-
-        jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
-    }//GEN-LAST:event_radioRandomFSActionPerformed
-
-    private void radioBRFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioBRFSActionPerformed
-        textBRFS.setEnabled(true);
-        labelBRFS_Comb.setEnabled(true);
-        jComboBox_BRFS_Comb.setEnabled(true);
-        labelBRFS_Norm.setEnabled(true);
-        jComboBox_BRFS_Norm.setEnabled(true);
-        labelBRFS_Out.setEnabled(true);
-        jComboBox_BRFS_Out.setEnabled(true);
-        textRandomFS.setEnabled(false);
-
-        jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
-    }//GEN-LAST:event_radioBRFSActionPerformed
-
-    private void jButtonSaveDatasetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveDatasetsActionPerformed
-        try{
-            /*
-                If only FS is selected, save FS dataset
-                If any splitting method is selected, save the splitted datasets (those are FS too if it has been selected)
-            */
-
-            String format = jComboBox_SaveFormat.getSelectedItem().toString();
-
-            if(dataset == null){
-                JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            if(!(radioNoFS.isSelected() && radioNoIS.isSelected() && radioNoSplit.isSelected())){
-                if((list_dataset_train.isEmpty() && list_dataset_test.isEmpty()) && (radioRandomCV.isSelected() || radioIterativeStratifiedCV.isSelected() || radioLPStratifiedCV.isSelected())){
-                    JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                if((dataset_train ==null && dataset_test==null) && (radioIterativeStratifiedHoldout.isSelected()|| radioRandomHoldout.isSelected() || radioLPStratifiedHoldout.isSelected())){
-                    JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                if((preprocessedDataset == null) && (radioBRFS.isSelected() || radioRandomFS.isSelected())){
-                    JOptionPane.showMessageDialog(null, "You must click on Start before.", "alert", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-            }
-
-
-            // JFILECHOOSER SAVE
-            JFileChooser fc= new JFileChooser();
-
-            fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            String path_train, path_test,path_xml;
-
-            int returnVal = fc.showSaveDialog(this);
-
-            if (returnVal == JFileChooser.APPROVE_OPTION)
-            {
-                File file = fc.getSelectedFile();
-                FileFilter f1 = fc.getFileFilter();
-
-                if(fc.isDirectorySelectionEnabled())
-                {
-                    //Check if none were selected -> Dataset conversion
-                    if(radioNoFS.isSelected() && radioNoIS.isSelected() && radioNoSplit.isSelected())
-                    {
-                        BufferedWriter bw_train = null;
-                        try {
-
-                            String name_dataset= dataset_name1.substring(0,dataset_name1.length()-5);
-
-                            if(format.toLowerCase().contains("meka")){
-                                String dataPath = file.getAbsolutePath()+"/"+name_dataset+"-MekaConverted.arff";
-
-                                bw_train = new BufferedWriter(new FileWriter(dataPath));
-                                PrintWriter wr_train = new PrintWriter(bw_train);
-
-                                util.Save_dataset_Meka_in_the_file(wr_train, dataset, name_dataset+"_MekaConverted");
-
-                                wr_train.close();
-                                bw_train.close();
-                            }
-                            else{
-                                //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-                                //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-                                //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-
-                                String dataPath = file.getAbsolutePath()+"/"+name_dataset+"-MulanConverted.arff";
-                                path_xml = file.getAbsolutePath()+"/"+name_dataset+"-MulanConverted.xml";
-
-                                bw_train = new BufferedWriter(new FileWriter(dataPath));
-                                PrintWriter wr_train = new PrintWriter(bw_train);
-
-                                util.Save_dataset_in_the_file(wr_train, dataset, name_dataset+"_MulanConverted");
-
-                                wr_train.close();
-                                bw_train.close();
-
-                                BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
-                                PrintWriter wr_xml = new PrintWriter(bw_xml);
-
-                                util.Save_xml_in_the_file(wr_xml, dataset);
-
-                                wr_xml.close();
-                                bw_xml.close();
-                            }
-
-
-                            JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
-
-                        } catch (IOException ex) {
-                            JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
-                            Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-
-                    String preprocessedType = new String();
-
-                    if(radioRandomIS.isSelected()){
-                        preprocessedType += "-randomIS";
-                    }
-                    if(radioBRFS.isSelected()){
-                        preprocessedType += "-BR_FS";
-                    }
-                    else if(radioRandomFS.isSelected()){
-                        preprocessedType += "-randomFS";
-                    }
-
-                    //check if only FS and/or IS is selected
-                    if((radioBRFS.isSelected() || radioRandomFS.isSelected() || radioRandomIS.isSelected()) && radioNoSplit.isSelected())//Feature and/or instance selection
-                    {
-
-                        BufferedWriter bw_train = null;
-                        try {
-
-                            String name_dataset= dataset_name1.substring(0,dataset_name1.length()-5);
-
-                            if(format.toLowerCase().contains("meka")){
-                                String dataPath = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".arff";
-
-                                bw_train = new BufferedWriter(new FileWriter(dataPath));
-                                PrintWriter wr_train = new PrintWriter(bw_train);
-
-                                util.Save_dataset_Meka_in_the_file(wr_train, preprocessedDataset, name_dataset + preprocessedType);
-
-                                wr_train.close();
-                                bw_train.close();
-                            }
-                            else{
-                                //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-                                //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-                                //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-
-                                String dataPath = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".arff";
-                                path_xml = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType +".xml";
-
-                                bw_train = new BufferedWriter(new FileWriter(dataPath));
-                                PrintWriter wr_train = new PrintWriter(bw_train);
-
-                                util.Save_dataset_in_the_file(wr_train, preprocessedDataset, name_dataset+ preprocessedType);
-
-                                wr_train.close();
-                                bw_train.close();
-
-                                BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
-                                PrintWriter wr_xml = new PrintWriter(bw_xml);
-
-                                util.Save_xml_in_the_file(wr_xml,preprocessedDataset);
-
-                                wr_xml.close();
-                                bw_xml.close();
-                            }
-
-
-                            JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
-
-                        } catch (IOException ex) {
-                            JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
-                            Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-
-
-                    if(radioIterativeStratifiedHoldout.isSelected()|| radioRandomHoldout.isSelected() || radioLPStratifiedHoldout.isSelected()) //holdout
-                    {
-                        BufferedWriter bw_train = null;
-                        try {
-
-                            String name_dataset= dataset_name1.substring(0,dataset_name1.length()-5);
-
-                            //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-                            //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-                            //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-
-                            if(radioNoFS.isSelected() && radioNoIS.isSelected()){
-                                path_train = file.getAbsolutePath()+"/"+name_dataset+"-train.arff";
-                                path_test = file.getAbsolutePath()+"/"+name_dataset+"-test.arff";
-                                path_xml = file.getAbsolutePath()+"/"+name_dataset+".xml"; 
-                            }
-                            else{
-                                path_train = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + "-train.arff";
-                                path_test = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + "-test.arff";
-                                path_xml = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".xml";
-                            }
-
-                            if(format.toLowerCase().contains("meka")){
-                                bw_train = new BufferedWriter(new FileWriter(path_train));
-                                PrintWriter wr_train = new PrintWriter(bw_train);
-
-                                util.Save_dataset_Meka_in_the_file(wr_train, dataset_train);
-
-                                wr_train.close();
-                                bw_train.close();
-
-                                BufferedWriter bw_test = new BufferedWriter(new FileWriter(path_test));
-                                PrintWriter wr_test = new PrintWriter(bw_test);
-
-                                util.Save_dataset_Meka_in_the_file(wr_test, dataset_test);
-
-                                wr_test.close();
-                                bw_test.close();
-                            }
-                            else{
-                                bw_train = new BufferedWriter(new FileWriter(path_train));
-                                PrintWriter wr_train = new PrintWriter(bw_train);
-
-                                util.Save_dataset_in_the_file(wr_train, dataset_train);
-
-                                wr_train.close();
-                                bw_train.close();
-
-                                BufferedWriter bw_test = new BufferedWriter(new FileWriter(path_test));
-                                PrintWriter wr_test = new PrintWriter(bw_test);
-
-                                util.Save_dataset_in_the_file(wr_test, dataset_test);
-
-                                wr_test.close();
-                                bw_test.close();
-
-                                BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
-                                PrintWriter wr_xml = new PrintWriter(bw_xml);
-
-                                util.Save_xml_in_the_file(wr_xml, dataset_train);
-
-                                wr_xml.close();
-                                bw_xml.close();
-                            }
-
-                            JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
-
-                        } catch (IOException ex) {
-                            JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
-                            Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-
-                    }
-
-                    else if(radioIterativeStratifiedCV.isSelected()|| radioRandomCV.isSelected() || radioLPStratifiedCV.isSelected())//CROSS VALIDATION
-                    {
-                        try{
-
-                            if(format.toLowerCase().contains("meka")){
-                               if(radioNoFS.isSelected() && radioNoIS.isSelected()){
-                                    util.Save_dataset_Meka_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-train");
-                                    util.Save_dataset_Meka_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-test");  
-                                }
-                                else{
-                                    util.Save_dataset_Meka_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
-                                    util.Save_dataset_Meka_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");  
-                                }
-                            }
-                            else{
-                                if(radioNoFS.isSelected() && radioNoIS.isSelected()){
-                                    util.Save_dataset_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-train");
-                                    util.Save_dataset_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-test");  
-                                    path_xml = file.getAbsolutePath()+"/"+dataset_name1.substring(0,dataset_name1.length()-5)+".xml";
-                                }
-                                else{
-                                    util.Save_dataset_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
-                                    util.Save_dataset_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");  
-                                    path_xml = file.getAbsolutePath()+"/"+dataset_name1.substring(0,dataset_name1.length()-5)+ preprocessedType + ".xml";
-                                }
-
-
-                                BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
-                                PrintWriter wr_xml = new PrintWriter(bw_xml);
-
-                                util.Save_xml_in_the_file(wr_xml,list_dataset_train.get(0));
-
-                                wr_xml.close();
-                                bw_xml.close();
-                            }
-
-                            JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
-
-                        }
-                        catch(IOException | HeadlessException e1){
-                            JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
-                            e1.printStackTrace();
-                        }
-
-                    }
-
-                    Toolkit.getDefaultToolkit().beep();
-                }
-
-            }
-        }
-        catch(Exception e){            
-            JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
-        
-        
-    }//GEN-LAST:event_jButtonSaveDatasetsActionPerformed
-
-    private void jButtonStartPreprocessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartPreprocessActionPerformed
-        progressBar.setIndeterminate(true);
-        progressFrame.setVisible(true);
-        progressFrame.repaint();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // do the long-running work here
-                final int returnCode = preprocess();
-                // at the end:
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressBar.setIndeterminate(false);
-                        progressFrame.setVisible(false);
-                        progressFrame.repaint();
-                        
-                        if(returnCode == 1 && (!(radioNoFS.isSelected() && radioNoSplit.isSelected() && radioNoIS.isSelected()))){
-                            JOptionPane.showMessageDialog(null, "Datasets have been generated succesfully.", "Successful", JOptionPane.INFORMATION_MESSAGE);
-                        }
-
-                        Toolkit.getDefaultToolkit().beep();
-                    }//run
-                }); //invokeLater
-            }
-        }
-        ).start();
-        
-        
-    }//GEN-LAST:event_jButtonStartPreprocessActionPerformed
-
     private int preprocess(){
         list_dataset_train = new ArrayList();
         list_dataset_test = new ArrayList();
@@ -3038,121 +3775,6 @@ public class RunApp extends javax.swing.JFrame {
         return 1;
     }
     
-    private void radioLPStratifiedCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioLPStratifiedCVActionPerformed
-        textRandomHoldout.setEnabled(false);
-        textIterativeStratifiedHoldout.setEnabled(false);
-        textLPStratifiedHoldout.setEnabled(false);
-        textRandomCV.setEnabled(false);
-        textIterativeStratifiedCV.setEnabled(false);
-        textLPStratifiedCV.setEnabled(true);
-
-        jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
-    }//GEN-LAST:event_radioLPStratifiedCVActionPerformed
-
-    private void radioLPStratifiedHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioLPStratifiedHoldoutActionPerformed
-        textRandomHoldout.setEnabled(false);
-        textIterativeStratifiedHoldout.setEnabled(false);
-        textLPStratifiedHoldout.setEnabled(true);
-        textRandomCV.setEnabled(false);
-        textIterativeStratifiedCV.setEnabled(false);
-        textLPStratifiedCV.setEnabled(false);
-
-        jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
-    }//GEN-LAST:event_radioLPStratifiedHoldoutActionPerformed
-
-    private void radioIterativeStratifiedCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioIterativeStratifiedCVActionPerformed
-        textRandomHoldout.setEnabled(false);
-        textIterativeStratifiedHoldout.setEnabled(false);
-        textLPStratifiedHoldout.setEnabled(false);
-        textRandomCV.setEnabled(false);
-        textIterativeStratifiedCV.setEnabled(true);
-        textLPStratifiedCV.setEnabled(false);
-
-        jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
-    }//GEN-LAST:event_radioIterativeStratifiedCVActionPerformed
-
-    private void radioRandomCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomCVActionPerformed
-        textRandomHoldout.setEnabled(false);
-        textIterativeStratifiedHoldout.setEnabled(false);
-        textLPStratifiedHoldout.setEnabled(false);
-        textRandomCV.setEnabled(true);
-        textIterativeStratifiedCV.setEnabled(false);
-        textLPStratifiedCV.setEnabled(false);
-
-        jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
-    }//GEN-LAST:event_radioRandomCVActionPerformed
-
-    private void radioIterativeStratifiedHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioIterativeStratifiedHoldoutActionPerformed
-        textIterativeStratifiedHoldout.setEnabled(true);
-        textRandomHoldout.setEnabled(false);
-        textRandomCV.setEnabled(false);
-        textIterativeStratifiedCV.setEnabled(false);
-        textLPStratifiedHoldout.setEnabled(false);
-        textLPStratifiedCV.setEnabled(false);
-
-        jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
-    }//GEN-LAST:event_radioIterativeStratifiedHoldoutActionPerformed
-
-    private void radioRandomHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomHoldoutActionPerformed
-        textRandomHoldout.setEnabled(true);
-        textIterativeStratifiedHoldout.setEnabled(false);
-        textRandomCV.setEnabled(false);
-        textIterativeStratifiedCV.setEnabled(false);
-        textLPStratifiedHoldout.setEnabled(false);
-        textLPStratifiedCV.setEnabled(false);
-
-        jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
-    }//GEN-LAST:event_radioRandomHoldoutActionPerformed
-
-    private void textChooseFileKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textChooseFileKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER)
-        {
-            String filename_database_arff = textChooseFile.getText();
-            filename_database_xml = util.Get_xml_string(filename_database_arff);
-            filename_database_xml = util.Get_file_name_xml(filename_database_xml);
-            Load_dataset(filename_database_arff, filename_database_xml);
-        }
-    }//GEN-LAST:event_textChooseFileKeyPressed
-
-    private void buttonChooseFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonChooseFileActionPerformed
-        final JFileChooser jfile1 = new JFileChooser();
-        FileNameExtensionFilter fname = new FileNameExtensionFilter(".arff", "arff");
-        jfile1.setFileFilter(fname);
-
-        final boolean deleteXML = false;
-        
-        final int returnVal = jfile1.showOpenDialog(this);
-        
-        progressBar.setIndeterminate(true);
-        progressFrame.setVisible(true);
-        progressFrame.repaint();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // do the long-running work here
-                loadDataset(returnVal, jfile1, deleteXML);
-                // at the end:
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressBar.setIndeterminate(false);
-                        progressFrame.setVisible(false);
-                        progressFrame.repaint();
-                    }//run
-                }); //invokeLater
-            }
-        }
-        ).start();        
-
-    }//GEN-LAST:event_buttonChooseFileActionPerformed
-
     private int loadDataset(int returnVal, JFileChooser jfile1, boolean deleteXML){
         if (returnVal == JFileChooser.OPEN_DIALOG)
         {
@@ -3308,45 +3930,6 @@ public class RunApp extends javax.swing.JFrame {
         return 1;
     }
     
-    private void buttonShowMostFrequentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostFrequentActionPerformed
-        int n = Integer.parseInt(textMostFrequent.getText());
-        
-        if(n > dataset.getNumLabels()){
-            JOptionPane.showMessageDialog(null, "The number of labels to show must be less than the number of labels in the dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
-            return;
-        }
-        else if(n < 2){
-            JOptionPane.showMessageDialog(null, "Select at least 2 labels.", "alert", JOptionPane.ERROR_MESSAGE); 
-            return;
-        }
-
-        if(lista_pares== null) 
-        {
-            JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
-            return;
-        }
-
-        tableCoOcurrenceLeft.setRowSelectionInterval(0, n-1);
-        
-        ArrayList<String> seleccionados= new  ArrayList();
-        
-        String current = new String();
-        for(int i=0;i<n; i++)
-        {
-            current = (tableCoOcurrenceLeft.getValueAt(i, 0).toString());
-            if(current != null){
-                seleccionados.add(current);
-            }
-            else break;
-        }
-
-        ArrayList<pares_atributos> pares_seleccionados =  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
-
-        String[] labelname=util.pasa_valores_al_arreglo(seleccionados);
-
-        graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
-    }//GEN-LAST:event_buttonShowMostFrequentActionPerformed
-
     private int getLabelIndex(String name){
         for(int i=0; i<jTable11.getColumnCount(); i++){
             if(jTable11.getColumnName(i).equals(name)){
@@ -3357,347 +3940,70 @@ public class RunApp extends javax.swing.JFrame {
         return(-1);
     }
     
-    private void buttonShowMostRelatedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostRelatedActionPerformed
-
-        int n = Integer.parseInt(textMostRelated.getText());
+    private int transform(){
         
-        if(n > dataset.getNumLabels()){
-            JOptionPane.showMessageDialog(null, "The number of labels to show must be less than the number of labels in the dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
-            return;
-        }
-        else if(n < 2){
-            JOptionPane.showMessageDialog(null, "Select at least 2 labels.", "alert", JOptionPane.ERROR_MESSAGE); 
-            return;
+        if(dataset == null){
+            JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
+            return -1;
         }
         
-        if(lista_pares== null) 
-        {
-            JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
-            return;
-        }
-
-        ArrayList<String> seleccionados= new  ArrayList();
-        
-        seleccionados = selectTopCoocurrenceLabels(n, true);      
-
-        ArrayList<pares_atributos> pares_seleccionados =  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
-
-        String[] labelname=util.pasa_valores_al_arreglo(seleccionados);
-
-        graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
-    }//GEN-LAST:event_buttonShowMostRelatedActionPerformed
-
-    private void radioNoSplitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioNoSplitActionPerformed
-        textRandomHoldout.setEnabled(false);
-        textIterativeStratifiedHoldout.setEnabled(false);
-        textLPStratifiedHoldout.setEnabled(false);
-        textRandomCV.setEnabled(false);
-        textIterativeStratifiedCV.setEnabled(false);
-        textLPStratifiedCV.setEnabled(false);
-
-        jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);        
-        
-    }//GEN-LAST:event_radioNoSplitActionPerformed
-
-    private void radioNoFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioNoFSActionPerformed
-        textBRFS.setEnabled(false);
-        labelBRFS_Comb.setEnabled(false);
-        jComboBox_BRFS_Comb.setEnabled(false);
-        labelBRFS_Norm.setEnabled(false);
-        jComboBox_BRFS_Norm.setEnabled(false);
-        labelBRFS_Out.setEnabled(false);
-        jComboBox_BRFS_Out.setEnabled(false);
-        textRandomFS.setEnabled(false);
-
-        jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
-    }//GEN-LAST:event_radioNoFSActionPerformed
-
-    private void buttonShowHeatMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowHeatMapActionPerformed
-        showHeatMap();
-    }//GEN-LAST:event_buttonShowHeatMapActionPerformed
-
-    private void buttonShowMostRelatedHeatMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostRelatedHeatMapActionPerformed
-        int n = Integer.parseInt(textMostRelatedHeatMap.getText());
-        showMostRelatedHeatMap(n);
-    }//GEN-LAST:event_buttonShowMostRelatedHeatMapActionPerformed
-
-    private void buttonShowMostFrequentHeatMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostFrequentHeatMapActionPerformed
-        int n = Integer.parseInt(textMostFrequentHeatMap.getText());
-        showMostFrequentsHeatMap(n);
-    }//GEN-LAST:event_buttonShowMostFrequentHeatMapActionPerformed
-
-    private void tableImbalanceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableImbalanceMouseClicked
-        //#Examples per labelset
-        if(tabsImbalance.getSelectedIndex()==1)
-        {
-            int seleccionada = tableImbalance.getSelectedRow();
-
-            if(labelsets_sorted == null){
-                return;
-            }
-
-            ArrayList<String> label_names= util.Get_labelnames_x_labelcombination(dataset, labelsets_sorted[seleccionada].get_name());
-
-            String[] args = new String[2];
-
-            args[0]= labelsets_sorted[seleccionada].get_name();
-            args[1]= Integer.toString(labelsets_sorted[seleccionada].get_frequency());
-
-            int posx = this.getBounds().x;
-            int posy = this.getBounds().y;
-
-            metric_output mo = new metric_output(dataset, posx, posy+50,args,label_names,label_x_frequency, es_de_tipo_meka);
-
-            mo.setVisible(true);
-        }
-
-        else if(tabsImbalance.getSelectedIndex()==5)
-        {
-            jRadioButton8.setSelected(true);
-
-            int seleccionada = tableImbalance.getSelectedRow();
-
-            String attr= tableImbalance.getValueAt(seleccionada, 0).toString();
-
-            Instances instancias = dataset.getDataSet();
-
-            Attribute attr_current = instancias.attribute(attr);
-
-            double[] valores_attr= instancias.attributeToDoubleArray(attr_current.index());
-
-            HeapSort.sort(valores_attr);
-
-            cp_box.getChart().setTitle(attr_current.name());
-
-            cp_box.getChart().getXYPlot().clearAnnotations();
-
-            util.update_values_xydataset(cp_box, HeapSort.get_array_sorted());
-
-        }
-
-        else if(tabsImbalance.getSelectedIndex()==6)
-        {
-            int seleccionada = tableImbalance.getSelectedRow();
-
-            if(labelsets_sorted_IR == null) return;
-
-            ArrayList<String> label_names= util.Get_labelnames_x_labelcombination(dataset, labelsets_sorted_IR[seleccionada].get_name());
-
-            String[] args = new String[2];
-
-            args[0]= labelsets_sorted_IR[seleccionada].get_name();
-            args[1]= Integer.toString(labelsets_sorted_IR[seleccionada].get_frequency());
-
-            int posx = this.getBounds().x;
-            int posy = this.getBounds().y;
-
-            metric_output mo = new metric_output(dataset, posx, posy+50,args,label_names,label_x_frequency, es_de_tipo_meka);
-
-            mo.setVisible(true);
-        }
-
-    }//GEN-LAST:event_tableImbalanceMouseClicked
-
-    private void comboBoxLabelsInformationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxLabelsInformationActionPerformed
-        
-        if(comboBoxLabelsInformation.getSelectedIndex() == 0){
-                tabsImbalance.setSelectedIndex(0);
-                export2.setVisible(true);
-                export2.repaint();
-                jLabelIR.setVisible(false);
-                jLabelIR.repaint();
-        }
-        else if(comboBoxLabelsInformation.getSelectedIndex() == 1){
-                tabsImbalance.setSelectedIndex(1);
-                export2.setVisible(true);
-                export2.repaint();
-                jLabelIR.setVisible(false);
-                jLabelIR.repaint();
-        }
-        else if(comboBoxLabelsInformation.getSelectedIndex() == 2){
-                tabsImbalance.setSelectedIndex(2);
-                export2.setVisible(true);
-                export2.repaint();
-                jLabelIR.setVisible(false);
-                jLabelIR.repaint();
-        }
-        else if(comboBoxLabelsInformation.getSelectedIndex() == 3){
-                tabsImbalance.setSelectedIndex(5);
-                export2.setVisible(false);
-                export2.repaint();
-                jLabelIR.setVisible(false);
-                jLabelIR.repaint();
-        }
-        else if(comboBoxLabelsInformation.getSelectedIndex() == 4){
-                tabsImbalance.setSelectedIndex(6);
-                export2.setVisible(true);
-                export2.repaint();
-                jLabelIR.setText("<html>When IR > 1.5, the label is <br> imbalanced and it is marked in red</html>");
-                jLabelIR.setVisible(true);
-                jLabelIR.repaint();
-        }
-        else if(comboBoxLabelsInformation.getSelectedIndex() == 5){
-                //tabsImbalance.setSelectedIndex(9);
-                tabsImbalance.setSelectedIndex(3);
-                export2.setVisible(true);
-                export2.repaint();
-                jLabelIR.setText("<html>When IR > 1.5, the label is <br> imbalanced and it is marked in red</html>");
-                jLabelIR.setVisible(true);
-                jLabelIR.repaint();
-        }
-        else if(comboBoxLabelsInformation.getSelectedIndex() == 6){
-                //tabsImbalance.setSelectedIndex(3);
-                tabsImbalance.setSelectedIndex(4);
-                export2.setVisible(true);
-                export2.repaint();
-                jLabelIR.setText("<html>When IR > 1.5, the labelset is <br> imbalanced and it is marked in red</html>");
-                jLabelIR.setVisible(true);
-                jLabelIR.repaint();
-        }
-    }//GEN-LAST:event_comboBoxLabelsInformationActionPerformed
-
-    private void tabsImbalanceStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabsImbalanceStateChanged
-
-        if(tm_BR1 !=null && tm_LP1!=null){
-
-            if(tabsImbalance.getSelectedIndex()==1)
-            {
-                tableImbalance.setModel(tm_LP1);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset frequency"));
-
-                radioExamplesPerLabel.setVisible(false);
-                radioExamplesPerLabelset.setVisible(false);
-                
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
-            }
-
-            else if (tabsImbalance.getSelectedIndex()==4)
-            {
-                tableImbalance.setModel(tm_ir_per_labelset);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelsets Imbalance Ratio"));
-
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-
-                radioExamplesPerLabel.setVisible(false);
-                radioExamplesPerLabelset.setVisible(false);
-            }
-            else if (tabsImbalance.getSelectedIndex()==0)
-            {
-                tableImbalance.setModel(tm_BR1);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Label frequency"));
-
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-
-                radioExamplesPerLabel.setVisible(false);
-                radioExamplesPerLabelset.setVisible(false);
-            }
+        transformedDatasets.clear();
+        if(radioBRTrans.isSelected()){
+            BinaryRelevanceTransformation BRTrans = new BinaryRelevanceTransformation(dataset);
             
-            else if (tabsImbalance.getSelectedIndex()==3)
-            {
-                tableImbalance.setModel(tm_ir_per_label_intra_class_only);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance Ratio intra class"));
-
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-
-                radioExamplesPerLabel.setVisible(false);
-                radioExamplesPerLabelset.setVisible(false);
+            for(int i=0; i<dataset.getNumLabels(); i++){
+                try {
+                    LabelsMetaDataImpl newLMD = (LabelsMetaDataImpl) dataset.getLabelsMetaData().clone();
+                    for(int j=0; j<dataset.getNumLabels(); j++){
+                        if(i!=j){
+                            newLMD.removeLabelNode(dataset.getLabelNames()[j]);
+                        }
+                    }
+                    Instances inst = BRTrans.transformInstances(i);
+                    inst.renameAttribute(inst.classIndex(), dataset.getLabelNames()[i]);
+                    transformedDatasets.add(inst);
+                } catch (Exception ex) {
+                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                    return -1;
+                }
             }
-            else if (tabsImbalance.getSelectedIndex()==2)
-            {
-                tableImbalance.setModel(tm_labelxExamples);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels histogram"));
-
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-
-                radioExamplesPerLabel.setVisible(false);
-                radioExamplesPerLabelset.setVisible(false);
-            }
-
-            else if (tabsImbalance.getSelectedIndex()==6)
-            {
-                tableImbalance.setModel(tm_ir_per_label_inter_class_only);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance Ratio inter class"));
-
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-
-                radioExamplesPerLabel.setVisible(false);
-                radioExamplesPerLabelset.setVisible(false);
-            }
-
-            else if (tabsImbalance.getSelectedIndex()==5)
-            {
-                tableImbalance.setModel(tm_attr);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Numeric attributes"));
-
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-                radioExamplesPerLabel.setVisible(true);
-                radioExamplesPerLabelset.setVisible(true);
-            }
-
-            else
-            {
-                tableImbalance.setModel(tm_labelxExamples);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels histogram"));
-
-                tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-
-                radioExamplesPerLabel.setVisible(false);
-                radioExamplesPerLabelset.setVisible(false);
-            }
-
-            tableImbalance.repaint();
-            tableImbalance.validate();
         }
-    }//GEN-LAST:event_tabsImbalanceStateChanged
+        else if(radioLPTrans.isSelected()){
+            try{
+                LabelPowersetTransformation LPTrans = new LabelPowersetTransformation();
+                Instances inst = LPTrans.transformInstances(dataset);
+                transformedDatasets.add(inst);
+            } catch(Exception ex){
+                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                return -1;
+            }
+        }
+        else if(radioRemoveLabelsTrans.isSelected()){
+            try{
+                RemoveAllLabels removeAllTrans = new RemoveAllLabels();
+                Instances inst = removeAllTrans.transformInstances(dataset);
+                transformedDatasets.add(inst);
+            } catch(Exception ex){
+                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                return -1;
+            }
+        }
+        else if(radioIncludeLabelsTrans.isSelected()){
+            try{
+                IncludeLabelsTransformation includeTrans = new IncludeLabelsTransformation();
+                Instances inst = includeTrans.transformInstances(dataset);
+                transformedDatasets.add(inst);
+            } catch(Exception ex){
+                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                return -1;
+            }
+        }
 
-    private void radioRandomISActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomISActionPerformed
-        textRandomIS.setEnabled(true);
-
-        jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
-    }//GEN-LAST:event_radioRandomISActionPerformed
-
-    private void radioNoISActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioNoISActionPerformed
-        textRandomIS.setEnabled(false);
-
-        jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
-    }//GEN-LAST:event_radioNoISActionPerformed
-
-    private void export2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_export2ActionPerformed
-        button_export_ActionPerformed(evt, tableImbalance);
-    }//GEN-LAST:event_export2ActionPerformed
-
-    private void radioExamplesPerLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioExamplesPerLabelMouseClicked
-        tableImbalance.clearSelection();
-        if(label_frenquency == null) return;
-
-        double [] label_frenquency_values = util.get_label_frequency(label_frenquency);
-
-        HeapSort.sort(label_frenquency_values);
-
-        cp_box.getChart().setTitle("# Examples per Label");
-        cp_box.getChart().getXYPlot().clearAnnotations();
-
-        util.update_values_xydataset(cp_box, HeapSort.get_array_sorted());
-    }//GEN-LAST:event_radioExamplesPerLabelMouseClicked
-
+        jButtonSaveDatasetsTrans.setEnabled(true);
+        
+        return 1;
+    }
+    
     private void showHeatMap(){
         if(lista_pares== null) 
         {
@@ -6291,7 +6597,7 @@ public class RunApp extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane TabPrincipal;
     private javax.swing.JButton buttonAddMultipleDatasets;
-    public javax.swing.JButton buttonChooseFile;
+    private javax.swing.JButton buttonChooseFile;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
@@ -6307,14 +6613,15 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JComboBox comboBoxLabelsInformation;
     private javax.swing.JButton export2;
     private javax.swing.JButton jButtonSaveDatasets;
+    private javax.swing.JButton jButtonSaveDatasetsTrans;
     private javax.swing.JButton jButtonStartPreprocess;
+    private javax.swing.JButton jButtonStartTrans;
     private javax.swing.JComboBox jComboBox_BRFS_Comb;
     private javax.swing.JComboBox jComboBox_BRFS_Norm;
     private javax.swing.JComboBox jComboBox_BRFS_Out;
     private javax.swing.JComboBox jComboBox_SaveFormat;
     private javax.swing.JLabel jLabelChiFi_text;
     private javax.swing.JLabel jLabelIR;
-    private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanelMulti;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -6360,7 +6667,7 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JPanel panelCoOcurrenceRight;
     private javax.swing.JPanel panelCoOcurrenceValues;
     private javax.swing.JPanel panelCurrentDataset;
-    private javax.swing.JPanel panelDataset;
+    private javax.swing.JPanel panelDependences;
     private javax.swing.JPanel panelExamplesPerLabel;
     private javax.swing.JPanel panelExamplesPerLabelset;
     private javax.swing.JPanel panelFS;
@@ -6371,20 +6678,26 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JPanel panelIRperLabelIntraClass;
     private javax.swing.JPanel panelIRperLabelset;
     private javax.swing.JPanel panelIS;
-    private javax.swing.JPanel panelImbalance;
     private javax.swing.JPanel panelImbalanceLeft;
+    private javax.swing.JPanel panelLabels;
     private javax.swing.JPanel panelLabelsPerExample;
     private javax.swing.JPanel panelMultipleDatasets;
     private javax.swing.JPanel panelMultipleDatasetsLeft;
     private javax.swing.JPanel panelPreprocess;
     private javax.swing.JPanel panelSplitting;
+    private javax.swing.JPanel panelSummary;
+    private javax.swing.JPanel panelTransformation;
+    private javax.swing.JPanel panelTransformationChoose;
     private javax.swing.JRadioButton radioBRFS;
+    private javax.swing.JRadioButton radioBRTrans;
     private javax.swing.JRadioButton radioExamplesPerLabel;
     private javax.swing.JRadioButton radioExamplesPerLabelset;
+    private javax.swing.JRadioButton radioIncludeLabelsTrans;
     private javax.swing.JRadioButton radioIterativeStratifiedCV;
     private javax.swing.JRadioButton radioIterativeStratifiedHoldout;
     private javax.swing.JRadioButton radioLPStratifiedCV;
     private javax.swing.JRadioButton radioLPStratifiedHoldout;
+    private javax.swing.JRadioButton radioLPTrans;
     private javax.swing.JRadioButton radioNoFS;
     private javax.swing.JRadioButton radioNoIS;
     private javax.swing.JRadioButton radioNoSplit;
@@ -6392,6 +6705,7 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JRadioButton radioRandomFS;
     private javax.swing.JRadioButton radioRandomHoldout;
     private javax.swing.JRadioButton radioRandomIS;
+    private javax.swing.JRadioButton radioRemoveLabelsTrans;
     private javax.swing.JTable tableCoOcurrenceLeft;
     private javax.swing.JTable tableHeatmapLeft;
     private javax.swing.JTable tableImbalance;
