@@ -131,7 +131,7 @@ public class RunApp extends javax.swing.JFrame {
     String filename_database_arff_test;
              
     //Charts
-    ChartPanel cp,cp1,cp2,cp3,cp11,cp22,cp_box,cp_per_labelset, cp_ir_x_label_inter_class_only, cp_ir_x_label_intra_class_only;
+    ChartPanel cp,cp1,cp2,cp3,cp11,cp22,cp_box, cp_box2,cp_per_labelset, cp_ir_x_label_inter_class_only, cp_ir_x_label_intra_class_only;
     
     double radio;
     int num_atributos;
@@ -412,6 +412,7 @@ public class RunApp extends javax.swing.JFrame {
         cp22 = createJChart(panelExamplesPerLabelset, "bar","Frequency","Labelsets",false, "Labelset frequency");
         cp11 =  createJChart(panelLabelsPerExample,"bar", "Frequency","Number of labels",false, "Labels histogram");
         cp_box =createGraph(panelBoxDiagram);
+        cp_box2 =createGraph(panelBoxDiagramAtt);
         
         cp_ir_x_label_inter_class_only = createJChart(panelIRperLabelInterClass, "bar", "IR inter-class","Labels",false, "IR per label inter class");
         cp_ir_x_label_intra_class_only = createJChart(panelIRperLabelIntraClass, "bar", "IR intra-class","Labels",false, "IR per label intra class");
@@ -836,6 +837,13 @@ public class RunApp extends javax.swing.JFrame {
         panelBoxDiagram = new javax.swing.JPanel();
         panelIRperLabelInterClass = new javax.swing.JPanel();
         jLabelIR = new javax.swing.JLabel();
+        panelAttributes = new javax.swing.JPanel();
+        comboBoxAttributeInformation = new javax.swing.JComboBox();
+        panelAttributeLeft = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tableAttributesLeft = new javax.swing.JTable();
+        tabsAttributes = new javax.swing.JTabbedPane();
+        panelBoxDiagramAtt = new javax.swing.JPanel();
         panelDependences = new javax.swing.JPanel();
         tabsDependences = new javax.swing.JTabbedPane();
         panelChiPhi = new javax.swing.JPanel();
@@ -1795,6 +1803,98 @@ public class RunApp extends javax.swing.JFrame {
         panelImbalanceLeft.getAccessibleContext().setAccessibleName("");
 
         TabPrincipal.addTab("Labels", panelLabels);
+
+        comboBoxAttributeInformation.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Box diagram for numeric attributes" }));
+        comboBoxAttributeInformation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxAttributeInformationActionPerformed(evt);
+            }
+        });
+
+        tableAttributesLeft.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        tableAttributesLeft.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableAttributesLeftMouseClicked(evt);
+            }
+        });
+        jScrollPane6.setViewportView(tableAttributesLeft);
+
+        javax.swing.GroupLayout panelAttributeLeftLayout = new javax.swing.GroupLayout(panelAttributeLeft);
+        panelAttributeLeft.setLayout(panelAttributeLeftLayout);
+        panelAttributeLeftLayout.setHorizontalGroup(
+            panelAttributeLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAttributeLeftLayout.createSequentialGroup()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        panelAttributeLeftLayout.setVerticalGroup(
+            panelAttributeLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAttributeLeftLayout.createSequentialGroup()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(86, Short.MAX_VALUE))
+        );
+
+        tabsAttributes.setTabPlacement(javax.swing.JTabbedPane.RIGHT);
+        tabsAttributes.setEnabled(false);
+        tabsAttributes.setFocusable(false);
+        tabsAttributes.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                tabsAttributesStateChanged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelBoxDiagramAttLayout = new javax.swing.GroupLayout(panelBoxDiagramAtt);
+        panelBoxDiagramAtt.setLayout(panelBoxDiagramAttLayout);
+        panelBoxDiagramAttLayout.setHorizontalGroup(
+            panelBoxDiagramAttLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 540, Short.MAX_VALUE)
+        );
+        panelBoxDiagramAttLayout.setVerticalGroup(
+            panelBoxDiagramAttLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 469, Short.MAX_VALUE)
+        );
+
+        tabsAttributes.addTab("", panelBoxDiagramAtt);
+
+        javax.swing.GroupLayout panelAttributesLayout = new javax.swing.GroupLayout(panelAttributes);
+        panelAttributes.setLayout(panelAttributesLayout);
+        panelAttributesLayout.setHorizontalGroup(
+            panelAttributesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAttributesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelAttributeLeft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelAttributesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(comboBoxAttributeInformation, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tabsAttributes, javax.swing.GroupLayout.PREFERRED_SIZE, 561, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(38, 38, 38))
+        );
+        panelAttributesLayout.setVerticalGroup(
+            panelAttributesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAttributesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelAttributesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelAttributesLayout.createSequentialGroup()
+                        .addComponent(comboBoxAttributeInformation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tabsAttributes, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(panelAttributesLayout.createSequentialGroup()
+                        .addComponent(panelAttributeLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
+        );
+
+        TabPrincipal.addTab("Attributes", panelAttributes);
 
         tabsDependences.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -3247,6 +3347,50 @@ public class RunApp extends javax.swing.JFrame {
         ).start();
     }//GEN-LAST:event_buttonChooseFileActionPerformed
 
+    private void comboBoxAttributeInformationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxAttributeInformationActionPerformed
+        if(comboBoxAttributeInformation.getSelectedIndex() == 0){
+            //Box diagram
+            tabsAttributes.setSelectedIndex(0);
+        }
+    }//GEN-LAST:event_comboBoxAttributeInformationActionPerformed
+
+    private void tableAttributesLeftMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableAttributesLeftMouseClicked
+        if(tabsAttributes.getSelectedIndex()==0)
+        {
+            int seleccionada = tableAttributesLeft.getSelectedRow();
+
+            String attr= tableAttributesLeft.getValueAt(seleccionada, 0).toString();
+
+            Instances instancias = dataset.getDataSet();
+
+            Attribute attr_current = instancias.attribute(attr);
+
+            double[] valores_attr= instancias.attributeToDoubleArray(attr_current.index());
+
+            HeapSort.sort(valores_attr);
+
+            cp_box2.getChart().setTitle(attr_current.name());
+
+            cp_box2.getChart().getXYPlot().clearAnnotations();
+
+            util.update_values_xydataset(cp_box2, HeapSort.get_array_sorted());
+        }
+    }//GEN-LAST:event_tableAttributesLeftMouseClicked
+
+    private void tabsAttributesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabsAttributesStateChanged
+        //tm_attr = jtable_attributes(tableAttributesLeft, dataset);
+        
+        if (tabsAttributes.getSelectedIndex()==0)
+        {
+//            tableAttributesLeft.setModel(tm_attr);
+            panelAttributeLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Numeric attributes"));
+
+            tableAttributesLeft.setDefaultRenderer(Object.class, new Mi_Render_default());
+            panelAttributeLeft.repaint();
+            panelAttributeLeft.validate();
+        }
+    }//GEN-LAST:event_tabsAttributesStateChanged
+
     private int loadMultiDataset(int returnVal, JFileChooser chooser){
         
         if (returnVal == JFileChooser.OPEN_DIALOG)
@@ -4562,6 +4706,18 @@ public class RunApp extends javax.swing.JFrame {
                 }
                 tableImbalance.repaint();
                 tableImbalance.validate();
+                
+                
+                if (tabsAttributes.getSelectedIndex()==0)
+                {
+                    tableAttributesLeft.setModel(tm_attr);
+                    panelAttributeLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Numeric attributes"));
+
+                    tableAttributesLeft.setDefaultRenderer(Object.class, new Mi_Render_default());
+                    panelAttributeLeft.repaint();
+                    panelAttributeLeft.validate();
+
+                }
             }
             
             
@@ -6610,6 +6766,7 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JButton buttonShowMostFrequentHeatMap;
     private javax.swing.JButton buttonShowMostRelated;
     private javax.swing.JButton buttonShowMostRelatedHeatMap;
+    private javax.swing.JComboBox comboBoxAttributeInformation;
     private javax.swing.JComboBox comboBoxLabelsInformation;
     private javax.swing.JButton export2;
     private javax.swing.JButton jButtonSaveDatasets;
@@ -6626,6 +6783,7 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JLabel labelAttributes;
@@ -6661,7 +6819,10 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JLabel labelRelation;
     private javax.swing.JLabel labelRelationValue;
     private javax.swing.JList listMultipleDatasetsLeft;
+    private javax.swing.JPanel panelAttributeLeft;
+    private javax.swing.JPanel panelAttributes;
     private javax.swing.JPanel panelBoxDiagram;
+    private javax.swing.JPanel panelBoxDiagramAtt;
     private javax.swing.JPanel panelChiPhi;
     private javax.swing.JPanel panelCoOcurrence;
     private javax.swing.JPanel panelCoOcurrenceRight;
@@ -6706,9 +6867,11 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JRadioButton radioRandomHoldout;
     private javax.swing.JRadioButton radioRandomIS;
     private javax.swing.JRadioButton radioRemoveLabelsTrans;
+    private javax.swing.JTable tableAttributesLeft;
     private javax.swing.JTable tableCoOcurrenceLeft;
     private javax.swing.JTable tableHeatmapLeft;
     private javax.swing.JTable tableImbalance;
+    private javax.swing.JTabbedPane tabsAttributes;
     private javax.swing.JTabbedPane tabsDependences;
     private javax.swing.JTabbedPane tabsImbalance;
     private javax.swing.JTextField textBRFS;
