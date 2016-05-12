@@ -150,7 +150,7 @@ public class RunApp extends javax.swing.JFrame {
     JTable jTable1, jTableMulti;
     JTable jTable10,jTable11,jTable12,fixedTable,fixedTable1,fixedTable2;
     
-    TableModel tm_BR,tm_BR1,tm_LP,tm_LP1,tm_IR,tm_coefficient,tm_labelxExamples, tm_coocurrences, tm_heapmap_values, tm_attr, tm_jgraph, tm_heapmap_graph, tm_ir_per_label_intra_class,tm_ir_per_label_inter_class,tm_ir_per_labelset, tm_ir_per_label_inter_class_only, tm_ir_per_label_intra_class_only;
+    TableModel tm_box, tm_BR,tm_BR1,tm_LP,tm_LP1,tm_IR,tm_coefficient,tm_labelxExamples, tm_coocurrences, tm_heapmap_values, tm_attr, tm_jgraph, tm_heapmap_graph, tm_ir_per_label_intra_class,tm_ir_per_label_inter_class,tm_ir_per_labelset, tm_ir_per_label_inter_class_only, tm_ir_per_label_intra_class_only;
     
     DefaultListModel lista = new DefaultListModel();
     ArrayList<MultiLabelInstances> list_dataset, list_dataset_train, list_dataset_test;
@@ -249,20 +249,11 @@ public class RunApp extends javax.swing.JFrame {
         // BOX DIAGRAM INICIALIZACION
         jRadioButton8 = new JRadioButton();
         jRadioButton8.setVisible(false);
-        radioExamplesPerLabel.setVisible(true);
-        radioExamplesPerLabelset.setVisible(true);
-        radioExamplesPerLabel.setVisible(false);
-        radioExamplesPerLabelset.setVisible(false);
         jLabelChiFi_text.setVisible(false); // comentario de valores dependientes chi- coefficient
 
         jLabelIR.setVisible(false);
 
         buttonGroup5.add(jRadioButton8);
-        buttonGroup5.add(radioExamplesPerLabel);
-        buttonGroup5.add(radioExamplesPerLabelset);
-       
-       
-       
     }
     
     private void init_jtable_chi_phi()
@@ -396,16 +387,20 @@ public class RunApp extends javax.swing.JFrame {
         
 
         buttonShowCoOcurrence.setToolTipText("Show graph with labels selected in table");
-        buttonShowMostFrequent.setToolTipText("Show graph with most frequent labels");
+        buttonShowMostFrequent.setToolTipText("Show graph with n most frequent labels");
         textMostFrequent.setToolTipText("Number of most frequent labels to show");
-        buttonShowMostRelated.setToolTipText("Show graph with most related labels");
+        buttonShowMostRelated.setToolTipText("Show graph with n most related labels");
         textMostRelated.setToolTipText("Number of most related labels to show");
+        buttonShowMostFrequentURelated.setToolTipText("Show graph with n most frequent union n most related labels");
+        textMostFrequentURelated.setToolTipText("Show graph with n most frequent union n most related labels");
 
         buttonShowHeatMap.setToolTipText("Show heatmap with labels selected in table");
-        buttonShowMostFrequentHeatMap.setToolTipText("Show heatmap with most frequent labels");
+        buttonShowMostFrequentHeatMap.setToolTipText("Show heatmap with n most frequent labels");
         textMostFrequentHeatMap.setToolTipText("Number of most frequent labels to show");
-        buttonShowMostRelatedHeatMap.setToolTipText("Show heatmap with most related labels");
+        buttonShowMostRelatedHeatMap.setToolTipText("Show heatmap with n most related labels");
         textMostRelatedHeatMap.setToolTipText("Number of most related labels to show");
+        buttonShowMostFrequentURelatedHeatMap.setToolTipText("Show heatmap with n most frequent union n most related labels");
+        textMostFrequentURelatedHeatMap.setToolTipText("Show graph with n most frequent union n most related labels");
       
         //Charts
         cp3 = createJChart(panelExamplesPerLabel,"bar","Frequency", "Labels",false, "Label frequency");
@@ -825,8 +820,6 @@ public class RunApp extends javax.swing.JFrame {
         panelImbalanceLeft = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         tableImbalance = new javax.swing.JTable();
-        radioExamplesPerLabel = new javax.swing.JRadioButton();
-        radioExamplesPerLabelset = new javax.swing.JRadioButton();
         export2 = new javax.swing.JButton();
         tabsImbalance = new javax.swing.JTabbedPane();
         panelExamplesPerLabel = new javax.swing.JPanel();
@@ -857,6 +850,8 @@ public class RunApp extends javax.swing.JFrame {
         textMostFrequent = new javax.swing.JTextField();
         buttonShowMostRelated = new javax.swing.JButton();
         textMostRelated = new javax.swing.JTextField();
+        buttonShowMostFrequentURelated = new javax.swing.JButton();
+        textMostFrequentURelated = new javax.swing.JTextField();
         panelCoOcurrenceValues = new javax.swing.JPanel();
         panelHeatmapGraph = new javax.swing.JPanel();
         jScrollPane8 = new javax.swing.JScrollPane();
@@ -867,6 +862,8 @@ public class RunApp extends javax.swing.JFrame {
         buttonShowMostRelatedHeatMap = new javax.swing.JButton();
         textMostRelatedHeatMap = new javax.swing.JTextField();
         textMostFrequentHeatMap = new javax.swing.JTextField();
+        buttonShowMostFrequentURelatedHeatMap = new javax.swing.JButton();
+        textMostFrequentURelatedHeatMap = new javax.swing.JTextField();
         panelHeatmapValues = new javax.swing.JPanel();
         panelMultipleDatasets = new javax.swing.JPanel();
         panelMultipleDatasetsLeft = new javax.swing.JPanel();
@@ -1609,20 +1606,6 @@ public class RunApp extends javax.swing.JFrame {
         });
         jScrollPane5.setViewportView(tableImbalance);
 
-        radioExamplesPerLabel.setText("# Examples per label");
-        radioExamplesPerLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                radioExamplesPerLabelMouseClicked(evt);
-            }
-        });
-
-        radioExamplesPerLabelset.setText("# Examples per labelset");
-        radioExamplesPerLabelset.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                radioExamplesPerLabelsetMouseClicked(evt);
-            }
-        });
-
         export2.setText("Save");
         export2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1639,20 +1622,13 @@ public class RunApp extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(panelImbalanceLeftLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelImbalanceLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(radioExamplesPerLabel)
-                    .addComponent(radioExamplesPerLabelset)
-                    .addComponent(export2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(export2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelImbalanceLeftLayout.setVerticalGroup(
             panelImbalanceLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelImbalanceLeftLayout.createSequentialGroup()
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(radioExamplesPerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(radioExamplesPerLabelset, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(export2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1675,7 +1651,7 @@ public class RunApp extends javax.swing.JFrame {
         );
         panelExamplesPerLabelLayout.setVerticalGroup(
             panelExamplesPerLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 446, Short.MAX_VALUE)
+            .addGap(0, 469, Short.MAX_VALUE)
         );
 
         tabsImbalance.addTab("", panelExamplesPerLabel);
@@ -1775,7 +1751,7 @@ public class RunApp extends javax.swing.JFrame {
                         .addComponent(panelImbalanceLeft, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(panelLabelsLayout.createSequentialGroup()
-                        .addGap(12, 12, 12)
+                        .addGap(10, 10, 10)
                         .addComponent(jLabelIR)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(panelLabelsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1981,6 +1957,15 @@ public class RunApp extends javax.swing.JFrame {
 
         textMostRelated.setText("10");
 
+        buttonShowMostFrequentURelated.setText("Show most frequent U most related");
+        buttonShowMostFrequentURelated.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonShowMostFrequentURelatedActionPerformed(evt);
+            }
+        });
+
+        textMostFrequentURelated.setText("10");
+
         javax.swing.GroupLayout panelCoOcurrenceLayout = new javax.swing.GroupLayout(panelCoOcurrence);
         panelCoOcurrence.setLayout(panelCoOcurrenceLayout);
         panelCoOcurrenceLayout.setHorizontalGroup(
@@ -1989,19 +1974,25 @@ public class RunApp extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelCoOcurrenceLayout.createSequentialGroup()
-                        .addComponent(buttonShowMostRelated, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(textMostRelated, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelCoOcurrenceLayout.createSequentialGroup()
+                                .addComponent(buttonShowMostRelated, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(textMostRelated, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelCoOcurrenceLayout.createSequentialGroup()
+                                .addGroup(panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(buttonShowCoOcurrence, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(buttonShowMostFrequent, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(textMostFrequent, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(panelCoOcurrenceRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelCoOcurrenceLayout.createSequentialGroup()
-                        .addGroup(panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(buttonShowCoOcurrence, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(buttonShowMostFrequent, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(textMostFrequent, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(panelCoOcurrenceRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(buttonShowMostFrequentURelated)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(textMostFrequentURelated, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         panelCoOcurrenceLayout.setVerticalGroup(
             panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2021,7 +2012,11 @@ public class RunApp extends javax.swing.JFrame {
                             .addComponent(buttonShowMostRelated)
                             .addComponent(textMostRelated, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(panelCoOcurrenceRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(buttonShowMostFrequentURelated)
+                    .addComponent(textMostFrequentURelated, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         tabsDependences.addTab("Co-occurrence graph", panelCoOcurrence);
@@ -2092,6 +2087,15 @@ public class RunApp extends javax.swing.JFrame {
 
         textMostFrequentHeatMap.setText("10");
 
+        buttonShowMostFrequentURelatedHeatMap.setText("Show most frequent U most related");
+        buttonShowMostFrequentURelatedHeatMap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonShowMostFrequentURelatedHeatMapActionPerformed(evt);
+            }
+        });
+
+        textMostFrequentURelatedHeatMap.setText("10");
+
         javax.swing.GroupLayout panelHeatmapGraphLayout = new javax.swing.GroupLayout(panelHeatmapGraph);
         panelHeatmapGraph.setLayout(panelHeatmapGraphLayout);
         panelHeatmapGraphLayout.setHorizontalGroup(
@@ -2099,20 +2103,26 @@ public class RunApp extends javax.swing.JFrame {
             .addGroup(panelHeatmapGraphLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panelHeatmapGraphLayout.createSequentialGroup()
-                        .addComponent(buttonShowMostRelatedHeatMap, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(textMostRelatedHeatMap, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelHeatmapGraphLayout.createSequentialGroup()
+                                .addComponent(buttonShowMostRelatedHeatMap, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(textMostRelatedHeatMap, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelHeatmapGraphLayout.createSequentialGroup()
+                                .addGroup(panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(buttonShowHeatMap, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(buttonShowMostFrequentHeatMap, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(textMostFrequentHeatMap, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(panelHeatmap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelHeatmapGraphLayout.createSequentialGroup()
-                        .addGroup(panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(buttonShowHeatMap, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(buttonShowMostFrequentHeatMap, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(textMostFrequentHeatMap, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(panelHeatmap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                        .addComponent(buttonShowMostFrequentURelatedHeatMap)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(textMostFrequentURelatedHeatMap, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         panelHeatmapGraphLayout.setVerticalGroup(
             panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2132,7 +2142,11 @@ public class RunApp extends javax.swing.JFrame {
                         .addGroup(panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(buttonShowMostRelatedHeatMap)
                             .addComponent(textMostRelatedHeatMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(buttonShowMostFrequentURelatedHeatMap)
+                    .addComponent(textMostFrequentURelatedHeatMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         tabsDependences.addTab(" Heatmap graph", panelHeatmapGraph);
@@ -2468,10 +2482,6 @@ public class RunApp extends javax.swing.JFrame {
             {
                 tableImbalance.setModel(tm_LP1);
                 panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset frequency"));
-
-                radioExamplesPerLabel.setVisible(false);
-                radioExamplesPerLabelset.setVisible(false);
-
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
             }
 
@@ -2483,9 +2493,6 @@ public class RunApp extends javax.swing.JFrame {
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
-
-                radioExamplesPerLabel.setVisible(false);
-                radioExamplesPerLabelset.setVisible(false);
             }
             else if (tabsImbalance.getSelectedIndex()==0)
             {
@@ -2495,9 +2502,6 @@ public class RunApp extends javax.swing.JFrame {
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
-
-                radioExamplesPerLabel.setVisible(false);
-                radioExamplesPerLabelset.setVisible(false);
             }
 
             else if (tabsImbalance.getSelectedIndex()==3)
@@ -2508,9 +2512,6 @@ public class RunApp extends javax.swing.JFrame {
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
-
-                radioExamplesPerLabel.setVisible(false);
-                radioExamplesPerLabelset.setVisible(false);
             }
             else if (tabsImbalance.getSelectedIndex()==2)
             {
@@ -2520,9 +2521,6 @@ public class RunApp extends javax.swing.JFrame {
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
-
-                radioExamplesPerLabel.setVisible(false);
-                radioExamplesPerLabelset.setVisible(false);
             }
 
             else if (tabsImbalance.getSelectedIndex()==6)
@@ -2533,21 +2531,17 @@ public class RunApp extends javax.swing.JFrame {
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_IR(1));
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
-
-                radioExamplesPerLabel.setVisible(false);
-                radioExamplesPerLabelset.setVisible(false);
             }
 
             else if (tabsImbalance.getSelectedIndex()==5)
             {
-                tableImbalance.setModel(tm_attr);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Numeric attributes"));
+                tableImbalance.setModel(tm_box);
+                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Box diagrams"));
+                //panelImbalanceLeft.setVisible(false);
 
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
-                radioExamplesPerLabel.setVisible(true);
-                radioExamplesPerLabelset.setVisible(true);
             }
 
             else
@@ -2558,9 +2552,6 @@ public class RunApp extends javax.swing.JFrame {
                 tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
                 panelImbalanceLeft.repaint();
                 panelImbalanceLeft.validate();
-
-                radioExamplesPerLabel.setVisible(false);
-                radioExamplesPerLabelset.setVisible(false);
             }
 
             tableImbalance.repaint();
@@ -2571,34 +2562,6 @@ public class RunApp extends javax.swing.JFrame {
     private void export2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_export2ActionPerformed
         button_export_ActionPerformed(evt, tableImbalance);
     }//GEN-LAST:event_export2ActionPerformed
-
-    private void radioExamplesPerLabelsetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioExamplesPerLabelsetMouseClicked
-        // TODO add your handling code here:
-        tableImbalance.clearSelection();
-
-        if(labelset_frequency == null) return;
-
-        HeapSort.sort(labelset_frequency);
-
-        cp_box.getChart().setTitle("# Examples per Labelset");
-        cp_box.getChart().getXYPlot().clearAnnotations();
-
-        util.update_values_xydataset(cp_box, HeapSort.get_array_sorted());
-    }//GEN-LAST:event_radioExamplesPerLabelsetMouseClicked
-
-    private void radioExamplesPerLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioExamplesPerLabelMouseClicked
-        tableImbalance.clearSelection();
-        if(label_frenquency == null) return;
-
-        double [] label_frenquency_values = util.get_label_frequency(label_frenquency);
-
-        HeapSort.sort(label_frenquency_values);
-
-        cp_box.getChart().setTitle("# Examples per Label");
-        cp_box.getChart().getXYPlot().clearAnnotations();
-
-        util.update_values_xydataset(cp_box, HeapSort.get_array_sorted());
-    }//GEN-LAST:event_radioExamplesPerLabelMouseClicked
 
     private void tableImbalanceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableImbalanceMouseClicked
         //#Examples per labelset
@@ -2627,26 +2590,44 @@ public class RunApp extends javax.swing.JFrame {
 
         else if(tabsImbalance.getSelectedIndex()==5)
         {
-            jRadioButton8.setSelected(true);
-
             int seleccionada = tableImbalance.getSelectedRow();
+            if(seleccionada == 0){
+                tableImbalance.clearSelection();
+                if(label_frenquency == null) return;
 
+                double [] label_frenquency_values = util.get_label_frequency(label_frenquency);
+
+                HeapSort.sort(label_frenquency_values);
+
+                cp_box.getChart().setTitle("# Examples per Label");
+                cp_box.getChart().getXYPlot().clearAnnotations();
+
+                util.update_values_xydataset(cp_box, HeapSort.get_array_sorted());
+            }
+            else if(seleccionada == 1){
+                tableImbalance.clearSelection();
+
+                if(labelset_frequency == null) return;
+
+                HeapSort.sort(labelset_frequency);
+
+                cp_box.getChart().setTitle("# Examples per Labelset");
+                cp_box.getChart().getXYPlot().clearAnnotations();
+
+                util.update_values_xydataset(cp_box, HeapSort.get_array_sorted());
+            }
+            /*
+            jRadioButton8.setSelected(true);
+            int seleccionada = tableImbalance.getSelectedRow();
             String attr= tableImbalance.getValueAt(seleccionada, 0).toString();
-
             Instances instancias = dataset.getDataSet();
-
             Attribute attr_current = instancias.attribute(attr);
-
             double[] valores_attr= instancias.attributeToDoubleArray(attr_current.index());
-
             HeapSort.sort(valores_attr);
-
             cp_box.getChart().setTitle(attr_current.name());
-
             cp_box.getChart().getXYPlot().clearAnnotations();
-
             util.update_values_xydataset(cp_box, HeapSort.get_array_sorted());
-
+            */
         }
 
         else if(tabsImbalance.getSelectedIndex()==6)
@@ -3390,6 +3371,58 @@ public class RunApp extends javax.swing.JFrame {
             panelAttributeLeft.validate();
         }
     }//GEN-LAST:event_tabsAttributesStateChanged
+
+    private void buttonShowMostFrequentURelatedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostFrequentURelatedActionPerformed
+        int n = Integer.parseInt(textMostFrequentURelated.getText());
+
+        if(n > dataset.getNumLabels()){
+            JOptionPane.showMessageDialog(null, "The number of labels to show must be less than the number of labels in the dataset.", "alert", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if(n < 2){
+            JOptionPane.showMessageDialog(null, "Select at least 2 labels.", "alert", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if(lista_pares== null)
+        {
+            JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        //tableCoOcurrenceLeft.setRowSelectionInterval(0, n-1);
+        
+        ArrayList<String> seleccionados= new  ArrayList();
+
+        String current = new String();
+        for(int i=0;i<n; i++)
+        {
+            current = (tableCoOcurrenceLeft.getValueAt(i, 0).toString());
+            if(current != null){
+                seleccionados.add(current);
+            }
+            else break;
+        }
+        
+        ArrayList<String> seleccionados2 = selectTopCoocurrenceLabels(n, true);
+        for(int i=0; i<n; i++){
+            if(! seleccionados.contains(seleccionados2.get(i))){
+                seleccionados.add(seleccionados2.get(i));
+            }
+        }
+        tableCoOcurrenceLeft.addRowSelectionInterval(0, n-1);
+
+        ArrayList<pares_atributos> pares_seleccionados =  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
+
+        String[] labelname=util.pasa_valores_al_arreglo(seleccionados);
+
+        graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
+    }//GEN-LAST:event_buttonShowMostFrequentURelatedActionPerformed
+
+    private void buttonShowMostFrequentURelatedHeatMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostFrequentURelatedHeatMapActionPerformed
+        int n = Integer.parseInt(textMostFrequentURelatedHeatMap.getText());
+        showMostFrequentURelatedHeatMap(n);
+    }//GEN-LAST:event_buttonShowMostFrequentURelatedHeatMapActionPerformed
 
     private int loadMultiDataset(int returnVal, JFileChooser chooser){
         
@@ -4159,7 +4192,8 @@ public class RunApp extends javax.swing.JFrame {
         Vector<Integer> selectedIndex = new Vector<Integer>();
 
         int[] selecteds=tableHeatmapLeft.getSelectedRows();
-
+        System.out.println(Arrays.toString(selecteds));
+        
         if(selecteds.length<= 1) {
             JOptionPane.showMessageDialog(null, "You must choose two or more labels.", "alert", JOptionPane.ERROR_MESSAGE); 
             return;
@@ -4204,42 +4238,33 @@ public class RunApp extends javax.swing.JFrame {
         }
         
         tableHeatmapLeft.setRowSelectionInterval(0, n-1);
-        
-        ArrayList<String> seleccionados= new  ArrayList();
-        
-        String current = new String();
-        for(int i=0;i<n; i++)
-        {
-            current = (tableHeatmapLeft.getValueAt(i, 0).toString());
-            if(current != null){
-                seleccionados.add(current);
-            }
-            else break;
-        }
-
-        int [] selectedIndex = new int[n];
-        
-        for(int i=0; i<n; i++){
-            for(int j=0; j<tableHeatmapLeft.getRowCount(); j++){
-                if(tableHeatmapLeft.getValueAt(j, 0).equals(seleccionados.get(i))){
-                    selectedIndex[i] = getLabelIndex(tableHeatmapLeft.getValueAt(j, 0).toString());
-                }
-            }
-        }
-        
-        Arrays.sort(selectedIndex);
- 
-        double [][] newCoeffs = new double[n][n];
-
-        
-        for(int i=0; i<n; i++){
-            for(int j=0; j<n; j++){
-                newCoeffs[i][j] = heatmap_coefficients[selectedIndex[i]][selectedIndex[j]];
-            }
-        }
-        
-        heatMap = Create_heatmap_graph(panelHeatmap, newCoeffs, null, heatMap);
+        showHeatMap();
     }
+    
+    private void showMostFrequentURelatedHeatMap(int n){
+        selectTopHeatmapLabels(n ,true);
+        
+        if(lista_pares== null) 
+        {
+            JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+        
+        if(n <= 1) {
+            JOptionPane.showMessageDialog(null, "You must choose two or more labels.", "alert", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+        else if (n > dataset.getNumLabels()){
+            JOptionPane.showMessageDialog(null, "The number of labels to show must be less than the number of labels in the dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+
+        int[] selecteds = getTopRelatedHeatmap(n);
+        Arrays.sort(selecteds);
+        tableHeatmapLeft.addRowSelectionInterval(0, n-1);
+        showHeatMap();
+    }
+    
     
     private void showMostRelatedHeatMap(int n){
         selectTopHeatmapLabels(n ,true);
@@ -4279,6 +4304,7 @@ public class RunApp extends javax.swing.JFrame {
         
         heatMap = Create_heatmap_graph(panelHeatmap, newCoeffs, null, heatMap);
     }
+    
     
     private void initTableMetrics(){
         ArrayList<String> metricsList = util.Get_all_metrics();
@@ -4535,15 +4561,6 @@ public class RunApp extends javax.swing.JFrame {
             else{
                 jLabelChiFi_text.setVisible(false);
             }
- 
-            if(tabsImbalance.getSelectedIndex()==5){
-               radioExamplesPerLabel.setVisible(true);
-               radioExamplesPerLabelset.setVisible(true);
-            }
-            else {
-               radioExamplesPerLabel.setVisible(false);
-               radioExamplesPerLabelset.setVisible(false);
-            }
              
             dataset_train= null;
             dataset_test= null;
@@ -4599,6 +4616,7 @@ public class RunApp extends javax.swing.JFrame {
                                 
             tm_BR1= jtable_frequency(tableImbalance,dataset);
             tm_attr = jtable_attributes(tableImbalance, dataset);
+            tm_box = jtable_labelBox(tableImbalance, dataset);
             tm_jgraph = jtable_label_graph(tableCoOcurrenceLeft, dataset);
             tm_heapmap_graph = jtable_label_graph(tableCoOcurrenceLeft, dataset);
             tm_labelxExamples = jtable_lablelsxExamples(tableImbalance, labels_x_example);
@@ -4687,10 +4705,10 @@ public class RunApp extends javax.swing.JFrame {
                 }
                 else if (tabsImbalance.getSelectedIndex()==5)
                 {
-                    tableImbalance.setModel(tm_attr);
-                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Numeric attributes"));
-
-                    tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
+                    tableImbalance.setModel(tm_box);
+                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Box diagrams"));
+                    
+                    //tableImbalance.setDefaultRenderer(Object.class, new Mi_Render_default());
                     panelImbalanceLeft.repaint();
                     panelImbalanceLeft.validate();
 
@@ -4710,6 +4728,7 @@ public class RunApp extends javax.swing.JFrame {
                 
                 if (tabsAttributes.getSelectedIndex()==0)
                 {
+                    //cp_box2 =createGraph(panelBoxDiagramAtt);
                     tableAttributesLeft.setModel(tm_attr);
                     panelAttributeLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Numeric attributes"));
 
@@ -6180,6 +6199,32 @@ public class RunApp extends javax.swing.JFrame {
         return jtable.getModel();
     }
     
+    
+    private TableModel jtable_labelBox(JTable jtable, MultiLabelInstances dataset)
+    {
+        DefaultTableModel table_model1= new DefaultTableModel()
+        {
+            public boolean isCellEditable(int row, int column)
+            {
+                return false;//This causes all cells to be not editable
+            }
+        };
+               
+        table_model1.addColumn("Diagram");
+
+        Object[] fila = new Object[1];
+        
+        fila[0] = "#Examples per label";
+        table_model1.addRow(fila);
+        fila[0] = "#Examples per labelset";
+        table_model1.addRow(fila);       
+        
+     
+        jtable.setModel(table_model1);
+
+        return jtable.getModel();
+    }
+    
     private TableModel jtable_ir_per_label_intra_class(JTable jtable)
     {
         DefaultTableModel table_model1= new DefaultTableModel()
@@ -6234,6 +6279,7 @@ public class RunApp extends javax.swing.JFrame {
             
         return jtable.getModel();
     }
+    
     
     private TableModel jtable_ir_per_label_intra_class_only(JTable jtable)
     {
@@ -6764,6 +6810,8 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JButton buttonShowHeatMap;
     private javax.swing.JButton buttonShowMostFrequent;
     private javax.swing.JButton buttonShowMostFrequentHeatMap;
+    private javax.swing.JButton buttonShowMostFrequentURelated;
+    private javax.swing.JButton buttonShowMostFrequentURelatedHeatMap;
     private javax.swing.JButton buttonShowMostRelated;
     private javax.swing.JButton buttonShowMostRelatedHeatMap;
     private javax.swing.JComboBox comboBoxAttributeInformation;
@@ -6851,8 +6899,6 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JPanel panelTransformationChoose;
     private javax.swing.JRadioButton radioBRFS;
     private javax.swing.JRadioButton radioBRTrans;
-    private javax.swing.JRadioButton radioExamplesPerLabel;
-    private javax.swing.JRadioButton radioExamplesPerLabelset;
     private javax.swing.JRadioButton radioIncludeLabelsTrans;
     private javax.swing.JRadioButton radioIterativeStratifiedCV;
     private javax.swing.JRadioButton radioIterativeStratifiedHoldout;
@@ -6882,6 +6928,8 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JTextField textLPStratifiedHoldout;
     private javax.swing.JTextField textMostFrequent;
     private javax.swing.JTextField textMostFrequentHeatMap;
+    private javax.swing.JTextField textMostFrequentURelated;
+    private javax.swing.JTextField textMostFrequentURelatedHeatMap;
     private javax.swing.JTextField textMostRelated;
     private javax.swing.JTextField textMostRelatedHeatMap;
     private javax.swing.JTextField textRandomCV;
