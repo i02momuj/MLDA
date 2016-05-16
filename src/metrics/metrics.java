@@ -156,6 +156,16 @@ public class metrics
             
             return proportions_attr_nominal;
         }
+        
+        
+        public static double Proportion_numeric_attr(MultiLabelInstances dataset)
+        {
+            Instances i1 = dataset.getDataSet();
+            double atributos = (i1.numAttributes()-dataset.getNumLabels());
+            double proportions_attr_numeric = metrics.count_attributes_numeric(dataset)*1.0/atributos;
+            
+            return proportions_attr_numeric;
+        }
     
     
          public static double Proportion_binary_attr(MultiLabelInstances dataset)
@@ -1381,6 +1391,18 @@ public class metrics
         
         for(int i=0;i<length;i++)
             if(dataset_i.attribute(i).isNominal())count++;
+      
+        return count;
+    }
+    
+    public static int count_attributes_numeric(MultiLabelInstances dataset1)
+    {
+        Instances dataset_i = dataset1.getDataSet();
+        int length = dataset_i.numAttributes()-dataset1.getNumLabels();
+        int count=0;
+        
+        for(int i=0;i<length;i++)
+            if(dataset_i.attribute(i).isNumeric())count++;
       
         return count;
     }

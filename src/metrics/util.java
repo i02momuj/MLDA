@@ -4538,8 +4538,14 @@ public class util {
             case "Proportion of nominal attributes":  value = metrics.Proportion_nominal_attr(dataset);
                      break;
                 
+            case "Proportion of numeric attributes":  value = metrics.Proportion_numeric_attr(dataset);
+                     break;
+                
             case "Number of nominal attributes":  value = metrics.count_attributes_nominal(dataset);
-                     break;    
+                     break;   
+                
+            case "Number of numeric attributes":  value = metrics.count_attributes_numeric(dataset);
+                     break;     
                 
             case "Default accuracy":  value = metrics.Default_Accuracy(dataset);
                      break;
@@ -5265,6 +5271,7 @@ public class util {
         result.add("Mean of standard deviation of numeric attributes");
         result.add("Number of binary attributes");
         result.add("Number of nominal attributes");
+        result.add("Number of numeric attributes");
         result.add("Proportion of binary attributes");
         result.add("Proportion of nominal attributes");
         result.add("Proportion of numeric attributes with outliers");
@@ -5312,12 +5319,14 @@ public class util {
         result.add("Number of labelsets up to 10 examples");
         result.add("Number of labelsets up to 50 examples");
         result.add("Number of nominal attributes");
+        result.add("Number of numeric attributes");
         result.add("Number of unconditionally dependent label pairs by chi-square test");
         result.add("Number of unique labelsets");
         result.add("Proportion of binary attributes");
         result.add("Proportion of distinct labelsets");
         result.add("Proportion of maxim label combination (PMax)");
         result.add("Proportion of nominal attributes");
+        result.add("Proportion of numeric attributes");
         result.add("Proportion of numeric attributes with outliers");
         result.add("Proportion of unique label combination (PUniq)");
         result.add("Ratio of labelsets with number of examples < half of the attributes");
@@ -5501,11 +5510,17 @@ public class util {
             case "Number of nominal attributes":
                 tooltip = "Number of nominal attributes";
                 break;
+            case "Number of numeric attributes":
+                tooltip = "Number of numeric attributes";
+                break;
             case "Proportion of binary attributes":
                 tooltip = "Proportion of attributes that are binary";
                 break;
             case "Proportion of nominal attributes":
                 tooltip = "Proportion of attributes that are nominal";
+                break;
+            case "Proportion of numeric attributes":
+                tooltip = "Proportion of attributes that are numeric";
                 break;
             case "Proportion of numeric attributes with outliers":
                 tooltip = "Proportion of numeric attributes having outliers";
@@ -5580,8 +5595,10 @@ public class util {
         result.add("Mean of standard deviation of numeric attributes");
         result.add("Number of binary attributes");
         result.add("Number of nominal attributes");
+        result.add("Number of numeric attributes");
         result.add("Proportion of binary attributes");
         result.add("Proportion of nominal attributes");
+        result.add("Proportion of numeric attributes");
         result.add("Proportion of numeric attributes with outliers");
 
         
@@ -6467,6 +6484,7 @@ public class util {
                     || (name.toLowerCase().equals("number of labelsets up to 10 examples"))
                     || (name.toLowerCase().equals("number of labelsets up to 50 examples"))
                     || (name.toLowerCase().equals("number of nominal attributes"))
+                    || (name.toLowerCase().equals("number of numeric attributes"))
                     || (name.toLowerCase().equals("number of unqiue labelsets"))
                     || (name.toLowerCase().equals("number of unconditionally dependent label pairs by chi-square test"))){
 

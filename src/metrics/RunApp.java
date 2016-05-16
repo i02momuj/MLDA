@@ -150,6 +150,8 @@ public class RunApp extends javax.swing.JFrame {
     JTable jTable1, jTableMulti;
     JTable jTable10,jTable11,jTable12,fixedTable,fixedTable1,fixedTable2;
     
+    
+    
     TableModel tm_box, tm_BR,tm_BR1,tm_LP,tm_LP1,tm_IR,tm_coefficient,tm_labelxExamples, tm_coocurrences, tm_heapmap_values, tm_attr, tm_jgraph, tm_heapmap_graph, tm_ir_per_label_intra_class,tm_ir_per_label_inter_class,tm_ir_per_labelset, tm_ir_per_label_inter_class_only, tm_ir_per_label_intra_class_only;
     
     DefaultListModel lista = new DefaultListModel();
@@ -414,6 +416,10 @@ public class RunApp extends javax.swing.JFrame {
 
         cp_per_labelset = createJChart(panelIRperLabelset, "bar", "IR","Labelsets",false, "IR per labelset");
       
+        jTable10 = setChiPhiTableHelp(jTable10);
+        jTable11 = setCoocurrenceTableHelp(jTable11);
+        jTable12 = setHeatmapTableHelp(jTable12);
+        
         jTable1 = setMetricsHelp(jTable1);
         create_jtable_metrics_principal(jTable1,panelSummary,button_all_1,button_none_1,button_invert_1,button_calculate_1,button_save, button_clear, 30,190,780,280,"database"); //tab Database //35,155,500,355
 
@@ -425,7 +431,7 @@ public class RunApp extends javax.swing.JFrame {
 
         //Configure jTable Phi and Chi
         init_jtable_chi_phi();
-
+        
         //Config jTable Co-ocurrence values
         jTable11.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         JScrollPane scrollPane = new JScrollPane(jTable11, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -3353,7 +3359,7 @@ public class RunApp extends javax.swing.JFrame {
             cp_box2.getChart().setTitle(attr_current.name());
 
             cp_box2.getChart().getXYPlot().clearAnnotations();
-
+            
             util.update_values_xydataset(cp_box2, HeapSort.get_array_sorted());
         }
     }//GEN-LAST:event_tableAttributesLeftMouseClicked
@@ -4104,6 +4110,7 @@ public class RunApp extends javax.swing.JFrame {
 
         }
         
+
         return 1;
     }
     
@@ -4192,7 +4199,7 @@ public class RunApp extends javax.swing.JFrame {
         Vector<Integer> selectedIndex = new Vector<Integer>();
 
         int[] selecteds=tableHeatmapLeft.getSelectedRows();
-        System.out.println(Arrays.toString(selecteds));
+        //System.out.println(Arrays.toString(selecteds));
         
         if(selecteds.length<= 1) {
             JOptionPane.showMessageDialog(null, "You must choose two or more labels.", "alert", JOptionPane.ERROR_MESSAGE); 
@@ -4761,7 +4768,7 @@ public class RunApp extends javax.swing.JFrame {
             panelCoOcurrenceValues.validate();
 
             jtable_coefficient_values(dataset, lista_pares,"heapmap");
-            jTable12.setDefaultRenderer(Object.class, new MiRender("estandar",Double.MAX_VALUE));
+            jTable12.setDefaultRenderer(Object.class, new MiRender("heatmap",Double.MAX_VALUE));
             fixedTable2.setDefaultRenderer(Object.class, new MiRender("chi_fi_fixed",Double.MAX_VALUE));
              
             panelHeatmapValues.repaint();
@@ -4804,6 +4811,9 @@ public class RunApp extends javax.swing.JFrame {
         
             // jpanel8 box diagram
              cp_box.getChart().getXYPlot().clearAnnotations();
+             cp_box.getChart().setTitle("");
+             cp_box2.getChart().getXYPlot().clearAnnotations();
+             cp_box2.getChart().setTitle("");
                
             DefaultXYDataset xyseriescollection = new DefaultXYDataset();
             DefaultXYDataset xyseriescollection1 = new DefaultXYDataset();
@@ -4811,9 +4821,13 @@ public class RunApp extends javax.swing.JFrame {
             cp_box.getChart().getXYPlot().setDataset(xyseriescollection);             
             cp_box.getChart().getXYPlot().setDataset(1, xyseriescollection1);
             
+            cp_box2.getChart().getXYPlot().setDataset(xyseriescollection);             
+            cp_box2.getChart().getXYPlot().setDataset(1, xyseriescollection1);
+            
             //TRAIN TEST
             jButtonSaveDatasets.setEnabled(false);
             jComboBox_SaveFormat.setEnabled(false);
+            
         } catch (InvalidDataFormatException ex) {
             Logger.getLogger(CrossValidationExperiment.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
@@ -5617,7 +5631,7 @@ public class RunApp extends javax.swing.JFrame {
     private ChartPanel createGraph(JPanel jpanel) 
     {
         XYDataset xydataset  = new DefaultXYDataset();
-        JFreeChart jfreechart = ChartFactory.createXYLineChart("Box diagram", "Distribution of numeric values", "", xydataset, PlotOrientation.VERTICAL, false, true, false);
+        JFreeChart jfreechart = ChartFactory.createXYLineChart("Box diagram", "Values", "", xydataset, PlotOrientation.VERTICAL, false, true, false);
  
         XYPlot xyplot = (XYPlot) jfreechart.getPlot();
         xyplot.setBackgroundPaint(Color.white);
@@ -5985,7 +5999,7 @@ public class RunApp extends javax.swing.JFrame {
                         data[num_fila][num_col] = dataset.getLabelNames()[num_fila];
                     }
                     else if(num_fila == num_col-1){
-                        data[num_fila][num_col] = "---";
+                        data[num_fila][num_col] = "";
                     }
                     else if(num_col > num_fila){
                         data[num_fila][num_col] = "";
@@ -6009,9 +6023,9 @@ public class RunApp extends javax.swing.JFrame {
                     if(num_col == 0){
                         data[num_fila][num_col] = dataset.getLabelNames()[num_fila];
                     }
-                    else if(num_fila == num_col-1){
-                        data[num_fila][num_col] = "---";
-                    }
+                    //else if(num_fila == num_col-1){
+                     //   data[num_fila][num_col] = "---";
+                   // }
                     else{
                         if(pair_label_values[num_col-1][num_fila] <= 0.0){
                             data[num_fila][num_col] = "";
@@ -6093,6 +6107,7 @@ public class RunApp extends javax.swing.JFrame {
        
         fixedTable.setModel(fixedModel);
         jTable10.setModel(model);
+        
       
         JScrollPane scroll = new JScrollPane(jTable10);
         JViewport viewport = new JViewport();
@@ -6628,6 +6643,83 @@ public class RunApp extends javax.swing.JFrame {
         
         return jtable;
     }
+    
+    
+    public JTable setChiPhiTableHelp(JTable jtable){
+        jtable = new JTable(jtable.getModel()){
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component c = super.prepareRenderer(renderer, row, column);
+                if (c instanceof JComponent) {
+                    //if(column == 0){
+                        JComponent jc = (JComponent) c;
+                        //jc.setToolTipText(getValueAt(1, 0).toString());
+                        if(row > column){
+                            jc.setToolTipText("Chi(" + getColumnName(row) + ", " + getColumnName(column) + ")");
+                        }
+                        else if(column > row){
+                            jc.setToolTipText("Phi(" + getColumnName(row) + ", " + getColumnName(column) + ")");
+                        }
+                    //}
+                }
+                return c;
+            }
+        };
+        
+        return jtable;
+    }
+    
+    public JTable setCoocurrenceTableHelp(JTable jtable){
+        jtable = new JTable(jtable.getModel()){
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component c = super.prepareRenderer(renderer, row, column);
+                if (c instanceof JComponent) {
+                    //if(column == 0){
+                        JComponent jc = (JComponent) c;
+                        //jc.setToolTipText(getValueAt(1, 0).toString());
+                        if(row > column){
+                            jc.setToolTipText("Coocurrence(" + getColumnName(row) + ", " + getColumnName(column) + ")");
+                        }
+                        else{
+                            jc.setToolTipText(null);
+                        }
+                        
+                    //}
+                }
+                return c;
+            }
+        };
+        
+        return jtable;
+    }
+    
+    public JTable setHeatmapTableHelp(JTable jtable){
+        jtable = new JTable(jtable.getModel()){
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component c = super.prepareRenderer(renderer, row, column);
+                if (c instanceof JComponent) {
+                    //if(column == 0){
+                        JComponent jc = (JComponent) c;
+                        //jc.setToolTipText(getValueAt(1, 0).toString());
+                        
+                        if(column == row){
+                            jc.setToolTipText("P(" + getColumnName(row) + ")");
+                        }
+                        else{
+                            jc.setToolTipText("P(" + getColumnName(row) + " | " + getColumnName(column) + ")");
+                        }
+                        
+                    //}
+                }
+                return c;
+            }
+        };
+        
+        return jtable;
+    }
+    
     
     public void create_jtable_metric_multi(JTable table,JPanel jpanel , Object rowData[][], int posx, int posy, int width,int height)
     {

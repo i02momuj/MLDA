@@ -131,6 +131,30 @@ public class MiRender extends DefaultTableCellRenderer
           }
       }
       
+      else if(tipo_tabla.equals("heatmap"))
+      {
+          if(column == row){ 
+              this.setBackground(Color.lightGray); 
+              this.setForeground(Color.black);
+          }
+
+          else if (column <= row)
+          {
+              if(current_value > critical_value){
+                  this.setBackground(Color.red); 
+                  this.setForeground(Color.white);
+              }
+              else{
+                  this.setBackground(Color.white); 
+                  this.setForeground(Color.black);
+              }
+          }
+          else{
+              this.setBackground(Color.white);
+              this.setForeground(Color.black);
+          }
+      }
+      
       else if(tipo_tabla.equals("estandar"))
       {
           if(column == row){ 
@@ -150,7 +174,7 @@ public class MiRender extends DefaultTableCellRenderer
               }
           }
           else{
-              this.setBackground(Color.lightGray);
+              this.setBackground(Color.gray);
               this.setForeground(Color.black);
           }
       }
