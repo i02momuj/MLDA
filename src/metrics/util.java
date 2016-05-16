@@ -4245,7 +4245,7 @@ public class util {
             line += labelNames[i] + ";";
             
             for(int j=0; j<coefficients[i].length; j++){
-                if(i == j || coefficients[j][i]==-1){
+                if(coefficients[j][i]==-1){
                     line += "" + ";";
                 }
                 else{
