@@ -2381,8 +2381,35 @@ public class util {
         
     }
     
+    public static void Save_dataset_in_the_file_noViews(ArrayList<MultiLabelInstances> dataset, String path,String dataset_name, String type) throws IOException
+    {
+      BufferedWriter  bw_current;
+      PrintWriter wr;        
+              
+       // new BufferedWriter(new FileWriter(path));
+       // new PrintWriter(bw_train);
+      int index=1;
+      String current_path;
+      
+      for(MultiLabelInstances dataset_current : dataset)
+      {
+          current_path = path + "/"+dataset_name+type+index+".arff";
+          
+          bw_current = new BufferedWriter(new FileWriter(current_path));
+          wr = new PrintWriter(bw_current);
+          
+          Save_dataset_in_the_file(wr,dataset_current, dataset_name);
+          
+          wr.close();
+          bw_current.close();
+          
+          index++;
+      }
+        
+    }
     
-    public static void Save_dataset_Meka_in_the_file(ArrayList<MultiLabelInstances> dataset, String path,String dataset_name, String type) throws IOException
+    
+    public static void Save_dataset_Meka_in_the_file(ArrayList<MultiLabelInstances> dataset, String path,String dataset_name, String type, String relationName) throws IOException
     {
       BufferedWriter  bw_current;
       PrintWriter wr;        
@@ -2409,6 +2436,44 @@ public class util {
         
     }
     
+    
+    public static void Save_dataset_Meka_in_the_file_noViews(ArrayList<MultiLabelInstances> dataset, String path,String dataset_name, String type, String relationName) throws IOException
+    {
+      BufferedWriter  bw_current;
+      PrintWriter wr;        
+              
+       // new BufferedWriter(new FileWriter(path));
+       // new PrintWriter(bw_train);
+      int index=1;
+      String current_path;
+      
+      for(MultiLabelInstances dataset_current : dataset)
+      {
+          current_path = path + "/"+dataset_name+"-"+type+index+".arff";
+          
+          bw_current = new BufferedWriter(new FileWriter(current_path));
+          wr = new PrintWriter(bw_current);
+          
+          Save_dataset_Meka_in_the_file(wr,dataset_current, dataset_name);
+          
+          wr.close();
+          bw_current.close();
+          
+          index++;
+      }
+        
+    }
+    
+    public static void Save_dataset_Meka_in_the_file(ArrayList<MultiLabelInstances> dataset, String path,String dataset_name, String type) throws IOException
+    {
+        Save_dataset_Meka_in_the_file(dataset, path,dataset_name, type, dataset_name);        
+    }
+    
+    public static void Save_dataset_Meka_in_the_file_noViews(ArrayList<MultiLabelInstances> dataset, String path,String dataset_name, String type) throws IOException
+    {
+        Save_dataset_Meka_in_the_file_noViews(dataset, path,dataset_name, type, dataset_name);        
+    }
+    
     public static void Save_dataset_in_the_file(PrintWriter wr, MultiLabelInstances dataset)
     {
         Save_dataset_in_the_file(wr, dataset, dataset.getDataSet().relationName());   
@@ -2419,17 +2484,105 @@ public class util {
         Save_dataset_Meka_in_the_file(wr, dataset, dataset.getDataSet().relationName());   
     }
     
+    
     public static void Save_dataset_in_the_file(PrintWriter wr, MultiLabelInstances dataset, String relationName)
     {
+        relationName.replaceAll(" ", "_");
+        if(relationName.contains("-")){
+            wr.write("@relation " + "\'" + relationName + "\'");
+            //relationName = relationName.split("-")[0];
+        }
+        else if(relationName.contains(":")){
+            wr.write("@relation " + "\'" + relationName + "\'");
+            //relationName = relationName.split("-")[0];
+        }
+        else{
+            wr.write("@relation " + relationName);
+        }
+       //wr.write("@relation " + relationName);
+       //System.out.println("relationName: " + relationName);
+       wr.write(System.getProperty("line.separator"));  
+       //wr.write(System.getProperty("line.separator"));  
+        
+        //Set<Attribute> attributeSet = dataset.getFeatureAttributes();
+        Instances instancias = dataset.getDataSet();
+       
+        Attribute att;
+       for (int i=0; i< instancias.numAttributes();i++)
+       {
+             att = instancias.attribute(i);
+             wr.write(att.toString());
+             wr.write(System.getProperty("line.separator")); 
+       }   
+       
+       //wr.write(System.getProperty("line.separator")); 
+        
+        String current ;
+        
+        wr.write("@data");
+        wr.write(System.getProperty("line.separator"));  
+        for(int i=0; i<dataset.getNumInstances();i++)
+        {
+          current = dataset.getDataSet().get(i).toString();
+          wr.write(current);
+          wr.write(System.getProperty("line.separator"));  
+        }
+        
+    }
+    
+    public static void Save_dataset_in_the_file_noViews(PrintWriter wr, MultiLabelInstances dataset, String relationName)
+    {
+        relationName.replaceAll(" ", "_");
         if(relationName.contains("-")){
             relationName = relationName.split("-")[0];
         }
         if(relationName.contains(":")){
             relationName = relationName.split("-")[0];
         }
+       wr.write("@relation " + relationName);
+       //System.out.println("relationName: " + relationName);
+       wr.write(System.getProperty("line.separator"));  
+       //wr.write(System.getProperty("line.separator"));  
+        
+        //Set<Attribute> attributeSet = dataset.getFeatureAttributes();
+        Instances instancias = dataset.getDataSet();
+       
+        Attribute att;
+       for (int i=0; i< instancias.numAttributes();i++)
+       {
+             att = instancias.attribute(i);
+             wr.write(att.toString());
+             wr.write(System.getProperty("line.separator")); 
+       }   
+       
+       //wr.write(System.getProperty("line.separator")); 
+        
+        String current ;
+        
+        wr.write("@data");
+        wr.write(System.getProperty("line.separator"));  
+        for(int i=0; i<dataset.getNumInstances();i++)
+        {
+          current = dataset.getDataSet().get(i).toString();
+          wr.write(current);
+          wr.write(System.getProperty("line.separator"));  
+        }
+        
+    }
+    
+    
+    public static void Save_datasetMV_in_the_file(PrintWriter wr, MultiLabelInstances dataset, String relationName, String views)
+    {
+        /*if(relationName.contains("-")){
+            relationName = relationName.split("-")[0];
+        }
+        if(relationName.contains(":")){
+            relationName = relationName.split("-")[0];
+        }*/
         relationName.replaceAll(" ", "_");
         
-       wr.write("@relation " + relationName);
+       //wr.write("@relation " + relationName);
+       wr.write("@relation " + "\'" + relationName + " " + views + "\'");
        //System.out.println("relationName: " + relationName);
        wr.write(System.getProperty("line.separator"));  
        //wr.write(System.getProperty("line.separator"));  
@@ -2532,8 +2685,88 @@ public class util {
             c = c + labelIndices.length;
         }
         
+        if(relationName.contains("-V:")){
+            wr.write("@relation " + "\'" + relationName.split("-V:")[0] + ": " + c + " -V:" + relationName.split("-V:")[1] +  "\'");
+        }
+        else{
+            wr.write("@relation " + "\'" + relationName + ": " + c + "\'");
+        }
         
-        wr.write("@relation " + "\"" + relationName + ": " + c + "\"");
+        wr.write(System.getProperty("line.separator"));  
+        //wr.write(System.getProperty("line.separator"));  
+        
+        //Set<Attribute> attributeSet = dataset.getFeatureAttributes();
+        Instances instancias = dataset.getDataSet();
+       
+        Attribute att;
+       for (int i=0; i< instancias.numAttributes();i++)
+       {
+             att = instancias.attribute(i);
+             wr.write(att.toString());
+             wr.write(System.getProperty("line.separator")); 
+       }   
+       
+       //wr.write(System.getProperty("line.separator")); 
+        
+        String current ;
+        
+        wr.write("@data");
+        wr.write(System.getProperty("line.separator"));  
+        for(int i=0; i<dataset.getNumInstances();i++)
+        {
+          current = dataset.getDataSet().get(i).toString();
+          wr.write(current);
+          wr.write(System.getProperty("line.separator"));  
+        }
+        
+    }
+    
+    public static void Save_datasetMV_Meka_in_the_file(PrintWriter wr, MultiLabelInstances dataset, String relationName, String views)
+    {
+        int maxAttIndex = Integer.MIN_VALUE;
+        int minAttIndex = Integer.MAX_VALUE;
+        
+        String c = new String();
+        c = "-C ";
+        
+        int [] attIndex = dataset.getFeatureIndices();
+        
+        maxAttIndex = getMaxFromIntArray(attIndex);
+        minAttIndex = getMinFromIntArray(attIndex);
+        
+        int [] labelIndices = dataset.getLabelIndices();
+        
+        boolean areLabelMaxIndices = true;
+        boolean areLabelMinIndices = false;
+        
+        for(int i=0; i<labelIndices.length && areLabelMaxIndices; i++){
+            if(labelIndices[i] < maxAttIndex){
+                areLabelMaxIndices = false;
+            }
+        }
+        
+        if(!areLabelMaxIndices){
+            areLabelMinIndices = true;
+            for(int i=0; i<labelIndices.length && areLabelMinIndices; i++){
+                if(labelIndices[i] > minAttIndex){
+                    areLabelMinIndices = false;
+                }
+            }
+        }
+        
+        if((!areLabelMaxIndices) && (!areLabelMinIndices)){
+            JOptionPane.showMessageDialog(null, "Cannot save as meka.", "alert", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if(areLabelMaxIndices){
+            c = c + "-" + labelIndices.length;
+        }
+        else{
+            c = c + labelIndices.length;
+        }
+        
+        
+        wr.write("@relation " + "\'" + relationName + ": " + c + " " + views + "\'");
         wr.write(System.getProperty("line.separator"));  
         //wr.write(System.getProperty("line.separator"));  
         
@@ -3984,6 +4217,28 @@ public class util {
         //wr.write("Label frequency");
         //wr.write(System.getProperty("line.separator"));  
     
+        String line = new String();
+        
+        line = "";
+        for(int j=0; j<table.getColumnCount(); j++){
+            line += table.getColumnName(j) + "; ";
+        }
+        wr.write(line);
+        wr.write(System.getProperty("line.separator"));  
+                
+        for(int i=0; i<table.getRowCount(); i++){
+            line = "";
+            for(int j=0; j<table.getColumnCount(); j++){
+                line += table.getValueAt(i, j) + "; ";
+            }
+            wr.write(line);
+            wr.write(System.getProperty("line.separator"));  
+        }
+     }
+    
+    
+    public static void Save_mv_table_csv(PrintWriter wr, JTable table, JTable table2)
+    {                 
         String line = new String();
         
         line = "";

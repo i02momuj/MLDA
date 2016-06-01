@@ -905,42 +905,60 @@ public class metrics
      
      public static double SCUMBLE (atributo[] imbalanced_data, MultiLabelInstances data)
      {
+         int [] labelIndices = data.getLabelIndices();
+         atributo[] new_imbalanced_data = new atributo[imbalanced_data.length];
+         
+         for(int i=0; i<imbalanced_data.length; i++){
+             for(int j=0; j<imbalanced_data.length; j++){
+                 if(data.getLabelNames()[i].equals(imbalanced_data[j].get_name())){
+                     new_imbalanced_data[i] = imbalanced_data[j];
+                 }
+             }
+         }
+         
          double SCUMBLE = 0.0;
          
          int nInstances = data.getNumInstances();
+         int nLabels = data.getNumLabels();
          
-         double IRLbli = 0.0;
-         double prod = 1.0;
-         int [] labelIndices = data.getLabelIndices();
+         double IRLbli_mean=0.0;
+         double IRprod = 1.0;
+         
          int active = 0;
          
          for(Instance inst : data.getDataSet()){
-             IRLbli = 0.0;
-             prod = 1.0;
+             IRprod = 1.0;
+             IRLbli_mean = 0.0;
              active = 0;
              
-             for(int i=0; i<data.getNumLabels(); i++){
+             for(int i=0; i<nLabels; i++){
                  if(inst.value(labelIndices[i]) == 1){
-                     //prod = prod*imbalanced_data[i].get_ir_inter_class();
-                     //System.out.println("label[" + i + "]: " + data.getLabelNames()[i] + "  ; imbalanced[" + i + "]: " + imbalanced_data[i].get_name());
-                     IRLbli += imbalanced_data[i].get_ir_inter_class();
-                     //System.out.println("imbalanced_data[i].get_ir_inter_class(): " + imbalanced_data[i].get_ir_inter_class());
-                     active++;
+                    //If label is active at instance i
+                    IRLbli_mean += new_imbalanced_data[i].get_ir_inter_class();
+                    IRprod *= new_imbalanced_data[i].get_ir_inter_class();
+                    active++;
                  }
              }
              
-             IRLbli = IRLbli/active;
-             prod = Math.pow(prod, 1.0/active);      
-             //System.out.println("prod: " + prod);
+             if (active != 0){
+                IRLbli_mean /= active;
+
+                SCUMBLE = SCUMBLE + (1 - (1 / IRLbli_mean) * (Math.pow(IRprod, 1.0/nLabels)));
+
+                System.out.println("IRLbli_mean: " + IRLbli_mean);
+                System.out.println("IRprod: " + IRprod);
+                System.out.println("SCUMBLE: " + SCUMBLE);
+             }
+             else{
+                 System.out.println("active = 0");
+             }
              
-             SCUMBLE += (1 - (1/IRLbli)*prod);
          }
          
          SCUMBLE = SCUMBLE/nInstances;
+
          
-         return-1;
-         
-         //return(SCUMBLE);
+         return(SCUMBLE);
      }
           
           

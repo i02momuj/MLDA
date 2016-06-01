@@ -120,6 +120,31 @@ public class FeatureSelector {
         
         return modifiedDataset;
     }
+    
+    
+    public MultiLabelInstances keepAttributes(int [] indicesToKeep){
+        
+        MultiLabelInstances modifiedDataset = null;
+
+        try {
+            int[] toKeep = new int[nFeatures + dataset.getNumLabels()];
+            System.arraycopy(indicesToKeep, 0, toKeep, 0, indicesToKeep.length);
+            int[] labelIndices = dataset.getLabelIndices();
+            System.arraycopy(labelIndices, 0, toKeep, indicesToKeep.length, dataset.getNumLabels());
+            
+            Remove filterRemove = new Remove();
+            filterRemove.setAttributeIndicesArray(toKeep);
+            filterRemove.setInvertSelection(true);
+            filterRemove.setInputFormat(dataset.getDataSet());
+
+            modifiedDataset = new MultiLabelInstances( Filter.useFilter(dataset.getDataSet(), filterRemove), dataset.getLabelsMetaData());
+
+        } catch (Exception ex) {
+            Logger.getLogger(FeatureSelector.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return modifiedDataset;
+    }
 
 
 }

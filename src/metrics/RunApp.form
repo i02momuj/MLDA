@@ -103,7 +103,7 @@
                       </Group>
                       <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                       <Component id="panelCurrentDataset" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="329" max="32767" attributes="0"/>
+                      <EmptySpace pref="347" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -394,9 +394,9 @@
                           </Group>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="panelIS" max="32767" attributes="0"/>
                                   <Component id="panelFS" alignment="0" max="32767" attributes="0"/>
                                   <Component id="panelSplitting" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="panelIS" alignment="0" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
@@ -2253,6 +2253,310 @@
               </Layout>
             </Container>
           </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="panelMVML">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="MVML">
+                <Property name="tabTitle" type="java.lang.String" value="MVML"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jPanel1" max="32767" attributes="0"/>
+                          <Component id="jPanel2" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jPanel2" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Container class="javax.swing.JPanel" name="jPanel1">
+              <Properties>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                    <TitledBorder title="Multi-View Multi-Label Summary"/>
+                  </Border>
+                </Property>
+              </Properties>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Component id="labelMaxNumAttrView" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="labelMaxNumAttrViewValue" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <Component id="labelNumViews" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="labelNumViewsValue" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="labelMinNumAttrView" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="labelMinNumAttrViewValue" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="labelMeanNumAttrView" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="labelMeanNumAttrViewValue" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <EmptySpace pref="623" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="labelNumViews" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelNumViewsValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="labelMaxNumAttrView" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelMaxNumAttrViewValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="labelMinNumAttrView" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelMinNumAttrViewValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="labelMeanNumAttrView" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelMeanNumAttrViewValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JLabel" name="labelNumViews">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Number of views:"/>
+                    <Property name="name" type="java.lang.String" value="" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="labelMaxNumAttrView">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Max number of attributes per view:"/>
+                    <Property name="name" type="java.lang.String" value="" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="labelMinNumAttrView">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Min number of attributes per view:"/>
+                    <Property name="name" type="java.lang.String" value="" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="labelMeanNumAttrView">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Mean number of attributes per view:"/>
+                    <Property name="name" type="java.lang.String" value="" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="labelNumViewsValue">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="-"/>
+                    <Property name="name" type="java.lang.String" value="" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="labelMaxNumAttrViewValue">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="-"/>
+                    <Property name="name" type="java.lang.String" value="" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="labelMinNumAttrViewValue">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="-"/>
+                    <Property name="name" type="java.lang.String" value="" noResource="true"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="labelMeanNumAttrViewValue">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="-"/>
+                    <Property name="name" type="java.lang.String" value="" noResource="true"/>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
+            <Container class="javax.swing.JPanel" name="jPanel2">
+              <Properties>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                    <TitledBorder title="Views"/>
+                  </Border>
+                </Property>
+              </Properties>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jComboBox_SaveFormat1" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <Component id="jScrollPane3" min="-2" pref="170" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="jScrollPane4" min="-2" pref="275" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="jPanel3" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jScrollPane3" pref="0" max="32767" attributes="0"/>
+                              <Component id="jScrollPane4" pref="312" max="32767" attributes="0"/>
+                              <Component id="jPanel3" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jComboBox_SaveFormat1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JButton" name="jButton1">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Save dataset"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+                  </Events>
+                </Component>
+                <Container class="javax.swing.JScrollPane" name="jScrollPane3">
+                  <AuxValues>
+                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                  </AuxValues>
+
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                  <SubComponents>
+                    <Component class="javax.swing.JTable" name="jTable2">
+                      <Properties>
+                        <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                          <Table columnCount="2" rowCount="0">
+                            <Column editable="false" title="Name" type="java.lang.String"/>
+                            <Column editable="false" title="#Attributes" type="java.lang.Integer"/>
+                          </Table>
+                        </Property>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTable2MouseClicked"/>
+                      </Events>
+                    </Component>
+                  </SubComponents>
+                </Container>
+                <Container class="javax.swing.JScrollPane" name="jScrollPane4">
+                  <AuxValues>
+                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                  </AuxValues>
+
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                  <SubComponents>
+                    <Component class="javax.swing.JTable" name="jTable3">
+                      <Properties>
+                        <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                          <Table columnCount="1" rowCount="0">
+                            <Column editable="false" title="Attributes" type="java.lang.String"/>
+                          </Table>
+                        </Property>
+                      </Properties>
+                    </Component>
+                  </SubComponents>
+                </Container>
+                <Component class="javax.swing.JComboBox" name="jComboBox_SaveFormat1">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="2">
+                        <StringItem index="0" value="Mulan .arff"/>
+                        <StringItem index="1" value="Meka .arff"/>
+                      </StringArray>
+                    </Property>
+                  </Properties>
+                </Component>
+                <Container class="javax.swing.JPanel" name="jPanel3">
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
+                </Container>
+              </SubComponents>
+            </Container>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="panelMIML">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="MIML">
+                <Property name="tabTitle" type="java.lang.String" value="MIML"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="845" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="522" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+          </Layout>
         </Container>
       </SubComponents>
     </Container>

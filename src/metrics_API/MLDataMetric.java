@@ -5,6 +5,8 @@
  */
 package metrics_API;
 
+import mulan.data.MultiLabelInstances;
+
 /**
  *
  * @author Jose Maria Moyano Murillo
@@ -16,10 +18,13 @@ public class MLDataMetric implements Comparable{
     */
     
     /* Metric name */
-    private String name;
+    protected String name;
     
     /* Metric value */
-    private double value;
+    protected double value;
+    
+    /* Dataset */
+    protected MultiLabelInstances mlData;
     
     
     
@@ -27,9 +32,10 @@ public class MLDataMetric implements Comparable{
         Constructor
     */
     
-    public MLDataMetric(String name){
+    public MLDataMetric(String name, MultiLabelInstances mlData){
         this.name = name;
         this.value = Double.NaN;
+        this.mlData = mlData;
     }
     
     
@@ -54,6 +60,7 @@ public class MLDataMetric implements Comparable{
         this.value = value;
     }
     
+    
     public String toString(){
         String s = new String();
         
@@ -61,7 +68,11 @@ public class MLDataMetric implements Comparable{
         
         return s;
     } 
-   
+    
+    protected double calculate(){
+        return -1;
+    }
+       
     
     @Override
     public int compareTo(Object other) {

@@ -55,7 +55,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import static metrics.util.Get_labelset_x_values;
-import metrics_API.MLDataEvaluator;
+import metrics_API.MLDataEvaluator_old;
 
 import mulan.data.InvalidDataFormatException;
 import mulan.data.IterativeStratification;
@@ -203,6 +203,8 @@ public class RunApp extends javax.swing.JFrame {
     //Hashtable<String, String> tableMetrics_test = new Hashtable<String, String>();    
     Hashtable<String, Hashtable<String, String>> tableMetricsMulti = new Hashtable<String, Hashtable<String, String>>();
     
+    Hashtable<String, Integer[]> views = new Hashtable<String, Integer[]>();
+    
     HeatMap heatMap = null; 
     
     ArrayList<String> labelsetStrings_freq;
@@ -291,13 +293,15 @@ public class RunApp extends javax.swing.JFrame {
         fi.setForeground(Color.black);
         fi.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         fi.setOpaque(true);
-        fi.setToolTipText("Gray cells corresponds to phi coefficients");
+        fi.setToolTipText("Light gray cells corresponds to phi coefficients");
 
         panelChiPhi.add(fi);
     } 
     
     private void init_config()
     {
+        
+                
         //radiobutton to group
         buttonGroup1.add(radioRandomHoldout);
         radioRandomHoldout.setToolTipText("Split the dataset into random train and test files");
@@ -475,6 +479,10 @@ public class RunApp extends javax.swing.JFrame {
         progressFrame.setResizable(false);
         progressFrame.setUndecorated(true);
         progressFrame.add(progressBar);   
+        
+        //System.out.println("TabPrincipal.getComponentCount(): " + TabPrincipal.getComponentCount());
+        TabPrincipal.setEnabledAt(7, false);
+        TabPrincipal.setEnabledAt(8, false);
         
     }
         
@@ -878,6 +886,25 @@ public class RunApp extends javax.swing.JFrame {
         buttonAddMultipleDatasets = new javax.swing.JButton();
         buttonRemoveMultipleDatasets = new javax.swing.JButton();
         jPanelMulti = new javax.swing.JPanel();
+        panelMVML = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        labelNumViews = new javax.swing.JLabel();
+        labelMaxNumAttrView = new javax.swing.JLabel();
+        labelMinNumAttrView = new javax.swing.JLabel();
+        labelMeanNumAttrView = new javax.swing.JLabel();
+        labelNumViewsValue = new javax.swing.JLabel();
+        labelMaxNumAttrViewValue = new javax.swing.JLabel();
+        labelMinNumAttrViewValue = new javax.swing.JLabel();
+        labelMeanNumAttrViewValue = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
+        jComboBox_SaveFormat1 = new javax.swing.JComboBox();
+        jPanel3 = new javax.swing.JPanel();
+        panelMIML = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -1059,7 +1086,7 @@ public class RunApp extends javax.swing.JFrame {
                     .addComponent(buttonChooseFile))
                 .addGap(7, 7, 7)
                 .addComponent(panelCurrentDataset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(329, Short.MAX_VALUE))
+                .addContainerGap(347, Short.MAX_VALUE))
         );
 
         TabPrincipal.addTab("Summary", panelSummary);
@@ -1454,9 +1481,9 @@ public class RunApp extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(panelPreprocessLayout.createSequentialGroup()
                         .addGroup(panelPreprocessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(panelIS, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(panelFS, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(panelSplitting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(panelSplitting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(panelIS, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap())))
         );
         panelPreprocessLayout.setVerticalGroup(
@@ -2263,6 +2290,225 @@ public class RunApp extends javax.swing.JFrame {
 
         TabPrincipal.addTab("Multiple datasets", panelMultipleDatasets);
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Multi-View Multi-Label Summary"));
+
+        labelNumViews.setText("Number of views:");
+        labelNumViews.setName(""); // NOI18N
+
+        labelMaxNumAttrView.setText("Max number of attributes per view:");
+        labelMaxNumAttrView.setName(""); // NOI18N
+
+        labelMinNumAttrView.setText("Min number of attributes per view:");
+        labelMinNumAttrView.setName(""); // NOI18N
+
+        labelMeanNumAttrView.setText("Mean number of attributes per view:");
+        labelMeanNumAttrView.setName(""); // NOI18N
+
+        labelNumViewsValue.setText("-");
+        labelNumViewsValue.setName(""); // NOI18N
+
+        labelMaxNumAttrViewValue.setText("-");
+        labelMaxNumAttrViewValue.setName(""); // NOI18N
+
+        labelMinNumAttrViewValue.setText("-");
+        labelMinNumAttrViewValue.setName(""); // NOI18N
+
+        labelMeanNumAttrViewValue.setText("-");
+        labelMeanNumAttrViewValue.setName(""); // NOI18N
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(labelMaxNumAttrView)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(labelMaxNumAttrViewValue))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(labelNumViews)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(labelNumViewsValue))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(labelMinNumAttrView)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(labelMinNumAttrViewValue))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(labelMeanNumAttrView)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(labelMeanNumAttrViewValue)))
+                .addContainerGap(623, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelNumViews)
+                    .addComponent(labelNumViewsValue))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelMaxNumAttrView)
+                    .addComponent(labelMaxNumAttrViewValue))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelMinNumAttrView)
+                    .addComponent(labelMinNumAttrViewValue))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelMeanNumAttrView)
+                    .addComponent(labelMeanNumAttrViewValue)))
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Views"));
+
+        jButton1.setText("Save dataset");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Name", "#Attributes"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable2MouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(jTable2);
+
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Attributes"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(jTable3);
+
+        jComboBox_SaveFormat1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Mulan .arff", "Meka .arff" }));
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox_SaveFormat1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jComboBox_SaveFormat1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout panelMVMLLayout = new javax.swing.GroupLayout(panelMVML);
+        panelMVML.setLayout(panelMVMLLayout);
+        panelMVMLLayout.setHorizontalGroup(
+            panelMVMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelMVMLLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelMVMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        panelMVMLLayout.setVerticalGroup(
+            panelMVMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelMVMLLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        TabPrincipal.addTab("MVML", panelMVML);
+
+        javax.swing.GroupLayout panelMIMLLayout = new javax.swing.GroupLayout(panelMIML);
+        panelMIML.setLayout(panelMIMLLayout);
+        panelMIMLLayout.setHorizontalGroup(
+            panelMIMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 845, Short.MAX_VALUE)
+        );
+        panelMIMLLayout.setVerticalGroup(
+            panelMIMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 522, Short.MAX_VALUE)
+        );
+
+        TabPrincipal.addTab("MIML", panelMIML);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -2942,7 +3188,7 @@ public class RunApp extends javax.swing.JFrame {
                                 bw_train = new BufferedWriter(new FileWriter(dataPath));
                                 PrintWriter wr_train = new PrintWriter(bw_train);
 
-                                util.Save_dataset_Meka_in_the_file(wr_train, dataset, name_dataset+"_MekaConverted");
+                                util.Save_dataset_Meka_in_the_file(wr_train, dataset, dataset.getDataSet().relationName());
 
                                 wr_train.close();
                                 bw_train.close();
@@ -2957,8 +3203,8 @@ public class RunApp extends javax.swing.JFrame {
 
                                 bw_train = new BufferedWriter(new FileWriter(dataPath));
                                 PrintWriter wr_train = new PrintWriter(bw_train);
-
-                                util.Save_dataset_in_the_file(wr_train, dataset, name_dataset+"_MulanConverted");
+                                
+                                util.Save_dataset_in_the_file(wr_train, dataset, dataset.getDataSet().relationName());
 
                                 wr_train.close();
                                 bw_train.close();
@@ -3007,7 +3253,12 @@ public class RunApp extends javax.swing.JFrame {
                                 bw_train = new BufferedWriter(new FileWriter(dataPath));
                                 PrintWriter wr_train = new PrintWriter(bw_train);
 
-                                util.Save_dataset_Meka_in_the_file(wr_train, preprocessedDataset, name_dataset + preprocessedType);
+                                if(radioNoFS.isSelected()){
+                                    util.Save_dataset_Meka_in_the_file(wr_train, preprocessedDataset, preprocessedDataset.getDataSet().relationName() + preprocessedType);
+                                }
+                                else{
+                                    util.Save_dataset_Meka_in_the_file(wr_train, preprocessedDataset, name_dataset + preprocessedType);
+                                }
 
                                 wr_train.close();
                                 bw_train.close();
@@ -3022,8 +3273,14 @@ public class RunApp extends javax.swing.JFrame {
 
                                 bw_train = new BufferedWriter(new FileWriter(dataPath));
                                 PrintWriter wr_train = new PrintWriter(bw_train);
-
-                                util.Save_dataset_in_the_file(wr_train, preprocessedDataset, name_dataset+ preprocessedType);
+                                
+                                if(radioNoFS.isSelected()){
+                                    util.Save_dataset_in_the_file(wr_train, preprocessedDataset, preprocessedDataset.getDataSet().relationName() + preprocessedType);
+                                }
+                                else{
+                                    util.Save_dataset_in_the_file(wr_train, preprocessedDataset, name_dataset+ preprocessedType);
+                                }
+                                
 
                                 wr_train.close();
                                 bw_train.close();
@@ -3071,7 +3328,13 @@ public class RunApp extends javax.swing.JFrame {
                                 bw_train = new BufferedWriter(new FileWriter(path_train));
                                 PrintWriter wr_train = new PrintWriter(bw_train);
 
-                                util.Save_dataset_Meka_in_the_file(wr_train, dataset_train);
+                                if(radioNoFS.isSelected()){
+                                    util.Save_dataset_Meka_in_the_file(wr_train, dataset_train, dataset_train.getDataSet().relationName());
+                                }
+                                else{
+                                    util.Save_dataset_Meka_in_the_file(wr_train, dataset_train, name_dataset);
+                                }
+                                
 
                                 wr_train.close();
                                 bw_train.close();
@@ -3079,8 +3342,13 @@ public class RunApp extends javax.swing.JFrame {
                                 BufferedWriter bw_test = new BufferedWriter(new FileWriter(path_test));
                                 PrintWriter wr_test = new PrintWriter(bw_test);
 
-                                util.Save_dataset_Meka_in_the_file(wr_test, dataset_test);
-
+                                if(radioNoFS.isSelected()){
+                                    util.Save_dataset_Meka_in_the_file(wr_test, dataset_test, dataset_test.getDataSet().relationName());
+                                }
+                                else{
+                                    util.Save_dataset_Meka_in_the_file(wr_test, dataset_test, name_dataset);
+                                }
+                                
                                 wr_test.close();
                                 bw_test.close();
                             }
@@ -3088,7 +3356,13 @@ public class RunApp extends javax.swing.JFrame {
                                 bw_train = new BufferedWriter(new FileWriter(path_train));
                                 PrintWriter wr_train = new PrintWriter(bw_train);
 
-                                util.Save_dataset_in_the_file(wr_train, dataset_train);
+                                if(radioNoFS.isSelected()){
+                                    util.Save_dataset_in_the_file(wr_train, dataset_train, dataset_train.getDataSet().relationName());
+                                }
+                                else{
+                                    util.Save_dataset_in_the_file(wr_train, dataset_train, name_dataset);
+                                }
+                                
 
                                 wr_train.close();
                                 bw_train.close();
@@ -3096,8 +3370,13 @@ public class RunApp extends javax.swing.JFrame {
                                 BufferedWriter bw_test = new BufferedWriter(new FileWriter(path_test));
                                 PrintWriter wr_test = new PrintWriter(bw_test);
 
-                                util.Save_dataset_in_the_file(wr_test, dataset_test);
-
+                                if(radioNoFS.isSelected()){
+                                    util.Save_dataset_in_the_file(wr_test, dataset_test, dataset_test.getDataSet().relationName());
+                                }
+                                else{
+                                    util.Save_dataset_in_the_file(wr_test, dataset_test, name_dataset);
+                                }
+                                
                                 wr_test.close();
                                 bw_test.close();
 
@@ -3128,9 +3407,13 @@ public class RunApp extends javax.swing.JFrame {
                                     util.Save_dataset_Meka_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-train");
                                     util.Save_dataset_Meka_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-test");
                                 }
-                                else{
+                                if(radioNoFS.isSelected()){
                                     util.Save_dataset_Meka_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
                                     util.Save_dataset_Meka_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");
+                                }
+                                else{
+                                    util.Save_dataset_Meka_in_the_file_noViews(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
+                                    util.Save_dataset_Meka_in_the_file_noViews(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");
                                 }
                             }
                             else{
@@ -3139,9 +3422,14 @@ public class RunApp extends javax.swing.JFrame {
                                     util.Save_dataset_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-test");
                                     path_xml = file.getAbsolutePath()+"/"+dataset_name1.substring(0,dataset_name1.length()-5)+".xml";
                                 }
-                                else{
+                                else if(radioNoFS.isSelected()){
                                     util.Save_dataset_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
                                     util.Save_dataset_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");
+                                    path_xml = file.getAbsolutePath()+"/"+dataset_name1.substring(0,dataset_name1.length()-5)+ preprocessedType + ".xml";
+                                }
+                                else{
+                                    util.Save_dataset_in_the_file_noViews(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
+                                    util.Save_dataset_in_the_file_noViews(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");
                                     path_xml = file.getAbsolutePath()+"/"+dataset_name1.substring(0,dataset_name1.length()-5)+ preprocessedType + ".xml";
                                 }
 
@@ -3430,6 +3718,207 @@ public class RunApp extends javax.swing.JFrame {
         showMostFrequentURelatedHeatMap(n);
     }//GEN-LAST:event_buttonShowMostFrequentURelatedHeatMapActionPerformed
 
+    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+        // TODO add your handling code here:
+        /*for(int i=0; i<((DefaultTableModel)jTable3.getModel()).getRowCount(); i++){
+            ((DefaultTableModel)jTable3.getModel()).removeRow(i);
+        }*/
+        //
+        ((DefaultTableModel)jTable3.getModel()).getDataVector().removeAllElements();
+        
+        int [] selected = jTable2.getSelectedRows();
+        
+        for(int i=0; i<selected.length; i++){
+            Integer [] indices = views.get("View " + (selected[i]+1));
+            for(int j=0; j<indices.length; j++){
+                ((DefaultTableModel)jTable3.getModel()).addRow(new Object[]{dataset.getDataSet().attribute(indices[j]).name()});
+                System.out.println(dataset.getDataSet().attribute(indices[j]).name());
+            }
+        }
+        
+        
+        
+    }//GEN-LAST:event_jTable2MouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        progressBar.setIndeterminate(true);
+        progressFrame.setVisible(true);
+        progressFrame.repaint();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // do the long-running work here
+                final int returnCode = saveMultiView();
+                // at the end:
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setIndeterminate(false);
+                        progressFrame.setVisible(false);
+                        progressFrame.repaint();
+
+                        if(returnCode == 1){
+                            JOptionPane.showMessageDialog(null, "Dataset saved succesfully.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                        }
+
+                        Toolkit.getDefaultToolkit().beep();
+                    }//run
+                }); //invokeLater
+            }
+        }
+        ).start();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private int saveMultiView(){
+        if(dataset == null){
+            JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
+            return -1;
+        }
+        
+        int [] selecteds = jTable2.getSelectedRows();
+        if(selecteds.length == 0){
+            JOptionPane.showMessageDialog(null, "You must select at least one view.", "alert", JOptionPane.ERROR_MESSAGE);
+            return -1;
+        }
+        
+        MultiLabelInstances mvData = null;
+        
+        int attSize = 0;
+        for(int n : selecteds){
+            attSize += views.get("View " + (n+1)).length;
+        }
+        int [] attToKeep = new int[attSize];
+        Integer [] view_i;
+        int j = 0;
+        for(int n : selecteds){
+            view_i = views.get("View " + (n+1));
+            for(int k : view_i){
+                attToKeep[j] = k;
+                j++;
+            }
+        }
+        
+        System.out.println("attSize: " + attSize);
+        System.out.println(Arrays.toString(attToKeep));
+        FeatureSelector fs = new FeatureSelector(dataset, attSize); 
+        mvData = fs.keepAttributes(attToKeep);
+        
+        System.out.println(Arrays.toString(mvData.getFeatureIndices()));
+        
+        try{
+            String format = jComboBox_SaveFormat1.getSelectedItem().toString();
+
+            // JFILECHOOSER SAVE
+            JFileChooser fc= new JFileChooser();
+
+            fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            String path_train, path_test,path_xml;
+
+            int returnVal = fc.showSaveDialog(this);
+
+            if (returnVal == JFileChooser.APPROVE_OPTION)
+            {
+                File file = fc.getSelectedFile();
+                FileFilter f1 = fc.getFileFilter();
+
+                if(fc.isDirectorySelectionEnabled())
+                {
+                    String preprocessedType = "-views";
+                    
+                    for(int n : selecteds){
+                        preprocessedType += "_" + (n+1);
+                    }
+
+
+                    BufferedWriter bw_train = null;
+                    try {
+                        String name_dataset= dataset_name1.substring(0,dataset_name1.length()-5);
+                        
+                        int sumNotSelected = 0;
+                        Hashtable<String, Integer[]> v = new Hashtable<>();
+                        for(int i=0; i<views.size(); i++){
+                            if(contains(selecteds, i)){
+                                Integer [] A = views.get("View " + (i+1));
+                                for(int a=0; a<A.length; a++){
+                                    A[a] -= sumNotSelected;
+                                }
+                                //v.add("View " + (i+1), views.get("View " + (i+1)));
+                                v.put("View " + (i+1), A);
+                            }
+                            else{
+                                sumNotSelected += views.get("View " + (i+1))[views.get("View " + (i+1)).length - 1] - views.get("View " + (i+1))[0] + 1;
+                            }
+                        }
+                            
+                        String viewsString = "-V:";
+                        for(int n : selecteds){
+                            attSize += v.get("View " + (n+1)).length;
+                            viewsString += v.get("View " + (n+1))[0] + "-" + v.get("View " + (n+1))[v.get("View " + (n+1)).length-1] + "!";
+                        }
+                        viewsString += ";";
+                        viewsString = viewsString.replace("!;", "");
+
+                        if(format.toLowerCase().contains("meka")){
+                            String dataPath = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".arff";
+
+                            bw_train = new BufferedWriter(new FileWriter(dataPath));
+                            PrintWriter wr_train = new PrintWriter(bw_train);                           
+                                                      
+                            util.Save_datasetMV_Meka_in_the_file(wr_train, mvData, name_dataset, viewsString);
+
+                            wr_train.close();
+                            bw_train.close();   
+                        }
+                        else{
+                            String dataPath = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".arff";
+                            path_xml = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType +".xml";
+
+                            bw_train = new BufferedWriter(new FileWriter(dataPath));
+                            PrintWriter wr_train = new PrintWriter(bw_train);
+
+                            util.Save_datasetMV_in_the_file(wr_train, mvData, name_dataset, viewsString);
+
+                            wr_train.close();
+                            bw_train.close();
+
+                            BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
+                            PrintWriter wr_xml = new PrintWriter(bw_xml);
+
+                            util.Save_xml_in_the_file(wr_xml, mvData);
+
+                            wr_xml.close();
+                            bw_xml.close();
+                        }
+
+                        JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
+                        Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    Toolkit.getDefaultToolkit().beep();
+                }
+
+            }
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        
+        return 1;
+    }
+    
+    private boolean contains(int [] A, int n){
+        for(int a : A){
+            if(a == n){
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     private int loadMultiDataset(int returnVal, JFileChooser chooser){
         
         if (returnVal == JFileChooser.OPEN_DIALOG)
@@ -3977,10 +4466,59 @@ public class RunApp extends javax.swing.JFrame {
             FileReader fr;
             try
             {
+                views.clear(); 
+                ((DefaultTableModel)jTable2.getModel()).getDataVector().removeAllElements();
+                ((DefaultTableModel)jTable3.getModel()).getDataVector().removeAllElements();
+                
                 fr = new FileReader(filename_database_arff);
                 BufferedReader bf = new BufferedReader(fr);
 
                 String sCadena = bf.readLine();
+                
+                if(sCadena.contains("-V:")){
+                    TabPrincipal.setEnabledAt(7, true);
+                    String sCadena2 = sCadena.split("'")[1];
+                    sCadena2 = sCadena2.split("-V:")[1];
+                    String [] intervals = sCadena2.split("!");
+                    int [] intervalsSize = new int[intervals.length];
+                    int max = Integer.MIN_VALUE;
+                    int min = Integer.MAX_VALUE;
+                    double mean = 0;
+                    DefaultListModel listModel = new DefaultListModel();
+                    for(int i=0; i<intervals.length; i++){
+                        int a = Integer.parseInt(intervals[i].split("-")[0]);
+                        int b = Integer.parseInt(intervals[i].split("-")[1]);
+                        
+                        intervalsSize[i] = b-a+1; //both a and b are included
+                        
+                        Integer [] indices = new Integer[intervalsSize[i]];
+                        for(int j=a ; j<=b; j++){
+                            indices[j-a] = j;
+                        }
+                        views.put("View " + (i+1), indices);
+                        
+                        if(intervalsSize[i] > max){
+                            max = intervalsSize[i];
+                        }
+                        if(intervalsSize[i] < min){
+                            min = intervalsSize[i];
+                        }
+                        mean += intervalsSize[i];
+                        
+                        ((DefaultTableModel)jTable2.getModel()).addRow(new Object[]{"View " + (i+1), intervalsSize[i]});
+                    }
+                    
+                    
+                    mean /= intervalsSize.length;
+                    labelNumViewsValue.setText(Integer.toString(intervalsSize.length));
+                    labelMaxNumAttrViewValue.setText(Integer.toString(max));
+                    labelMinNumAttrViewValue.setText(Integer.toString(min));
+                    labelMeanNumAttrViewValue.setText(Double.toString(mean));
+                }
+                else{
+                    TabPrincipal.setEnabledAt(7, false);
+                }
+                
                 int label_found=0;
                 String label_name;
                 String[] label_names_found;
@@ -4075,6 +4613,7 @@ public class RunApp extends javax.swing.JFrame {
                 File f = new File(filename_database_xml);
                 if(f.exists() && !f.isDirectory()) { 
                     MultiLabelInstances dataset_temp = new MultiLabelInstances(filename_database_arff, filename_database_xml);
+                    
                 }
                 else{
                     JOptionPane.showMessageDialog(null, "File could not be loaded.", "alert", JOptionPane.ERROR_MESSAGE); 
@@ -4974,7 +5513,7 @@ public class RunApp extends javax.swing.JFrame {
             labelRelationValue.setText(dataset_current_name);
         }
         
-        MLDataEvaluator mldEvaluator = new MLDataEvaluator(dataset);
+        MLDataEvaluator_old mldEvaluator = new MLDataEvaluator_old(dataset);
         mldEvaluator.addMetric("Instances");
         mldEvaluator.addMetric("Attributes");
         mldEvaluator.addMetric("Labels");
@@ -6891,7 +7430,7 @@ public class RunApp extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane TabPrincipal;
     private javax.swing.JButton buttonAddMultipleDatasets;
-    private javax.swing.JButton buttonChooseFile;
+    public javax.swing.JButton buttonChooseFile;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
@@ -6909,6 +7448,7 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JComboBox comboBoxAttributeInformation;
     private javax.swing.JComboBox comboBoxLabelsInformation;
     private javax.swing.JButton export2;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonSaveDatasets;
     private javax.swing.JButton jButtonSaveDatasetsTrans;
     private javax.swing.JButton jButtonStartPreprocess;
@@ -6917,15 +7457,23 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JComboBox jComboBox_BRFS_Norm;
     private javax.swing.JComboBox jComboBox_BRFS_Out;
     private javax.swing.JComboBox jComboBox_SaveFormat;
+    private javax.swing.JComboBox jComboBox_SaveFormat1;
     private javax.swing.JLabel jLabelChiFi_text;
     private javax.swing.JLabel jLabelIR;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelMulti;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
     private javax.swing.JLabel labelAttributes;
     private javax.swing.JLabel labelAttributesValue;
     private javax.swing.JLabel labelBRFS;
@@ -6951,6 +7499,14 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JLabel labelLabelsValue;
     private javax.swing.JLabel labelLxIxF;
     private javax.swing.JLabel labelLxIxFValue;
+    private javax.swing.JLabel labelMaxNumAttrView;
+    private javax.swing.JLabel labelMaxNumAttrViewValue;
+    private javax.swing.JLabel labelMeanNumAttrView;
+    private javax.swing.JLabel labelMeanNumAttrViewValue;
+    private javax.swing.JLabel labelMinNumAttrView;
+    private javax.swing.JLabel labelMinNumAttrViewValue;
+    private javax.swing.JLabel labelNumViews;
+    private javax.swing.JLabel labelNumViewsValue;
     private javax.swing.JLabel labelPercIterativeStratified;
     private javax.swing.JLabel labelPercLPStratified;
     private javax.swing.JLabel labelPercRandom;
@@ -6982,6 +7538,8 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JPanel panelImbalanceLeft;
     private javax.swing.JPanel panelLabels;
     private javax.swing.JPanel panelLabelsPerExample;
+    private javax.swing.JPanel panelMIML;
+    private javax.swing.JPanel panelMVML;
     private javax.swing.JPanel panelMultipleDatasets;
     private javax.swing.JPanel panelMultipleDatasetsLeft;
     private javax.swing.JPanel panelPreprocess;
