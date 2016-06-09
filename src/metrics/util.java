@@ -4368,6 +4368,50 @@ public class util {
      }
     
     
+    public static void save_mv_csv_file(PrintWriter wr, JTable table, Hashtable<String, Integer[]> views, MultiLabelInstances mlData)
+    {                 
+        String line = new String();
+        
+        line = "";
+
+        line += "Name" + "; " +
+                "#Attributes" + "; " +
+                "LxIxF" + "; " + 
+                "Ratio Inst/Att" + "; " + 
+                "Average gain ratio" + "; ";
+        
+        wr.write(line);
+        wr.write(System.getProperty("line.separator"));  
+                
+        for(int i=0; i<table.getRowCount(); i++){
+            line = "";
+            
+            line += table.getValueAt(i, 0) + "; " + 
+                    table.getValueAt(i, 1) + "; " +
+                    table.getValueAt(i, 2) + "; " + 
+                    table.getValueAt(i, 3) + "; " + 
+                    table.getValueAt(i, 4) + "; ";
+
+            wr.write(line);
+            wr.write(System.getProperty("line.separator"));  
+        }
+        
+        wr.write(System.getProperty("line.separator"));  
+        wr.write(System.getProperty("line.separator")); 
+        
+        line = "View" + "; " + "Attribute name" + "; ";        
+        wr.write(line);
+        wr.write(System.getProperty("line.separator"));
+        
+        for(int i=0; i<views.size(); i++){
+            for(int j=0; j<views.get("View " + (i+1)).length; j++){
+                Integer [] attributes = views.get("View " + (i+1));
+                line = "View " + (i+1) + "; " + mlData.getDataSet().attribute(j).name();
+                wr.write(line);
+                wr.write(System.getProperty("line.separator"));  
+            }
+        }
+     }
     
     public static void Save_csv_file_multi(PrintWriter wr,ArrayList<String> metric_list, ArrayList<String> dataNames, Hashtable<String, Hashtable<String, String>> tableMetrics)
     {
@@ -4569,6 +4613,7 @@ public class util {
         }
     
      }
+    
     
    
     public static void Save_meka_file(PrintWriter wr,ArrayList<String> metric_list, MultiLabelInstances dataset, atributo[] imbalanced_data, boolean  es_de_tipo_meka, Hashtable<String, String> tableMetrics)
@@ -5838,7 +5883,7 @@ public class util {
                 tooltip = "Average of absolute correlation values between numeric attributes, indicating robustness to irrelevant attributes";
                 break;
             case "Average gain ratio":
-                tooltip = "The average information gain ratio is obtained by splitting the data accordint to each target attribute";
+                tooltip = "The average information gain ratio is obtained by splitting the data according to each target attribute";
                 break;
             case "Mean of entropies of nominal attributes":
                 tooltip = "Average value of entropies of nominal attributes";

@@ -55,6 +55,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import static metrics.util.Get_labelset_x_values;
+import mldc.attributes.AvgGainRatio;
 import mldc.base.MLDataMetric;
 import mldc.labelsDistribution.Cardinality;
 import mldc.labelsDistribution.Density;
@@ -63,6 +64,7 @@ import mldc.labelsRelation.Diversity;
 import mldc.size.DistinctLabelsets;
 import mldc.size.Labels;
 import mldc.size.LxIxF;
+import mldc.size.RatioInstancesToAttributes;
 
 import mulan.data.InvalidDataFormatException;
 import mulan.data.IterativeStratification;
@@ -104,6 +106,7 @@ import weka.core.Attribute;
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
 import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.Remove;
 import weka.filters.unsupervised.instance.Randomize;
 import weka.filters.unsupervised.instance.RemoveRange;
 
@@ -216,6 +219,8 @@ public class RunApp extends javax.swing.JFrame {
     
     ArrayList<String> labelsetStrings_freq;
     ArrayList<String> labelsetStrings_IR;
+    
+    boolean mv = false;
     
     
     public RunApp() 
@@ -903,13 +908,13 @@ public class RunApp extends javax.swing.JFrame {
         labelMinNumAttrViewValue = new javax.swing.JLabel();
         labelMeanNumAttrViewValue = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        buttonSaveViews = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable();
         jComboBox_SaveFormat1 = new javax.swing.JComboBox();
-        jPanel3 = new javax.swing.JPanel();
+        buttonSaveTable = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -2344,7 +2349,7 @@ public class RunApp extends javax.swing.JFrame {
                         .addComponent(labelMeanNumAttrView)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(labelMeanNumAttrViewValue)))
-                .addContainerGap(623, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2369,10 +2374,10 @@ public class RunApp extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Views"));
 
-        jButton1.setText("Save views");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        buttonSaveViews.setText("Save views");
+        buttonSaveViews.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                buttonSaveViewsActionPerformed(evt);
             }
         });
 
@@ -2381,14 +2386,14 @@ public class RunApp extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Name", "#Attributes"
+                "Name", "#Attributes", "LxIxF", "Ratio Inst/Att", "Avg Gain Ratio"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -2429,20 +2434,18 @@ public class RunApp extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTable3.setFocusable(false);
+        jTable3.setRowSelectionAllowed(false);
         jScrollPane4.setViewportView(jTable3);
 
         jComboBox_SaveFormat1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Mulan .arff", "Meka .arff" }));
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        buttonSaveTable.setText("Save table");
+        buttonSaveTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonSaveTableActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -2450,18 +2453,16 @@ public class RunApp extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(buttonSaveViews)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBox_SaveFormat1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(buttonSaveTable))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 498, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -2470,12 +2471,12 @@ public class RunApp extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jComboBox_SaveFormat1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(buttonSaveViews)
+                    .addComponent(jComboBox_SaveFormat1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonSaveTable))
                 .addContainerGap())
         );
 
@@ -2483,11 +2484,12 @@ public class RunApp extends javax.swing.JFrame {
         panelMVML.setLayout(panelMVMLLayout);
         panelMVMLLayout.setHorizontalGroup(
             panelMVMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelMVMLLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelMVMLLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelMVMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(panelMVMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         panelMVMLLayout.setVerticalGroup(
             panelMVMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3724,7 +3726,6 @@ public class RunApp extends javax.swing.JFrame {
             Integer [] indices = views.get("View " + (selected[i]+1));
             for(int j=0; j<indices.length; j++){
                 ((DefaultTableModel)jTable3.getModel()).addRow(new Object[]{dataset.getDataSet().attribute(indices[j]).name()});
-                System.out.println(dataset.getDataSet().attribute(indices[j]).name());
             }
         }
         
@@ -3732,7 +3733,7 @@ public class RunApp extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jTable2MouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void buttonSaveViewsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSaveViewsActionPerformed
         progressBar.setIndeterminate(true);
         progressFrame.setVisible(true);
         progressFrame.repaint();
@@ -3760,8 +3761,60 @@ public class RunApp extends javax.swing.JFrame {
             }
         }
         ).start();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_buttonSaveViewsActionPerformed
 
+    private void buttonSaveTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSaveTableActionPerformed
+        // TODO add your handling code here:
+        if(jTable2.getRowCount()==0 || dataset == null)
+        {
+            JOptionPane.showMessageDialog(null, "The table is empty.", "Error", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+
+        JFileChooser fc= new JFileChooser();
+        
+        // extension 
+        //FileNameExtensionFilter fname = new FileNameExtensionFilter(".xls", "xls"); 
+        FileNameExtensionFilter fname1 =  new FileNameExtensionFilter(".csv", "csv");
+        
+        //Remove default
+        fc.removeChoosableFileFilter(fc.getChoosableFileFilters()[0]);
+        
+        fc.setFileFilter(fname1);
+        
+        int returnVal = fc.showSaveDialog(this);
+         
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+        {
+            File file = fc.getSelectedFile();
+            FileFilter f1 = fc.getFileFilter();
+                
+            if(f1.getDescription().equals(".csv"))
+            {  
+                try
+                {
+                    String path = file.getAbsolutePath() +".csv";
+                     
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+                    PrintWriter wr = new PrintWriter(bw);
+                    
+                    util.save_mv_csv_file(wr, jTable2, views, dataset);
+                                    
+                    wr.close();
+                    bw.close(); 
+                    
+                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);                     
+                }
+                catch(Exception e1)
+                {
+                    JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
+                }   
+                             
+            }
+        }
+    }//GEN-LAST:event_buttonSaveTableActionPerformed
+
+    
     private int saveMultiView(){
         if(dataset == null){
             JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
@@ -4468,6 +4521,8 @@ public class RunApp extends javax.swing.JFrame {
                 String sCadena = bf.readLine();
                 
                 if(sCadena.contains("-V:")){
+                    mv = true;
+                    
                     TabPrincipal.setEnabledAt(7, true);
                     String sCadena2 = sCadena.split("'")[1];
                     sCadena2 = sCadena2.split("-V:")[1];
@@ -4497,7 +4552,7 @@ public class RunApp extends javax.swing.JFrame {
                         }
                         mean += intervalsSize[i];
                         
-                        ((DefaultTableModel)jTable2.getModel()).addRow(new Object[]{"View " + (i+1), intervalsSize[i]});
+                        //((DefaultTableModel)jTable2.getModel()).addRow(new Object[]{"View " + (i+1), intervalsSize[i], 1, 2, 3});
                     }
                     
                     
@@ -4509,6 +4564,7 @@ public class RunApp extends javax.swing.JFrame {
                 }
                 else{
                     TabPrincipal.setEnabledAt(7, false);
+                    mv = false;
                 }
                 
                 int label_found=0;
@@ -4641,9 +4697,95 @@ public class RunApp extends javax.swing.JFrame {
 
         }
         
+        if(mv){   
+            
+            if(((DefaultTableModel)jTable2.getModel()).getRowCount() > 0){
+                ((DefaultTableModel)jTable2.getModel()).getDataVector().removeAllElements();
+            }
+            
+            for(int i=0; i<views.size(); i++){
+                MultiLabelInstances view = dataset.clone();
+                
+                 try {
+                    Instances inst = view.getDataSet();
+                    
+                    int [] attributes = toPrimitive(views.get("View " + (i+1)));
+                    
+                    int[] toKeep = new int[attributes.length + dataset.getNumLabels()];
+                    System.arraycopy(attributes, 0, toKeep, 0, attributes.length);
+                    int[] labelIndices = dataset.getLabelIndices();
+                    for (int l = 0; l < dataset.getNumLabels(); l++) {
+                        toKeep[attributes.length + l] = labelIndices[l];
+                    }
+                    
+                    
+                    Remove filterRemove = new Remove();
+                    filterRemove.setAttributeIndicesArray(toKeep);
+                    filterRemove.setInvertSelection(true);
+                    filterRemove.setInputFormat(inst);
+
+                    MultiLabelInstances modifiedDataset = new MultiLabelInstances( Filter.useFilter(view.getDataSet(), filterRemove), dataset.getLabelsMetaData());
+                    
+                    LxIxF lif = new LxIxF();
+                    lif.calculate(modifiedDataset);
+                    RatioInstancesToAttributes ratioInstAtt = new RatioInstancesToAttributes();
+                    ratioInstAtt.calculate(modifiedDataset);
+                    AvgGainRatio avgGainRatio = new AvgGainRatio();
+                    avgGainRatio.calculate(modifiedDataset);
+                    
+                    ((DefaultTableModel)jTable2.getModel()).addRow(new Object[]{"View " + (i+1), attributes.length, 
+                        getMetricValueFormatted(lif), 
+                        getMetricValueFormatted(ratioInstAtt), 
+                        getMetricValueFormatted(avgGainRatio)});
+                    
+                } catch (Exception ex) {
+                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
 
         return 1;
     }
+    
+    public JTable setMVTableHelp(JTable jtable){
+        jtable = new JTable(jtable.getModel()){
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component c = super.prepareRenderer(renderer, row, column);
+                if (c instanceof JComponent) {
+                    JComponent jc = (JComponent) c;
+                        if(column == 0){
+                            jc.setToolTipText("View name");
+                        }
+                        else if(column == 1){
+                            jc.setToolTipText("Number of the attributes of the view");
+                        }
+                        else if(column == 2){
+                            jc.setToolTipText("Labels x Instances x Features");
+                        }
+                        else if(column == 3){
+                            jc.setToolTipText("Ratio of number of instances to the number of attributes");
+                        }
+                        else if(column == 4){
+                            jc.setToolTipText("Average gain ratio");
+                        }
+                }
+                return c;
+            }
+        };
+        
+        return jtable;
+    }
+    
+   
+    public static int[] toPrimitive(Integer[] IntegerArray) {
+        int[] result = new int[IntegerArray.length];
+	for (int i = 0; i < IntegerArray.length; i++) {
+            result[i] = IntegerArray[i].intValue();
+	}
+	return result;	
+    }
+
     
     private int getLabelIndex(String name){
         for(int i=0; i<jTable11.getColumnCount(); i++){
@@ -7480,6 +7622,8 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup4;
     private javax.swing.ButtonGroup buttonGroup5;
     private javax.swing.JButton buttonRemoveMultipleDatasets;
+    private javax.swing.JButton buttonSaveTable;
+    private javax.swing.JButton buttonSaveViews;
     private javax.swing.JButton buttonShowCoOcurrence;
     private javax.swing.JButton buttonShowHeatMap;
     private javax.swing.JButton buttonShowMostFrequent;
@@ -7491,7 +7635,6 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JComboBox comboBoxAttributeInformation;
     private javax.swing.JComboBox comboBoxLabelsInformation;
     private javax.swing.JButton export2;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonSaveDatasets;
     private javax.swing.JButton jButtonSaveDatasetsTrans;
     private javax.swing.JButton jButtonStartPreprocess;
@@ -7505,7 +7648,6 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelIR;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelMulti;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane2;
