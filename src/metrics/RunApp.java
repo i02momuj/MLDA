@@ -55,7 +55,14 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import static metrics.util.Get_labelset_x_values;
-import metrics_API.MLDataEvaluator_old;
+import mldc.base.MLDataMetric;
+import mldc.labelsDistribution.Cardinality;
+import mldc.labelsDistribution.Density;
+import mldc.labelsRelation.Bound;
+import mldc.labelsRelation.Diversity;
+import mldc.size.DistinctLabelsets;
+import mldc.size.Labels;
+import mldc.size.LxIxF;
 
 import mulan.data.InvalidDataFormatException;
 import mulan.data.IterativeStratification;
@@ -482,7 +489,6 @@ public class RunApp extends javax.swing.JFrame {
         
         //System.out.println("TabPrincipal.getComponentCount(): " + TabPrincipal.getComponentCount());
         TabPrincipal.setEnabledAt(7, false);
-        TabPrincipal.setEnabledAt(8, false);
         
     }
         
@@ -904,7 +910,6 @@ public class RunApp extends javax.swing.JFrame {
         jTable3 = new javax.swing.JTable();
         jComboBox_SaveFormat1 = new javax.swing.JComboBox();
         jPanel3 = new javax.swing.JPanel();
-        panelMIML = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -2364,7 +2369,7 @@ public class RunApp extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Views"));
 
-        jButton1.setText("Save dataset");
+        jButton1.setText("Save views");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -2495,19 +2500,6 @@ public class RunApp extends javax.swing.JFrame {
         );
 
         TabPrincipal.addTab("MVML", panelMVML);
-
-        javax.swing.GroupLayout panelMIMLLayout = new javax.swing.GroupLayout(panelMIML);
-        panelMIML.setLayout(panelMIMLLayout);
-        panelMIMLLayout.setHorizontalGroup(
-            panelMIMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 845, Short.MAX_VALUE)
-        );
-        panelMIMLLayout.setVerticalGroup(
-            panelMIMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 522, Short.MAX_VALUE)
-        );
-
-        TabPrincipal.addTab("MIML", panelMIML);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -5512,61 +5504,112 @@ public class RunApp extends javax.swing.JFrame {
         else{
             labelRelationValue.setText(dataset_current_name);
         }
-        
-        MLDataEvaluator_old mldEvaluator = new MLDataEvaluator_old(dataset);
-        mldEvaluator.addMetric("Instances");
-        mldEvaluator.addMetric("Attributes");
-        mldEvaluator.addMetric("Labels");
-        mldEvaluator.addMetric("Density");
-        mldEvaluator.addMetric("Cardinality");
-        mldEvaluator.addMetric("Diversity");
-        mldEvaluator.addMetric("Bound");
-        mldEvaluator.addMetric("Distinct labelsets");
-        mldEvaluator.addMetric("LIF");
-        mldEvaluator.calculate();
+
+        mldc.size.Instances instances = new mldc.size.Instances();
+        instances.calculate(dataset);
+        mldc.size.Attributes attributes = new mldc.size.Attributes();
+        attributes.calculate(dataset);
+        Labels labels = new Labels();
+        labels.calculate(dataset);
+        Density density = new Density();
+        density.calculate(dataset);
+        Cardinality cardinality = new Cardinality();
+        cardinality.calculate(dataset);
+        Diversity diversity = new Diversity();
+        diversity.calculate(dataset);
+        Bound bound = new Bound();
+        bound.calculate(dataset);
+        DistinctLabelsets distinct = new DistinctLabelsets();
+        distinct.calculate(dataset);
+        LxIxF lif = new LxIxF();
+        lif.calculate(dataset);
 
         //Instances
         //labelInstancesValue.setText(util.getValueFormatted("Instances", num_instancias));
-        labelInstancesValue.setText(mldEvaluator.getMetricValueFormatted("Instances"));
+        labelInstancesValue.setText(getMetricValueFormatted(instances));
         //System.out.println("Instances: " + mldEvaluator.getMetricValueFormatted("Instances"));
             
         //Attributes
         //labelAttributesValue.setText(util.getValueFormatted("Attributes", num_atributos));
-        labelAttributesValue.setText(mldEvaluator.getMetricValueFormatted("Attributes"));
+        labelAttributesValue.setText(getMetricValueFormatted(attributes));
             
         //Labels
         //labelLabelsValue.setText(util.getValueFormatted("Labels", util.get_value_metric("Labels", dataset, es_de_tipo_meka)));
-        labelLabelsValue.setText(mldEvaluator.getMetricValueFormatted("Labels"));    
+        labelLabelsValue.setText(getMetricValueFormatted(labels));    
         
         //Density
         //String density = util.get_value_metric("Density", dataset, es_de_tipo_meka);
         //labelDensityValue.setText(util.getValueFormatted("Density", density));
-        labelDensityValue.setText(mldEvaluator.getMetricValueFormatted("Density"));
+        labelDensityValue.setText(getMetricValueFormatted(density));
                       
         //Cardinality
         //String cardinality = util.get_value_metric("Cardinality", dataset, es_de_tipo_meka);
         //labelCardinalityValue.setText(util.getValueFormatted("Cardinality", cardinality));
-        labelCardinalityValue.setText(mldEvaluator.getMetricValueFormatted("Cardinality"));
+        labelCardinalityValue.setText(getMetricValueFormatted(cardinality));
             
         //Diversity      
         //String diversity = util.get_value_metric("Diversity", dataset, es_de_tipo_meka);
         //labelDiversityValue.setText(util.getValueFormatted("Diversity", diversity));
-        labelDiversityValue.setText(mldEvaluator.getMetricValueFormatted("Diversity"));
+        labelDiversityValue.setText(getMetricValueFormatted(diversity));
                 
         //Bound
         //String bound = util.get_value_metric("Bound", dataset, es_de_tipo_meka);
         //labelBoundValue.setText(util.getValueFormatted("Bound", bound));
-        labelBoundValue.setText(mldEvaluator.getMetricValueFormatted("Bound"));
+        labelBoundValue.setText(getMetricValueFormatted(bound));
                 
         //Distinct labelset     
         //String distinct_labelset = util.get_value_metric("Distinct labelsets", dataset, es_de_tipo_meka);
         //labelDistinctValue.setText(util.getValueFormatted("Distinct labelsets", distinct_labelset));
-        labelDistinctValue.setText(mldEvaluator.getMetricValueFormatted("Distinct labelsets"));
+        labelDistinctValue.setText(getMetricValueFormatted(distinct));
                 
         //LxIxF
         //String LIF = util.get_value_metric("Labels x instances x features", dataset, es_de_tipo_meka);
         //labelLxIxFValue.setText(util.getValueFormatted("Labels x instances x features", LIF));    
-        labelLxIxFValue.setText(mldEvaluator.getMetricValueFormatted("LIF"));
+        labelLxIxFValue.setText(getMetricValueFormatted(lif));
+    }
+    
+    
+    public String getMetricValueFormatted(MLDataMetric metric){
+        String value = new String();
+        NumberFormat formatter;
+        String name = metric.getName();
+        
+        double numericValue = metric.getValue();
+        
+        //Scientific notation
+        if( ((Math.abs(numericValue*1000) < 1.0) && 
+                (Math.abs(numericValue*1000) > 0.0)) 
+             || (Math.abs(numericValue/1000) > 10))
+        {
+            formatter = new DecimalFormat("0.###E0");
+            value = formatter.format(numericValue);
+        }
+        //Integer values
+        else if((name.toLowerCase().equals("attributes"))
+                    || (name.toLowerCase().equals("bound"))
+                    || (name.toLowerCase().equals("distinct labelsets"))
+                    || (name.toLowerCase().equals("instances"))
+                    || (name.toLowerCase().equals("LIF"))
+                    || (name.toLowerCase().equals("labels"))
+                    || (name.toLowerCase().equals("number of binary attributes"))
+                    || (name.toLowerCase().equals("number of labelsets up to 2 examples"))
+                    || (name.toLowerCase().equals("number of labelsets up to 5 examples"))
+                    || (name.toLowerCase().equals("number of labelsets up to 10 examples"))
+                    || (name.toLowerCase().equals("number of labelsets up to 50 examples"))
+                    || (name.toLowerCase().equals("number of nominal attributes"))
+                    || (name.toLowerCase().equals("number of unique labelsets"))
+                    || (name.toLowerCase().equals("number of unconditionally dependent label pairs by chi-square test")))
+        {
+            formatter = new DecimalFormat("#0");
+            value = formatter.format(numericValue);
+        }
+        //Decimal values
+        else{
+            formatter = new DecimalFormat("#0.000");
+            value = formatter.format(numericValue);
+        }
+        
+        return(value.replace(",", "."));
     }
   
     private void button_saveActionPerformed_principal(java.awt.event.ActionEvent evt, JTable jtable) throws IOException
@@ -7538,7 +7581,6 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JPanel panelImbalanceLeft;
     private javax.swing.JPanel panelLabels;
     private javax.swing.JPanel panelLabelsPerExample;
-    private javax.swing.JPanel panelMIML;
     private javax.swing.JPanel panelMVML;
     private javax.swing.JPanel panelMultipleDatasets;
     private javax.swing.JPanel panelMultipleDatasetsLeft;

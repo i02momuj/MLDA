@@ -32,6 +32,59 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import mldc.attributes.AttributesMetrics;
+import mldc.attributes.AvgAbsoluteCorrelationBetweenNumericAttributes;
+import mldc.attributes.AvgGainRatio;
+import mldc.attributes.BinaryAttributes;
+import mldc.attributes.MeanEntropiesNominalAttributes;
+import mldc.attributes.MeanOfMeanOfNumericAttributes;
+import mldc.attributes.MeanStdvNumericAttributes;
+import mldc.attributes.NominalAttributes;
+import mldc.attributes.NumericAttributes;
+import mldc.attributes.ProportionBinaryAttributes;
+import mldc.attributes.ProportionNominalAttributes;
+import mldc.attributes.ProportionNumericAttributes;
+import mldc.attributes.ProportionNumericAttributesWithOutliers;
+import mldc.base.MLDataMetric;
+import mldc.imbalance.CVIRInterClass;
+import mldc.imbalance.KurtosisCardinality;
+import mldc.imbalance.MaxIRInterClass;
+import mldc.imbalance.MaxIRIntraClass;
+import mldc.imbalance.MaxIRLabelset;
+import mldc.imbalance.MeanIRInterClass;
+import mldc.imbalance.MeanIRIntraClass;
+import mldc.imbalance.MeanIRLabelset;
+import mldc.imbalance.MeanKurtosis;
+import mldc.imbalance.MeanSkewnessNumericAttributes;
+import mldc.imbalance.MeanStdvIRIntraClass;
+import mldc.imbalance.PMax;
+import mldc.imbalance.PUniq;
+import mldc.imbalance.SkewnessCardinality;
+import mldc.labelsDistribution.Cardinality;
+import mldc.labelsDistribution.Density;
+import mldc.labelsDistribution.MaxEntropy;
+import mldc.labelsDistribution.MeanEntropy;
+import mldc.labelsDistribution.MinEntropy;
+import mldc.labelsDistribution.StdvCardinality;
+import mldc.labelsRelation.AvgExamplesPerLabelset;
+import mldc.labelsRelation.AvgUnconditionalDependentLabelPairsByChiSquare;
+import mldc.labelsRelation.Bound;
+import mldc.labelsRelation.Diversity;
+import mldc.labelsRelation.LabelsetsUpTo10Examples;
+import mldc.labelsRelation.LabelsetsUpTo2Examples;
+import mldc.labelsRelation.LabelsetsUpTo50Examples;
+import mldc.labelsRelation.LabelsetsUpTo5Examples;
+import mldc.labelsRelation.NumUnconditionalDependentLabelPairsByChiSquare;
+import mldc.labelsRelation.ProportionDistinctLabelsets;
+import mldc.labelsRelation.RatioLabelsetsUpTo10Examples;
+import mldc.labelsRelation.RatioLabelsetsUpTo2Examples;
+import mldc.labelsRelation.RatioLabelsetsUpTo50Examples;
+import mldc.labelsRelation.RatioLabelsetsUpTo5Examples;
+import mldc.labelsRelation.RatioLabelsetsWithExamplesLessThanHalfAttributes;
+import mldc.labelsRelation.RatioUnconditionalDependentLabelPairsByChiSquare;
+import mldc.labelsRelation.SCUMBLE;
+import mldc.labelsRelation.StdvExamplesPerLabelset;
+import mldc.labelsRelation.UniqueLabelsets;
 import mulan.data.InvalidDataFormatException;
 import mulan.data.LabelSet;
 import mulan.data.LabelsPair;
@@ -55,6 +108,9 @@ import org.jfree.data.xy.XYSeriesCollection;
 import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
+
+import mldc.size.*;
+
 
 /**
  *
@@ -4613,70 +4669,71 @@ public class util {
     
     public static String get_value_metric_imbalanced(String metric,MultiLabelInstances dataset,atributo[] imbalanced_data)
     {
-        /*
-        Statistics stat1 = new Statistics();
-        stat1.calculateStats(dataset);        
-        
-        Integer[] combCounts= metrics.get_combCounts(stat1);
-        */
-        double value=-1;
+        double value = -1.0;
+        MLDataMetric mldm = null;
         
         try{           
-        switch (metric) 
+            switch (metric) 
             {
-              
-            case "Mean of IR per label intra class":  value =  metrics.Mean_IR_BR_intra_class(imbalanced_data);
+                case "Mean of IR per label intra class":
+                    mldm = new MeanIRIntraClass();
                     break;     
-                
-            case "Max IR per label intra class":  value =  metrics.Max_IR_BR_intra_class(imbalanced_data);
+
+                case "Max IR per label intra class":
+                    mldm = new MaxIRIntraClass();
                     break;  
-            
-            case "Mean of IR per label inter class":  value =  metrics.Mean_IR_BR_inter_class(imbalanced_data);
+
+                case "Mean of IR per label inter class":
+                    mldm = new MeanIRInterClass();
                     break;  
-                
-            case "Max IR per label inter class":  value =  metrics.Max_IR_BR_inter_class(imbalanced_data);
+
+                case "Max IR per label inter class":
+                    mldm = new MaxIRInterClass();
                     break;  
-                
-            case "Mean of IR per labelset":  value =  metrics.get_mean_ir_per_labelset(dataset);
+
+                case "Mean of IR per labelset":
+                    mldm = new MeanIRLabelset();
                     break;  
-                
-            case "Max IR per labelset":  value =  metrics.get_max_ir_per_labelset(dataset);
+
+                case "Max IR per labelset":
+                    mldm = new MaxIRLabelset();
                     break; 
-                                                        
-            case "Mean of standard deviation of IR per label intra class":  value =  metrics.Mean_Standard_deviation_imbalance_intra_class(imbalanced_data);
+
+                case "Mean of standard deviation of IR per label intra class":
+                    mldm = new MeanStdvIRIntraClass();
                     break;         
-         
-            //case "IR per labelset":  value =  metrics.imbalanced_ratio_LP(dataset);
-               //     break;         
-            
-            case "Variance of examples per labelset":  value =  metrics.Variance_imbalanced_ratio_LP(dataset);
+                    
+                case "CVIR inter class":
+                    mldm = new CVIRInterClass();     
                     break;       
-                
-            case "CVIR inter class":  value =  metrics.CVIR_inter_class(imbalanced_data);
-                   break;       
-                
-            case "SCUMBLE":  value =  metrics.SCUMBLE(imbalanced_data, dataset);
-                   break;    
-                
-            
-            default:  value = -1.0;
-                     break;   
+
+                case "SCUMBLE":
+                    mldm = new SCUMBLE();
+                    break;    
+                    
+                default:  value = -1.0;
+                         break;   
             }
         }
-          catch (Exception e) {
-                e.printStackTrace();
-            }
+        catch (Exception e) {
+            e.printStackTrace();
+            value = -1.0;
+        }
+        
+        if(mldm != null){
+            value = mldm.calculate(dataset);
+        }
+        else{
+            value = -1.0;
+        }
         
         if(Double.isNaN(value) || value == Double.POSITIVE_INFINITY || value == Double.NEGATIVE_INFINITY){
-           //System.out.println("isNaN");
             return("NaN");
         }
         else{
             NumberFormat formatter = new DecimalFormat("#0.000"); 
-            //System.out.println("formatter: " + formatter.format(value) + "  value: " + value);
            return(formatter.format(value)); 
         }
-        //return Truncate_values_aprox_zero(Double.toString(value),4);
     }
     
     
@@ -4719,198 +4776,231 @@ public class util {
     }
     
     public static String get_value_metric(String metric, MultiLabelInstances dataset , boolean es_de_tipo_meka)
-    {
-        Statistics stat1 = new Statistics();
-        stat1.calculateStats(dataset);
-        
-        
+    {       
         double value =-1.0;
-        Integer[] combCounts= metrics.get_combCounts(stat1);
         
-       //System.out.println("se recorre el combcounts");
-        //util.Recorre_Arreglo(combCounts);
+        MLDataMetric mldm = null;
         
-        try{
-            
+        try{           
             
         switch (metric) 
         {
-            
-            case "Labels x instances x features":  value =  metrics.labelsxinstancesxfeatures(dataset);
-                    break;     
-                 
-            case "Instances":  value =  dataset.getNumInstances();
-                    break;     
+            case "Labels x instances x features":  
+                mldm = new LxIxF();
+                break;     
 
-            case "Attributes":  value =  dataset.getDataSet().numAttributes()-dataset.getNumLabels();
-                    break;    
-                
-            case "Labels":  value =  dataset.getNumLabels();
-                    break;    
-                
-            case "Label density":  value =  metrics.Label_Density(dataset, stat1);
-                    break;                
-             
-            case "Label Cardinality":  value = metrics.LabelCardinality(dataset, stat1);
-                      break;
-                
-            case "Distinct labelsets":  value = metrics.DistincLabelset(stat1);
-                     break;
-                
-            case "Number of unique labelsets":  value = metrics.UniqueLabelset(stat1);
-                     break;
+            case "Instances":
+                mldm = new mldc.size.Instances();
+                break;
             
-            case "Proportion of distinct labelsets":  value = metrics.ProportionDistincLabelset(stat1,dataset);
-                     break;
+            case "Attributes":
+                mldm = new mldc.size.Attributes();
+                break;
                 
-            case "Density":  value = metrics.Density(stat1);
-                     break;
-                
-            case "Cardinality":  value = metrics.Cardinality(stat1);
-                     break;
-                
-            case "Bound":  value = metrics.Bound(dataset);
-                     break;      
+            case "Labels":
+                mldm = new Labels();
+                break;
             
-            case "Diversity":  value = metrics.Diversity(dataset, stat1);
-                   break;       
-                                
-            case "Proportion of unique label combination (PUniq)":  value = metrics.PUniq(stat1, dataset);
-                     break;
+            case "Label density":
+                mldm = new Density();
+                break;                
+
+            case "Label Cardinality":
+                mldm = new Cardinality();
+                break;
+
+            case "Distinct labelsets":
+                mldm = new DistinctLabelsets();
+                break;
             
-            case "Proportion of maxim label combination (PMax)":  value = metrics.PMax(stat1, dataset);
-                     break;
-                
-            case "Ratio of number of instances to the number of attributes":  value = metrics.Ratio_instances_to_attr(dataset);
-                     break;
-                
-            case "Number of binary attributes":  value = metrics.count_attributes_binary(dataset);
-                     break;   
-                
-             case "Proportion of binary attributes":  value = metrics.Proportion_binary_attr(dataset);
-                     break;
+            case "Number of unique labelsets":
+                mldm = new UniqueLabelsets();
+                break;
             
-            case "Proportion of nominal attributes":  value = metrics.Proportion_nominal_attr(dataset);
-                     break;
-                
-            case "Proportion of numeric attributes":  value = metrics.Proportion_numeric_attr(dataset);
-                     break;
-                
-            case "Number of nominal attributes":  value = metrics.count_attributes_nominal(dataset);
-                     break;   
-                
-            case "Number of numeric attributes":  value = metrics.count_attributes_numeric(dataset);
-                     break;     
-                
-            case "Default accuracy":  value = metrics.Default_Accuracy(dataset);
-                     break;
-                
-            case "Mean of mean of numeric attributes":  value = metrics.MeanOfMeans(dataset);
-                     break;
-                
-            case "Mean of standard deviation of numeric attributes":  value = metrics.MeanOfStDev(dataset);
-                     break;      
-                
-            case "Mean of skewness of numeric attributes":  value = metrics.MeanSkewness(dataset);
-                     break;    
-                
-            case "Mean of kurtosis":  value = metrics.MeanKurtosis(dataset);
-                     break;
+            case "Proportion of distinct labelsets":
+                mldm = new ProportionDistinctLabelsets();
+                break;
             
-            case "Mean of entropies of nominal attributes":  value = metrics.MeanOfEntropies_nominal_attr(dataset);
-                     break;
+            case "Density":
+                mldm = new Density();
+                break;
             
-            /*case "Mean of entropies (numeric attr)":  value = metrics.MeanOfEntropies_numeric_attr(dataset);
-                     break;
-              */  
-            case "Average absolute correlation between numeric attributes":  value = metrics.AverageAbsoluteCorrelation(dataset);
-                     break;
-                
-            case "Proportion of numeric attributes with outliers":  value = metrics.ProportionWithOutliers(dataset);
-                     break;
-                
-            case "Average gain ratio":  value = metrics.AverageGainRatio(dataset, es_de_tipo_meka);
-                     break;      
-                
-            case "Ratio of distinct classes to the total number label combinations":  value = metrics.Ratio_DC_to_total_label_combination(stat1, dataset);
-                     break;
+            case "Cardinality":
+                mldm = new Cardinality();
+                break;
             
-            case "Standard deviation of label cardinality":  value = metrics.StDevOfTrainCardinality(stat1, metrics.LabelsForInstance(dataset));
-                     break;    
+            case "Bound":
+                mldm = new Bound();
+                break;
             
-            case "Skewness cardinality":  value = metrics.SkewnessOfTrainCardinality(stat1, metrics.LabelsForInstance(dataset));
-                     break;
- 
+            case "Diversity":
+                mldm = new Diversity();
+                break;
             
-            case "Kurtosis cardinality":  value = metrics.KurtosisOfTrainCardinality(stat1,  metrics.LabelsForInstance(dataset));
-                     break;
-                
-            case "Number of unconditionally dependent label pairs by chi-square test":  value = metrics.UncondDepPairsNum_UncondDepPairsRatio_AvgOfDepChiScores(dataset)[0];
-                     break;
-                
-            case "Ratio of unconditionally dependent label pairs by chi-square test":  value = metrics.UncondDepPairsNum_UncondDepPairsRatio_AvgOfDepChiScores(dataset)[1];
-                     break;
-                
-            case "Average of unconditionally dependent label pairs by chi-square test":  value = metrics.UncondDepPairsNum_UncondDepPairsRatio_AvgOfDepChiScores(dataset)[2];
-                     break;      
-                
-            case "Number of labelsets up to 2 examples":  value = metrics.countUpTo(2,combCounts);
-                     break;
+            case "Proportion of unique label combination (PUniq)":
+                mldm = new PUniq();
+                break;
             
-            case "Number of labelsets up to 5 examples":  value = metrics.countUpTo(5,combCounts);
-                     break;
-                
-            case "Number of labelsets up to 10 examples":  value = metrics.countUpTo(10,combCounts);
-                     break;
-                
-            case "Number of labelsets up to 50 examples":  value = metrics.countUpTo(50,combCounts);
-                     break;   
-                
-            case "Ratio of labelsets with number of examples < half of the attributes":  value = metrics.RatioClassesWithExamplesLessHalfAttributes(dataset,combCounts);
-                     break;    
-                 
-             case "Ratio of number of labelsets up to 2 examples":  value = metrics.RatioClassesWithUpTo_n_Examples(combCounts,2);
-                     break;
+            case "Proportion of maxim label combination (PMax)":
+                mldm = new PMax();
+                break;
             
-            case "Ratio of number of labelsets up to 5 examples":  value = metrics.RatioClassesWithUpTo_n_Examples(combCounts,5);
-                     break;
-                
-            case "Ratio of number of labelsets up to 10 examples":  value = metrics.RatioClassesWithUpTo_n_Examples(combCounts,10);
-                     break;
-                
-            case "Ratio of number of labelsets up to 50 examples":  value =  metrics.RatioClassesWithUpTo_n_Examples(combCounts,50);
-                     break;     
-                
-            case "Ratio of Distinct labelsets over Bound": value= metrics.ratio_DL_over_bount(dataset, stat1);
-                    break;
-                
-            case "Average examples per labelset":  value = metrics.AvgExamplesPerClass(dataset);
-                     break;
+            case "Ratio of number of instances to the number of attributes":
+                mldm = new RatioInstancesToAttributes();
+                break;
             
-            case "Minimal entropy of labels":  value = metrics.Min_MaxOfLabelEntropies(dataset)[0];
-                     break;
-                
-            case "Maximal entropy of labels":  value = metrics.Min_MaxOfLabelEntropies(dataset)[1];
-                     break;
-                
-            case "Mean of entropies of labels":  value =  metrics.MeanOfLabelEntropies(dataset);
-                    break;
+            case "Number of binary attributes":
+                mldm = new BinaryAttributes();
+                break;
             
-            case "Standard deviation of examples per labelset":  value =  metrics.Standard_deviation_x_labelset(dataset, stat1);
-                    break;                
-              
-                
-            default:  value = -1.0;
-                     break;    
+            case "Proportion of binary attributes":
+                mldm = new ProportionBinaryAttributes();
+                break;
+            
+            case "Proportion of nominal attributes":
+                mldm = new ProportionNominalAttributes();
+                break;
+            
+            case "Proportion of numeric attributes":
+                mldm = new ProportionNumericAttributes();
+                break;
+            
+            case "Number of nominal attributes":
+                mldm = new NominalAttributes();
+                break;
+            
+            case "Number of numeric attributes":
+                mldm = new NumericAttributes();
+                break;
+
+            case "Mean of mean of numeric attributes":
+                mldm = new MeanOfMeanOfNumericAttributes();
+                break;
+            
+            case "Mean of standard deviation of numeric attributes":
+                mldm = new MeanStdvNumericAttributes();
+                break;
+            
+            case "Mean of skewness of numeric attributes":
+                mldm = new MeanSkewnessNumericAttributes();
+                break;
+            
+            case "Mean of kurtosis":
+                mldm = new MeanKurtosis();
+                break;
+            
+            case "Mean of entropies of nominal attributes":
+                mldm = new MeanEntropiesNominalAttributes();
+                break;
+            
+            case "Average absolute correlation between numeric attributes":
+                mldm = new AvgAbsoluteCorrelationBetweenNumericAttributes();
+                break;
+            
+            case "Proportion of numeric attributes with outliers":
+                mldm = new ProportionNumericAttributesWithOutliers();
+                break;
+            
+            case "Average gain ratio":
+                mldm = new AvgGainRatio();
+                break;
+            
+            case "Standard deviation of label cardinality":
+                mldm = new StdvCardinality();
+                break;
+            
+            case "Skewness cardinality":
+                mldm = new SkewnessCardinality();
+                break;
+            
+            case "Kurtosis cardinality":
+                mldm = new KurtosisCardinality();
+                break;
+            
+            case "Number of unconditionally dependent label pairs by chi-square test":
+                mldm = new NumUnconditionalDependentLabelPairsByChiSquare();
+                break;
+            
+            case "Ratio of unconditionally dependent label pairs by chi-square test":
+                mldm = new RatioUnconditionalDependentLabelPairsByChiSquare();
+                break;
+            
+            case "Average of unconditionally dependent label pairs by chi-square test":
+                mldm = new AvgUnconditionalDependentLabelPairsByChiSquare();
+                break;
+            
+            case "Number of labelsets up to 2 examples":
+                mldm = new LabelsetsUpTo2Examples();
+                break;
+            
+            case "Number of labelsets up to 5 examples":
+                mldm = new LabelsetsUpTo5Examples();
+                break;
+            
+            case "Number of labelsets up to 10 examples":
+                mldm = new LabelsetsUpTo10Examples();
+                break;
+            
+            case "Number of labelsets up to 50 examples":
+                mldm = new LabelsetsUpTo50Examples();
+                break;
+            
+            case "Ratio of labelsets with number of examples < half of the attributes":
+                mldm = new RatioLabelsetsWithExamplesLessThanHalfAttributes();
+                break;
+            
+            case "Ratio of number of labelsets up to 2 examples":
+                mldm = new RatioLabelsetsUpTo2Examples();
+                break;
+            
+            case "Ratio of number of labelsets up to 5 examples":
+                mldm = new RatioLabelsetsUpTo5Examples();
+                break;
+            
+            case "Ratio of number of labelsets up to 10 examples":
+                mldm = new RatioLabelsetsUpTo10Examples();
+                break;
+            
+            case "Ratio of number of labelsets up to 50 examples":
+                mldm = new RatioLabelsetsUpTo50Examples();
+                break;
+  
+            case "Average examples per labelset":
+                mldm = new AvgExamplesPerLabelset();
+                break;
+            
+            case "Minimal entropy of labels":
+                mldm = new MinEntropy();
+                break;
+            
+            case "Maximal entropy of labels":
+                mldm = new MaxEntropy();
+                break;
+            
+            case "Mean of entropies of labels":
+                mldm = new MeanEntropy();
+                break;
+            
+            case "Standard deviation of examples per labelset":
+                mldm = new StdvExamplesPerLabelset();
+                break;
+            
+            default:  
+                value = -1.0;
+                break;    
+            }
         
-        }
+            if(mldm != null){
+                value = mldm.calculate(dataset);
+            }
+            else{
+                value = -1.0;
+            }
         
         }
         catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        //System.out.println("formatter: " + formatter.format(Double.parseDouble(val.toString().replace(",", "."))));
+            e.printStackTrace();
+        }
         
         if(Double.isNaN(value) || value == Double.POSITIVE_INFINITY || value == Double.NEGATIVE_INFINITY){
            //System.out.println("isNaN");
