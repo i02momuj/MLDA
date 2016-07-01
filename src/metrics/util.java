@@ -32,6 +32,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import mldc.attributes.AttributesMetrics;
 import mldc.attributes.AvgAbsoluteCorrelationBetweenNumericAttributes;
 import mldc.attributes.AvgGainRatio;
 import mldc.attributes.BinaryAttributes;
@@ -564,197 +565,8 @@ public class util {
 
    double ir = util.get_RI_q1_q3(q1, q3);
    
-   //double linf = util.Limite_inf(q1, ir);
-   //double lsup = util.Limite_sup(q3, ir);
-   
-   XYSeries serie_linf=null;
-   XYSeries serie_lsup=null;
-
-   // l_inf vertical
-       serie_linf = new XYSeries("8");
-       //serie_linf.add(linf, 0.4);
-       //serie_linf.add(linf, 0.6);
-       
-       XYTextAnnotation annotation ;//= new XYTextAnnotation("Li", linf, 0.35);
-       //annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-       //xyplot.addAnnotation(annotation);
-   
-    //min-linf horizontal
-    XYSeries serie15 = new XYSeries("15");
-    serie15.add(min, 0.5);
-    //serie15.add(linf, 0.5);
-    
-    //max-lsup horizontal
-    XYSeries serie16 = new XYSeries("16");
-    serie16.add(max, 0.5);
-    //serie16.add(lsup, 0.5);
-    
-   
-   //min vertical
-    XYSeries serie1 = new XYSeries("0");
-    serie1.add(min, 0.45);
-    serie1.add(min, 0.55);
-    
-     annotation = new XYTextAnnotation("Min", min, 0.40);
-     annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-     xyplot.addAnnotation(annotation);
-     
-  
-    //min-q1 horizontal
-    XYSeries serie2 = new XYSeries("1");
-    serie2.add(min, 0.5);
-    serie2.add(q1, 0.5);
-  
-    //q1 vertical  
-    XYSeries serie3 = new XYSeries("2");
-    serie3.add(q1, 0.1);
-    serie3.add(q1, 0.9);
-    
-    annotation = new XYTextAnnotation("Q1", q1, 0.08);
-    annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-    xyplot.addAnnotation(annotation);
-    
-    // mediana 
-    XYSeries serie_mediana = new XYSeries("11");
-    serie_mediana.add(mediana, 0.1);
-    serie_mediana.add(mediana, 0.9);
-    
-    annotation = new XYTextAnnotation("Median", mediana, 0.04);
-    annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-    xyplot.addAnnotation(annotation);
- 
-    //q1-q3 horizontal sup
-    XYSeries serie4 = new XYSeries("3");
-    serie4.add(q1, 0.9);
-    serie4.add(q3, 0.9);
- 
-    //q1-q3 horizontal inf
-    XYSeries serie5 = new XYSeries("4");
-    serie5.add(q1, 0.1);
-    serie5.add(q3, 0.1);
- 
-    //q3 vertical
-    XYSeries serie6 = new XYSeries("5");
-    serie6.add(q3, 0.1);
-    serie6.add(q3, 0.9);
-    
-    annotation = new XYTextAnnotation("Q3", q3, 0.08);
-    annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-    xyplot.addAnnotation(annotation);
-    
-    //q3-max horizontal
-    XYSeries serie7 = new XYSeries("6");
-    serie7.add(q3, 0.5);
-    serie7.add(max, 0.5);
-    
-    //max vertical
-    XYSeries serie8 = new XYSeries("7");
-    serie8.add(max, 0.45);
-    serie8.add(max, 0.55);
-    
-    annotation = new XYTextAnnotation("Max", max, 0.4);
-    annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-    xyplot.addAnnotation(annotation);
-    
-
-        serie_lsup = new XYSeries("9");
-        //serie_lsup.add(lsup, 0.4);
-        //serie_lsup.add(lsup, 0.6);
-        
-       //annotation = new XYTextAnnotation("Ls", lsup, 0.35);
-       //annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-       //xyplot.addAnnotation(annotation);
-
-       
-
- 
- XYSeriesCollection xyseriescollection = new XYSeriesCollection();
-
- //xyseriescollection.addSeries(serie_point);
- 
- xyseriescollection.addSeries(serie1);
- xyseriescollection.addSeries(serie2);
- xyseriescollection.addSeries(serie3);
- xyseriescollection.addSeries(serie4);
- xyseriescollection.addSeries(serie5);
- xyseriescollection.addSeries(serie6);
- xyseriescollection.addSeries(serie7);
- xyseriescollection.addSeries(serie8);
- xyseriescollection.addSeries(serie15);
- xyseriescollection.addSeries(serie16);
- xyseriescollection.addSeries(serie_mediana);
- 
- //xyseriescollection.addSeries(serie_linf);
- xyplot.getRenderer().setSeriesPaint(9, Color.black);
- //xyseriescollection.addSeries(serie_lsup); 
- xyplot.getRenderer().setSeriesPaint(10, Color.black); 
- 
- 
- xyplot.getRenderer().setSeriesPaint(0, Color.black);
- xyplot.getRenderer().setSeriesPaint(1, Color.black);
- xyplot.getRenderer().setSeriesPaint(2, Color.black);
- xyplot.getRenderer().setSeriesPaint(3, Color.black);
- xyplot.getRenderer().setSeriesPaint(4, Color.black);
- xyplot.getRenderer().setSeriesPaint(5, Color.black);
- xyplot.getRenderer().setSeriesPaint(6, Color.black);
- xyplot.getRenderer().setSeriesPaint(7, Color.black);
- xyplot.getRenderer().setSeriesPaint(8, Color.black);
- xyplot.getRenderer().setSeriesPaint(9, Color.black);
- xyplot.getRenderer().setSeriesPaint(10, Color.black);
- xyplot.getRenderer().setSeriesPaint(11, Color.black);
- xyplot.getRenderer().setSeriesPaint(12, Color.black);
- xyplot.getRenderer().setSeriesPaint(13, Color.black);
- 
-  //agregar el dataset
- xyplot.setDataset(xyseriescollection);
- 
- 
- 
- 
- 
- 
-    // add a second dataset and renderer... 
-     XYSeriesCollection anotherserie = new XYSeriesCollection();
-         
-     XYSeries serie_point = new XYSeries("21");
-     
-     double[] valor_y = {0.47,0.49,0.51,0.53};
-     
-     for(int i=0, j=0; i<arreglo_ordenado.length; i++ , j++)
-     {
-         if(j%4==0) j=0;
-         serie_point.add(arreglo_ordenado[i],valor_y[j] );
-     }
-         
-    anotherserie.addSeries(serie_point);
-       
-     
-     XYLineAndShapeRenderer renderer1 = new XYLineAndShapeRenderer(false, true); 
-     renderer1.setSeriesPaint(0, Color.lightGray);
-    // arguments of new XYLineAndShapeRenderer are to activate or deactivate the display of points or line. Set first argument to true if you want to draw lines between the points for e.g.
-    xyplot.setDataset(1, anotherserie);
-    xyplot.setRenderer(1, renderer1);
- 
- 
- }
-  
-  public static void update_values_xydataset(ChartPanel xyplot1, int[] arreglo_ordenado) {
-
-   XYPlot xyplot = xyplot1.getChart().getXYPlot();
-    
-   double min = arreglo_ordenado[0];
-   //System.out.println("el menor es " +min);
-   double max = arreglo_ordenado[arreglo_ordenado.length-1];
-   
-   double mediana = get_mediana(arreglo_ordenado);
-   
-   double q1 = get_q1(arreglo_ordenado);
-   double q3 = get_q3(arreglo_ordenado);
-
-   double ir = util.get_RI_q1_q3(q1, q3);
-   
-   double linf = Limite_inf(q1, ir);
-   double lsup = Limite_sup(q3, ir);
+   double linf = util.Limite_inf(q1, ir);
+   double lsup = util.Limite_sup(q3, ir);
    
    XYSeries serie_linf=null;
    XYSeries serie_lsup=null;
@@ -765,9 +577,8 @@ public class util {
        serie_linf.add(linf, 0.6);
        
        XYTextAnnotation annotation = new XYTextAnnotation("Li", linf, 0.35);
-       
-       //annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-       //xyplot.addAnnotation(annotation);
+       annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
+       xyplot.addAnnotation(annotation);
    
     //min-linf horizontal
     XYSeries serie15 = new XYSeries("15");
@@ -851,9 +662,198 @@ public class util {
         serie_lsup.add(lsup, 0.4);
         serie_lsup.add(lsup, 0.6);
         
-       //annotation = new XYTextAnnotation("Ls", lsup, 0.35);
-       //annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-       //xyplot.addAnnotation(annotation);
+       annotation = new XYTextAnnotation("Ls", lsup, 0.35);
+       annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
+       xyplot.addAnnotation(annotation);
+
+       
+
+ 
+ XYSeriesCollection xyseriescollection = new XYSeriesCollection();
+
+ //xyseriescollection.addSeries(serie_point);
+ 
+ xyseriescollection.addSeries(serie1);
+ xyseriescollection.addSeries(serie2);
+ xyseriescollection.addSeries(serie3);
+ xyseriescollection.addSeries(serie4);
+ xyseriescollection.addSeries(serie5);
+ xyseriescollection.addSeries(serie6);
+ xyseriescollection.addSeries(serie7);
+ xyseriescollection.addSeries(serie8);
+ xyseriescollection.addSeries(serie15);
+ xyseriescollection.addSeries(serie16);
+ xyseriescollection.addSeries(serie_mediana);
+ 
+ xyseriescollection.addSeries(serie_linf);
+ xyplot.getRenderer().setSeriesPaint(9, Color.black);
+ xyseriescollection.addSeries(serie_lsup); 
+ xyplot.getRenderer().setSeriesPaint(10, Color.black); 
+ 
+ 
+ xyplot.getRenderer().setSeriesPaint(0, Color.black);
+ xyplot.getRenderer().setSeriesPaint(1, Color.black);
+ xyplot.getRenderer().setSeriesPaint(2, Color.black);
+ xyplot.getRenderer().setSeriesPaint(3, Color.black);
+ xyplot.getRenderer().setSeriesPaint(4, Color.black);
+ xyplot.getRenderer().setSeriesPaint(5, Color.black);
+ xyplot.getRenderer().setSeriesPaint(6, Color.black);
+ xyplot.getRenderer().setSeriesPaint(7, Color.black);
+ xyplot.getRenderer().setSeriesPaint(8, Color.black);
+ xyplot.getRenderer().setSeriesPaint(9, Color.black);
+ xyplot.getRenderer().setSeriesPaint(10, Color.black);
+ xyplot.getRenderer().setSeriesPaint(11, Color.black);
+ xyplot.getRenderer().setSeriesPaint(12, Color.black);
+ xyplot.getRenderer().setSeriesPaint(13, Color.black);
+ 
+  //agregar el dataset
+ xyplot.setDataset(xyseriescollection);
+ 
+ 
+ 
+ 
+ 
+ 
+    // add a second dataset and renderer... 
+     XYSeriesCollection anotherserie = new XYSeriesCollection();
+         
+     XYSeries serie_point = new XYSeries("21");
+     
+     double[] valor_y = {0.47,0.49,0.51,0.53};
+     
+     for(int i=0, j=0; i<arreglo_ordenado.length; i++ , j++)
+     {
+         if(j%4==0) j=0;
+         serie_point.add(arreglo_ordenado[i],valor_y[j] );
+     }
+         
+    anotherserie.addSeries(serie_point);
+       
+     
+     XYLineAndShapeRenderer renderer1 = new XYLineAndShapeRenderer(false, true); 
+     renderer1.setSeriesPaint(0, Color.lightGray);
+    // arguments of new XYLineAndShapeRenderer are to activate or deactivate the display of points or line. Set first argument to true if you want to draw lines between the points for e.g.
+    xyplot.setDataset(1, anotherserie);
+    xyplot.setRenderer(1, renderer1);
+ 
+ 
+ }
+  
+  public static void update_values_xydataset(ChartPanel xyplot1, int[] arreglo_ordenado) {
+
+   XYPlot xyplot = xyplot1.getChart().getXYPlot();
+    
+   double min = arreglo_ordenado[0];
+   //System.out.println("el menor es " +min);
+   double max = arreglo_ordenado[arreglo_ordenado.length-1];
+   
+   double mediana = get_mediana(arreglo_ordenado);
+   
+   double q1 = get_q1(arreglo_ordenado);
+   double q3 = get_q3(arreglo_ordenado);
+
+   double ir = util.get_RI_q1_q3(q1, q3);
+   
+   double linf = Limite_inf(q1, ir);
+   double lsup = Limite_sup(q3, ir);
+   
+   XYSeries serie_linf=null;
+   XYSeries serie_lsup=null;
+
+   // l_inf vertical
+       serie_linf = new XYSeries("8");
+       serie_linf.add(linf, 0.4);
+       serie_linf.add(linf, 0.6);
+       
+       XYTextAnnotation annotation = new XYTextAnnotation("Li", linf, 0.35);
+       annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
+       xyplot.addAnnotation(annotation);
+   
+    //min-linf horizontal
+    XYSeries serie15 = new XYSeries("15");
+    serie15.add(min, 0.5);
+    serie15.add(linf, 0.5);
+    
+    //max-lsup horizontal
+    XYSeries serie16 = new XYSeries("16");
+    serie16.add(max, 0.5);
+    serie16.add(lsup, 0.5);
+    
+   
+   //min vertical
+    XYSeries serie1 = new XYSeries("0");
+    serie1.add(min, 0.45);
+    serie1.add(min, 0.55);
+    
+     annotation = new XYTextAnnotation("Min", min, 0.40);
+     annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
+     xyplot.addAnnotation(annotation);
+     
+  
+    //min-q1 horizontal
+    XYSeries serie2 = new XYSeries("1");
+    serie2.add(min, 0.5);
+    serie2.add(q1, 0.5);
+  
+    //q1 vertical  
+    XYSeries serie3 = new XYSeries("2");
+    serie3.add(q1, 0.1);
+    serie3.add(q1, 0.9);
+    
+    annotation = new XYTextAnnotation("Q1", q1, 0.08);
+    annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
+    xyplot.addAnnotation(annotation);
+    
+    // mediana 
+    XYSeries serie_mediana = new XYSeries("11");
+    serie_mediana.add(mediana, 0.1);
+    serie_mediana.add(mediana, 0.9);
+    
+    annotation = new XYTextAnnotation("Median", mediana, 0.04);
+    annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
+    xyplot.addAnnotation(annotation);
+ 
+    //q1-q3 horizontal sup
+    XYSeries serie4 = new XYSeries("3");
+    serie4.add(q1, 0.9);
+    serie4.add(q3, 0.9);
+ 
+    //q1-q3 horizontal inf
+    XYSeries serie5 = new XYSeries("4");
+    serie5.add(q1, 0.1);
+    serie5.add(q3, 0.1);
+ 
+    //q3 vertical
+    XYSeries serie6 = new XYSeries("5");
+    serie6.add(q3, 0.1);
+    serie6.add(q3, 0.9);
+    
+    annotation = new XYTextAnnotation("Q3", q3, 0.08);
+    annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
+    xyplot.addAnnotation(annotation);
+    
+    //q3-max horizontal
+    XYSeries serie7 = new XYSeries("6");
+    serie7.add(q3, 0.5);
+    serie7.add(max, 0.5);
+    
+    //max vertical
+    XYSeries serie8 = new XYSeries("7");
+    serie8.add(max, 0.45);
+    serie8.add(max, 0.55);
+    
+    annotation = new XYTextAnnotation("Max", max, 0.4);
+    annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
+    xyplot.addAnnotation(annotation);
+    
+
+        serie_lsup = new XYSeries("9");
+        serie_lsup.add(lsup, 0.4);
+        serie_lsup.add(lsup, 0.6);
+        
+       annotation = new XYTextAnnotation("Ls", lsup, 0.35);
+       annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
+       xyplot.addAnnotation(annotation);
 
        
 
