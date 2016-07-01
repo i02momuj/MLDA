@@ -427,8 +427,8 @@ public class RunApp extends javax.swing.JFrame {
         cp_box =createGraph(panelBoxDiagram);
         cp_box2 =createGraph(panelBoxDiagramAtt);
         
-        cp_ir_x_label_inter_class_only = createJChart(panelIRperLabelInterClass, "bar", "IR inter-class","Labels",false, "IR per label inter class");
-        cp_ir_x_label_intra_class_only = createJChart(panelIRperLabelIntraClass, "bar", "IR intra-class","Labels",false, "IR per label intra class");
+        cp_ir_x_label_inter_class_only = createJChart(panelIRperLabelInterClass, "bar", "IR inter-class","Labels",false, "IR inter class");
+        cp_ir_x_label_intra_class_only = createJChart(panelIRperLabelIntraClass, "bar", "IR intra-class","Labels",false, "IR intra class");
 
         cp_per_labelset = createJChart(panelIRperLabelset, "bar", "IR","Labelsets",false, "IR per labelset");
       
@@ -1624,7 +1624,7 @@ public class RunApp extends javax.swing.JFrame {
 
         TabPrincipal.addTab("Transformation", panelTransformation);
 
-        comboBoxLabelsInformation.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Label frequency", "Labelset frequency", "Labels histogram", "Box diagram", "IR per label inter class", "IR per label intra class", "IR per labelset" }));
+        comboBoxLabelsInformation.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Label frequency", "Labelset frequency", "Labels histogram", "Box diagram", "IR inter class", "IR intra class", "IR per labelset" }));
         comboBoxLabelsInformation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboBoxLabelsInformationActionPerformed(evt);
@@ -3586,6 +3586,8 @@ public class RunApp extends javax.swing.JFrame {
 
     private void buttonChooseFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonChooseFileActionPerformed
         final JFileChooser jfile1 = new JFileChooser();
+        jfile1.setLocale(Locale.UK);
+        jfile1.repaint();
         FileNameExtensionFilter fname = new FileNameExtensionFilter(".arff", "arff");
         jfile1.setFileFilter(fname);
 
@@ -6416,11 +6418,11 @@ public class RunApp extends javax.swing.JFrame {
                 renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
                 "Instances with {1} labels = {2}", NumberFormat.getInstance()));
             }
-            else if(charTitle.toLowerCase().equals("ir per label inter class")){
+            else if(charTitle.toLowerCase().equals("ir inter class")){
                 renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
                 "{0} = {2}", NumberFormat.getInstance()));
             }
-            else if(charTitle.toLowerCase().equals("ir per label intra class")){
+            else if(charTitle.toLowerCase().equals("ir intra class")){
                 renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
                 "{0} = {2}", NumberFormat.getInstance()));
             }

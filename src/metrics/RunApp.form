@@ -1264,8 +1264,8 @@
                     <StringItem index="1" value="Labelset frequency"/>
                     <StringItem index="2" value="Labels histogram"/>
                     <StringItem index="3" value="Box diagram"/>
-                    <StringItem index="4" value="IR per label inter class"/>
-                    <StringItem index="5" value="IR per label intra class"/>
+                    <StringItem index="4" value="IR inter class"/>
+                    <StringItem index="5" value="IR intra class"/>
                     <StringItem index="6" value="IR per labelset"/>
                   </StringArray>
                 </Property>

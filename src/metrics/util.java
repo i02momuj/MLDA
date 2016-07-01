@@ -32,7 +32,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import mldc.attributes.AttributesMetrics;
 import mldc.attributes.AvgAbsoluteCorrelationBetweenNumericAttributes;
 import mldc.attributes.AvgGainRatio;
 import mldc.attributes.BinaryAttributes;
@@ -565,30 +564,30 @@ public class util {
 
    double ir = util.get_RI_q1_q3(q1, q3);
    
-   double linf = util.Limite_inf(q1, ir);
-   double lsup = util.Limite_sup(q3, ir);
+   //double linf = util.Limite_inf(q1, ir);
+   //double lsup = util.Limite_sup(q3, ir);
    
    XYSeries serie_linf=null;
    XYSeries serie_lsup=null;
 
    // l_inf vertical
        serie_linf = new XYSeries("8");
-       serie_linf.add(linf, 0.4);
-       serie_linf.add(linf, 0.6);
+       //serie_linf.add(linf, 0.4);
+       //serie_linf.add(linf, 0.6);
        
-       XYTextAnnotation annotation = new XYTextAnnotation("Li", linf, 0.35);
-       annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-       xyplot.addAnnotation(annotation);
+       XYTextAnnotation annotation ;//= new XYTextAnnotation("Li", linf, 0.35);
+       //annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
+       //xyplot.addAnnotation(annotation);
    
     //min-linf horizontal
     XYSeries serie15 = new XYSeries("15");
     serie15.add(min, 0.5);
-    serie15.add(linf, 0.5);
+    //serie15.add(linf, 0.5);
     
     //max-lsup horizontal
     XYSeries serie16 = new XYSeries("16");
     serie16.add(max, 0.5);
-    serie16.add(lsup, 0.5);
+    //serie16.add(lsup, 0.5);
     
    
    //min vertical
@@ -659,12 +658,12 @@ public class util {
     
 
         serie_lsup = new XYSeries("9");
-        serie_lsup.add(lsup, 0.4);
-        serie_lsup.add(lsup, 0.6);
+        //serie_lsup.add(lsup, 0.4);
+        //serie_lsup.add(lsup, 0.6);
         
-       annotation = new XYTextAnnotation("Ls", lsup, 0.35);
-       annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-       xyplot.addAnnotation(annotation);
+       //annotation = new XYTextAnnotation("Ls", lsup, 0.35);
+       //annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
+       //xyplot.addAnnotation(annotation);
 
        
 
@@ -685,9 +684,9 @@ public class util {
  xyseriescollection.addSeries(serie16);
  xyseriescollection.addSeries(serie_mediana);
  
- xyseriescollection.addSeries(serie_linf);
+ //xyseriescollection.addSeries(serie_linf);
  xyplot.getRenderer().setSeriesPaint(9, Color.black);
- xyseriescollection.addSeries(serie_lsup); 
+ //xyseriescollection.addSeries(serie_lsup); 
  xyplot.getRenderer().setSeriesPaint(10, Color.black); 
  
  
@@ -766,8 +765,9 @@ public class util {
        serie_linf.add(linf, 0.6);
        
        XYTextAnnotation annotation = new XYTextAnnotation("Li", linf, 0.35);
-       annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-       xyplot.addAnnotation(annotation);
+       
+       //annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
+       //xyplot.addAnnotation(annotation);
    
     //min-linf horizontal
     XYSeries serie15 = new XYSeries("15");
@@ -851,9 +851,9 @@ public class util {
         serie_lsup.add(lsup, 0.4);
         serie_lsup.add(lsup, 0.6);
         
-       annotation = new XYTextAnnotation("Ls", lsup, 0.35);
-       annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-       xyplot.addAnnotation(annotation);
+       //annotation = new XYTextAnnotation("Ls", lsup, 0.35);
+       //annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
+       //xyplot.addAnnotation(annotation);
 
        
 
