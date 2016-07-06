@@ -5268,7 +5268,7 @@ public class RunApp extends javax.swing.JFrame {
               
             if(filename_database_xml == null){
                 MekaToMulan m = new MekaToMulan();
-                m.convertir(filename_database_arff, filename_database_arff+"_mulan");
+                m.convert(filename_database_arff, filename_database_arff+"_mulan");
                 dataset = new MultiLabelInstances(filename_database_arff+"_mulan.arff", filename_database_arff+"_mulan.xml");
                 File f2 = new File(filename_database_arff+"_mulan.xml");
                 f2.delete();

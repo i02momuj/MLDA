@@ -6,178 +6,171 @@ import java.util.*;
 
 public class MekaToMulan {
 
-	String relationName = new String();
-	int labels = 0;
-	int c = 0;
-	Vector<Attribute> atributos = new Vector<Attribute>();
+    String relationName = new String();
+    int labels = 0;
+    int c = 0;
+    Vector<Attribute> attributes = new Vector<Attribute>();
 	
-	public void convertir (String nombreFicheroMeka, String nombreFicheroMulan)
-	{
-		FileReader frEntrada = null;
-		BufferedReader br = null;
-		FileWriter salidaARFF = null;
-		PrintWriter pwARFF = null;
-		FileWriter salidaXML = null;
-		PrintWriter pwXML = null;
-		
-		try{
-			frEntrada = new FileReader(nombreFicheroMeka + ".arff");
-			br = new BufferedReader(frEntrada);
+    public void convert (String mekaFileName, String mulanFileName)
+    {
+        FileReader frIn = null;
+	BufferedReader br = null;
+	FileWriter outArff = null;
+	PrintWriter pwARFF = null;
+	FileWriter outXML = null;
+	PrintWriter pwXML = null;
+        
+        try{
+            frIn = new FileReader(mekaFileName + ".arff");
+            br = new BufferedReader(frIn);
 			
-			salidaARFF = new FileWriter(nombreFicheroMulan + ".arff");
-			pwARFF = new PrintWriter(salidaARFF);
-			salidaXML = new FileWriter(nombreFicheroMulan + ".xml");
-			pwXML = new PrintWriter(salidaXML);
+            outArff = new FileWriter(mulanFileName + ".arff");
+            pwARFF = new PrintWriter(outArff);
+            outXML = new FileWriter(mulanFileName + ".xml");
+            pwXML = new PrintWriter(outXML);
 			
-			String linea = new String();
-			String [] palabra;
-			
-			while((linea=br.readLine()) != null)
-			{
-				palabra = linea.split(" ");
+            String line = new String();
+            String [] words;
+            
+            while((line=br.readLine()) != null)
+            {
+                words = line.split(" ");
 				
-				if(palabra[0].toLowerCase().equals("@relation"))
-				{
-					palabra = linea.split("-C");
-					relationName = nombreFicheroMulan;
+                if(words[0].toLowerCase().equals("@relation"))
+		{
+                    words = line.split("-C");
+                    relationName = mulanFileName;   
+                    
+                    words = words[1].split("[^0-9\\-]");
+                    
+                    c = Integer.parseInt(words[1]);
+                    labels = Math.abs(c);
 
-					palabra = palabra[1].split("[^0-9\\-]");
-					
-					c = Integer.parseInt(palabra[1]);
-					labels = Math.abs(c);
-					System.out.println("Labels: " + labels);
-					
-					pwARFF.println("@relation " + relationName);
-					pwARFF.println();
-				}
-				else if(palabra[0].toLowerCase().equals("@attribute"))
-				{
-					Attribute atr = new Attribute();
-					
-					atr.name = obtenerNombreAtributo(linea);
-					atr.type = obtenerTipoAtributo(linea);
-					
-					atributos.addElement(atr);
-					
-					pwARFF.println(linea);
-				}
-				else if(palabra[0].toLowerCase().equals("@data"))
-				{
-					pwARFF.println();
-					pwARFF.println(linea);
-					
-					while((linea=br.readLine()) != null)
-						pwARFF.println(linea);
-				}
-			}
-			
-			/*
-			 * Creacion del fichero XML
-			 */
-			
-			pwXML.println("<?xml version=\"1.0\" ?>");
-			pwXML.println("<labels xmlns=\"http://mulan.sourceforge.net/labels\">");
-			
-			Attribute a = new Attribute();
-			
-			if(c > 0)
-			{
-				for(int i=0; i<labels; i++)
-				{
-					a = atributos.get(i);
-					/* El caracter de escape para replaceAll es \\
-					 * 		Asi que reemplazamos \' por '
-					 */
-					pwXML.println("<label name=\"" + a.name.replaceAll("\\\\\'", "\\'") + "\"> </label>");
-				}
-			}
-			else if(c < 0)
-			{
-				int x = atributos.size();
-				for(int i=(x-labels); i<x; i++)
-				{
-					a = atributos.get(i);
-					pwXML.println("<label name=\"" + a.name.replaceAll("\\\\\'", "\\'") + "\"> </label>");
-				}
-			}
-			
-			pwXML.println("</labels>");
+                    pwARFF.println("@relation " + relationName);
+                    pwARFF.println();
 		}
-		catch(Exception e1)
+		else if(words[0].toLowerCase().equals("@attribute"))
 		{
-			e1.printStackTrace();
+                    Attribute atr = new Attribute();
+					
+                    atr.name = getAttributeName(line);
+                    atr.type = getAttributeType(line);
+                    
+                    attributes.addElement(atr);
+					
+                    pwARFF.println(line);
 		}
-		finally
+		else if(words[0].toLowerCase().equals("@data"))
 		{
-			try{
-				if(salidaARFF != null)
-					salidaARFF.close();
-				if(salidaXML != null)
-					salidaXML.close();
-				if(frEntrada != null)
-					frEntrada.close();
-			}
-			catch(Exception e2){
-				e2.printStackTrace();
-			}
+                    pwARFF.println();
+                    pwARFF.println(line);
+					
+                    while((line=br.readLine()) != null) {
+                        pwARFF.println(line);
+                    }
+                }
+            }
+			
+            /*
+             * Generating XML file
+             */
+            
+            pwXML.println("<?xml version=\"1.0\" ?>");
+            pwXML.println("<labels xmlns=\"http://mulan.sourceforge.net/labels\">");
+			
+            Attribute a = new Attribute();
+			
+            if(c > 0)
+            {
+                for(int i=0; i<labels; i++)
+                {
+                    a = attributes.get(i);
+                    /* scape caracter is \\
+                     * 		replace \' by '
+                     */
+                    pwXML.println("<label name=\"" + a.name.replaceAll("\\\\\'", "\\'") + "\"> </label>");
 		}
-		
-		System.out.println("End");
+            }
+            else if(c < 0)
+            {
+                int x = attributes.size();
+                for(int i=(x-labels); i<x; i++)
+		{
+                    a = attributes.get(i);
+                    pwXML.println("<label name=\"" + a.name.replaceAll("\\\\\'", "\\'") + "\"> </label>");
+		}
+            }
+			
+            pwXML.println("</labels>");
+	} catch(Exception e1) { 
+            e1.printStackTrace();
+	} finally {
+            try{
+                if(outArff != null) {
+                    outArff.close();
+                }
+		if(outXML != null) {
+                    outXML.close();
+                }
+		if(frIn != null) {
+                    frIn.close();
+                }
+            } catch(Exception e2){
+                e2.printStackTrace();
+            }
 	}
+    }
 	
 	
-	public String obtenerNombreAtributo(String s)
+    public String getAttributeName(String s)
+    {
+        //Remove '@attribute' -> 10 caracteres
+        s = s.substring(10);
+        s = s.trim();
+		
+	int init = 0;
+	int end = s.length();
+        boolean quotes = false;
+        
+        for(int i=0; i<s.length(); i++)
 	{
-		//Quitamos primero '@attribute' -> Son 10 caracteres
-		s = s.substring(10);
-		
-		//Dejamos la cadena sin espacios al principio y al final
-		s = s.trim();
-		
-		int inicio = 0;
-		int fin = s.length();
-		boolean comillas = false;
-		
-		for(int i=0; i<s.length(); i++)
-		{
-			if(s.charAt(i) == '\\')
-			{
-				//Si es el simbolo de escape, saltamos el siguiente caracter
-				i++;
-			}
-			else if((s.charAt(i) == '\'') && (comillas == false))
-			{
-				//Si encontramos una primera comilla
-				//El inicio del name del atributo sera aqui
-				inicio = i;
-				comillas = true;
-			}
-			else if((s.charAt(i) == '\'') && (comillas == true))
-			{
-				//Si encontramos una segunda comilla
-				//El final del name de atributo esta aqui
-				fin = i;
-				break; //Salimos del for
-			}
-		}
-		
-		if(comillas == true)
-		{	
-			s = s.substring(inicio+1, fin); 
-		}
-		else
-			s = s.split(" ")[0];
-		
-		return s;
+            if(s.charAt(i) == '\\')
+            {
+                //If scape symbol, go to the next character
+		i++;
+            }
+            else if((s.charAt(i) == '\'') && (quotes == false))
+            {
+                //If first quote: starting attribute name
+                init = i;
+		quotes = true;
+            }
+            else if((s.charAt(i) == '\'') && (quotes == true))
+            {
+                //If second quote: end attribute name
+                end = i;
+		break; //Salimos del for
+            }
 	}
+		
+	if(quotes == true)
+	{	
+            s = s.substring(init+1, end); 
+	}
+        else {
+            s = s.split(" ")[0];
+        }
+	
+        return s;
+    }
 	
 	
-	public String obtenerTipoAtributo(String s)
-	{
-		String [] palabra;
+    public String getAttributeType(String s)
+    {
+        String [] palabra;
 		
-		palabra = s.split(" ");
+        palabra = s.split(" ");
 		
-		return palabra[palabra.length - 1];
-	}
+	return palabra[palabra.length - 1];
+    }
 }
