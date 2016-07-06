@@ -1,19 +1,18 @@
 package conversion;
 
-
 public class Attribute {
-	String nombre;
-	String tipo;
+    String name;
+    String type;
+    
+    Attribute()
+    {
+        name = new String();
+	type = new String();
+    }
 	
-	Attribute()
-	{
-		nombre = new String();
-		tipo = new String();
-	}
-	
-	Attribute(String nombre, String tipo)
-	{
-		this.nombre = nombre;
-		this.tipo = tipo;
-	}
+    Attribute(String nombre, String tipo)
+    {
+        this.name = nombre;
+	this.type = tipo;
+    }
 }

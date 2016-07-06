@@ -54,8 +54,8 @@ public class MekaToMulan {
 				{
 					Attribute atr = new Attribute();
 					
-					atr.nombre = obtenerNombreAtributo(linea);
-					atr.tipo = obtenerTipoAtributo(linea);
+					atr.name = obtenerNombreAtributo(linea);
+					atr.type = obtenerTipoAtributo(linea);
 					
 					atributos.addElement(atr);
 					
@@ -88,7 +88,7 @@ public class MekaToMulan {
 					/* El caracter de escape para replaceAll es \\
 					 * 		Asi que reemplazamos \' por '
 					 */
-					pwXML.println("<label name=\"" + a.nombre.replaceAll("\\\\\'", "\\'") + "\"> </label>");
+					pwXML.println("<label name=\"" + a.name.replaceAll("\\\\\'", "\\'") + "\"> </label>");
 				}
 			}
 			else if(c < 0)
@@ -97,7 +97,7 @@ public class MekaToMulan {
 				for(int i=(x-labels); i<x; i++)
 				{
 					a = atributos.get(i);
-					pwXML.println("<label name=\"" + a.nombre.replaceAll("\\\\\'", "\\'") + "\"> </label>");
+					pwXML.println("<label name=\"" + a.name.replaceAll("\\\\\'", "\\'") + "\"> </label>");
 				}
 			}
 			
@@ -148,14 +148,14 @@ public class MekaToMulan {
 			else if((s.charAt(i) == '\'') && (comillas == false))
 			{
 				//Si encontramos una primera comilla
-				//El inicio del nombre del atributo sera aqui
+				//El inicio del name del atributo sera aqui
 				inicio = i;
 				comillas = true;
 			}
 			else if((s.charAt(i) == '\'') && (comillas == true))
 			{
 				//Si encontramos una segunda comilla
-				//El final del nombre de atributo esta aqui
+				//El final del name de atributo esta aqui
 				fin = i;
 				break; //Salimos del for
 			}

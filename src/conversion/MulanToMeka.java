@@ -107,13 +107,13 @@ public class MulanToMeka {
 				{
 					Attribute atr = new Attribute();
 
-					atr.nombre = obtenerNombreAtributo(linea);
-					atr.tipo = obtenerTipoAtributo(linea);
+					atr.name = obtenerNombreAtributo(linea);
+					atr.type = obtenerTipoAtributo(linea);
 					
 					/* Almacenamos el numero de atributo en el fichero original */
 					correspOriginal.put(n, obtenerNombreAtributo(linea));
 					
-					if(isLabel(atr.nombre)){
+					if(isLabel(atr.name)){
 						labels.addElement(atr);
 					}
 					else{	
@@ -132,30 +132,30 @@ public class MulanToMeka {
 					{
 						a = atributos.get(i);
 						
-						if (a.nombre.indexOf(" ") != -1){
-							pwARFF.println("@attribute " + "\'" + a.nombre + "\'" + " " + a.tipo);
+						if (a.name.indexOf(" ") != -1){
+							pwARFF.println("@attribute " + "\'" + a.name + "\'" + " " + a.type);
 						}
 						else
-							pwARFF.println("@attribute " + a.nombre + " " + a.tipo);
+							pwARFF.println("@attribute " + a.name + " " + a.type);
 						
 						/*Almacenamos el numero de atributo en el nuevo fichero */
-						correspNueva.put(a.nombre, n);
+						correspNueva.put(a.name, n);
 						n++;
 					}
 					for(int i=0; i<nLabels; i++)
 					{
 						a = labels.get(i);
 						
-						if (a.nombre.indexOf(" ") != -1)
+						if (a.name.indexOf(" ") != -1)
 						{
-							//Si tiene espacios el nombre
-							pwARFF.println("@attribute " + "\'" + a.nombre + "\'" + " " + "{0,1}");
+							//Si tiene espacios el name
+							pwARFF.println("@attribute " + "\'" + a.name + "\'" + " " + "{0,1}");
 						}
 						else
-							pwARFF.println("@attribute " + a.nombre + " " + "{0,1}");
+							pwARFF.println("@attribute " + a.name + " " + "{0,1}");
 						
 						/*Almacenamos el numero de atributo en el nuevo fichero */
-						correspNueva.put(a.nombre, n);
+						correspNueva.put(a.name, n);
 						n++;
 					}
 					
@@ -349,14 +349,14 @@ public class MulanToMeka {
 			else if((s.charAt(i) == '\'') && (comillas == false))
 			{
 				//Si encontramos una primera comilla
-				//El inicio del nombre del atributo sera aqui
+				//El inicio del name del atributo sera aqui
 				inicio = i;
 				comillas = true;
 			}
 			else if((s.charAt(i) == '\'') && (comillas == true))
 			{
 				//Si encontramos una segunda comilla
-				//El final del nombre de atributo esta aqui
+				//El final del name de atributo esta aqui
 				fin = i;
 				break; //Salimos del for
 			}
