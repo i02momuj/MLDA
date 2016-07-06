@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package models;
 
 import javax.swing.table.AbstractTableModel;
 
 /**
- *
- * @author oscglezm
+ * 
+ * @author Jose Maria Moyano Murillo
  */
 public class AbstractTableModel1 extends AbstractTableModel{
     
@@ -21,20 +17,24 @@ public class AbstractTableModel1 extends AbstractTableModel{
         this.column = column;
     }
     
+    @Override
     public int getColumnCount() {
         return 1;
-      }
+    }
 
-      public int getRowCount() {
+    @Override
+    public int getRowCount() {
         return data.length;
-      }
+    }
 
-      public String getColumnName(int col) {
+    @Override
+    public String getColumnName(int col) {
         return (String) column[col];
-      }
+    }
 
-      public Object getValueAt(int row, int col) {
+    @Override
+    public Object getValueAt(int row, int col) {
         return data[row][col];
-      }
+    }
     
 }

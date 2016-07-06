@@ -1,5 +1,9 @@
 package conversion;
 
+/**
+ * 
+ * @author Jose Maria Moyano Murillo
+ */
 public class Attribute {
     String name;
     String type;

@@ -1,9 +1,12 @@
 package conversion;
 
-
 import java.io.*;
 import java.util.*;
 
+/**
+ * 
+ * @author Jose Maria Moyano Murillo
+ */
 public class MekaToMulan {
 
     String relationName = new String();

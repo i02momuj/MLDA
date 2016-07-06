@@ -1,6 +1,5 @@
 package conversion;
 
-
 import java.io.*;
 import java.util.*;
 
@@ -14,6 +13,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+/**
+ * 
+ * @author Jose Maria Moyano Murillo
+ */
 public class MulanToMeka {
     
     /* Raltion name */
