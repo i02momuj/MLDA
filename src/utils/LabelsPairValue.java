@@ -38,7 +38,6 @@ public class LabelsPairValue implements Comparable<LabelsPairValue>{
         }
     }
     
-    @Override
     public String toString(){
         return("[" + label1 + ", " + label2 + "] - " + value);
     }
