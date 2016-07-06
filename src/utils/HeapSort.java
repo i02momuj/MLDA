@@ -1,15 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package utils;
 
-
 /**
- *
- * @author oscglezm
+ * 
+ * @author Jose Maria Moyano Murillo
  */
- public class HeapSort 
+public class HeapSort 
 { 
     private static double[] a; 
     private static int n; 
@@ -24,7 +19,9 @@ package utils;
         } 
     } 
     
-    public static double[] get_array_sorted(){return a;}
+    public static double[] getSortedArray(){
+        return a;
+    }
     
     public static void maxheap(double[] a, int i){ 
         left=2*i; 
@@ -45,14 +42,16 @@ package utils;
         } 
     } 
     
+    
     public static void exchange(int i, int j){ 
         double t=a[i]; 
         a[i]=a[j]; 
         a[j]=t; 
-        } 
+    } 
+    
     
     public static void sort(double []a0){ 
-        a=a0; 
+        a = a0; 
         buildheap(a); 
         
         for(int i=n;i>0;i--)

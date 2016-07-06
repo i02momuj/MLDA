@@ -1,74 +1,73 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package utils;
 
 /**
- *
- * @author osc
+ * 
+ * @author Jose Maria Moyano Murillo
  */
 public class ImbalancedFeature {
     
     private String name;
-    private int frequency;
-    private double ir;
+    private int appearances;
+    private double IRIntraClass;
     private double variance;
-    double ir_inter_class;
+    double IRInterClass;
     
-    public ImbalancedFeature(String name)
+    
+    public ImbalancedFeature(String name, int appearances)
     {
         this.name = name;
-        frequency =-1;
-        ir=-1;
+        this.appearances = appearances;
+        IRIntraClass=-1;
         variance=-1;
-        ir_inter_class=-1;
+        IRInterClass=-1;
     }
     
-    public ImbalancedFeature(String name, int frequency)
+    public ImbalancedFeature(String name, double IRIntraClass, double variance)
     {
         this.name = name;
-        this.frequency = frequency;
-        ir=-1;
-        variance=-1;
-        ir_inter_class=-1;
-    }
-    
-    public ImbalancedFeature(String name, double ir, double variance)
-    {
-        this.name = name;
-        frequency =-1;
-        this.ir = ir;
+        appearances =-1;
+        this.IRIntraClass = IRIntraClass;
         this.variance = variance;
-        ir_inter_class=-1;
+        IRInterClass=-1;
     }
     
-    public ImbalancedFeature(String name, int frequency, double ir)
+    public ImbalancedFeature(String name, int appearances, double IRIntraClass)
     {
         this.name = name;
-        this.frequency=frequency ;
-        this.ir = ir;
-         variance=-1;
-         ir_inter_class=-1;
+        this.appearances=appearances ;
+        this.IRIntraClass = IRIntraClass;
+        variance=-1;
+        IRInterClass=-1;
     }
     
-    public ImbalancedFeature(String name, int frequency, double ir, double variance, double ir_inter_class)
+    public ImbalancedFeature(String name, int appearances, double IRIntraClass, 
+            double variance, double IRInterClass)
     {
         this.name = name;
-        this.frequency=frequency ;
-        this.ir = ir;
+        this.appearances=appearances ;
+        this.IRIntraClass = IRIntraClass;
         this.variance=variance;
-         this.ir_inter_class= ir_inter_class;
+        this.IRInterClass= IRInterClass;
     }
     
-    public String get_name() { return name; }
+    public String getName() { 
+        return name; 
+    }
     
-    public int get_frequency(){return frequency;}
+    public int getAppearances(){
+        return appearances;
+    }
     
-    public double get_ir(){return ir;}
+    public double getIRIntraClass(){
+        return IRIntraClass;
+    }
     
-    public double get_variance(){return variance;}
+    public double getVariance(){
+        return variance;
+    }
     
-    public double get_ir_inter_class(){return ir_inter_class;}
+    public double getIRInterClass(){
+        return IRInterClass;
+    }
     
 }

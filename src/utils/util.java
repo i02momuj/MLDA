@@ -352,7 +352,7 @@ public class util {
              current = label_imbalanced[i];
              if(encontrados == cant_etiquetas_encontradas) break;
              
-             truncate_current = Double.toString(current.get_ir_inter_class());
+             truncate_current = Double.toString(current.getIRInterClass());
             //System.out.println("truncate_current1: " + truncate_current);
              truncate_current = Truncate_values_aprox_zero(truncate_current, 5);
              
@@ -361,7 +361,7 @@ public class util {
              if(current_ir == ir)
              {
                  encontrados++;
-                 labelnames.add(current.get_name());
+                 labelnames.add(current.getName());
              }
          }
          return labelnames;
@@ -379,10 +379,10 @@ public class util {
              current = label_imbalanced[i];
              if(encontrados == cant_etiquetas_encontradas) break;
              
-             if(current.get_ir() == ir)
+             if(current.getIRIntraClass() == ir)
              {
                  encontrados++;
-                 labelnames.add(current.get_name());
+                 labelnames.add(current.getName());
              }
          }
          return labelnames;
@@ -402,14 +402,14 @@ public class util {
              current = label_imbalanced[i];
              if(encontrados == cant_etiquetas_encontradas) break;
              
-             truncate = Double.toString(current.get_ir());
+             truncate = Double.toString(current.getIRIntraClass());
              truncate = util.Truncate_values_aprox_zero(truncate, 5);
              current_truncate = Double.parseDouble(truncate);
              
              if(current_truncate == ir)
              {
                  encontrados++;
-                 labelnames.add(current.get_name());
+                 labelnames.add(current.getName());
              }
          }
          return labelnames;
@@ -448,12 +448,12 @@ public class util {
             double sum = 0.0;
             for(int i=0; i<label_x_frequency.length;i++)
             {
-                prob= label_x_frequency[i].get_frequency()*1.0/cant_instancias;
+                prob= label_x_frequency[i].getAppearances()*1.0/cant_instancias;
                 sum += prob;
-               ////System.out.println(" TESTING "+label_x_frequency[i].get_name()+" "+label_x_frequency[i].get_frequency() +" "+ prob);
+               ////System.out.println(" TESTING "+label_x_frequency[i].getName()+" "+label_x_frequency[i].getAppearances() +" "+ prob);
                                 
                     //type === bar
-                    my_data.setValue(prob, label_x_frequency[i].get_name()," ");               
+                    my_data.setValue(prob, label_x_frequency[i].getName()," ");               
             }
           
             cp.setDataset(my_data);
@@ -485,7 +485,7 @@ public class util {
             {
                 prob= IR[i];           
                 sum += prob;
-                my_data.setValue(prob, label_x_frequency[i].get_name()," ");      
+                my_data.setValue(prob, label_x_frequency[i].getName()," ");      
             }
           
             cp.setDataset(my_data);
@@ -525,9 +525,9 @@ public class util {
             for(int i=labelset_x_IR.length-1; i>=0; i--)
             {
                 //prob= IR[i];   
-                prob = labelset_x_IR[i].get_ir_inter_class();
+                prob = labelset_x_IR[i].getIRInterClass();
                 sum += prob;
-                my_data.setValue(prob, labelset_x_IR[i].get_name()," ");      
+                my_data.setValue(prob, labelset_x_IR[i].getName()," ");      
             }
           
             cp.setDataset(my_data);
@@ -1143,7 +1143,7 @@ public class util {
         double[] label_frequency = new double[label_freq.length];
         
         for(int i=0;i<label_freq.length; i++)
-            label_frequency[i]=(double)label_freq[i].get_frequency();
+            label_frequency[i]=(double)label_freq[i].getAppearances();
         
         return label_frequency;
     }
@@ -1426,7 +1426,7 @@ public class util {
      public static boolean Esta_Atributo (ArrayList<String> visitados , ImbalancedFeature actual)
      {
          for( String current : visitados)
-             if(current.equals(actual.get_name())) return true;
+             if(current.equals(actual.getName())) return true;
          
          return false;
      }
@@ -1443,7 +1443,7 @@ public class util {
                  if(mayor == null) mayor = current;
                  else
                  {
-                     if(mayor.get_ir() <= current.get_ir() && mayor.get_variance() < current.get_variance()) mayor = current;
+                     if(mayor.getIRIntraClass() <= current.getIRIntraClass() && mayor.getVariance() < current.getVariance()) mayor = current;
                  }
              }
          }
@@ -1462,7 +1462,7 @@ public class util {
                  if(mayor == null) mayor = current;
                  else
                  {
-                     if(mayor.get_ir_inter_class()<= current.get_ir_inter_class()&& mayor.get_variance() < current.get_variance()) mayor = current;
+                     if(mayor.getIRInterClass()<= current.getIRInterClass()&& mayor.getVariance() < current.getVariance()) mayor = current;
                  }
              }
          }
@@ -1481,7 +1481,7 @@ public class util {
                  if(menor == null) menor = current;
                  else
                  {
-                     if(menor.get_ir() >= current.get_ir() && menor.get_variance() > current.get_variance()) menor = current;
+                     if(menor.getIRIntraClass() >= current.getIRIntraClass() && menor.getVariance() > current.getVariance()) menor = current;
                  }
              }
          }
@@ -1617,7 +1617,7 @@ public class util {
             if(current ==null) break;
             
             ordenados[i]=current;
-            visitados.add(current.get_name());
+            visitados.add(current.getName());
             
         }
         
@@ -1638,7 +1638,7 @@ public class util {
             if(current ==null) break;
             
             ordenados[i]=current;
-            visitados.add(current.get_name());
+            visitados.add(current.getName());
             
         }
         
@@ -1659,7 +1659,7 @@ public class util {
             if(current ==null) break;
             
             ordenados[i]=current;
-            visitados.add(current.get_name());
+            visitados.add(current.getName());
             
         }
         
@@ -1709,17 +1709,17 @@ public class util {
              
              current_label_freq = Get_label_x_labelname(current.name(),label_frequency);
              
-             mayor_ocurrencia = label_frequency[0].get_frequency();
+             mayor_ocurrencia = label_frequency[0].getAppearances();
              
-             if(current_label_freq.get_frequency() <= 0){
+             if(current_label_freq.getAppearances() <= 0){
                  ir_inter_class = Double.NaN;
              }
              else{
-                 ir_inter_class = mayor_ocurrencia/(current_label_freq.get_frequency()*1.0);
+                 ir_inter_class = mayor_ocurrencia/(current_label_freq.getAppearances()*1.0);
              }
              
              
-             labels_imbalanced[i]= new ImbalancedFeature(current.name(),current_label_freq.get_frequency(),ir, variance, ir_inter_class);
+             labels_imbalanced[i]= new ImbalancedFeature(current.name(),current_label_freq.getAppearances(),ir, variance, ir_inter_class);
              
              cantidad_0=0;
              cantidad_1=0;
@@ -1832,7 +1832,7 @@ public class util {
         ImbalancedFeature mayor = lista.get(0);
                
         for(ImbalancedFeature current : lista)
-          if(current.get_frequency()>mayor.get_frequency()) mayor = current;
+          if(current.getAppearances()>mayor.getAppearances()) mayor = current;
             
         return mayor;       
     }
@@ -1844,7 +1844,7 @@ public class util {
         ImbalancedFeature menor = lista.get(0);
                
         for(ImbalancedFeature current : lista)
-          if(current.get_frequency()<menor.get_frequency()) menor = current;
+          if(current.getAppearances()<menor.getAppearances()) menor = current;
             
         return menor;       
     }
@@ -1859,8 +1859,8 @@ public class util {
         
         for(int i=0; i<data_imbalanced.length;i++)
         {
-            if(current > data_imbalanced[i].get_ir()) return cant_veces;
-           if(current == data_imbalanced[i].get_ir()) cant_veces++;
+            if(current > data_imbalanced[i].getIRIntraClass()) return cant_veces;
+           if(current == data_imbalanced[i].getIRIntraClass()) cant_veces++;
         }
         
         return cant_veces;
@@ -3801,7 +3801,7 @@ public class util {
    {
        for(int i=0;i<lista.length; i++)
        {
-           if(labelname.equals(lista[i].get_name())) return lista[i];
+           if(labelname.equals(lista[i].getName())) return lista[i];
        }
        return null;
    }
@@ -5904,12 +5904,12 @@ public class util {
          
          for( AttributesPair current : lista_pares)
          {
-             i= current.get_ind_att1();
-             j= current.get_ind_att2();
+             i= current.getAttribute1Index();
+             j= current.getAttribute2Index();
              
-             probabilidad_att1_att2 = current.get_cant_veces()/(double)cant_instancias;
-             probabilidad_att1 = current.get_cant_att1()/(double)cant_instancias;
-             probabilidad_att2 = current.get_cant_att2()/(double)cant_instancias;
+             probabilidad_att1_att2 = current.getAppearances()/(double)cant_instancias;
+             probabilidad_att1 = current.getAttribute1Appearances()/(double)cant_instancias;
+             probabilidad_att2 = current.getAttribute2Appearances()/(double)cant_instancias;
              
              get_pair_label[i][j]= probabilidad_att1_att2/probabilidad_att2;                               
              get_pair_label[j][i]= probabilidad_att1_att2/probabilidad_att1;
@@ -5943,9 +5943,9 @@ public class util {
                if(current !=null) 
                {
                    
-                probabilidad_att1_att2 = current.get_cant_veces()/(double)cant_instancias;
-                probabilidad_att1 = current.get_cant_att1()/(double)cant_instancias;
-                probabilidad_att2 = current.get_cant_att2()/(double)cant_instancias;
+                probabilidad_att1_att2 = current.getAppearances()/(double)cant_instancias;
+                probabilidad_att1 = current.getAttribute1Appearances()/(double)cant_instancias;
+                probabilidad_att2 = current.getAttribute2Appearances()/(double)cant_instancias;
              
                 get_pair_label[i][j]= probabilidad_att1_att2/probabilidad_att2;                               
                 get_pair_label[j][i]= probabilidad_att1_att2/probabilidad_att1;
@@ -5960,12 +5960,12 @@ public class util {
          /*
          for( AttributesPair current : lista_pares)
          {
-             i= current.get_ind_att1();
-             j= current.get_ind_att2();
+             i= current.getAttribute1Index();
+             j= current.getAttribute2Index();
              
-             probabilidad_att1_att2 = current.get_cant_veces()/(double)cant_instancias;
-             probabilidad_att1 = current.get_cant_att1()/(double)cant_instancias;
-             probabilidad_att2 = current.get_cant_att2()/(double)cant_instancias;
+             probabilidad_att1_att2 = current.getAppearances()/(double)cant_instancias;
+             probabilidad_att1 = current.getAttribute1Appearances()/(double)cant_instancias;
+             probabilidad_att2 = current.getAttribute2Appearances()/(double)cant_instancias;
              
              get_pair_label[i][j]= probabilidad_att1_att2/probabilidad_att2;                               
              get_pair_label[j][i]= probabilidad_att1_att2/probabilidad_att1;
@@ -6032,14 +6032,14 @@ public class util {
         
         for(AttributesPair actual : mi_lista)
         {
-            if(actual.get_name_attr1()==labelname) 
+            if(actual.getAttributeName1()==labelname) 
             {
-                result.add(actual.get_name_attr2());
+                result.add(actual.getAttributeName2());
      
             }
-           else if(actual.get_name_attr2()==labelname)
+           else if(actual.getAttributeName2()==labelname)
            {
-               result.add(actual.get_name_attr1());
+               result.add(actual.getAttributeName1());
      
            }
             
@@ -6082,7 +6082,7 @@ public class util {
         double[] result = new double[label_imbalanced.length];
         
         for(int i=0; i<label_imbalanced.length; i++)
-            result[i]=label_imbalanced[i].get_ir();
+            result[i]=label_imbalanced[i].getIRIntraClass();
         
         return result;    
     
@@ -6095,18 +6095,18 @@ public class util {
         
         double[] ir_inter_class = new double[label_freq.length];
         
-        int mayor= label_freq_sorted[0].get_frequency();
+        int mayor= label_freq_sorted[0].getAppearances();
         double value;
         
         double media=0;
         
         for(int i=0;i<label_freq_sorted.length; i++)
         {
-            if(label_freq_sorted[i].get_frequency() <= 0){
+            if(label_freq_sorted[i].getAppearances() <= 0){
                 value = Double.NaN;
             }
             else{
-                value = mayor/(label_freq_sorted[i].get_frequency()*1.0);
+                value = mayor/(label_freq_sorted[i].getAppearances()*1.0);
             }
             
             ir_inter_class[i] = value;
@@ -6125,7 +6125,7 @@ public class util {
     {
         for(int i=0 ; i<lista_attr_freq.length; i++)
         {
-            if(lista_attr_freq[i].get_name().equals(label_name)) return lista_attr_freq[i].get_frequency();
+            if(lista_attr_freq[i].getName().equals(label_name)) return lista_attr_freq[i].getAppearances();
         }
         return -1;//es que no aparece el nombre de la etiqueta
     }
@@ -6235,7 +6235,7 @@ public class util {
                
                if(current !=null) 
                {
-                 pares_freq[i][j]=current.get_cant_veces()/(num_instances*1.0);
+                 pares_freq[i][j]=current.getAppearances()/(num_instances*1.0);
                }
                //current =null;
            }
@@ -6250,8 +6250,8 @@ public class util {
     {
       for(AttributesPair current : lista)
       {
-          if(par1.equals(current.get_name_attr1()) && par2.equals(current.get_name_attr2())) return current;
-          else if (par2.equals(current.get_name_attr1()) && par1.equals(current.get_name_attr2())) return current;
+          if(par1.equals(current.getAttributeName1()) && par2.equals(current.getAttributeName2())) return current;
+          else if (par2.equals(current.getAttributeName1()) && par1.equals(current.getAttributeName2())) return current;
       }
       return null;
     }
@@ -6261,7 +6261,7 @@ public class util {
         int mayor=0;
         
         for(AttributesPair current : lista)
-            if(mayor<current.get_cant_veces()) mayor=(int)current.get_cant_veces();
+            if(mayor<current.getAppearances()) mayor=(int)current.getAppearances();
         
         return mayor;        
     }
@@ -6280,10 +6280,10 @@ public class util {
     
     public static int get_valor_min_entre_pares_atrr (ArrayList<AttributesPair> lista)
     {
-        int min=(int)lista.get(0).get_cant_veces();
+        int min=(int)lista.get(0).getAppearances();
         
         for(AttributesPair current : lista)
-            if(min >current.get_cant_veces()) min=(int)current.get_cant_veces();
+            if(min >current.getAppearances()) min=(int)current.getAppearances();
         
         return min;        
     }
@@ -6341,8 +6341,8 @@ public class util {
     {
         for( AttributesPair current : lista)
         {
-            if(current.get_name_attr1().equals(att1) && current.get_name_attr2().equals(att2))return current;
-            if(current.get_name_attr1().equals(att2) && current.get_name_attr2().equals(att1))return current;
+            if(current.getAttributeName1().equals(att1) && current.getAttributeName2().equals(att2))return current;
+            if(current.getAttributeName1().equals(att2) && current.getAttributeName2().equals(att1))return current;
         }
         return null;
     }
