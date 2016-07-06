@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package renders;
 
 import java.awt.Color;
@@ -10,29 +6,23 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
- *
- * @author oscglezm
+ * 
+ * @author Jose Maria Moyano Murillo
  */
 public class DefaultRender extends DefaultTableCellRenderer
 {
-
     public DefaultRender(){}
     
     
-     public Component getTableCellRendererComponent(JTable table,
-      Object value,
-      boolean isSelected,
-      boolean hasFocus,
-      int row,
-      int column )
-   {
-       super.getTableCellRendererComponent (table, value, isSelected, hasFocus, row, column);
+    public Component getTableCellRendererComponent(JTable table, Object value,
+            boolean isSelected, boolean hasFocus, int row, int column )
+    {
+        super.getTableCellRendererComponent (table, value, isSelected, hasFocus, row, column);
       
-       this.setForeground(Color.black);
+        this.setForeground(Color.black);
+        this.setOpaque(true);
        
-       this.setOpaque(true);
-       
-       return this;
-   }
+        return this;
+    }
     
 }

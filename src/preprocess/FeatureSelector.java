@@ -1,38 +1,27 @@
 package preprocess;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.nio.channels.FileChannel;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-
 import weka.attributeSelection.ASEvaluation;
 import weka.attributeSelection.ChiSquaredAttributeEval;
-import weka.core.Instances;
-//import weka.core.converters.ArffSaver;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Remove;
 import mulan.data.MultiLabelInstances;
 import mulan.dimensionalityReduction.BinaryRelevanceAttributeEvaluator;
 import mulan.dimensionalityReduction.Ranker;
 
+/**
+ * 
+ * @author Jose Maria Moyano Murillo
+ */
 public class FeatureSelector {
-
-	/**
-	 * @param args
-	 * @throws Exception 
-	 */
     
     private MultiLabelInstances dataset;
     
     private int nFeatures;
+    
     
     public FeatureSelector(MultiLabelInstances dataset, int nFeatures){
         this.dataset = dataset;
@@ -99,13 +88,9 @@ public class FeatureSelector {
             int[] toKeep = new int[nFeatures + dataset.getNumLabels()];
             
             System.arraycopy(attIndices, 0, toKeep, 0, nFeatures);
-           //System.out.println("toKeep1: " + Arrays.toString(toKeep));
 
             int[] labelIndices = dataset.getLabelIndices();
             System.arraycopy(labelIndices, 0, toKeep, nFeatures, dataset.getNumLabels());
-            
-           //System.out.println("nFeatures: " + nFeatures);
-           //System.out.println("toKeep2: " + Arrays.toString(toKeep));
             
             Remove filterRemove = new Remove();
             filterRemove.setAttributeIndicesArray(toKeep);
@@ -145,6 +130,5 @@ public class FeatureSelector {
         
         return modifiedDataset;
     }
-
 
 }
