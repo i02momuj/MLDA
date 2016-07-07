@@ -2,7 +2,12 @@ package utils;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.HashMap;
+import mulan.data.LabelsPair;
+import mulan.data.MultiLabelInstances;
+import mulan.data.Statistics;
+import mulan.data.UnconditionalChiSquareIdentifier;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.annotations.XYTextAnnotation;
 import org.jfree.chart.plot.CategoryPlot;
@@ -13,7 +18,9 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import static utils.util.calculateCoocurrences;
 import static utils.util.maxKey;
+import weka.core.Instances;
 
 /**
  *
@@ -273,4 +280,61 @@ public class ChartUtils {
             cp.getDomainAxis().setTickLabelsVisible(true);   
         }
     }
+    
+    
+    public static double[][] getCoocurrences (MultiLabelInstances dataset)
+    {
+        double [][] coocurrences;
+        coocurrences = calculateCoocurrences(dataset);
+        return(coocurrences);
+    }
+    
+    
+    public static double[][] getChiPhiCoefficients (MultiLabelInstances dataset)
+    {
+        double[][] coefficients = new double[dataset.getNumLabels()][dataset.getNumLabels()];
+        double phi, chi;
+        
+        try {                
+            UnconditionalChiSquareIdentifier depid = new UnconditionalChiSquareIdentifier();
+            LabelsPair[] pairs = depid.calculateDependence(dataset);
+            Statistics stat = new Statistics();
+            double [][] phiMatrix = stat.calculatePhi(dataset);
+                
+            for (LabelsPair pair : pairs) {
+                chi = pair.getScore();
+                phi = phiMatrix[pair.getPair()[0]][pair.getPair()[1]];
+                coefficients[pair.getPair()[0]][pair.getPair()[1]] = chi;
+                coefficients[pair.getPair()[1]][pair.getPair()[0]] = phi;
+            }   
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return coefficients;  
+    }
+    
+    
+    public static ArrayList<String> getVertices(String labelName, ArrayList<AttributesPair> list)
+    {
+        ArrayList<String> result = new ArrayList<>();    
+        
+        for(AttributesPair actual : list)
+        {
+            if(actual.getAttributeName1().equals(labelName)) 
+            {
+                result.add(actual.getAttributeName2());
+            }
+            else if(actual.getAttributeName2().equals(labelName))
+            {
+                result.add(actual.getAttributeName1());
+            }
+        }        
+        
+        return result;     
+    }
+    
+    
+    
 }

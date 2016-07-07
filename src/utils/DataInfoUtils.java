@@ -126,4 +126,30 @@ public class DataInfoUtils {
         }
         return null;
     }
+    
+    
+    public static int getLabelIndex (String[] labels, String labelName)
+    {
+        for(int i=0; i<labels.length;i++)
+        {
+            if(labelName.equals(labels[i])){
+                return i;
+            }
+        }
+        
+        return -1;
+    }
+    
+    
+    public static String[] getLabelNames(int[] labelIndices, Instances instances)
+    {
+        String[] labelName = new String[labelIndices.length];
+                
+        for(int i=0;i<labelIndices.length;i++)
+        {
+            labelName[i]=instances.attribute(labelIndices[i]).name();
+        }
+        
+        return labelName;
+    }
 }

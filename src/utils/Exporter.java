@@ -4,7 +4,6 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import javax.swing.JTable;
 import jxl.Workbook;
 import jxl.format.Alignment;
@@ -13,9 +12,6 @@ import jxl.write.WritableCellFormat;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
-import static utils.util.get_value_metric;
-import static utils.util.get_value_metric_imbalanced;
-import mulan.data.MultiLabelInstances;
 
 /**
  * 

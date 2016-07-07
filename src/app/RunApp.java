@@ -571,7 +571,7 @@ public class RunApp extends javax.swing.JFrame {
   
     private void create_jtable_metrics_principal(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_calculate,JButton button_save, JButton button_clear, int posx,int posy, int width, int heigh,String info)
     {
-        create_jtable_metric_principal(jtable,jpanel, util.Get_row_data_principal(),posx,posy,width,heigh);        
+        create_jtable_metric_principal(jtable,jpanel, MetricUtils.getRowData(),posx,posy,width,heigh);        
         //jtable.setToolTipText("<html>TOOLTIP<br>Hola<br>Tooltip<br></html>");
         //TableCellRenderer rTable = jtable.getCellRenderer(posy, posy);
         //JComponent row = (JComponent) jtable.prepareRenderer(rTable, 0, 0);
@@ -683,7 +683,7 @@ public class RunApp extends javax.swing.JFrame {
     private void create_jtable_metrics_multi(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_calculate,JButton button_save, int posx,int posy, int width, int heigh)
     {
 
-        create_jtable_metric_multi(jtable,jpanel, util.Get_row_data_multi(),posx,posy,width,heigh);  
+        create_jtable_metric_multi(jtable,jpanel, MetricUtils.getRowDataMulti(),posx,posy,width,heigh);  
         
         //button ALL
         button_all = new JButton("All");
@@ -5009,7 +5009,7 @@ public class RunApp extends javax.swing.JFrame {
     
     
     private void initTableMetrics(){
-        ArrayList<String> metricsList = util.Get_all_metrics();
+        ArrayList<String> metricsList = MetricUtils.getAllMetrics();
         
         tableMetrics.clear();
         
@@ -5024,7 +5024,7 @@ public class RunApp extends javax.swing.JFrame {
     }
     
     private void initTableMetricsMulti(String dataName){
-        ArrayList<String> metricsList = util.Get_metrics_multi();
+        ArrayList<String> metricsList = MetricUtils.Get_metrics_multi();
         
         tableMetricsMulti.get(dataName).clear();
         
@@ -5143,11 +5143,11 @@ public class RunApp extends javax.swing.JFrame {
 
                 for(int i=0;i<Label_name.length;i++)
                 {
-                    lista_del_otro_par=util.Get_lista_vertices_del_par(Label_name[i], mi_lista);
+                    lista_del_otro_par=ChartUtils.getVertices(Label_name[i], mi_lista);
 
                     for(String actual : lista_del_otro_par)
                     {
-                        int index = util.devuelve_indice(Label_name, actual);
+                        int index = DataInfoUtils.getLabelIndex(Label_name, actual);
 
                         temp =util.Search_and_get(Label_name[i], actual, mi_lista);
                         freq = temp.getAppearances()/(dataset.getNumInstances()*1.0);
@@ -5698,36 +5698,36 @@ public class RunApp extends javax.swing.JFrame {
         labelAttributesValue.setText(getMetricValueFormatted(attributes));
             
         //Labels
-        //labelLabelsValue.setText(util.getValueFormatted("Labels", util.get_value_metric("Labels", dataset, es_de_tipo_meka)));
+        //labelLabelsValue.setText(util.getValueFormatted("Labels", util.getMetricValue("Labels", dataset, es_de_tipo_meka)));
         labelLabelsValue.setText(getMetricValueFormatted(labels));    
         
         //Density
-        //String density = util.get_value_metric("Density", dataset, es_de_tipo_meka);
+        //String density = util.getMetricValue("Density", dataset, es_de_tipo_meka);
         //labelDensityValue.setText(util.getValueFormatted("Density", density));
         labelDensityValue.setText(getMetricValueFormatted(density));
                       
         //Cardinality
-        //String cardinality = util.get_value_metric("Cardinality", dataset, es_de_tipo_meka);
+        //String cardinality = util.getMetricValue("Cardinality", dataset, es_de_tipo_meka);
         //labelCardinalityValue.setText(util.getValueFormatted("Cardinality", cardinality));
         labelCardinalityValue.setText(getMetricValueFormatted(cardinality));
             
         //Diversity      
-        //String diversity = util.get_value_metric("Diversity", dataset, es_de_tipo_meka);
+        //String diversity = util.getMetricValue("Diversity", dataset, es_de_tipo_meka);
         //labelDiversityValue.setText(util.getValueFormatted("Diversity", diversity));
         labelDiversityValue.setText(getMetricValueFormatted(diversity));
                 
         //Bound
-        //String bound = util.get_value_metric("Bound", dataset, es_de_tipo_meka);
+        //String bound = util.getMetricValue("Bound", dataset, es_de_tipo_meka);
         //labelBoundValue.setText(util.getValueFormatted("Bound", bound));
         labelBoundValue.setText(getMetricValueFormatted(bound));
                 
         //Distinct labelset     
-        //String distinct_labelset = util.get_value_metric("Distinct labelsets", dataset, es_de_tipo_meka);
+        //String distinct_labelset = util.getMetricValue("Distinct labelsets", dataset, es_de_tipo_meka);
         //labelDistinctValue.setText(util.getValueFormatted("Distinct labelsets", distinct_labelset));
         labelDistinctValue.setText(getMetricValueFormatted(distinct));
                 
         //LxIxF
-        //String LIF = util.get_value_metric("Labels x instances x features", dataset, es_de_tipo_meka);
+        //String LIF = util.getMetricValue("Labels x instances x features", dataset, es_de_tipo_meka);
         //labelLxIxFValue.setText(util.getValueFormatted("Labels x instances x features", LIF));    
         labelLxIxFValue.setText(getMetricValueFormatted(lif));
     }
@@ -6000,10 +6000,10 @@ public class RunApp extends javax.swing.JFrame {
             progressBar.setValue(v);
             //If metric value exists, don't calculate
            if((tableMetrics.get(metric) == null) || (tableMetrics.get(metric).equals("-"))){
-               value = util.get_value_metric(metric, dataset, es_de_tipo_meka);
-                if(value.equals("-1.0") || value.equals("-1,0")){
-                    value = util.get_value_metric_imbalanced(metric, dataset, imbalanced_data);
-                } 	
+               value = MetricUtils.getMetricValue(metric, dataset);
+                //if(value.equals("-1.0") || value.equals("-1,0")){
+                  //  value = util.get_value_metric_imbalanced(metric, dataset, imbalanced_data);
+                //} 	
 
                //System.out.println(metric + " --- " + value + " --> " + value.replace(",", "."));
                 tableMetrics.put(metric, value.replace(",", "."));
@@ -6061,10 +6061,10 @@ public class RunApp extends javax.swing.JFrame {
                 
                 //If metric value exists, don't calculate
                if((tableMetricsMulti.get(dataName).get(metric) == null) || (tableMetricsMulti.get(dataName).get(metric).equals("-"))){
-                   value = util.get_value_metric(metric, list_dataset.get(d), es_de_tipo_meka);
-                    if(value.equals("-1.0") || value.equals("-1,0")){
-                        value = util.get_value_metric_imbalanced(metric, list_dataset.get(d), imbalanced_data);
-                    } 	
+                   value = MetricUtils.getMetricValue(metric, list_dataset.get(d));
+                    //if(value.equals("-1.0") || value.equals("-1,0")){
+                      //  value = util.get_value_metric_imbalanced(metric, list_dataset.get(d), imbalanced_data);
+                    //} 	
 
                     tableMetricsMulti.get(dataName).put(metric, value.replace(",", "."));
                } 
@@ -6080,7 +6080,7 @@ public class RunApp extends javax.swing.JFrame {
 
     private void clearTable_metrics_principal()
     {
-        ArrayList<String> metric_list = util.Get_all_metrics();
+        ArrayList<String> metric_list = MetricUtils.getAllMetrics();
 
         for(String metric : metric_list)
         {
@@ -6722,7 +6722,7 @@ public class RunApp extends javax.swing.JFrame {
          
         //coocurrence values table
         if(tipo_tabla.equals("coocurrence")) {
-            pair_label_values =util.get_pair_label_values(dataset, lista_pares);
+            pair_label_values = ChartUtils.getCoocurrences(dataset);
             coocurrence_coefficients = pair_label_values;
         }
         //heatmap values table
@@ -6833,7 +6833,7 @@ public class RunApp extends javax.swing.JFrame {
     
     private void jtable_chi_phi_coefficient(MultiLabelInstances dataset )
     {
-        chi_fi_coefficient = util.get_chi_fi_coefficient(dataset);
+        chi_fi_coefficient = ChartUtils.getChiPhiCoefficients(dataset);
         data = new Object[chi_fi_coefficient.length][chi_fi_coefficient.length+1];        
         column = new Object[data.length+1];
                           
@@ -7380,7 +7380,7 @@ public class RunApp extends javax.swing.JFrame {
                 if (c instanceof JComponent) {
                     //if(column == 0){
                         JComponent jc = (JComponent) c;
-                        jc.setToolTipText(util.Get_metric_tooltip(getValueAt(row, 0).toString()));
+                        jc.setToolTipText(MetricUtils.getMetricTooltip(getValueAt(row, 0).toString()));
                     //}
                 }
                 return c;
