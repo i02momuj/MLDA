@@ -3201,7 +3201,7 @@ public class RunApp extends javax.swing.JFrame {
                                 bw_train = new BufferedWriter(new FileWriter(dataPath));
                                 PrintWriter wr_train = new PrintWriter(bw_train);
 
-                                util.Save_dataset_Meka_in_the_file(wr_train, dataset, dataset.getDataSet().relationName());
+                                DataIOUtils.saveMekaDataset(wr_train, dataset, dataset.getDataSet().relationName());
 
                                 wr_train.close();
                                 bw_train.close();
@@ -3217,7 +3217,7 @@ public class RunApp extends javax.swing.JFrame {
                                 bw_train = new BufferedWriter(new FileWriter(dataPath));
                                 PrintWriter wr_train = new PrintWriter(bw_train);
                                 
-                                util.Save_dataset_in_the_file(wr_train, dataset, dataset.getDataSet().relationName());
+                                DataIOUtils.saveDataset(wr_train, dataset, dataset.getDataSet().relationName());
 
                                 wr_train.close();
                                 bw_train.close();
@@ -3225,7 +3225,7 @@ public class RunApp extends javax.swing.JFrame {
                                 BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
                                 PrintWriter wr_xml = new PrintWriter(bw_xml);
 
-                                util.Save_xml_in_the_file(wr_xml, dataset);
+                                DataIOUtils.saveXMLFile(wr_xml, dataset);
 
                                 wr_xml.close();
                                 bw_xml.close();
@@ -3267,10 +3267,10 @@ public class RunApp extends javax.swing.JFrame {
                                 PrintWriter wr_train = new PrintWriter(bw_train);
 
                                 if(radioNoFS.isSelected()){
-                                    util.Save_dataset_Meka_in_the_file(wr_train, preprocessedDataset, preprocessedDataset.getDataSet().relationName() + preprocessedType);
+                                    DataIOUtils.saveMekaDataset(wr_train, preprocessedDataset, preprocessedDataset.getDataSet().relationName() + preprocessedType);
                                 }
                                 else{
-                                    util.Save_dataset_Meka_in_the_file(wr_train, preprocessedDataset, name_dataset + preprocessedType);
+                                    DataIOUtils.saveMekaDataset(wr_train, preprocessedDataset, name_dataset + preprocessedType);
                                 }
 
                                 wr_train.close();
@@ -3288,10 +3288,10 @@ public class RunApp extends javax.swing.JFrame {
                                 PrintWriter wr_train = new PrintWriter(bw_train);
                                 
                                 if(radioNoFS.isSelected()){
-                                    util.Save_dataset_in_the_file(wr_train, preprocessedDataset, preprocessedDataset.getDataSet().relationName() + preprocessedType);
+                                    DataIOUtils.saveDataset(wr_train, preprocessedDataset, preprocessedDataset.getDataSet().relationName() + preprocessedType);
                                 }
                                 else{
-                                    util.Save_dataset_in_the_file(wr_train, preprocessedDataset, name_dataset+ preprocessedType);
+                                    DataIOUtils.saveDataset(wr_train, preprocessedDataset, name_dataset+ preprocessedType);
                                 }
                                 
 
@@ -3301,7 +3301,7 @@ public class RunApp extends javax.swing.JFrame {
                                 BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
                                 PrintWriter wr_xml = new PrintWriter(bw_xml);
 
-                                util.Save_xml_in_the_file(wr_xml,preprocessedDataset);
+                                DataIOUtils.saveXMLFile(wr_xml,preprocessedDataset);
 
                                 wr_xml.close();
                                 bw_xml.close();
@@ -3342,10 +3342,10 @@ public class RunApp extends javax.swing.JFrame {
                                 PrintWriter wr_train = new PrintWriter(bw_train);
 
                                 if(radioNoFS.isSelected()){
-                                    util.Save_dataset_Meka_in_the_file(wr_train, dataset_train, dataset_train.getDataSet().relationName());
+                                    DataIOUtils.saveMekaDataset(wr_train, dataset_train, dataset_train.getDataSet().relationName());
                                 }
                                 else{
-                                    util.Save_dataset_Meka_in_the_file(wr_train, dataset_train, name_dataset);
+                                    DataIOUtils.saveMekaDataset(wr_train, dataset_train, name_dataset);
                                 }
                                 
 
@@ -3356,10 +3356,10 @@ public class RunApp extends javax.swing.JFrame {
                                 PrintWriter wr_test = new PrintWriter(bw_test);
 
                                 if(radioNoFS.isSelected()){
-                                    util.Save_dataset_Meka_in_the_file(wr_test, dataset_test, dataset_test.getDataSet().relationName());
+                                    DataIOUtils.saveMekaDataset(wr_test, dataset_test, dataset_test.getDataSet().relationName());
                                 }
                                 else{
-                                    util.Save_dataset_Meka_in_the_file(wr_test, dataset_test, name_dataset);
+                                    DataIOUtils.saveMekaDataset(wr_test, dataset_test, name_dataset);
                                 }
                                 
                                 wr_test.close();
@@ -3370,10 +3370,10 @@ public class RunApp extends javax.swing.JFrame {
                                 PrintWriter wr_train = new PrintWriter(bw_train);
 
                                 if(radioNoFS.isSelected()){
-                                    util.Save_dataset_in_the_file(wr_train, dataset_train, dataset_train.getDataSet().relationName());
+                                    DataIOUtils.saveDataset(wr_train, dataset_train, dataset_train.getDataSet().relationName());
                                 }
                                 else{
-                                    util.Save_dataset_in_the_file(wr_train, dataset_train, name_dataset);
+                                    DataIOUtils.saveDataset(wr_train, dataset_train, name_dataset);
                                 }
                                 
 
@@ -3384,10 +3384,10 @@ public class RunApp extends javax.swing.JFrame {
                                 PrintWriter wr_test = new PrintWriter(bw_test);
 
                                 if(radioNoFS.isSelected()){
-                                    util.Save_dataset_in_the_file(wr_test, dataset_test, dataset_test.getDataSet().relationName());
+                                    DataIOUtils.saveDataset(wr_test, dataset_test, dataset_test.getDataSet().relationName());
                                 }
                                 else{
-                                    util.Save_dataset_in_the_file(wr_test, dataset_test, name_dataset);
+                                    DataIOUtils.saveDataset(wr_test, dataset_test, name_dataset);
                                 }
                                 
                                 wr_test.close();
@@ -3396,7 +3396,7 @@ public class RunApp extends javax.swing.JFrame {
                                 BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
                                 PrintWriter wr_xml = new PrintWriter(bw_xml);
 
-                                util.Save_xml_in_the_file(wr_xml, dataset_train);
+                                DataIOUtils.saveXMLFile(wr_xml, dataset_train);
 
                                 wr_xml.close();
                                 bw_xml.close();
@@ -3417,39 +3417,39 @@ public class RunApp extends javax.swing.JFrame {
 
                             if(format.toLowerCase().contains("meka")){
                                 if(radioNoFS.isSelected() && radioNoIS.isSelected()){
-                                    util.Save_dataset_Meka_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-train");
-                                    util.Save_dataset_Meka_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-test");
+                                    DataIOUtils.saveMekaDataset(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-train");
+                                    DataIOUtils.saveMekaDataset(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-test");
                                 }
                                 if(radioNoFS.isSelected()){
-                                    util.Save_dataset_Meka_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
-                                    util.Save_dataset_Meka_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");
+                                    DataIOUtils.saveMekaDataset(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
+                                    DataIOUtils.saveMekaDataset(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");
                                 }
                                 else{
-                                    util.Save_dataset_Meka_in_the_file_noViews(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
-                                    util.Save_dataset_Meka_in_the_file_noViews(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");
+                                    DataIOUtils.saveMekaDatasetNoViews(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
+                                    DataIOUtils.saveMekaDatasetNoViews(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");
                                 }
                             }
                             else{
                                 if(radioNoFS.isSelected() && radioNoIS.isSelected()){
-                                    util.Save_dataset_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-train");
-                                    util.Save_dataset_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-test");
+                                    DataIOUtils.saveDataset(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-train");
+                                    DataIOUtils.saveDataset(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5), "-test");
                                     path_xml = file.getAbsolutePath()+"/"+dataset_name1.substring(0,dataset_name1.length()-5)+".xml";
                                 }
                                 else if(radioNoFS.isSelected()){
-                                    util.Save_dataset_in_the_file(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
-                                    util.Save_dataset_in_the_file(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");
+                                    DataIOUtils.saveDataset(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
+                                    DataIOUtils.saveDataset(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");
                                     path_xml = file.getAbsolutePath()+"/"+dataset_name1.substring(0,dataset_name1.length()-5)+ preprocessedType + ".xml";
                                 }
                                 else{
-                                    util.Save_dataset_in_the_file_noViews(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
-                                    util.Save_dataset_in_the_file_noViews(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");
+                                    DataIOUtils.saveMVDataset(list_dataset_train,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-train");
+                                    DataIOUtils.saveMVDataset(list_dataset_test,file.getAbsolutePath(), dataset_name1.substring(0,dataset_name1.length()-5),  preprocessedType + "-test");
                                     path_xml = file.getAbsolutePath()+"/"+dataset_name1.substring(0,dataset_name1.length()-5)+ preprocessedType + ".xml";
                                 }
 
                                 BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
                                 PrintWriter wr_xml = new PrintWriter(bw_xml);
 
-                                util.Save_xml_in_the_file(wr_xml,list_dataset_train.get(0));
+                                DataIOUtils.saveXMLFile(wr_xml,list_dataset_train.get(0));
 
                                 wr_xml.close();
                                 bw_xml.close();
@@ -3931,7 +3931,7 @@ public class RunApp extends javax.swing.JFrame {
                             bw_train = new BufferedWriter(new FileWriter(dataPath));
                             PrintWriter wr_train = new PrintWriter(bw_train);                           
                                                       
-                            util.Save_datasetMV_Meka_in_the_file(wr_train, mvData, name_dataset, viewsString);
+                            DataIOUtils.saveMVMekaDataset(wr_train, mvData, name_dataset, viewsString);
 
                             wr_train.close();
                             bw_train.close();   
@@ -3943,7 +3943,7 @@ public class RunApp extends javax.swing.JFrame {
                             bw_train = new BufferedWriter(new FileWriter(dataPath));
                             PrintWriter wr_train = new PrintWriter(bw_train);
 
-                            util.Save_datasetMV_in_the_file(wr_train, mvData, name_dataset, viewsString);
+                            DataIOUtils.saveDatasetMV(wr_train, mvData, name_dataset, viewsString);
 
                             wr_train.close();
                             bw_train.close();
@@ -3951,7 +3951,7 @@ public class RunApp extends javax.swing.JFrame {
                             BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
                             PrintWriter wr_xml = new PrintWriter(bw_xml);
 
-                            util.Save_xml_in_the_file(wr_xml, mvData);
+                            DataIOUtils.saveXMLFile(wr_xml, mvData);
 
                             wr_xml.close();
                             bw_xml.close();
@@ -5116,7 +5116,7 @@ public class RunApp extends javax.swing.JFrame {
             //create vertices
             for(int i=0;i<Label_name.length;i++)
             {
-                current = util.Get_label_x_labelname(Label_name[i],label_x_frequency);
+                current = DataInfoUtils.getLabelByLabelname(Label_name[i],label_x_frequency);
                 freq = current.getAppearances()/(dataset.getNumInstances()*1.0);
 
                 fortaleza =  util.get_valor_fortaleza(min, max, cant_intervalos, freq);
@@ -5280,10 +5280,10 @@ public class RunApp extends javax.swing.JFrame {
                 dataset = new MultiLabelInstances(filename_database_arff, filename_database_xml);
             }
 
-            label_frenquency = util.Get_Frequency_x_label(dataset);
-            label_frenquency = util.sortByFrequency(label_frenquency);
+            label_frenquency = MetricUtils.getImbalancedDataByAppearances(dataset);
+            label_frenquency = MetricUtils.sortByFrequency(label_frenquency);
              
-            label_imbalanced = util.Get_data_imbalanced_x_label_inter_class(dataset,label_frenquency);
+            label_imbalanced = MetricUtils.getImbalancedDataByIRInterClass(dataset,label_frenquency);
              
             IR_intra_class = util.get_ir_values_intra_class(label_imbalanced);
             HeapSort.sort(IR_intra_class);
@@ -5298,7 +5298,7 @@ public class RunApp extends javax.swing.JFrame {
 
             Print_main_metric_dataset(dataset);
 
-            label_x_frequency = util.Get_Frequency_x_label(dataset);
+            label_x_frequency = MetricUtils.getImbalancedDataByAppearances(dataset);
              
 
             CategoryPlot temp1 = cp3.getChart().getCategoryPlot();
@@ -5983,10 +5983,10 @@ public class RunApp extends javax.swing.JFrame {
             return; 
         }
 
-        ImbalancedFeature[] label_frenquency = util.Get_Frequency_x_label(dataset);
-        label_frenquency = util.sortByFrequency(label_frenquency);// ordena de mayor a menor
+        ImbalancedFeature[] label_frenquency = MetricUtils.getImbalancedDataByAppearances(dataset);
+        label_frenquency = MetricUtils.sortByFrequency(label_frenquency);// ordena de mayor a menor
                 
-        ImbalancedFeature[] imbalanced_data = util.Get_data_imbalanced_x_label_inter_class(dataset,label_frenquency);
+        ImbalancedFeature[] imbalanced_data = MetricUtils.getImbalancedDataByIRInterClass(dataset,label_frenquency);
         
         String value = new String();
 
@@ -6045,9 +6045,9 @@ public class RunApp extends javax.swing.JFrame {
         
         int d = 0;
         for(String dataName : Dataset_names){
-            label_frenquency = util.Get_Frequency_x_label(list_dataset.get(d));
-            label_frenquency = util.sortByFrequency(label_frenquency);
-            imbalanced_data = util.Get_data_imbalanced_x_label_inter_class(list_dataset.get(d), label_frenquency);
+            label_frenquency = MetricUtils.getImbalancedDataByAppearances(list_dataset.get(d));
+            label_frenquency = MetricUtils.sortByFrequency(label_frenquency);
+            imbalanced_data = MetricUtils.getImbalancedDataByIRInterClass(list_dataset.get(d), label_frenquency);
             
             if(!tableMetricsMulti.contains(dataName)){
                 tableMetricsMulti.put(dataName, new Hashtable<String, String>());
@@ -6569,7 +6569,7 @@ public class RunApp extends javax.swing.JFrame {
          
         while(!lista1.isEmpty())
         {
-            temp = util.Devuelve_menor(lista1);
+            temp = util.getMin(lista1);
             
             labelsets_sorted_IR[count-1]= temp;
             labelset_per_ir[count-1]=temp.getIRIntraClass();
@@ -6667,7 +6667,7 @@ public class RunApp extends javax.swing.JFrame {
          
         while(!lista1.isEmpty())
         {
-            temp = util.Devuelve_mayor(lista1);
+            temp = util.getMax(lista1);
             labelsets_sorted[count-1]= temp;
             value = temp.getAppearances();            
             labelset_frequency[count-1]= value;                    
@@ -6838,7 +6838,7 @@ public class RunApp extends javax.swing.JFrame {
                           
         for(int num_fila=0;  num_fila< chi_fi_coefficient.length;num_fila++)
         {            
-            data[num_fila]  = util.Get_values_x_fila(num_fila, chi_fi_coefficient,dataset.getLabelNames()[num_fila]);
+            data[num_fila]  = util.getValuesByRow(num_fila, chi_fi_coefficient,dataset.getLabelNames()[num_fila]);
         }
         
         for(int i = 0; i< column.length;i++)//se le agrega 1 pq realmente se emieza en 1 y no en 0.
@@ -7013,7 +7013,7 @@ public class RunApp extends javax.swing.JFrame {
             current= (label_imbalanced[i].getIRIntraClass());
             truncate = Double.toString(current);
             
-            cant_veces=  util.Devuelve_cant_labels_x_IR(label_imbalanced, visitados,current );
+            cant_veces=  MetricUtils.getNumLabelsByIR(label_imbalanced, visitados,current );
 
             if(cant_veces ==-1) continue;
             
@@ -7148,7 +7148,7 @@ public class RunApp extends javax.swing.JFrame {
         {
             current= IR_inter_class[i];
             
-            cant_veces=  util.Devuelve_cant_labels_x_IR(IR_inter_class, visitados,current ); //calcula la cantidad de veces que aparece un mismo ir inter class
+            cant_veces=  MetricUtils.getNumLabelsByIR(IR_inter_class, visitados,current ); //calcula la cantidad de veces que aparece un mismo ir inter class
 
             if(cant_veces ==-1) continue;
             
@@ -7203,7 +7203,7 @@ public class RunApp extends javax.swing.JFrame {
         table_model1.addColumn("IR intra class");
         table_model1.addColumn("IR inter class");
         table_model1.addColumn("STDEV intra class");
-        label_imbalanced = util.Sort_data_imbalance_Mayor_IR_intra_class(label_imbalanced);
+        label_imbalanced = MetricUtils.sortImbalancedDataByIRIntraClass(label_imbalanced);
 
         Object[] fila = new Object[4];
         double std;
@@ -7493,7 +7493,7 @@ public class RunApp extends javax.swing.JFrame {
 
     private double[][] getHeatMapCoefficients(){
          
-        ImbalancedFeature [] label_frenquency = util.Get_Frequency_x_label(dataset);;
+        ImbalancedFeature [] label_frenquency = MetricUtils.getImbalancedDataByAppearances(dataset);;
         double [] label_frenquency_values = DataInfoUtils.getLabelAppearances(label_frenquency);
          
         double [][] coeffs = new double[dataset.getNumLabels()][dataset.getNumLabels()];

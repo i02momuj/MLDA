@@ -75,7 +75,7 @@ public class EmergentOutput extends javax.swing.JFrame {
         
         for(int i=0;i<labelNames.size(); i++)
         {
-            current = util.Get_label_x_labelname(labelNames.get(i), imbalancedData);
+            current = DataInfoUtils.getLabelByLabelname(labelNames.get(i), imbalancedData);
               
             if (current != null)
             {

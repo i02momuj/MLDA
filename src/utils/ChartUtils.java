@@ -28,7 +28,7 @@ public class ChartUtils {
         
         double prob;
             
-        labelsByFreq = util.sortByFrequency(labelsByFreq);
+        labelsByFreq = MetricUtils.sortByFrequency(labelsByFreq);
         
         double sum = 0.0;
         for(int i=0; i<labelsByFreq.length;i++)
@@ -58,7 +58,7 @@ public class ChartUtils {
       
         double prob = 0;
             
-        labelsByFrequency = util.sortByFrequency(labelsByFrequency);
+        labelsByFrequency = MetricUtils.sortByFrequency(labelsByFrequency);
             
         double sum = 0.0;
         for(int i=labelsByFrequency.length-1; i>=0; i--)
@@ -97,10 +97,10 @@ public class ChartUtils {
         double min = sortedArray[0];
         double max = sortedArray[sortedArray.length-1];
 
-        double median = util.get_mediana(sortedArray);
+        double median = util.getMedian(sortedArray);
 
-        double q1 = util.get_q1(sortedArray);
-        double q3 = util.get_q3(sortedArray);
+        double q1 = util.getQ1(sortedArray);
+        double q3 = util.getQ3(sortedArray);
 
         XYTextAnnotation annotation ;
 

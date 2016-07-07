@@ -116,4 +116,14 @@ public class DataInfoUtils {
     }
     
     
+    public static ImbalancedFeature getLabelByLabelname(String labelName , ImbalancedFeature[] list)
+    {
+        for(int i=0;i<list.length; i++)
+        {
+            if(labelName.equals(list[i].getName())) {
+                return list[i];
+            }
+        }
+        return null;
+    }
 }
