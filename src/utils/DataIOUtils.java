@@ -88,5 +88,29 @@ public class DataIOUtils {
     }
     
         
+    public static String getXMLString( String arff_text)
+    {
+        String result = new String();
+
+        String [] words = arff_text.split("-t");
+        if(words.length > 1){
+            for(int i=0; i<words.length-1; i++){
+                if(i == (words.length-2)){
+                    result = result + words[i];
+                }
+                else{
+                    result = result + words[i]+"-t";
+                }
+            }
+            result = result.substring(0, result.length()) + ".xml";
+        }
+        else{
+            result = arff_text.substring(0,arff_text.length()-5)+".xml";
+        }
         
+        return result;
+    }
+    
+    
+    
 }

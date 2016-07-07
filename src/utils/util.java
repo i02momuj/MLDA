@@ -54,717 +54,41 @@ import utils.ImbalancedFeature;
  * 
  * @author Jose Maria Moyano Murillo
  */
-public class util {        
-
+public class util {          
     
-    
-  
-  public static void update_values_xydataset(ChartPanel xyplot1, int[] arreglo_ordenado) {
-
-   XYPlot xyplot = xyplot1.getChart().getXYPlot();
-    
-   double min = arreglo_ordenado[0];
-   //System.out.println("el menor es " +min);
-   double max = arreglo_ordenado[arreglo_ordenado.length-1];
-   
-   double mediana = get_mediana(arreglo_ordenado);
-   
-   double q1 = get_q1(arreglo_ordenado);
-   double q3 = get_q3(arreglo_ordenado);
-
-   double ir = util.get_RI_q1_q3(q1, q3);
-   
-   double linf = Limite_inf(q1, ir);
-   double lsup = Limite_sup(q3, ir);
-   
-   XYSeries serie_linf=null;
-   XYSeries serie_lsup=null;
-
-   // l_inf vertical
-       serie_linf = new XYSeries("8");
-       serie_linf.add(linf, 0.4);
-       serie_linf.add(linf, 0.6);
-       
-       XYTextAnnotation annotation = new XYTextAnnotation("Li", linf, 0.35);
-       
-       //annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-       //xyplot.addAnnotation(annotation);
-   
-    //min-linf horizontal
-    XYSeries serie15 = new XYSeries("15");
-    serie15.add(min, 0.5);
-    serie15.add(linf, 0.5);
-    
-    //max-lsup horizontal
-    XYSeries serie16 = new XYSeries("16");
-    serie16.add(max, 0.5);
-    serie16.add(lsup, 0.5);
-    
-   
-   //min vertical
-    XYSeries serie1 = new XYSeries("0");
-    serie1.add(min, 0.45);
-    serie1.add(min, 0.55);
-    
-     annotation = new XYTextAnnotation("Min", min, 0.40);
-     annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-     xyplot.addAnnotation(annotation);
-     
-  
-    //min-q1 horizontal
-    XYSeries serie2 = new XYSeries("1");
-    serie2.add(min, 0.5);
-    serie2.add(q1, 0.5);
-  
-    //q1 vertical  
-    XYSeries serie3 = new XYSeries("2");
-    serie3.add(q1, 0.1);
-    serie3.add(q1, 0.9);
-    
-    annotation = new XYTextAnnotation("Q1", q1, 0.08);
-    annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-    xyplot.addAnnotation(annotation);
-    
-    // mediana 
-    XYSeries serie_mediana = new XYSeries("11");
-    serie_mediana.add(mediana, 0.1);
-    serie_mediana.add(mediana, 0.9);
-    
-    annotation = new XYTextAnnotation("Median", mediana, 0.04);
-    annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-    xyplot.addAnnotation(annotation);
- 
-    //q1-q3 horizontal sup
-    XYSeries serie4 = new XYSeries("3");
-    serie4.add(q1, 0.9);
-    serie4.add(q3, 0.9);
- 
-    //q1-q3 horizontal inf
-    XYSeries serie5 = new XYSeries("4");
-    serie5.add(q1, 0.1);
-    serie5.add(q3, 0.1);
- 
-    //q3 vertical
-    XYSeries serie6 = new XYSeries("5");
-    serie6.add(q3, 0.1);
-    serie6.add(q3, 0.9);
-    
-    annotation = new XYTextAnnotation("Q3", q3, 0.08);
-    annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-    xyplot.addAnnotation(annotation);
-    
-    //q3-max horizontal
-    XYSeries serie7 = new XYSeries("6");
-    serie7.add(q3, 0.5);
-    serie7.add(max, 0.5);
-    
-    //max vertical
-    XYSeries serie8 = new XYSeries("7");
-    serie8.add(max, 0.45);
-    serie8.add(max, 0.55);
-    
-    annotation = new XYTextAnnotation("Max", max, 0.4);
-    annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-    xyplot.addAnnotation(annotation);
-    
-
-        serie_lsup = new XYSeries("9");
-        serie_lsup.add(lsup, 0.4);
-        serie_lsup.add(lsup, 0.6);
-        
-       //annotation = new XYTextAnnotation("Ls", lsup, 0.35);
-       //annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-       //xyplot.addAnnotation(annotation);
-
-       
-
- 
- XYSeriesCollection xyseriescollection = new XYSeriesCollection();
-
- //xyseriescollection.addSeries(serie_point);
- 
- xyseriescollection.addSeries(serie1);
- xyseriescollection.addSeries(serie2);
- xyseriescollection.addSeries(serie3);
- xyseriescollection.addSeries(serie4);
- xyseriescollection.addSeries(serie5);
- xyseriescollection.addSeries(serie6);
- xyseriescollection.addSeries(serie7);
- xyseriescollection.addSeries(serie8);
- xyseriescollection.addSeries(serie15);
- xyseriescollection.addSeries(serie16);
- xyseriescollection.addSeries(serie_mediana);
- 
- xyseriescollection.addSeries(serie_linf);
- xyplot.getRenderer().setSeriesPaint(9, Color.black);
- xyseriescollection.addSeries(serie_lsup); 
- xyplot.getRenderer().setSeriesPaint(10, Color.black); 
- 
- 
- xyplot.getRenderer().setSeriesPaint(0, Color.black);
- xyplot.getRenderer().setSeriesPaint(1, Color.black);
- xyplot.getRenderer().setSeriesPaint(2, Color.black);
- xyplot.getRenderer().setSeriesPaint(3, Color.black);
- xyplot.getRenderer().setSeriesPaint(4, Color.black);
- xyplot.getRenderer().setSeriesPaint(5, Color.black);
- xyplot.getRenderer().setSeriesPaint(6, Color.black);
- xyplot.getRenderer().setSeriesPaint(7, Color.black);
- xyplot.getRenderer().setSeriesPaint(8, Color.black);
- xyplot.getRenderer().setSeriesPaint(9, Color.black);
- xyplot.getRenderer().setSeriesPaint(10, Color.black);
- xyplot.getRenderer().setSeriesPaint(11, Color.black);
- xyplot.getRenderer().setSeriesPaint(12, Color.black);
- xyplot.getRenderer().setSeriesPaint(13, Color.black);
- 
-  //agregar el dataset
- xyplot.setDataset(xyseriescollection);
- 
- 
- 
- 
- 
- 
-    // add a second dataset and renderer... 
-     XYSeriesCollection anotherserie = new XYSeriesCollection();
-         
-     XYSeries serie_point = new XYSeries("21");
-     
-     double[] valor_y = {0.47,0.49,0.51,0.53};
-     
-     for(int i=0, j=0; i<arreglo_ordenado.length; i++ , j++)
-     {
-         if(j%4==0) j=0;
-         serie_point.add(arreglo_ordenado[i],valor_y[j] );
-     }
-         
-    anotherserie.addSeries(serie_point);
-       
-     
-     XYLineAndShapeRenderer renderer1 = new XYLineAndShapeRenderer(false, true); 
-     renderer1.setSeriesPaint(0, Color.lightGray);
-    // arguments of new XYLineAndShapeRenderer are to activate or deactivate the display of points or line. Set first argument to true if you want to draw lines between the points for e.g.
-    xyplot.setDataset(1, anotherserie);
-    xyplot.setRenderer(1, renderer1);
- 
- 
- }
-
-   public static void update_values_line_chart(double[] id_x_IR ,int[] id_x_nums_label, CategoryPlot cp)
-    {      
-       DefaultCategoryDataset my_data = new DefaultCategoryDataset();
-       DefaultCategoryDataset my_data1 = new DefaultCategoryDataset();
-       
-       if(id_x_IR==null) return;
-       
-           for(int i=0; i<id_x_IR.length ; i++)
-           {
-                if(id_x_IR[i]==0 && id_x_nums_label[i]==0) continue; //my_data.setValue(0 , "Label-Combination: ",Integer.toString(i));
-                else 
-                {
-                    my_data.setValue(id_x_IR[i] , "IR",Integer.toString(i+1));
-                    my_data1.setValue(id_x_nums_label[i] , "# labels",Integer.toString(i+1));                                    
-                }
-           }  
-        if(id_x_IR.length>50) cp.getDomainAxis().setTickLabelsVisible(false);   
-        else{cp.getDomainAxis().setTickLabelsVisible(true);   }
-        
-        cp.setDataset(my_data);      
-        
-        double sum = get_mean(id_x_nums_label, id_x_IR);
-        
-        Marker start = new ValueMarker(sum);
-        start.setPaint(Color.red);
-        start.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
-        start.setLabel("                        Mean: "+MetricUtils.truncateValue(sum, 3));
-        cp.addRangeMarker(start);
-        
-        
-        cp.setDataset(1, my_data1);
-    
-    }
-  
-     public static void update_values_line_chart(double[] ir_values, CategoryPlot cp, boolean invertir_reccorrido)
-    {      
-       DefaultCategoryDataset my_data = new DefaultCategoryDataset();
-       
-       
-       if(ir_values==null) return;
-       
-       
-       if(!invertir_reccorrido){
-       
-           for(int i=0; i<ir_values.length ; i++)
-           {
-                if(ir_values[i]==0 ) continue; //my_data.setValue(0 , "Label-Combination: ",Integer.toString(i));
-                else 
-                {
-                    my_data.setValue(ir_values[i] , "IR",Integer.toString(i+1));
-                                             
-                }
-           }
-       }
-       else
-       {
-           int temp = ir_values.length-1;
-           
-            for(int i=temp, count=1; i>=0 ; i--,count++)
-           {
-                if(ir_values[i]==0 ) continue; //my_data.setValue(0 , "Label-Combination: ",Integer.toString(i));
-                else 
-                {
-                    my_data.setValue(ir_values[i] , "IR",Integer.toString(count));
-                                             
-                }
-           }
-           
-       }
-
-           
-        cp.getDomainAxis().setTickLabelsVisible(false);
-        
-        cp.setDataset(my_data); 
-        
-        double sum = get_mean(ir_values);
-        
-        Marker start = new ValueMarker(sum);
-        start.setPaint(Color.red);
-        start.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
-        start.setLabel("                        Mean: "+MetricUtils.truncateValue(sum, 3));
-        cp.addRangeMarker(start);
-        
-        
-      
-    
-    }
-     
-       public static double get_mean(double[] values)
-       {
-           double result=0;
-           
-           for(int i=0;i<values.length; i++)
-           {
-               result+=values[i];
-           }
-           return result/values.length;
-       }
-     
-       public static double get_mean(int[] cant_values, double[] values)
-     {
-         int sum=0;
-         double value=0;
-         
-         double result;
-         
-         for(int i=0;i<cant_values.length; i++)
-         {
-             sum+=cant_values[i];
-             value+= values[i]*(cant_values[i]);
-         }
-         
-         result = value/(sum*1.0);
-         return result;
-     }
-     
-     
-     public static double get_mean(int[] cant_values, int[] values)
-     {
-         int sum=0;
-         int value=0;
-         
-         for(int i=0;i<cant_values.length; i++)
-         {
-             sum+=cant_values[i];
-             value+= values[i]*(cant_values[i]*1.0);
-         }
-         return value/(sum*1.0);
-     }
-     
-     public static int get_sum_values_array(int[] values)
-     {
-         int count=0;
-         
-         for(int i=0;i<values.length; i++)
-             count+=values[i];
-         
-         return count;
-     }
-     
-     public static double[] Get_array_values_IR(int[] id_x_labels, double[] id_x_ir)
-     {
-         int size = get_sum_values_array(id_x_labels);
-         double[] result = new double[size];
-         
-         int count,temp=0;
-         int j=0;//posicion de result
-         
-         for(int i=0;i<id_x_labels.length;i++)
-         {
-             count = id_x_labels[i];
-             
-             while(temp<count)
-             {
-                 result[j]=id_x_ir[i];
-                 j++;
-                 temp++;
-             }
-             temp=0;//temporal para asignar tantas veces hasta que la cantidad de veces de count.
-         }
-         
-         return result;
-     }
-  
-  
-     // VIZUALIZA LAS COMBINACIONES DE ETIQUETAS ORDENADAS DE MENOR A MAYOR, MOSTRANDO SU FRECUENCIA: EJ: # LABEL QUE TIENEN 1, # LABEL QUE TIENEN 2...
-     public static void update_values_line_chart(int cant_instancias, CategoryPlot cp,HashMap<Integer,Integer> labelset_x_frequency )
-    {      
-       DefaultCategoryDataset my_data = new DefaultCategoryDataset();
-      
-            double prob;            
-
-            int max = Maxim_key(labelset_x_frequency);
-                     
-           for(int i=0; i<=max ; i++)
-           {
-               int freq_current=0;
-               if(labelset_x_frequency.get(i)!=null) freq_current=labelset_x_frequency.get(i);
-               
-               prob= freq_current*1.0/cant_instancias;
-               
-                if(prob==0.0) my_data.setValue(0 , "Label-Combination: ",Integer.toString(i));
-                else my_data.setValue(prob , "Label-Combination: ",Integer.toString(i));
-               
-           }         
-        cp.setDataset(my_data);       
-        
-        if(max>30) cp.getDomainAxis().setTickLabelsVisible(false);   
-        else{cp.getDomainAxis().setTickLabelsVisible(true);   }
-    
-    }
-    
-    public  static int Maxim_key (HashMap<Integer,Integer> hm)
+    public  static int maxKey (HashMap<Integer,Integer> hm)
     {
-       Set<Integer> keys= hm.keySet();
-       
-       int mayor=0;
-       
-       for(int current : keys)
-       {
-           if(mayor<current) mayor = current;
-       }
-       return mayor;
-    }
-    
-    public static double[] get_label_frequency(ImbalancedFeature[] label_freq)
-    {
-        double[] label_frequency = new double[label_freq.length];
-        
-        for(int i=0;i<label_freq.length; i++)
-            label_frequency[i]=(double)label_freq[i].getAppearances();
-        
-        return label_frequency;
-    }
-     
-    //DEVUELVE UN HASHMAP CON KEY: CANTIDAD DE ETIQUETAS, VALUE: CANTIDAD DE VECES QUE SE REPITE EL LABELSET EN UN DATASET,
-    public static HashMap<Integer,Integer> Get_labelset_x_values( Statistics stat1 )
-    {            
-        HashMap<LabelSet,Integer> result = stat1.labelCombCount();
-        Set<LabelSet> keysets = result.keySet();
-        
-        HashMap<Integer,Integer> labelset_x_frequency = new HashMap<Integer,Integer>();
-        
-             
-        int old_value;
-        
-        for(LabelSet current : keysets)
+        Set<Integer> keys= hm.keySet();
+
+        int max = 0;
+
+        for(int current : keys)
         {
-            int value=  result.get(current);
-            int key = current.size();
-            
-            if(labelset_x_frequency.get(key)==null)
-            {
-                labelset_x_frequency.put(key, value);
+            if(max<current) {
+                max = current;
             }
-            else
-            {
-                old_value = labelset_x_frequency.get(key);
-                labelset_x_frequency.remove(key);
-                labelset_x_frequency.put(key, value+old_value);     
-            }
-            
-           
-        }    
-        return labelset_x_frequency;
+        }
+
+        return max;
     }
     
-    public static String Get_xml_string( String arff_text)
+    
+    public static boolean existsValue (double[] visited , double current)
     {
-        String result="";
-       //System.out.println("arff_text: " + arff_text);
-        
-        //for(int i=0; i<arff_text.length();i++)
-        //{
-            //if(arff_text.charAt(i)=='-') return result+=".xml";
-        
-        //    result+=arff_text.charAt(i);
-        //}     
-        
-        String [] words = arff_text.split("-t");
-        if(words.length > 1){
-           //System.out.println("words: " + Arrays.toString(words));
-            for(int i=0; i<words.length-1; i++){
-                if(i == (words.length-2)){
-                    result = result + words[i];
-                }
-                else{
-                    result = result + words[i]+"-t";
-                }
-                
+        for(int i=0; i<visited.length;i++)
+        {
+            if(visited[i]==current){
+                return true;
             }
-            result = result.substring(0, result.length()) + ".xml";
-           //System.out.println("result1: " + result);
-        }
-        else{
-            result = arff_text.substring(0,arff_text.length()-5)+".xml";
-           //System.out.println("result2: " + result);
         }
         
-       
-       return result;
-    }
-     
-    
-    public static double[][] Get_data_heapmap(MultiLabelInstances dataset)
-    {
-        int cant_labels = dataset.getNumLabels();
-        double[][] data = new double[cant_labels][cant_labels];
-        
-        int[] label_indices= dataset.getLabelIndices(); //ALMACENA LOS INDICES DE LAS ETIQUETAS
-        
-        
-        
-        for(int j=0; j<cant_labels ; j++)
-            for(int k=0; k<cant_labels; k++)
-            {
-                data[j][k]= Get_probability_x_2_labels(dataset, label_indices[j], label_indices[k]);//[j][k], j-fila y k-columna
-            }
-         
-         return data;
-    }
-    
-     public static int[] get_label_indices(String[] labels, MultiLabelInstances dataset)
-     {
-         int[] label_indices = new int[labels.length];
-         
-         int current;
-         Instances instancias = dataset.getDataSet();
-         for(int i=0; i<label_indices.length;i++)
-         {
-            current = instancias.attribute(labels[i]).index();
-            label_indices[i]=current;                    
-         }
-         return label_indices;
-     }
-    
-     public static double[][] Get_data_heapmap(MultiLabelInstances dataset, int[] labels)
-    {
-        double[][] data = new double[labels.length][labels.length];
-        
-        int[] label_indices= dataset.getLabelIndices(); //ALMACENA LOS INDICES DE LAS ETIQUETAS
-        
-        
-        for(int j=0; j<labels.length ; j++)
-            for(int k=0; k<labels.length; k++)
-            {
-                data[j][k]= Get_probability_x_2_labels(dataset, labels[j], labels[k]);//[j][k], j-fila y k-columna
-            }
-         
-         return data;
+        return false;
     }
     
     
-    public static double[][] Invertir_Matrix(double[][] data)
-    {
-        double[][] result = new double[data.length][data.length];
-        
-        for(int k=data.length-1; k>=0 ; k--)
-            for(int j=0; j<data.length;j++)
-            {
-                result[k][j]=data[j][data.length-1-k];
-            }
-        
-        return result;
-    }
-    
-    public static void Recorre_Arreglo_2_dimensiones(double[][] data)
-    {
-       //System.out.println("RECORRER ARREGLO DATOS");
-        for(int j=0; j<data.length ; j++)
-        {
-            for(int k=0; k<data.length; k++)
-            {
-               //System.out.print(" , "+data[j][k]);
-            }
-           //System.out.println();            
-        }   
-    }
-    
-     
-    
-     public static double Get_repetition_number_x_1_label(MultiLabelInstances dataset, int label_k)
-    {
-      double value=0.0;
-        
-        Instances Instancias = dataset.getDataSet();
-        
-        double  esta_label_k;
-        
-         for(int i=0; i<Instancias.size();i++)
-             {
-               esta_label_k=Instancias.instance(i).value(label_k);                
-               if(esta_label_k==1.0) value++;
-             }         
-                
-        return value;
-    }
-    
-    public static double Get_frequency_x_1_label(MultiLabelInstances dataset, int label_k)
-    {
-      double value=0.0;
-        
-        Instances Instancias = dataset.getDataSet();
-        
-        double  esta_label_k;
-        
-         for(int i=0; i<Instancias.size();i++)
-             {
-               esta_label_k=Instancias.instance(i).value(label_k);                
-               if(esta_label_k==1.0) value++;
-             }         
-                
-        return value/dataset.getNumInstances();
-    }
-    
-    //DADO DOS ETIQUETAS DEVOLVER LA FREQUENCIA CON QUE OCURREN AMBAS EN EL CONJUNTO DE INSTANCIAS
-    public static double Get_probability_x_2_labels(MultiLabelInstances dataset, int label_j, int label_k)
-    {
-        double value=0.0;
-        
-        Instances Instancias = dataset.getDataSet();
-        
-        double esta_label_j , esta_label_k;
-        
-         for(int i=0; i<Instancias.size();i++)
-             {
-                esta_label_j=Instancias.instance(i).value(label_j);
-                esta_label_k=Instancias.instance(i).value(label_k);
-                
-                if(esta_label_j ==1.0 && esta_label_k==1.0) value++;
-             }         
-        
-         double freq = value/dataset.getNumInstances();
-         
-        if(label_j == label_k)  return freq;
-        
-        return freq / Get_frequency_x_1_label(dataset, label_k);
-        
-    }
-    
-     public static double Get_repetitions_x_2_labels(MultiLabelInstances dataset, int label_j, int label_k)
-    {
-        double value=0.0;
-        
-        Instances Instancias = dataset.getDataSet();
-        
-        double esta_label_j , esta_label_k;
-        
-         for(int i=0; i<Instancias.size();i++)
-             {
-                esta_label_j=Instancias.instance(i).value(label_j);
-                esta_label_k=Instancias.instance(i).value(label_k);
-                
-                if(esta_label_j ==1.0 && esta_label_k==1.0) value++;
-             }         
-        
-         double freq = value;
-         
-        if(label_j == label_k)  return freq;
-        
-        return freq ;
-        
-    }
     
     
-    public static String[] devuelve_etiquetas_seleccionadas (MultiLabelInstances dataset, int[] label_indices)
-    {
-        String[] result = new String[label_indices.length];
-        
-        String current;
-        for(int i=0;i<label_indices.length;i++)
-        {
-            current = dataset.getDataSet().attribute(label_indices[i]).name();
-            result[i]= current;
-        }
-        return result;
-    }
     
-    public static int Devuelve_num_celda(int pos_inicial, int posicion_Actual, int ancho_celda, int cant_celdas)
-    {
-        int limite = pos_inicial+(cant_celdas*ancho_celda);
-        
-        if(posicion_Actual<pos_inicial) return -1;
-        
-        int temp=pos_inicial;
-        
-        for(int i=0;temp<=limite;i++, temp=temp+ancho_celda)
-        {
-            if(temp>posicion_Actual) return i;
-        }
-        
-        return -1;
-    }
-    
-        
-     public static boolean Esta_el_valor (int[] visitados , int actual)
-     {
-         for(int i=0; i<visitados.length;i++)
-             if(visitados[i]==actual)return true;
-         return false;
-     }
-     
-    public static boolean Esta_el_valor (double[] visitados , double actual)
-     {
-         for(int i=0; i<visitados.length;i++)
-             if(visitados[i]==actual)return true;
-         return false;
-     }
-    
-    
-     public static boolean Esta_Atributo (ArrayList<String> visitados , ImbalancedFeature actual)
-     {
-         for( String current : visitados)
-             if(current.equals(actual.getName())) return true;
-         
-         return false;
-     }
-    
-     public static ImbalancedFeature Devuelve_Mayor_IR_intra_class(ImbalancedFeature[] imbalanced_data, ArrayList<String> visitados)
-     {
-         ImbalancedFeature mayor=null ;
-         
-         for( ImbalancedFeature current : imbalanced_data )
-         {
-             if( Esta_Atributo(visitados, current)) continue;
-             else
-             {
-                 if(mayor == null) mayor = current;
-                 else
-                 {
-                     if(mayor.getIRIntraClass() <= current.getIRIntraClass() && mayor.getVariance() < current.getVariance()) mayor = current;
-                 }
-             }
-         }
-         return mayor;
-     }
      
      public static ImbalancedFeature Devuelve_Mayor_IR_inter_class(ImbalancedFeature[] imbalanced_data, ArrayList<String> visitados)
      {
@@ -772,7 +96,7 @@ public class util {
          
          for( ImbalancedFeature current : imbalanced_data )
          {
-             if( Esta_Atributo(visitados, current)) continue;
+             if( DataInfoUtils.existsAttribute(visitados, current)) continue;
              else
              {
                  if(mayor == null) mayor = current;
@@ -791,7 +115,7 @@ public class util {
          
          for( ImbalancedFeature current : imbalanced_data )
          {
-             if( Esta_Atributo(visitados, current)) continue;
+             if( DataInfoUtils.existsAttribute(visitados, current)) continue;
              else
              {
                  if(menor == null) menor = current;
@@ -929,7 +253,7 @@ public class util {
         
         for(int i=0; i<imbalanced_data.length; i++)
         {
-            current= Devuelve_Mayor_IR_intra_class(imbalanced_data,visitados);
+            current= MetricUtils.getMaxIRIntraClass(imbalanced_data,visitados);
             if(current ==null) break;
             
             ordenados[i]=current;
@@ -1169,7 +493,7 @@ public class util {
     
     public static int Devuelve_cant_labels_x_IR(ImbalancedFeature[] data_imbalanced, double[] visitados , double current)
     {
-        if (Esta_el_valor(visitados,current)) return -1;
+        if (existsValue(visitados,current)) return -1;
         
         int cant_veces=0;
         
@@ -1184,7 +508,7 @@ public class util {
     
      public static int Devuelve_cant_labels_x_IR(double[] IR_inter_class, double[] visitados , double current)
     {
-        if (Esta_el_valor(visitados,current)) return -1;
+        if (existsValue(visitados,current)) return -1;
         
         int cant_veces=0;
         

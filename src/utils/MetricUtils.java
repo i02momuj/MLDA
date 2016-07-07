@@ -1,5 +1,6 @@
 package utils;
 
+import java.util.ArrayList;
 import static utils.util.hasMoreNDigits;
 
 /**
@@ -47,4 +48,24 @@ public class MetricUtils {
         return result;
     }
     
+    
+    public static ImbalancedFeature getMaxIRIntraClass(ImbalancedFeature[] imbalancedData, ArrayList<String> visited)
+    {
+        ImbalancedFeature max=null ;
+         
+        for( ImbalancedFeature current : imbalancedData )
+        {
+            if(! DataInfoUtils.existsAttribute(visited, current)) {
+                if(max == null) {
+                    max = current;
+                }
+                else
+                {
+                    if(max.getIRIntraClass() <= current.getIRIntraClass() && max.getVariance() < current.getVariance()) max = current;
+                }
+            }
+        }
+        
+        return max;
+    }
 }

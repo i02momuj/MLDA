@@ -120,7 +120,6 @@ import utils.ChartUtils;
 import utils.DataIOUtils;
 import utils.DataInfoUtils;
 import utils.MetricUtils;
-import static utils.util.Get_labelset_x_values;
 import weka.core.Attribute;
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
@@ -2861,7 +2860,7 @@ public class RunApp extends javax.swing.JFrame {
                 tableImbalance.clearSelection();
                 if(label_frenquency == null) return;
 
-                double [] label_frenquency_values = util.get_label_frequency(label_frenquency);
+                double [] label_frenquency_values = DataInfoUtils.getLabelAppearances(label_frenquency);
 
                 HeapSort.sort(label_frenquency_values);
 
@@ -3598,7 +3597,7 @@ public class RunApp extends javax.swing.JFrame {
         if(evt.getKeyCode() == KeyEvent.VK_ENTER)
         {
             String filename_database_arff = textChooseFile.getText();
-            filename_database_xml = util.Get_xml_string(filename_database_arff);
+            filename_database_xml = DataIOUtils.getXMLString(filename_database_arff);
             filename_database_xml = util.Get_file_name_xml(filename_database_xml);
             Load_dataset(filename_database_arff, filename_database_xml);
         }
@@ -4003,7 +4002,7 @@ public class RunApp extends javax.swing.JFrame {
                 }
 
                 String filename_database_arff = f1.getAbsolutePath();
-                filename_database_xml = util.Get_xml_string(filename_database_arff);
+                filename_database_xml = DataIOUtils.getXMLString(filename_database_arff);
                 filename_database_xml = util.Get_file_name_xml(filename_database_xml);
 
                 boolean es_meka=false;
@@ -4675,7 +4674,7 @@ public class RunApp extends javax.swing.JFrame {
 
             if(!file_temp.exists())
             {
-                filename_database_xml_path = util.Get_xml_string(filename_database_arff);
+                filename_database_xml_path = DataIOUtils.getXMLString(filename_database_arff);
                 filename_database_xml = util.Get_file_name_xml(filename_database_xml_path);
             }
 
@@ -5306,9 +5305,9 @@ public class RunApp extends javax.swing.JFrame {
             temp1.clearRangeMarkers();
             ChartUtils.updateValuesBarChart(label_x_frequency,num_instancias,temp1);
 
-            HashMap<Integer,Integer> labels_x_example = Get_labelset_x_values(stat1);
+            HashMap<Integer,Integer> labels_x_example = DataInfoUtils.getLabelsetByValues(stat1);
                             
-            util.update_values_line_chart(num_instancias,cp11.getChart().getCategoryPlot(),labels_x_example);
+            ChartUtils.updateLineChart(num_instancias,cp11.getChart().getCategoryPlot(),labels_x_example);
                    
             temp1 = cp22.getChart().getCategoryPlot();
             temp1.clearRangeMarkers();
@@ -5337,13 +5336,13 @@ public class RunApp extends javax.swing.JFrame {
             //ir per label inter class only
             temp1= cp_ir_x_label_inter_class_only.getChart().getCategoryPlot();
             temp1.clearRangeMarkers();
-            //util.update_values_line_chart(IR_inter_class,temp1,true);
+            //util.updateLineChart(IR_inter_class,temp1,true);
             ChartUtils.updateIRBarChart(label_x_frequency, IR_inter_class, temp1);
             
             //ir per label intra class only
             temp1= cp_ir_x_label_intra_class_only.getChart().getCategoryPlot();
             temp1.clearRangeMarkers();
-            //util.update_values_line_chart(IR_intra_class,temp1,true);
+            //util.updateLineChart(IR_intra_class,temp1,true);
             ChartUtils.updateIRBarChart(label_x_frequency, IR_intra_class, temp1);
             
             
@@ -7261,7 +7260,7 @@ public class RunApp extends javax.swing.JFrame {
         int freq_current;
         String truncate;
 
-        int max = util.Maxim_key(labels_x_example);
+        int max = util.maxKey(labels_x_example);
 				 
 				            
 	for(int i=0; i<=max ; i++)
@@ -7495,7 +7494,7 @@ public class RunApp extends javax.swing.JFrame {
     private double[][] getHeatMapCoefficients(){
          
         ImbalancedFeature [] label_frenquency = util.Get_Frequency_x_label(dataset);;
-        double [] label_frenquency_values = util.get_label_frequency(label_frenquency);
+        double [] label_frenquency_values = DataInfoUtils.getLabelAppearances(label_frenquency);
          
         double [][] coeffs = new double[dataset.getNumLabels()][dataset.getNumLabels()];
          

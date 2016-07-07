@@ -2,6 +2,7 @@ package utils;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.HashMap;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.annotations.XYTextAnnotation;
 import org.jfree.chart.plot.CategoryPlot;
@@ -12,6 +13,7 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import static utils.util.maxKey;
 
 /**
  *
@@ -233,5 +235,42 @@ public class ChartUtils {
 
         xyplot.setDataset(1, anotherserie);
         xyplot.setRenderer(1, renderer1);
+    }
+    
+    
+    public static void updateLineChart(int nInstances, CategoryPlot cp, 
+            HashMap<Integer,Integer> labelsetsByFrequency )
+    {      
+        DefaultCategoryDataset data = new DefaultCategoryDataset();
+        
+        double prob;            
+
+        int max = maxKey(labelsetsByFrequency);
+                     
+        for(int i=0; i<=max ; i++)
+        {
+            int freq_current=0;
+            if(labelsetsByFrequency.get(i)!=null) {
+                freq_current=labelsetsByFrequency.get(i);
+            }
+            
+            prob= freq_current*1.0/nInstances;
+            
+            if(prob==0.0) {
+                data.setValue(0 , "Label-Combination: ",Integer.toString(i));
+            }
+            else {
+                data.setValue(prob , "Label-Combination: ",Integer.toString(i));
+            }
+               
+        }         
+        cp.setDataset(data);       
+        
+        if(max>30) {
+            cp.getDomainAxis().setTickLabelsVisible(false);
+        }   
+        else{
+            cp.getDomainAxis().setTickLabelsVisible(true);   
+        }
     }
 }
