@@ -120,6 +120,7 @@ import utils.ChartUtils;
 import utils.DataIOUtils;
 import utils.DataInfoUtils;
 import utils.MetricUtils;
+import utils.ResultsIOUtils;
 import weka.core.Attribute;
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
@@ -3819,7 +3820,7 @@ public class RunApp extends javax.swing.JFrame {
                     BufferedWriter bw = new BufferedWriter(new FileWriter(path));
                     PrintWriter wr = new PrintWriter(bw);
                     
-                    util.save_mv_csv_file(wr, jTable2, views, dataset);
+                    ResultsIOUtils.saveMVTableCsv(wr, jTable2, views, dataset);
                                     
                     wr.close();
                     bw.close(); 
@@ -5816,7 +5817,7 @@ public class RunApp extends javax.swing.JFrame {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(path));
                 PrintWriter wr = new PrintWriter(bw);
                 
-                util.Save_text_file(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
+                ResultsIOUtils.saveMetricsTxt(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
                 
                 wr.close();
                 bw.close(); 
@@ -5830,7 +5831,7 @@ public class RunApp extends javax.swing.JFrame {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(path));
                 PrintWriter wr = new PrintWriter(bw);
                 
-                util.Save_tex_file(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
+                ResultsIOUtils.saveMetricsTex(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
                 
                 wr.close();
                 bw.close(); 
@@ -5844,7 +5845,7 @@ public class RunApp extends javax.swing.JFrame {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(path));
                 PrintWriter wr = new PrintWriter(bw);
                 
-                util.Save_csv_file(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
+                ResultsIOUtils.saveMetricsCsv(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
                 
                 wr.close();
                 bw.close(); 
@@ -5858,7 +5859,7 @@ public class RunApp extends javax.swing.JFrame {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(path));
                 PrintWriter wr = new PrintWriter(bw);
                 
-                util.Save_meka_file(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
+                ResultsIOUtils.saveMetricsArff(wr, metric_list, dataset, label_imbalanced, es_de_tipo_meka, tableMetrics);
                 
                 wr.close();
                 bw.close(); 
@@ -5913,7 +5914,7 @@ public class RunApp extends javax.swing.JFrame {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(path));
                 PrintWriter wr = new PrintWriter(bw);
                 
-                util.Save_text_file_multi(wr, metric_list, Dataset_names, tableMetricsMulti);
+                ResultsIOUtils.saveMultiMetricsTxt(wr, metric_list, Dataset_names, tableMetricsMulti);
                 
                 wr.close();
                 bw.close(); 
@@ -5928,7 +5929,7 @@ public class RunApp extends javax.swing.JFrame {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(path));
                 PrintWriter wr = new PrintWriter(bw);
                 
-                util.Save_tex_file_multi(wr, metric_list, Dataset_names, tableMetricsMulti);
+                ResultsIOUtils.saveMultiMetricsTex(wr, metric_list, Dataset_names, tableMetricsMulti);
                 
                 wr.close();
                 bw.close(); 
@@ -5943,7 +5944,7 @@ public class RunApp extends javax.swing.JFrame {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(path));
                 PrintWriter wr = new PrintWriter(bw);
                 
-                util.Save_csv_file_multi(wr, metric_list, Dataset_names, tableMetricsMulti);
+                ResultsIOUtils.saveMultiMetricsCsv(wr, metric_list, Dataset_names, tableMetricsMulti);
                 
                 wr.close();
                 bw.close(); 
@@ -5958,7 +5959,7 @@ public class RunApp extends javax.swing.JFrame {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(path));
                 PrintWriter wr = new PrintWriter(bw);
                 
-                util.Save_meka_file_multi(wr, metric_list, Dataset_names, tableMetricsMulti);
+                ResultsIOUtils.saveMultiMetricsArff(wr, metric_list, Dataset_names, tableMetricsMulti);
                 
                 wr.close();
                 bw.close(); 
@@ -6267,13 +6268,13 @@ public class RunApp extends javax.swing.JFrame {
                     
                     if(comboBoxLabelsInformation.getSelectedIndex()==1){
                         //Labelsets tables
-                        util.Save_table_labelsets_frequency_csv(wr, jtable, labelsetStrings_freq);
+                        ResultsIOUtils.saveTableLabelsetsFrequencyCsv(wr, jtable, labelsetStrings_freq);
                     }
                     else if(comboBoxLabelsInformation.getSelectedIndex()==6){
-                        util.Save_table_labelsets_IR_csv(wr, jtable, labelsetStrings_IR);
+                        ResultsIOUtils.saveTableLabelsetsIRCsv(wr, jtable, labelsetStrings_IR);
                     }
                     else{
-                        util.Save_table_csv(wr, jtable);
+                        ResultsIOUtils.saveTableCsv(wr, jtable);
                     }
                     
                 
@@ -6330,13 +6331,13 @@ public class RunApp extends javax.swing.JFrame {
                     wr = new PrintWriter(bw);
                     
                     if(table.equals("ChiPhi")){
-                        util.Save_chi_phi_csv_file(wr, chi_fi_coefficient, dataset.getLabelNames());
+                        ResultsIOUtils.saveChiPhiTableCsv(wr, chi_fi_coefficient, dataset.getLabelNames());
                     }
                     else if(table.equals("Coocurrence")){
-                        util.Save_coocurrence_csv_file(wr, coocurrence_coefficients, dataset.getLabelNames());
+                        ResultsIOUtils.saveCoocurrenceTableCsv(wr, coocurrence_coefficients, dataset.getLabelNames());
                     }
                     else if(table.equals("Heatmap")){
-                        util.Save_heatmap_csv_file(wr, heatmap_coefficients, dataset.getLabelNames());
+                        ResultsIOUtils.saveHeatmapTableCsv(wr, heatmap_coefficients, dataset.getLabelNames());
                     }
                     else{
                         JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
