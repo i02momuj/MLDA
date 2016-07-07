@@ -66,7 +66,7 @@ public class EmergentOutput extends javax.swing.JFrame {
         jTextArea1.append("# Labels: "+tabs+labelNames.size()+"\n");
         
         
-        jTextArea1.append("Frequency: "+tabs+ util.Truncate_values_aprox_zero(Double.toString(value), 5)  +"\n");
+        jTextArea1.append("Frequency: "+tabs+ MetricUtils.truncateValue(Double.toString(value), 5)  +"\n");
         jTextArea1.append("# Examples: " +tabs+info[1]+"\n");
         
         ImbalancedFeature current;
@@ -85,7 +85,7 @@ public class EmergentOutput extends javax.swing.JFrame {
                 jTextArea1.append("--------------------------------------------------------------------------------------------------------------------------" +"\n");
                 jTextArea1.append("Label "+id_label +":  "+tabs+current.getName()+" \n");
                 
-                jTextArea1.append("Frequency:"+ tabs+ util.Truncate_values_aprox_zero(Double.toString(freq), 5) +"\n");
+                jTextArea1.append("Frequency:"+ tabs+ MetricUtils.truncateValue(Double.toString(freq), 5) +"\n");
                   
                 jTextArea1.append("# Examples: "+tabs+ repeat +"\n");
                   

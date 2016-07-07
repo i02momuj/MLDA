@@ -1,27 +1,15 @@
 package utils;
 
-import utils.ImbalancedFeature;
-import utils.AttributesPair;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Shape;
-import java.awt.geom.Ellipse2D;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import static java.lang.Double.NaN;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -31,713 +19,45 @@ import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
-import mldc.attributes.AvgAbsoluteCorrelationBetweenNumericAttributes;
-import mldc.attributes.AvgGainRatio;
-import mldc.attributes.BinaryAttributes;
-import mldc.attributes.MeanEntropiesNominalAttributes;
-import mldc.attributes.MeanOfMeanOfNumericAttributes;
-import mldc.attributes.MeanStdvNumericAttributes;
-import mldc.attributes.NominalAttributes;
-import mldc.attributes.NumericAttributes;
-import mldc.attributes.ProportionBinaryAttributes;
-import mldc.attributes.ProportionNominalAttributes;
-import mldc.attributes.ProportionNumericAttributes;
-import mldc.attributes.ProportionNumericAttributesWithOutliers;
+import mldc.attributes.*;
 import mldc.base.MLDataMetric;
-import mldc.imbalance.CVIRInterClass;
-import mldc.imbalance.KurtosisCardinality;
-import mldc.imbalance.MaxIRInterClass;
-import mldc.imbalance.MaxIRIntraClass;
-import mldc.imbalance.MaxIRLabelset;
-import mldc.imbalance.MeanIRInterClass;
-import mldc.imbalance.MeanIRIntraClass;
-import mldc.imbalance.MeanIRLabelset;
-import mldc.imbalance.MeanKurtosis;
-import mldc.imbalance.MeanSkewnessNumericAttributes;
-import mldc.imbalance.MeanStdvIRIntraClass;
-import mldc.imbalance.PMax;
-import mldc.imbalance.PUniq;
-import mldc.imbalance.SkewnessCardinality;
-import mldc.labelsDistribution.Cardinality;
-import mldc.labelsDistribution.Density;
-import mldc.labelsDistribution.MaxEntropy;
-import mldc.labelsDistribution.MeanEntropy;
-import mldc.labelsDistribution.MinEntropy;
-import mldc.labelsDistribution.StdvCardinality;
-import mldc.labelsRelation.AvgExamplesPerLabelset;
-import mldc.labelsRelation.AvgUnconditionalDependentLabelPairsByChiSquare;
-import mldc.labelsRelation.Bound;
-import mldc.labelsRelation.Diversity;
-import mldc.labelsRelation.LabelsetsUpTo10Examples;
-import mldc.labelsRelation.LabelsetsUpTo2Examples;
-import mldc.labelsRelation.LabelsetsUpTo50Examples;
-import mldc.labelsRelation.LabelsetsUpTo5Examples;
-import mldc.labelsRelation.NumUnconditionalDependentLabelPairsByChiSquare;
-import mldc.labelsRelation.ProportionDistinctLabelsets;
-import mldc.labelsRelation.RatioLabelsetsUpTo10Examples;
-import mldc.labelsRelation.RatioLabelsetsUpTo2Examples;
-import mldc.labelsRelation.RatioLabelsetsUpTo50Examples;
-import mldc.labelsRelation.RatioLabelsetsUpTo5Examples;
-import mldc.labelsRelation.RatioLabelsetsWithExamplesLessThanHalfAttributes;
-import mldc.labelsRelation.RatioUnconditionalDependentLabelPairsByChiSquare;
-import mldc.labelsRelation.SCUMBLE;
-import mldc.labelsRelation.StdvExamplesPerLabelset;
-import mldc.labelsRelation.UniqueLabelsets;
+import mldc.imbalance.*;
+import mldc.labelsDistribution.*;
+import mldc.labelsRelation.*;
+import mldc.size.*;
+
 import mulan.data.InvalidDataFormatException;
 import mulan.data.LabelSet;
 import mulan.data.LabelsPair;
 import mulan.data.MultiLabelInstances;
 import mulan.data.Statistics;
 import mulan.data.UnconditionalChiSquareIdentifier;
-import mulan.data.generation.DataSetBuilder;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.annotations.XYTextAnnotation;
-import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 
-import mldc.size.*;
 import utils.AttributesPair;
 import utils.ImbalancedFeature;
 
 
 /**
- *
- * @author osc
+ * 
+ * @author Jose Maria Moyano Murillo
  */
-public class util {
-    
-    
-    public static String[] Get_labels_from_line(ArrayList<String> label_lines)
-    {
-        String[] labels = new String[label_lines.size()];
-        
-        for(int i=0;i<label_lines.size(); i++)
-            labels[i]= Get_label_from_line(label_lines.get(i));
-        
-        return labels;
-    }
-    
-    private static String Get_label_from_line(String line)
-    {
-        String label="";
-        boolean flag_space=false;
-        char current;
-        for(int i=0;i<line.length();i++)
-        {
-            current =line.charAt(i);
-            
-            if(current==' '&& !flag_space) {flag_space=true;continue;}
-            if(current==' '&& flag_space) {break;}
-            
-            if(flag_space){label+=line.charAt(i); continue;}
-        }
-        return label;
-    }
-    
-    public static void Write_into_xml_file( PrintWriter wr , String[] labels )
-    {
-        //<?xml version="1.0" encoding="utf-8"?>
-        String imprimir = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-    
-        wr.write(imprimir);//escribe en el fichero
-        wr.write(System.getProperty("line.separator"));// escribe el salto de linea
-        
-        //<labels xmlns="http://mulan.sourceforge.net/labels">
-        imprimir = "<labels xmlns=\"http://mulan.sourceforge.net/labels\">";
-        
-        wr.write(imprimir);//escribe en el fichero
-        wr.write(System.getProperty("line.separator"));// escribe el salto de linea
-        
-        for(int i=0; i<labels.length;i++)
-        {
-            //<label name="label-current"></label>
-            imprimir = "<label name=\""+labels[i]+"\"></label>";
-            wr.write(imprimir);//escribe en el fichero
-            wr.write(System.getProperty("line.separator"));// escribe el salto de linea
-        }
-        
-        imprimir = "</labels>";
-        wr.write(imprimir);//escribe en el fichero
-        wr.write(System.getProperty("line.separator"));// escribe el salto de linea
-        
-        
-    }
-    
-    public static boolean Es_de_tipo_MEKA(String cadena)
-    {
-        String tipo="-C";
-        
-        if(cadena.indexOf(tipo)!=-1) return true;
-        return false;
-    }
-    
-    public static String transforma_cadena_tipo_A(String cadena, int cant_labels)
-    {
-        String result="",temp="";
-        int comas=0;
-        for(int i=0;i<cadena.length();i++)
-        {
-            if(comas<cant_labels)
-            {
-                if(cadena.charAt(i)==',') comas++;
-                
-                temp+=cadena.charAt(i);
-            }
-            else{result+= cadena.charAt(i);}
-        }
-        return result+=","+temp.substring(0, temp.length()-1);
-    
-    }
-    
-    public static String Get_tipo_formato(String cadena)
-    {
-        if(cadena.charAt(0)=='{') return "tipo_B";
-        return "tipo_A";
-    }
-    
-  
-    public static String Extract_relation_name(String cadena)
-    {
-        String relation_name =" ";
-        String simbol = "'";
-        boolean flag =false;
-        
-        for(int i=1; i<cadena.length(); i++)
-        {
-            if(cadena.substring(i-1, i).equals(simbol)){ flag=true; continue;}
-            
-            if(flag)
-            {
-                if(cadena.substring(i-1, i).equals(":")) break;
-                relation_name+=cadena.substring(i-1, i);
-            }
-            
-        }
-        
-        return relation_name;
-    }
-    
-    public static int Extract_labels_from_arff(String cadena)
-    {
-        int labels;
-        String current, value="";
-        
-       //System.out.println("cadena: " + cadena);
-        String [] words = cadena.split("-C");
-        String c = words[1].trim();
-        Matcher matcher = Pattern.compile("\\d+").matcher(c);
-        matcher.find();
-        labels = Integer.valueOf(matcher.group());
-       //System.out.println("c: -"+ c + "- ; " + labels);
-        if(c.charAt(0) == '-'){
-            labels = labels * -1;
-        }
-       //System.out.println("labels: " + labels);
+public class util {        
 
-        
-        return labels;
-    }
-    
-    public static String Extract_label_name_from_String(String cadena)
-    {
-        String result=null;
-        int espacios=0;
-        int pos_inicio=0,pos_final=0;
-        
-        if(cadena.indexOf("@attribute")!= -1) 
-        {
-            for(int i=0; i<cadena.length(); i++)
-            {
-                if(cadena.charAt(i)==' ' && espacios==0){espacios++;pos_inicio=i;}
-                else if(cadena.charAt(i)==' '){pos_final=i; break;}
-                
-            }
-            
-            result = cadena.substring(pos_inicio+1, pos_final);
-        }
-        
-        return result;
-    }
-    
-    	 
-	 public static boolean es_numero(char valor)
-	 {
-             String numero_aceptado="0123456789";
-	
-            if(!Esta_valor(numero_aceptado, valor)) return false; 
-
-            return true;
-	 }
-    
-    	 public static boolean Esta_valor(String conjunto, char valor)
-	 {
-		 for (int i=0; i<conjunto.length(); i++)
-			 if(conjunto.charAt(i)== valor) return true;
-		 
-         	 return false;
-	 }
-    
-    public static String Truncate_values_aprox_zero (String value, int digits)
-    {
-        String simbol ="";
-        if(this_value_Has_E(value))
-        {
-            simbol=value.substring(value.length()-3, value.length());
-        }
-        double valor = Double.parseDouble(value);
-        return Truncate_value(valor, digits);//+simbol;
-    }
-    private static boolean this_value_Has_E(String value)
-    {               
-        if(value.charAt(value.length()-3) =='E' ||value.charAt(value.length()-2) =='E')
-           return true;
-        
-        return false;
-    }
     
     
-    public static String[] Labelcommb_information(Statistics stat1, int index)
-    {
-        String[] selected= new String[2];
-        
-        HashMap<LabelSet,Integer> labelcombination = stat1.labelCombCount();
-        Set<LabelSet> keysets = labelcombination.keySet();
-        
-        int count =0;
-        for(LabelSet current : keysets)
-        {
-            
-            if(count == index)
-            {
-               int value= labelcombination.get(current);
-               String labelname = current.toString();
-               
-               selected[0]=  labelname;
-               selected[1] = Integer.toString(value);
-               break;
-            }
-            count++;
-        }
-        return selected;
-        
-    }
-    
-     //ENCONTRAR TODAS LAS ETIQUETAS QUE TENGAN EL MISMO IR inter class
-    public static ArrayList<String> Get_labelnames_x_IR_inter_class(double ir, int cant_etiquetas_encontradas,ImbalancedFeature[] label_imbalanced)
-    {
-         ArrayList<String> labelnames= new ArrayList();
-         ImbalancedFeature current;
-         int encontrados=0;
-         String truncate_current;
-         double current_ir;
-         
-         for(int i=0; i<label_imbalanced.length; i++)
-         {
-             current = label_imbalanced[i];
-             if(encontrados == cant_etiquetas_encontradas) break;
-             
-             truncate_current = Double.toString(current.getIRInterClass());
-            //System.out.println("truncate_current1: " + truncate_current);
-             truncate_current = Truncate_values_aprox_zero(truncate_current, 5);
-             
-             current_ir = Double.parseDouble(truncate_current);
-             
-             if(current_ir == ir)
-             {
-                 encontrados++;
-                 labelnames.add(current.getName());
-             }
-         }
-         return labelnames;
-    }
-    
-    
-    //ENCONTRAR TODAS LAS ETIQUETAS QUE TENGAN EL MISMO IR intra class
-    public static ArrayList<String> Get_labelnames_x_IR_intra_class(int ir, int cant_etiquetas_encontradas,ImbalancedFeature[] label_imbalanced)
-    {
-         ArrayList<String> labelnames= new ArrayList();
-         ImbalancedFeature current;
-         int encontrados=0;
-         for(int i=0; i<label_imbalanced.length; i++)
-         {
-             current = label_imbalanced[i];
-             if(encontrados == cant_etiquetas_encontradas) break;
-             
-             if(current.getIRIntraClass() == ir)
-             {
-                 encontrados++;
-                 labelnames.add(current.getName());
-             }
-         }
-         return labelnames;
-    }
-    
-    //ENCONTRAR TODAS LAS ETIQUETAS QUE TENGAN EL MISMO IR intra class
-        public static ArrayList<String> Get_labelnames_x_IR_intra_class(double ir, int cant_etiquetas_encontradas,ImbalancedFeature[] label_imbalanced)
-    {
-         ArrayList<String> labelnames= new ArrayList();
-         ImbalancedFeature current;
-         int encontrados=0;
-         String truncate;
-         double current_truncate;
-         
-         for(int i=0; i<label_imbalanced.length; i++)
-         {
-             current = label_imbalanced[i];
-             if(encontrados == cant_etiquetas_encontradas) break;
-             
-             truncate = Double.toString(current.getIRIntraClass());
-             truncate = util.Truncate_values_aprox_zero(truncate, 5);
-             current_truncate = Double.parseDouble(truncate);
-             
-             if(current_truncate == ir)
-             {
-                 encontrados++;
-                 labelnames.add(current.getName());
-             }
-         }
-         return labelnames;
-    }
-    
-    public static ArrayList<String> Get_labelnames_x_labelcombination( MultiLabelInstances dataset, String labelcombination)
-    {
-        ArrayList<String> labelnames_x_labelcombination = new ArrayList();
-        
-        for(int i=0; i<labelcombination.length();i++)
-        {
-            if(labelcombination.charAt(i)=='1')
-            {
-                labelnames_x_labelcombination.add(Get_label_x_indice(dataset, i).name());
-            }
-        }
-        return labelnames_x_labelcombination;
-    }
-    
-    public static Attribute Get_label_x_indice( MultiLabelInstances dataset,int id)
-    {
-        int[] label_indices = dataset.getLabelIndices();
-        
-        Attribute result = dataset.getDataSet().instance(1).attribute(label_indices[id]);
-        return result;
-    }
-    
-    public static void update_values_bar_chart(ImbalancedFeature[] label_x_frequency, int cant_instancias, CategoryPlot cp )
-    {
-            DefaultCategoryDataset my_data = new DefaultCategoryDataset();
-      
-            double prob;
-            
-            label_x_frequency = util.Ordenar_freq_x_attr(label_x_frequency);
-            
-            double sum = 0.0;
-            for(int i=0; i<label_x_frequency.length;i++)
-            {
-                prob= label_x_frequency[i].getAppearances()*1.0/cant_instancias;
-                sum += prob;
-               ////System.out.println(" TESTING "+label_x_frequency[i].getName()+" "+label_x_frequency[i].getAppearances() +" "+ prob);
-                                
-                    //type === bar
-                    my_data.setValue(prob, label_x_frequency[i].getName()," ");               
-            }
-          
-            cp.setDataset(my_data);
-            
-            // add a labelled marker for the bid start price...
-            sum = sum/label_x_frequency.length;
-            Marker start = new ValueMarker(sum);
-            start.setPaint(Color.red);
-            start.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
-            start.setLabel("                        Mean: "+util.Truncate_value(sum, 3));
-            cp.addRangeMarker(start);
-            
-            //return cp;
-              
-            
-    }
-    
-    
-    public static void update_values_bar_chart_IR(ImbalancedFeature[] label_x_frequency, double[] IR, CategoryPlot cp)
-    {
-            DefaultCategoryDataset my_data = new DefaultCategoryDataset();
-      
-            double prob = 0;
-            
-            label_x_frequency = util.Ordenar_freq_x_attr(label_x_frequency);
-            
-            double sum = 0.0;
-            for(int i=label_x_frequency.length-1; i>=0; i--)
-            {
-                prob= IR[i];           
-                sum += prob;
-                my_data.setValue(prob, label_x_frequency[i].getName()," ");      
-            }
-          
-            cp.setDataset(my_data);
-            
-            // add a labelled marker for the bid start price...
-            sum = sum/label_x_frequency.length;
-            Marker meanMark = new ValueMarker(sum);
-            meanMark.setPaint(Color.red);
-            meanMark.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
-            meanMark.setLabel("                        Mean: "+util.Truncate_value(sum, 3));
-            cp.addRangeMarker(meanMark);
-            
-            Marker limitMark = new ValueMarker(1.5);
-            limitMark.setPaint(Color.black);
-            limitMark.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
-            
-            if((sum < 1.3) || (sum > 1.7)){
-                limitMark.setLabel("                                                Imbalance limit (IR=1.5)");
-            }            
-            cp.addRangeMarker(limitMark);
-            
-            //return cp;
-              
-            
-    }
-    
-    
-    public static void update_values_bar_chart_IR(ImbalancedFeature[] labelset_x_IR, CategoryPlot cp)
-    {
-            DefaultCategoryDataset my_data = new DefaultCategoryDataset();
-      
-            double prob = 0;
-            
-            //label_x_frequency = util.Ordenar_freq_x_attr(label_x_frequency);
-            
-            double sum = 0.0;
-            for(int i=labelset_x_IR.length-1; i>=0; i--)
-            {
-                //prob= IR[i];   
-                prob = labelset_x_IR[i].getIRInterClass();
-                sum += prob;
-                my_data.setValue(prob, labelset_x_IR[i].getName()," ");      
-            }
-          
-            cp.setDataset(my_data);
-            
-            // add a labelled marker for the bid start price...
-            sum = sum/labelset_x_IR.length;
-            Marker meanMark = new ValueMarker(sum);
-            meanMark.setPaint(Color.red);
-            meanMark.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
-            meanMark.setLabel("                        Mean: "+util.Truncate_value(sum, 3));
-            cp.addRangeMarker(meanMark);
-            
-            Marker limitMark = new ValueMarker(1.5);
-            limitMark.setPaint(Color.black);
-            limitMark.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
-            
-            if((sum < 1.3) || (sum > 1.7)){
-                limitMark.setLabel("                                                Imbalance limit (IR=1.5)");
-            }            
-            cp.addRangeMarker(limitMark);
-    }
-     
-     
-   
-    
- 
-  public static void update_values_xydataset(ChartPanel xyplot1, double[] arreglo_ordenado) {
-
-   XYPlot xyplot = xyplot1.getChart().getXYPlot();
-    
-   double min = arreglo_ordenado[0];
-   //System.out.println("el menor es " +min);
-   double max = arreglo_ordenado[arreglo_ordenado.length-1];
-   
-   double mediana = util.get_mediana(arreglo_ordenado);
-   
-   double q1 = util.get_q1(arreglo_ordenado);
-   double q3 = util.get_q3(arreglo_ordenado);
-
-   double ir = util.get_RI_q1_q3(q1, q3);
-   
-   //double linf = util.Limite_inf(q1, ir);
-   //double lsup = util.Limite_sup(q3, ir);
-   
-   XYSeries serie_linf=null;
-   XYSeries serie_lsup=null;
-
-   // l_inf vertical
-       serie_linf = new XYSeries("8");
-       //serie_linf.add(linf, 0.4);
-       //serie_linf.add(linf, 0.6);
-       
-       XYTextAnnotation annotation ;//= new XYTextAnnotation("Li", linf, 0.35);
-       //annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-       //xyplot.addAnnotation(annotation);
-   
-    //min-linf horizontal
-    XYSeries serie15 = new XYSeries("15");
-    serie15.add(min, 0.5);
-    //serie15.add(linf, 0.5);
-    
-    //max-lsup horizontal
-    XYSeries serie16 = new XYSeries("16");
-    serie16.add(max, 0.5);
-    //serie16.add(lsup, 0.5);
-    
-   
-   //min vertical
-    XYSeries serie1 = new XYSeries("0");
-    serie1.add(min, 0.45);
-    serie1.add(min, 0.55);
-    
-     annotation = new XYTextAnnotation("Min", min, 0.40);
-     annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-     xyplot.addAnnotation(annotation);
-     
-  
-    //min-q1 horizontal
-    XYSeries serie2 = new XYSeries("1");
-    serie2.add(min, 0.5);
-    serie2.add(q1, 0.5);
-  
-    //q1 vertical  
-    XYSeries serie3 = new XYSeries("2");
-    serie3.add(q1, 0.1);
-    serie3.add(q1, 0.9);
-    
-    annotation = new XYTextAnnotation("Q1", q1, 0.08);
-    annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-    xyplot.addAnnotation(annotation);
-    
-    // mediana 
-    XYSeries serie_mediana = new XYSeries("11");
-    serie_mediana.add(mediana, 0.1);
-    serie_mediana.add(mediana, 0.9);
-    
-    annotation = new XYTextAnnotation("Median", mediana, 0.04);
-    annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-    xyplot.addAnnotation(annotation);
- 
-    //q1-q3 horizontal sup
-    XYSeries serie4 = new XYSeries("3");
-    serie4.add(q1, 0.9);
-    serie4.add(q3, 0.9);
- 
-    //q1-q3 horizontal inf
-    XYSeries serie5 = new XYSeries("4");
-    serie5.add(q1, 0.1);
-    serie5.add(q3, 0.1);
- 
-    //q3 vertical
-    XYSeries serie6 = new XYSeries("5");
-    serie6.add(q3, 0.1);
-    serie6.add(q3, 0.9);
-    
-    annotation = new XYTextAnnotation("Q3", q3, 0.08);
-    annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-    xyplot.addAnnotation(annotation);
-    
-    //q3-max horizontal
-    XYSeries serie7 = new XYSeries("6");
-    serie7.add(q3, 0.5);
-    serie7.add(max, 0.5);
-    
-    //max vertical
-    XYSeries serie8 = new XYSeries("7");
-    serie8.add(max, 0.45);
-    serie8.add(max, 0.55);
-    
-    annotation = new XYTextAnnotation("Max", max, 0.4);
-    annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-    xyplot.addAnnotation(annotation);
-    
-
-        serie_lsup = new XYSeries("9");
-        //serie_lsup.add(lsup, 0.4);
-        //serie_lsup.add(lsup, 0.6);
-        
-       //annotation = new XYTextAnnotation("Ls", lsup, 0.35);
-       //annotation.setFont(new Font("SansSerif", Font.PLAIN, 11));
-       //xyplot.addAnnotation(annotation);
-
-       
-
- 
- XYSeriesCollection xyseriescollection = new XYSeriesCollection();
-
- //xyseriescollection.addSeries(serie_point);
- 
- xyseriescollection.addSeries(serie1);
- xyseriescollection.addSeries(serie2);
- xyseriescollection.addSeries(serie3);
- xyseriescollection.addSeries(serie4);
- xyseriescollection.addSeries(serie5);
- xyseriescollection.addSeries(serie6);
- xyseriescollection.addSeries(serie7);
- xyseriescollection.addSeries(serie8);
- xyseriescollection.addSeries(serie15);
- xyseriescollection.addSeries(serie16);
- xyseriescollection.addSeries(serie_mediana);
- 
- //xyseriescollection.addSeries(serie_linf);
- xyplot.getRenderer().setSeriesPaint(9, Color.black);
- //xyseriescollection.addSeries(serie_lsup); 
- xyplot.getRenderer().setSeriesPaint(10, Color.black); 
- 
- 
- xyplot.getRenderer().setSeriesPaint(0, Color.black);
- xyplot.getRenderer().setSeriesPaint(1, Color.black);
- xyplot.getRenderer().setSeriesPaint(2, Color.black);
- xyplot.getRenderer().setSeriesPaint(3, Color.black);
- xyplot.getRenderer().setSeriesPaint(4, Color.black);
- xyplot.getRenderer().setSeriesPaint(5, Color.black);
- xyplot.getRenderer().setSeriesPaint(6, Color.black);
- xyplot.getRenderer().setSeriesPaint(7, Color.black);
- xyplot.getRenderer().setSeriesPaint(8, Color.black);
- xyplot.getRenderer().setSeriesPaint(9, Color.black);
- xyplot.getRenderer().setSeriesPaint(10, Color.black);
- xyplot.getRenderer().setSeriesPaint(11, Color.black);
- xyplot.getRenderer().setSeriesPaint(12, Color.black);
- xyplot.getRenderer().setSeriesPaint(13, Color.black);
- 
-  //agregar el dataset
- xyplot.setDataset(xyseriescollection);
- 
- 
- 
- 
- 
- 
-    // add a second dataset and renderer... 
-     XYSeriesCollection anotherserie = new XYSeriesCollection();
-         
-     XYSeries serie_point = new XYSeries("21");
-     
-     double[] valor_y = {0.47,0.49,0.51,0.53};
-     
-     for(int i=0, j=0; i<arreglo_ordenado.length; i++ , j++)
-     {
-         if(j%4==0) j=0;
-         serie_point.add(arreglo_ordenado[i],valor_y[j] );
-     }
-         
-    anotherserie.addSeries(serie_point);
-       
-     
-     XYLineAndShapeRenderer renderer1 = new XYLineAndShapeRenderer(false, true); 
-     renderer1.setSeriesPaint(0, Color.lightGray);
-    // arguments of new XYLineAndShapeRenderer are to activate or deactivate the display of points or line. Set first argument to true if you want to draw lines between the points for e.g.
-    xyplot.setDataset(1, anotherserie);
-    xyplot.setRenderer(1, renderer1);
- 
- 
- }
   
   public static void update_values_xydataset(ChartPanel xyplot1, int[] arreglo_ordenado) {
 
@@ -955,7 +275,7 @@ public class util {
         Marker start = new ValueMarker(sum);
         start.setPaint(Color.red);
         start.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
-        start.setLabel("                        Mean: "+util.Truncate_value(sum, 3));
+        start.setLabel("                        Mean: "+MetricUtils.truncateValue(sum, 3));
         cp.addRangeMarker(start);
         
         
@@ -1009,7 +329,7 @@ public class util {
         Marker start = new ValueMarker(sum);
         start.setPaint(Color.red);
         start.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
-        start.setLabel("                        Mean: "+util.Truncate_value(sum, 3));
+        start.setLabel("                        Mean: "+MetricUtils.truncateValue(sum, 3));
         cp.addRangeMarker(start);
         
         
@@ -1805,7 +1125,7 @@ public class util {
          return frequencia_x_labels;
     }
     
-    public static ImbalancedFeature[] Ordenar_freq_x_attr (ImbalancedFeature[] label_frenquency) // ordena de mayor a menor
+    public static ImbalancedFeature[] sortByFrequency (ImbalancedFeature[] label_frenquency) // ordena de mayor a menor
     {
         ArrayList<ImbalancedFeature> lista = new ArrayList();
         
@@ -1903,7 +1223,7 @@ public class util {
           if(i-1 != num_fila  )
           {
               truncate = Double.toString(coefficient[i-1][num_fila]);
-              fila[i]= util.Truncate_values_aprox_zero(truncate, 4);
+              fila[i]= MetricUtils.truncateValue(truncate, 4);
           }
                     
           else if (i-1==num_fila) {fila[i]= "---"; }
@@ -2821,11 +2141,11 @@ public class util {
         ImbalancedFeature[] imbalanced_data_train, imbalanced_data_test, label_frenquency_train, label_frenquency_test;
         
         label_frenquency_train = util.Get_Frequency_x_label(dataset_train);
-        label_frenquency_train = util.Ordenar_freq_x_attr(label_frenquency_train);// ordena de mayor a menor             
+        label_frenquency_train = util.sortByFrequency(label_frenquency_train);// ordena de mayor a menor             
         imbalanced_data_train = util.Get_data_imbalanced_x_label_inter_class(dataset_train,label_frenquency_train);
         
         label_frenquency_test = util.Get_Frequency_x_label(dataset_test);
-        label_frenquency_test = util.Ordenar_freq_x_attr(label_frenquency_test);// ordena de mayor a menor
+        label_frenquency_test = util.sortByFrequency(label_frenquency_test);// ordena de mayor a menor
         imbalanced_data_test = util.Get_data_imbalanced_x_label_inter_class(dataset_test,label_frenquency_test);
         
         
@@ -2893,11 +2213,11 @@ public class util {
         ImbalancedFeature[] imbalanced_data_train, imbalanced_data_test, label_frenquency_train, label_frenquency_test;
         
         label_frenquency_train = util.Get_Frequency_x_label(dataset_train);
-        label_frenquency_train = util.Ordenar_freq_x_attr(label_frenquency_train);// ordena de mayor a menor             
+        label_frenquency_train = util.sortByFrequency(label_frenquency_train);// ordena de mayor a menor             
         imbalanced_data_train = util.Get_data_imbalanced_x_label_inter_class(dataset_train,label_frenquency_train);
         
         label_frenquency_test = util.Get_Frequency_x_label(dataset_test);
-        label_frenquency_test = util.Ordenar_freq_x_attr(label_frenquency_test);// ordena de mayor a menor
+        label_frenquency_test = util.sortByFrequency(label_frenquency_test);// ordena de mayor a menor
         imbalanced_data_test = util.Get_data_imbalanced_x_label_inter_class(dataset_test,label_frenquency_test);
         
         
@@ -2973,7 +2293,7 @@ public class util {
             current_test = dataset_test_list.get(i);
         
             label_frenquency_train = util.Get_Frequency_x_label(current_train);
-            label_frenquency_train = util.Ordenar_freq_x_attr(label_frenquency_train);// ordena de mayor a menor             
+            label_frenquency_train = util.sortByFrequency(label_frenquency_train);// ordena de mayor a menor             
             imbalanced_data_train = util.Get_data_imbalanced_x_label_inter_class(current_train,label_frenquency_train);
             
             //TRAIN
@@ -2998,7 +2318,7 @@ public class util {
 
             
             label_frenquency_test = util.Get_Frequency_x_label(current_test);
-            label_frenquency_test = util.Ordenar_freq_x_attr(label_frenquency_test);// ordena de mayor a menor
+            label_frenquency_test = util.sortByFrequency(label_frenquency_test);// ordena de mayor a menor
             imbalanced_data_test = util.Get_data_imbalanced_x_label_inter_class(current_test,label_frenquency_test);
             
              //Test
@@ -3055,7 +2375,7 @@ public class util {
             current_test = dataset_test_list.get(i);
         
             label_frenquency_train = util.Get_Frequency_x_label(current_train);
-            label_frenquency_train = util.Ordenar_freq_x_attr(label_frenquency_train);// ordena de mayor a menor             
+            label_frenquency_train = util.sortByFrequency(label_frenquency_train);// ordena de mayor a menor             
             imbalanced_data_train = util.Get_data_imbalanced_x_label_inter_class(current_train,label_frenquency_train);
             
             //TRAIN
@@ -3080,7 +2400,7 @@ public class util {
 
             
             label_frenquency_test = util.Get_Frequency_x_label(current_test);
-            label_frenquency_test = util.Ordenar_freq_x_attr(label_frenquency_test);// ordena de mayor a menor
+            label_frenquency_test = util.sortByFrequency(label_frenquency_test);// ordena de mayor a menor
             imbalanced_data_test = util.Get_data_imbalanced_x_label_inter_class(current_test,label_frenquency_test);
             
              //Test
@@ -3133,7 +2453,7 @@ public class util {
              for(String metric : metric_list)
              {
                 label_frenquency = util.Get_Frequency_x_label(current);
-                label_frenquency = util.Ordenar_freq_x_attr(label_frenquency);// ordena de mayor a menor
+                label_frenquency = util.sortByFrequency(label_frenquency);// ordena de mayor a menor
              
                 imbalanced_data = util.Get_data_imbalanced_x_label_inter_class(current,label_frenquency);
                 
@@ -3245,7 +2565,7 @@ public class util {
     
              else
              {             
-                 value_truncate = util.Truncate_value(util.Get_media(lista_valores), 5);
+                 value_truncate = MetricUtils.truncateValue(util.Get_media(lista_valores), 5);
                  value_truncate =Cambia_pto_x_coma(value_truncate);
                  wr.write(metrica+";"+value_truncate );
                  wr.write(System.getProperty("line.separator"));
@@ -3316,7 +2636,7 @@ public class util {
                  }
                  else 
                  {
-                    value_truncate_test = util.Truncate_value(util.Get_media(lista_valores_test), 5);
+                    value_truncate_test = MetricUtils.truncateValue(util.Get_media(lista_valores_test), 5);
                     value_truncate_test =Cambia_pto_x_coma(value_truncate_test);
                  
                     wr.write(metrica+";"+"NaN"+";"+value_truncate_test );
@@ -3330,7 +2650,7 @@ public class util {
                  if(lista_valores_test.isEmpty())
                  {
                                           
-                    value_truncate = util.Truncate_value(util.Get_media(lista_valores), 5);
+                    value_truncate = MetricUtils.truncateValue(util.Get_media(lista_valores), 5);
                     value_truncate = Cambia_pto_x_coma(value_truncate);
                     
                     wr.write(metrica+";"+value_truncate+";"+"NaN" );
@@ -3341,7 +2661,7 @@ public class util {
                     
                     if(metrica.equals("Number of unseen labelsets")|| metrica.equals("Ratio of unseen labelsets"))
                      {
-                        value_truncate_test = util.Truncate_value(util.Get_media(lista_valores_test), 5);
+                        value_truncate_test = MetricUtils.truncateValue(util.Get_media(lista_valores_test), 5);
                         value_truncate_test =Cambia_pto_x_coma(value_truncate_test);
                                      
                         wr.write(metrica+";"+"NaN"+";"+value_truncate_test );
@@ -3350,10 +2670,10 @@ public class util {
                       
                     else
                     {
-                        value_truncate = util.Truncate_value(util.Get_media(lista_valores), 5);
+                        value_truncate = MetricUtils.truncateValue(util.Get_media(lista_valores), 5);
                         value_truncate = Cambia_pto_x_coma(value_truncate);
                     
-                        value_truncate_test = util.Truncate_value(util.Get_media(lista_valores_test), 5);
+                        value_truncate_test = MetricUtils.truncateValue(util.Get_media(lista_valores_test), 5);
                         value_truncate_test =Cambia_pto_x_coma(value_truncate_test);
                  
                     
@@ -3551,7 +2871,7 @@ public class util {
     
              else
              {             
-                 value_truncate = util.Truncate_value(util.Get_media(lista_valores), 5);
+                 value_truncate = MetricUtils.truncateValue(util.Get_media(lista_valores), 5);
                  wr.write(value+value_truncate );
                  wr.write(System.getProperty("line.separator"));
              }
@@ -3598,7 +2918,7 @@ public class util {
             {
                 current_train = list_datasets_train.get(n);
                 label_frenquency = util.Get_Frequency_x_label(current_train);
-                label_frenquency = util.Ordenar_freq_x_attr(label_frenquency);// ordena de mayor a menor
+                label_frenquency = util.sortByFrequency(label_frenquency);// ordena de mayor a menor
                 
                 imbalanced_data = util.Get_data_imbalanced_x_label_inter_class(current_train,label_frenquency);
                 
@@ -3631,7 +2951,7 @@ public class util {
     
              else
              {             
-                 value_truncate = util.Truncate_value(util.Get_media(lista_valores), 5);
+                 value_truncate = MetricUtils.truncateValue(util.Get_media(lista_valores), 5);
                  wr.write(value +value_truncate);
                  wr.write(System.getProperty("line.separator"));  
              }
@@ -3677,7 +2997,7 @@ public class util {
                 current_test = list_datasets_test.get(n);
                 
                 label_frenquency1 = util.Get_Frequency_x_label(current_test);
-                label_frenquency1 = util.Ordenar_freq_x_attr(label_frenquency1);// ordena de mayor a menor
+                label_frenquency1 = util.sortByFrequency(label_frenquency1);// ordena de mayor a menor
                 
                 imbalanced_data1 = util.Get_data_imbalanced_x_label_inter_class(current_test,label_frenquency1);
                                
@@ -3709,7 +3029,7 @@ public class util {
     
              else
              {             
-                 value_truncate = util.Truncate_value(util.Get_media(lista_valores), 5);
+                 value_truncate = MetricUtils.truncateValue(util.Get_media(lista_valores), 5);
                  wr.write(value +value_truncate);
                  wr.write(System.getProperty("line.separator"));  
              }
@@ -3836,11 +3156,11 @@ public class util {
           ImbalancedFeature[] imbalanced_data_train, imbalanced_data_test, label_frenquency_train,label_frenquency_test;
           
           label_frenquency_train = util.Get_Frequency_x_label(dataset_train);
-          label_frenquency_train = util.Ordenar_freq_x_attr(label_frenquency_train);// ordena de mayor a menor
+          label_frenquency_train = util.sortByFrequency(label_frenquency_train);// ordena de mayor a menor
           imbalanced_data_train = util.Get_data_imbalanced_x_label_inter_class(dataset_train,label_frenquency_train);
                     
           label_frenquency_test = util.Get_Frequency_x_label(dataset_test);
-          label_frenquency_test = util.Ordenar_freq_x_attr(label_frenquency_test);// ordena de mayor a menor
+          label_frenquency_test = util.sortByFrequency(label_frenquency_test);// ordena de mayor a menor
           imbalanced_data_test = util.Get_data_imbalanced_x_label_inter_class(dataset_test,label_frenquency_test);
           
         for(String metrica : metric_list_comun)
@@ -5002,7 +4322,7 @@ public class util {
         }
         
         
-        //return Truncate_values_aprox_zero(Double.toString(value),4);
+        //return truncateValue(Double.toString(value),4);
     }
     
     
@@ -6087,7 +5407,7 @@ public class util {
     public static double[] get_ir_values_inter_class(ImbalancedFeature[] label_freq)//se le pasa el arreglo ordenado de mayor a menor
     {
         
-        ImbalancedFeature[] label_freq_sorted = Ordenar_freq_x_attr(label_freq);
+        ImbalancedFeature[] label_freq_sorted = sortByFrequency(label_freq);
         
         double[] ir_inter_class = new double[label_freq.length];
         
@@ -6453,7 +5773,7 @@ public class util {
         return path;
     }
     
-    public static boolean Has_more_n_digits(double d, int digits)
+    public static boolean hasMoreNDigits(double d, int digits)
     {
     
         String text = Double.toString(Math.abs(d));
@@ -6464,31 +5784,7 @@ public class util {
         return true;
     }
     
-    public static String Truncate_value(double value, int digits)
-    {
-       
-        String number = Double.toString(value);
-        int count_dig =0;
-        String result="";
-        boolean flag =false;
-        
-        if(!Has_more_n_digits(value, digits)) return Double.toString(value);
-        
-        for(int i=0; i<number.length();i++)
-        {
-            if(flag && count_dig!=digits)count_dig++;
-                
-            if(number.charAt(i)=='.')
-            {flag=true; continue;}
-            
-            if(count_dig == digits) 
-            {
-                result=number.substring(0,i);
-                break;
-            }
-        }
-        return result;
-    }
+    
         
     
     public static int Label_value_most_frequency(HashMap labels)

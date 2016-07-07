@@ -116,6 +116,10 @@ import preprocess.FeatureSelector;
 import preprocess.RandomTrainTest;
 import preprocess.IterativeTrainTest;
 import preprocess.LabelPowersetTrainTest;
+import utils.ChartUtils;
+import utils.DataIOUtils;
+import utils.DataInfoUtils;
+import utils.MetricUtils;
 import static utils.util.Get_labelset_x_values;
 import weka.core.Attribute;
 import weka.core.Instances;
@@ -2835,7 +2839,7 @@ public class RunApp extends javax.swing.JFrame {
                 return;
             }
 
-            ArrayList<String> label_names= util.Get_labelnames_x_labelcombination(dataset, labelsets_sorted[seleccionada].getName());
+            ArrayList<String> label_names= DataInfoUtils.getLabelNamesByLabelset(dataset, labelsets_sorted[seleccionada].getName());
 
             String[] args = new String[2];
 
@@ -2864,7 +2868,7 @@ public class RunApp extends javax.swing.JFrame {
                 cp_box.getChart().setTitle("# Examples per Label");
                 cp_box.getChart().getXYPlot().clearAnnotations();
 
-                util.update_values_xydataset(cp_box, HeapSort.getSortedArray());
+                ChartUtils.updateXYChart(cp_box, HeapSort.getSortedArray());
             }
             else if(seleccionada == 1){
                 tableImbalance.clearSelection();
@@ -2876,7 +2880,7 @@ public class RunApp extends javax.swing.JFrame {
                 cp_box.getChart().setTitle("# Examples per Labelset");
                 cp_box.getChart().getXYPlot().clearAnnotations();
 
-                util.update_values_xydataset(cp_box, HeapSort.getSortedArray());
+                ChartUtils.updateXYChart(cp_box, HeapSort.getSortedArray());
             }
             /*
             jRadioButton8.setSelected(true);
@@ -2888,7 +2892,7 @@ public class RunApp extends javax.swing.JFrame {
             HeapSort.sort(valores_attr);
             cp_box.getChart().setTitle(attr_current.name());
             cp_box.getChart().getXYPlot().clearAnnotations();
-            util.update_values_xydataset(cp_box, HeapSort.getSortedArray());
+            util.updateXYChart(cp_box, HeapSort.getSortedArray());
             */
         }
 
@@ -2898,7 +2902,7 @@ public class RunApp extends javax.swing.JFrame {
 
             if(labelsets_sorted_IR == null) return;
 
-            ArrayList<String> label_names= util.Get_labelnames_x_labelcombination(dataset, labelsets_sorted_IR[seleccionada].getName());
+            ArrayList<String> label_names= DataInfoUtils.getLabelNamesByLabelset(dataset, labelsets_sorted_IR[seleccionada].getName());
 
             String[] args = new String[2];
 
@@ -3660,7 +3664,7 @@ public class RunApp extends javax.swing.JFrame {
 
             cp_box2.getChart().getXYPlot().clearAnnotations();
             
-            util.update_values_xydataset(cp_box2, HeapSort.getSortedArray());
+            ChartUtils.updateXYChart(cp_box2, HeapSort.getSortedArray());
         }
     }//GEN-LAST:event_tableAttributesLeftMouseClicked
 
@@ -4017,14 +4021,14 @@ public class RunApp extends javax.swing.JFrame {
                     String label_name;
                     String[] label_names_found;
 
-                    es_meka = util.Es_de_tipo_MEKA(sCadena);
+                    es_meka = DataIOUtils.isMeka(sCadena);
                     lista_son_meka.add(es_meka);
 
                     if(es_meka)
                     {
                         es_de_tipo_meka = true;
 
-                        int label_count = util.Extract_labels_from_arff(sCadena);                
+                        int label_count = DataIOUtils.getLabelsFromARFF(sCadena);                
 
                         //---------------
 
@@ -4034,7 +4038,7 @@ public class RunApp extends javax.swing.JFrame {
                             while(label_found < label_count)
                             {
                                 sCadena = bf.readLine();
-                                label_name = util.Extract_label_name_from_String(sCadena);
+                                label_name = DataIOUtils.getLabelNameFromLine(sCadena);
 
                                 if(label_name!= null)
                                 {
@@ -4061,7 +4065,7 @@ public class RunApp extends javax.swing.JFrame {
                             }
 
                             for(int i=0; i<label_count; i++){
-                                label_name = util.Extract_label_name_from_String(sCadenas[i]);
+                                label_name = DataIOUtils.getLabelNameFromLine(sCadenas[i]);
 
                                 if(label_name!= null)
                                 {
@@ -4077,7 +4081,7 @@ public class RunApp extends javax.swing.JFrame {
                         BufferedWriter bw_xml= new BufferedWriter(new FileWriter(filename_database_xml_path1));
                         PrintWriter wr_xml = new PrintWriter(bw_xml);
 
-                        util.Write_into_xml_file(wr_xml, label_names_found);
+                        DataIOUtils.writeXMLFile(wr_xml, label_names_found);
 
                         bw_xml.close();
                         wr_xml.close();
@@ -4133,7 +4137,7 @@ public class RunApp extends javax.swing.JFrame {
             return -1;
         }
         
-        MultiLabelInstances preprocessDataset = dataset;
+        MultiLabelInstances preprocessDataset = dataset.clone();
         
         if(! radioNoIS.isSelected()){
             //Do Instance Selection
@@ -4589,13 +4593,13 @@ public class RunApp extends javax.swing.JFrame {
                 String label_name;
                 String[] label_names_found;
 
-                if(util.Es_de_tipo_MEKA(sCadena))
+                if(DataIOUtils.isMeka(sCadena))
                 {
                     deleteXML = true;
 
                     es_de_tipo_meka = true;
 
-                    int label_count = util.Extract_labels_from_arff(sCadena);
+                    int label_count = DataIOUtils.getLabelsFromARFF(sCadena);
                     
                     if(label_count > 0){
                         label_names_found = new String[label_count];
@@ -4603,7 +4607,7 @@ public class RunApp extends javax.swing.JFrame {
                         while(label_found < label_count)
                         {
                             sCadena = bf.readLine();
-                            label_name = util.Extract_label_name_from_String(sCadena);
+                            label_name = DataIOUtils.getLabelNameFromLine(sCadena);
 
                             if(label_name!= null)
                             {
@@ -4630,7 +4634,7 @@ public class RunApp extends javax.swing.JFrame {
                         }
                         
                         for(int i=0; i<label_count; i++){
-                            label_name = util.Extract_label_name_from_String(sCadenas[i]);
+                            label_name = DataIOUtils.getLabelNameFromLine(sCadenas[i]);
 
                             if(label_name!= null)
                             {
@@ -4644,7 +4648,7 @@ public class RunApp extends javax.swing.JFrame {
                     BufferedWriter bw_xml= new BufferedWriter(new FileWriter(filename_database_xml_path));
                     PrintWriter wr_xml = new PrintWriter(bw_xml);
 
-                    util.Write_into_xml_file(wr_xml, label_names_found);
+                    DataIOUtils.writeXMLFile(wr_xml, label_names_found);
 
                     bw_xml.close();
                     wr_xml.close();
@@ -5278,7 +5282,7 @@ public class RunApp extends javax.swing.JFrame {
             }
 
             label_frenquency = util.Get_Frequency_x_label(dataset);
-            label_frenquency = util.Ordenar_freq_x_attr(label_frenquency);
+            label_frenquency = util.sortByFrequency(label_frenquency);
              
             label_imbalanced = util.Get_data_imbalanced_x_label_inter_class(dataset,label_frenquency);
              
@@ -5300,7 +5304,7 @@ public class RunApp extends javax.swing.JFrame {
 
             CategoryPlot temp1 = cp3.getChart().getCategoryPlot();
             temp1.clearRangeMarkers();
-            util.update_values_bar_chart(label_x_frequency,num_instancias,temp1);
+            ChartUtils.updateValuesBarChart(label_x_frequency,num_instancias,temp1);
 
             HashMap<Integer,Integer> labels_x_example = Get_labelset_x_values(stat1);
                             
@@ -5328,19 +5332,19 @@ public class RunApp extends javax.swing.JFrame {
             temp1=cp_per_labelset.getChart().getCategoryPlot();
             temp1.clearRangeMarkers();
             tm_ir_per_labelset = jchart_and_jtable_label_set_IR(tableImbalance,dataset,stat1,cp_per_labelset.getChart().getCategoryPlot());
-            //util.update_values_bar_chart_IR(labelsets_sorted_IR,temp1);
+            //util.updateIRBarChart(labelsets_sorted_IR,temp1);
             
             //ir per label inter class only
             temp1= cp_ir_x_label_inter_class_only.getChart().getCategoryPlot();
             temp1.clearRangeMarkers();
             //util.update_values_line_chart(IR_inter_class,temp1,true);
-            util.update_values_bar_chart_IR(label_x_frequency, IR_inter_class, temp1);
+            ChartUtils.updateIRBarChart(label_x_frequency, IR_inter_class, temp1);
             
             //ir per label intra class only
             temp1= cp_ir_x_label_intra_class_only.getChart().getCategoryPlot();
             temp1.clearRangeMarkers();
             //util.update_values_line_chart(IR_intra_class,temp1,true);
-            util.update_values_bar_chart_IR(label_x_frequency, IR_intra_class, temp1);
+            ChartUtils.updateIRBarChart(label_x_frequency, IR_intra_class, temp1);
             
             
             if(tm_BR1 !=null && tm_LP1!=null)
@@ -5981,7 +5985,7 @@ public class RunApp extends javax.swing.JFrame {
         }
 
         ImbalancedFeature[] label_frenquency = util.Get_Frequency_x_label(dataset);
-        label_frenquency = util.Ordenar_freq_x_attr(label_frenquency);// ordena de mayor a menor
+        label_frenquency = util.sortByFrequency(label_frenquency);// ordena de mayor a menor
                 
         ImbalancedFeature[] imbalanced_data = util.Get_data_imbalanced_x_label_inter_class(dataset,label_frenquency);
         
@@ -6043,7 +6047,7 @@ public class RunApp extends javax.swing.JFrame {
         int d = 0;
         for(String dataName : Dataset_names){
             label_frenquency = util.Get_Frequency_x_label(list_dataset.get(d));
-            label_frenquency = util.Ordenar_freq_x_attr(label_frenquency);
+            label_frenquency = util.sortByFrequency(label_frenquency);
             imbalanced_data = util.Get_data_imbalanced_x_label_inter_class(list_dataset.get(d), label_frenquency);
             
             if(!tableMetricsMulti.contains(dataName)){
@@ -6552,7 +6556,7 @@ public class RunApp extends javax.swing.JFrame {
         {
             value=  result.get(current); //es la cantidad de veces que aparece el labelset en el dataset
             IR_labelset = mayor /(value*1.0);
-            String temp1 =util.Truncate_value(IR_labelset, 4);
+            String temp1 =MetricUtils.truncateValue(IR_labelset, 4);
             IR_labelset = Double.parseDouble(temp1);
             
             temp = new ImbalancedFeature(current.toString(), value,IR_labelset);
@@ -6575,7 +6579,7 @@ public class RunApp extends javax.swing.JFrame {
              
             truncate = Double.toString(temp.getIRIntraClass());
             fila[1] = util.getValueFormatted(truncate, 3);
-            //fila[1]= util.Truncate_values_aprox_zero(truncate,5);
+            //fila[1]= MetricUtils.truncateValue(truncate,5);
              
             table_model1.addRow(fila);
              
@@ -6612,7 +6616,7 @@ public class RunApp extends javax.swing.JFrame {
         Marker start = new ValueMarker(sum);
         start.setPaint(Color.blue);
         start.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
-        start.setLabel("                        Mean: "+util.Truncate_value(sum, 4));
+        start.setLabel("                        Mean: "+MetricUtils.truncateValue(sum, 4));
         cp.addRangeMarker(start);
                         
         return jtable.getModel();
@@ -6673,7 +6677,7 @@ public class RunApp extends javax.swing.JFrame {
             sum += freq;             
             String value_freq =Double.toString(freq);             
             fila[1]= value;             
-            //fila[2]= util.Truncate_values_aprox_zero(value_freq,4);
+            //fila[2]= MetricUtils.truncateValue(value_freq,4);
             fila[2] = util.getValueFormatted(value_freq, 4);
             table_model1.addRow(fila);
 
@@ -6703,7 +6707,7 @@ public class RunApp extends javax.swing.JFrame {
         sum = sum/keysets.size();
         Marker start = new ValueMarker(sum);
         start.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
-        start.setLabel("                        Mean: "+util.Truncate_value(sum, 4));
+        start.setLabel("                        Mean: "+MetricUtils.truncateValue(sum, 4));
         start.setPaint(Color.red);
         cp.addRangeMarker(start);
 
@@ -6902,7 +6906,7 @@ public class RunApp extends javax.swing.JFrame {
             fila[1]= current.getAppearances();
             
             truncate = Double.toString(freq);
-            fila[2]= util.Truncate_values_aprox_zero(truncate, 4);
+            fila[2]= MetricUtils.truncateValue(truncate, 4);
 
             table_model1.addRow(fila);
         }
@@ -7016,7 +7020,7 @@ public class RunApp extends javax.swing.JFrame {
             
             fila[0]=id;          
             fila[1]= cant_veces;
-            fila[2]= util.Truncate_values_aprox_zero(truncate, 5);
+            fila[2]= MetricUtils.truncateValue(truncate, 5);
                         
             table_model1.addRow(fila);
 
@@ -7060,7 +7064,7 @@ public class RunApp extends javax.swing.JFrame {
             truncate = Double.toString(label_imbalanced[i].getIRIntraClass());
             
             fila[0]= label_imbalanced[i].getName();          
-            //fila[1]=util.Truncate_values_aprox_zero(truncate, 5);
+            //fila[1]=MetricUtils.truncateValue(truncate, 5);
             fila[1] = util.getValueFormatted(truncate, 3);
       
             table_model1.addRow(fila);
@@ -7101,7 +7105,7 @@ public class RunApp extends javax.swing.JFrame {
             truncate = Double.toString(IR_inter_class[i]);
             
             fila[0]= label_frenquency[i].getName();          
-            //fila[1]=util.Truncate_values_aprox_zero(truncate, 5);
+            //fila[1]=MetricUtils.truncateValue(truncate, 5);
             fila[1] = util.getValueFormatted(truncate, 3);
                         
             table_model1.addRow(fila);
@@ -7170,7 +7174,7 @@ public class RunApp extends javax.swing.JFrame {
             
             fila[0]= i+1;          
             fila[1]= id_x_nums_label_inter_class[i];
-            fila[2]= util.Truncate_values_aprox_zero(truncate, 5);
+            fila[2]= MetricUtils.truncateValue(truncate, 5);
                         
             table_model1.addRow(fila);
         }
@@ -7215,13 +7219,13 @@ public class RunApp extends javax.swing.JFrame {
             fila[0]=current.getName();          
             
             truncate = Double.toString(current.getIRIntraClass());            
-            fila[1]= util.Truncate_values_aprox_zero(truncate, 5);
+            fila[1]= MetricUtils.truncateValue(truncate, 5);
             
             truncate = Double.toString(current.getIRInterClass());            
-            fila[2]= util.Truncate_values_aprox_zero(truncate, 5);
+            fila[2]= MetricUtils.truncateValue(truncate, 5);
             
             std = Math.sqrt(current.getVariance());
-            fila[3]= util.Truncate_value(std,4);
+            fila[3]= MetricUtils.truncateValue(std,4);
             
             table_model1.addRow(fila);
         }
@@ -7273,7 +7277,7 @@ public class RunApp extends javax.swing.JFrame {
             fila[1]=freq_current;
             truncate = Double.toString(freq);
             fila[2] = util.getValueFormatted(truncate, 4);
-            //fila[2]=util.Truncate_values_aprox_zero(truncate, 5);
+            //fila[2]=MetricUtils.truncateValue(truncate, 5);
                 
             table_model1.addRow(fila);
         }
@@ -7320,7 +7324,7 @@ public class RunApp extends javax.swing.JFrame {
             fila[1]= current.getAppearances(); //numero de ejemplos
             
             truncate = Double.toString(freq);
-            //fila[2]= util.Truncate_values_aprox_zero(truncate, 5);
+            //fila[2]= MetricUtils.truncateValue(truncate, 5);
             fila[2] = util.getValueFormatted(truncate, 4);
 
             table_model1.addRow(fila);
