@@ -485,4 +485,33 @@ public class DataIOUtils {
             wr.write(System.getProperty("line.separator"));  
         }
     }
+    
+    
+    public static String getFileName(String path)
+    {           
+        for(int i=path.length()-1;i>0;i--)
+        {
+            if (path.charAt(i)=='\\')break;
+        }
+        return path;
+    }
+    
+    
+    public static String getFilePath(String path)
+    {           
+        String [] words;
+        words = path.split("/");
+
+        path = words[words.length-1];
+        String dir = new String();
+        if(words.length > 1){
+            for(int i=0; i<words.length-1; i++){
+                dir += words[i] + "/";
+            }
+        }
+      
+        path = dir+path;
+        
+        return path;
+    }
 }

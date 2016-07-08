@@ -152,4 +152,34 @@ public class DataInfoUtils {
         
         return labelName;
     }
+    
+    
+    public static int getLabelAppearancesByName(ImbalancedFeature[] imbalancedData,
+            String labelName)
+    {
+        for(int i=0 ; i<imbalancedData.length; i++)
+        {
+            if(imbalancedData[i].getName().equals(labelName)) {
+                return imbalancedData[i].getAppearances();
+            }
+        }
+        
+        return -1;
+    }
+    
+    
+    public static int[] getCurrentValueLabels(Instances instances, int position, 
+            int[] labelIndices)
+    {
+        int[] labelsValue = new int[labelIndices.length];
+        int value;
+        
+        for(int i=0; i<labelsValue.length; i++)
+        {
+           value = (int)instances.instance(position).value(labelIndices[i]);
+           labelsValue[i] = value;
+        }
+        
+        return labelsValue;
+    }
 }

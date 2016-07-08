@@ -61,4 +61,5 @@ public class AttributesPair
     public int getAttribute2Appearances(){ 
         return attributeAppearances2;
     }
+    
 }

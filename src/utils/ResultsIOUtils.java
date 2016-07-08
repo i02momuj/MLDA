@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import javax.swing.JTable;
 import mulan.data.MultiLabelInstances;
-import static utils.util.getValueFormatted;
 
 /**
  *
@@ -34,7 +33,7 @@ public class ResultsIOUtils {
                 wr.write(" ");
             }
 
-            wr.write(getValueFormatted(metric, tableMetrics.get(metric)));
+            wr.write(MetricUtils.getValueFormatted(metric, tableMetrics.get(metric)));
             wr.write(System.getProperty("line.separator"));  
         }
     }   
@@ -99,7 +98,7 @@ public class ResultsIOUtils {
                     line += " ";
                 }
                 
-                value = getValueFormatted(metric, tableMetrics.get(dataNames.get(i)).get(metric));
+                value = MetricUtils.getValueFormatted(metric, tableMetrics.get(dataNames.get(i)).get(metric));
                 
                 line += value;
                 
@@ -149,7 +148,7 @@ public class ResultsIOUtils {
         String value;
         for(String metric : metricsList)
         {
-            value = getValueFormatted(metric, tableMetrics.get(metric));
+            value = MetricUtils.getValueFormatted(metric, tableMetrics.get(metric));
             if(value.equals("---")){
                wr.write(metric + " & " + "NaN" + " \\\\"); 
             }
@@ -224,7 +223,7 @@ public class ResultsIOUtils {
             s = metric;
             
             for(int i=0; i<dataNames.size(); i++){
-                value = getValueFormatted(metric, tableMetrics.get(dataNames.get(i)).get(metric));
+                value = MetricUtils.getValueFormatted(metric, tableMetrics.get(dataNames.get(i)).get(metric));
             
                 if(value.equals("---")){
                     s = s + " & " + "NaN";
@@ -263,7 +262,7 @@ public class ResultsIOUtils {
         String value;
         for(String metric : metricsList)
         {
-            value = getValueFormatted(metric, tableMetrics.get(metric));
+            value = MetricUtils.getValueFormatted(metric, tableMetrics.get(metric));
             if(value.equals("---")){
                wr.write(metric + ";" + "NaN"); 
             }
@@ -412,7 +411,7 @@ public class ResultsIOUtils {
         {   value = metric + ";";
         
             for(int i=0; i<tableMetrics.size(); i++){
-                temp = getValueFormatted(metric, tableMetrics.get(dataNames.get(i)).get(metric));
+                temp = MetricUtils.getValueFormatted(metric, tableMetrics.get(dataNames.get(i)).get(metric));
                 
                 if(temp.equals("---")){
                     value = value + "NaN" + ";";
@@ -605,12 +604,12 @@ public class ResultsIOUtils {
         String value;
         for(String metric : metric_list)
         {         
-            value = getValueFormatted(metric, tableMetrics.get(metric));
+            value = MetricUtils.getValueFormatted(metric, tableMetrics.get(metric));
             if(value.equals("---")){
                 line += "?";
             }
             else{
-                line += getValueFormatted(metric, tableMetrics.get(metric));
+                line += MetricUtils.getValueFormatted(metric, tableMetrics.get(metric));
             }
             line += ", ";
         }
@@ -651,12 +650,12 @@ public class ResultsIOUtils {
             
             for(String metric : metricsList)
             {         
-                value=getValueFormatted(metric, tableMetrics.get(dataNames.get(i)).get(metric));
+                value=MetricUtils.getValueFormatted(metric, tableMetrics.get(dataNames.get(i)).get(metric));
                 if(value.equals("---")){
                     line += "?";
                 }
                 else{
-                    line += getValueFormatted(metric, tableMetrics.get(dataNames.get(i)).get(metric));
+                    line += MetricUtils.getValueFormatted(metric, tableMetrics.get(dataNames.get(i)).get(metric));
                 }
                 line += ", ";
             }

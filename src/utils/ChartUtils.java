@@ -18,8 +18,8 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import static utils.util.calculateCoocurrences;
 import static utils.util.maxKey;
+import weka.core.Instance;
 import weka.core.Instances;
 
 /**
@@ -336,5 +336,45 @@ public class ChartUtils {
     }
     
     
+    public static int getBorderStrength (int min, int max, int n, double edgeValue)
+    {
+        double interval = (max-min)/(n*1.0);
+        
+        int strength = 0;
+        
+        for(double i=min; i<max ;i=i+interval)
+        {
+            if(edgeValue < i) break;
+            {
+                strength++;
+            }
+        }
+        return strength;
+    }
     
+    
+    public static double[][] calculateCoocurrences(MultiLabelInstances mldata)
+    {        
+        int nLabels = mldata.getNumLabels();
+        Instances data = mldata.getDataSet();
+            
+        double [][] coocurrenceMatrix = new double[nLabels][nLabels];
+        
+        int [] labelIndices = mldata.getLabelIndices();
+            
+        Instance temp = null;
+        for(int k=0; k<data.numInstances(); k++){   
+            temp = data.instance(k);
+                
+            for(int i=0; i<nLabels; i++){
+                for(int j=i+1; j<nLabels; j++){
+                    if((temp.value(labelIndices[i]) == 1.0) && (temp.value(labelIndices[j]) == 1.0)){
+                        coocurrenceMatrix[i][j]++;
+                    }
+                }
+            }
+        }
+            
+        return coocurrenceMatrix;
+    }
 }

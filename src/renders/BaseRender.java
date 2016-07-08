@@ -40,7 +40,7 @@ public class BaseRender extends DefaultTableCellRenderer
                 table.setValueAt(value, row, column);
             }
            
-            if(util.is_number(value.toString()))
+            if(util.isNumber(value.toString()))
             {
                 currentValue = Double.parseDouble(value.toString());
             }

@@ -116,6 +116,7 @@ import preprocess.FeatureSelector;
 import preprocess.RandomTrainTest;
 import preprocess.IterativeTrainTest;
 import preprocess.LabelPowersetTrainTest;
+import utils.AttributePairsUtils;
 import utils.ChartUtils;
 import utils.DataIOUtils;
 import utils.DataInfoUtils;
@@ -2667,9 +2668,9 @@ public class RunApp extends javax.swing.JFrame {
 
         seleccionados = selectTopCoocurrenceLabels(n, true);
 
-        ArrayList<AttributesPair> pares_seleccionados =  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
+        ArrayList<AttributesPair> pares_seleccionados =  AttributePairsUtils.findSelectedAttributesPair(lista_pares, seleccionados);
 
-        String[] labelname=util.pasa_valores_al_arreglo(seleccionados);
+        String[] labelname=util.listToArray(seleccionados);
 
         graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
     }//GEN-LAST:event_buttonShowMostRelatedActionPerformed
@@ -2706,9 +2707,9 @@ public class RunApp extends javax.swing.JFrame {
             else break;
         }
 
-        ArrayList<AttributesPair> pares_seleccionados =  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
+        ArrayList<AttributesPair> pares_seleccionados =  AttributePairsUtils.findSelectedAttributesPair(lista_pares, seleccionados);
 
-        String[] labelname=util.pasa_valores_al_arreglo(seleccionados);
+        String[] labelname=util.listToArray(seleccionados);
 
         graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
     }//GEN-LAST:event_buttonShowMostFrequentActionPerformed
@@ -2733,9 +2734,9 @@ public class RunApp extends javax.swing.JFrame {
             seleccionados.add((tableCoOcurrenceLeft.getValueAt(selecteds[i], 0).toString()));
         }
 
-        ArrayList<AttributesPair> pares_seleccionados =  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
+        ArrayList<AttributesPair> pares_seleccionados =  AttributePairsUtils.findSelectedAttributesPair(lista_pares, seleccionados);
 
-        String[] labelname=util.pasa_valores_al_arreglo(seleccionados);//solo cambia el tipo de estructura de datos.
+        String[] labelname=util.listToArray(seleccionados);//solo cambia el tipo de estructura de datos.
 
         graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
     }//GEN-LAST:event_buttonShowCoOcurrenceActionPerformed
@@ -3599,7 +3600,7 @@ public class RunApp extends javax.swing.JFrame {
         {
             String filename_database_arff = textChooseFile.getText();
             filename_database_xml = DataIOUtils.getXMLString(filename_database_arff);
-            filename_database_xml = util.Get_file_name_xml(filename_database_xml);
+            filename_database_xml = DataIOUtils.getFilePath(filename_database_xml);
             Load_dataset(filename_database_arff, filename_database_xml);
         }
     }//GEN-LAST:event_textChooseFileKeyPressed
@@ -3722,9 +3723,9 @@ public class RunApp extends javax.swing.JFrame {
         }
         tableCoOcurrenceLeft.addRowSelectionInterval(0, n-1);
 
-        ArrayList<AttributesPair> pares_seleccionados =  util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
+        ArrayList<AttributesPair> pares_seleccionados =  AttributePairsUtils.findSelectedAttributesPair(lista_pares, seleccionados);
 
-        String[] labelname=util.pasa_valores_al_arreglo(seleccionados);
+        String[] labelname=util.listToArray(seleccionados);
 
         graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
     }//GEN-LAST:event_buttonShowMostFrequentURelatedActionPerformed
@@ -4004,7 +4005,7 @@ public class RunApp extends javax.swing.JFrame {
 
                 String filename_database_arff = f1.getAbsolutePath();
                 filename_database_xml = DataIOUtils.getXMLString(filename_database_arff);
-                filename_database_xml = util.Get_file_name_xml(filename_database_xml);
+                filename_database_xml = DataIOUtils.getFilePath(filename_database_xml);
 
                 boolean es_meka=false;
 
@@ -4086,7 +4087,7 @@ public class RunApp extends javax.swing.JFrame {
                         bw_xml.close();
                         wr_xml.close();
 
-                        filename_database_xml = util.Get_file_name_xml(filename_database_xml_path1);
+                        filename_database_xml = DataIOUtils.getFilePath(filename_database_xml_path1);
                     }
                     else
                     {
@@ -4524,7 +4525,7 @@ public class RunApp extends javax.swing.JFrame {
             String filename_database_arff = f1.getAbsolutePath();
 
             filename_database_xml_path=  filename_database_arff.substring(0,filename_database_arff.length()-5)+".xml";
-            filename_database_xml = util.Get_file_name_xml1(filename_database_xml_path);
+            filename_database_xml = DataIOUtils.getFileName(filename_database_xml_path);
 
             File  file_temp = new File(filename_database_xml_path);
 
@@ -4653,7 +4654,7 @@ public class RunApp extends javax.swing.JFrame {
                     bw_xml.close();
                     wr_xml.close();
 
-                    filename_database_xml = util.Get_file_name_xml(filename_database_xml_path);
+                    filename_database_xml = DataIOUtils.getFilePath(filename_database_xml_path);
                     file_temp = new File(filename_database_xml_path);
                 }
 
@@ -4676,7 +4677,7 @@ public class RunApp extends javax.swing.JFrame {
             if(!file_temp.exists())
             {
                 filename_database_xml_path = DataIOUtils.getXMLString(filename_database_arff);
-                filename_database_xml = util.Get_file_name_xml(filename_database_xml_path);
+                filename_database_xml = DataIOUtils.getFilePath(filename_database_xml_path);
             }
 
             try {
@@ -5120,7 +5121,7 @@ public class RunApp extends javax.swing.JFrame {
                 current = DataInfoUtils.getLabelByLabelname(Label_name[i],label_x_frequency);
                 freq = current.getAppearances()/(dataset.getNumInstances()*1.0);
 
-                fortaleza =  util.get_valor_fortaleza(min, max, cant_intervalos, freq);
+                fortaleza =  ChartUtils.getBorderStrength(min, max, cant_intervalos, freq);
                 
                 if(fortaleza==1)lista_vertices[i]= graph.insertVertex(parent, null,Label_name[i], aleatorio.nextInt(430), aleatorio.nextInt(280), Label_name[i].length()*6,20);      
                 else if (fortaleza==2) lista_vertices[i]= graph.insertVertex(parent, null,Label_name[i], aleatorio.nextInt(430), aleatorio.nextInt(280), Label_name[i].length()*5,20,"ROUNDED;strokeWidth=2");      
@@ -5149,10 +5150,10 @@ public class RunApp extends javax.swing.JFrame {
                     {
                         int index = DataInfoUtils.getLabelIndex(Label_name, actual);
 
-                        temp =util.Search_and_get(Label_name[i], actual, mi_lista);
+                        temp =AttributePairsUtils.searchAndGet(Label_name[i], actual, mi_lista);
                         freq = temp.getAppearances()/(dataset.getNumInstances()*1.0);
 
-                        fortaleza =  util.get_valor_fortaleza(min, max, cant_intervalos,freq );
+                        fortaleza =  ChartUtils.getBorderStrength(min, max, cant_intervalos,freq );
 
                         if(fortaleza==1) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=1");
                         else if (fortaleza==2) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=2");
@@ -5286,7 +5287,7 @@ public class RunApp extends javax.swing.JFrame {
              
             label_imbalanced = MetricUtils.getImbalancedDataByIRInterClass(dataset,label_frenquency);
              
-            IR_intra_class = util.get_ir_values_intra_class(label_imbalanced);
+            IR_intra_class = MetricUtils.getIRIntraClassValues(label_imbalanced);
             HeapSort.sort(IR_intra_class);
             IR_intra_class = HeapSort.getSortedArray();
 
@@ -5453,7 +5454,7 @@ public class RunApp extends javax.swing.JFrame {
             panelChiPhi.validate();
 
             //tm_coocurrences   
-            lista_pares = util.Get_pares_atributos(dataset);   
+            lista_pares = AttributePairsUtils.getAttributePairs(dataset);   
              
             jtable_coefficient_values(dataset, lista_pares,"coocurrence");
             jTable11.setDefaultRenderer(Object.class, new BaseRender("estandar",Double.MAX_VALUE));
@@ -5495,9 +5496,9 @@ public class RunApp extends javax.swing.JFrame {
         
             seleccionados = selectTopCoocurrenceLabels(10, true);
 
-            ArrayList<AttributesPair> pares_seleccionados = util.Encuentra_pares_attr_seleccionados(lista_pares, seleccionados);
+            ArrayList<AttributesPair> pares_seleccionados = AttributePairsUtils.findSelectedAttributesPair(lista_pares, seleccionados);
         
-            String[] labelname1=util.pasa_valores_al_arreglo(seleccionados);
+            String[] labelname1=util.listToArray(seleccionados);
        
             graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname1,graphComponent);
 
@@ -5689,46 +5690,46 @@ public class RunApp extends javax.swing.JFrame {
         lif.calculate(dataset);
 
         //Instances
-        //labelInstancesValue.setText(util.getValueFormatted("Instances", num_instancias));
+        //labelInstancesValue.setText(MetricUtils.getValueFormatted("Instances", num_instancias));
         labelInstancesValue.setText(getMetricValueFormatted(instances));
         //System.out.println("Instances: " + mldEvaluator.getMetricValueFormatted("Instances"));
             
         //Attributes
-        //labelAttributesValue.setText(util.getValueFormatted("Attributes", num_atributos));
+        //labelAttributesValue.setText(MetricUtils.getValueFormatted("Attributes", num_atributos));
         labelAttributesValue.setText(getMetricValueFormatted(attributes));
             
         //Labels
-        //labelLabelsValue.setText(util.getValueFormatted("Labels", util.getMetricValue("Labels", dataset, es_de_tipo_meka)));
+        //labelLabelsValue.setText(MetricUtils.getValueFormatted("Labels", util.getMetricValue("Labels", dataset, es_de_tipo_meka)));
         labelLabelsValue.setText(getMetricValueFormatted(labels));    
         
         //Density
         //String density = util.getMetricValue("Density", dataset, es_de_tipo_meka);
-        //labelDensityValue.setText(util.getValueFormatted("Density", density));
+        //labelDensityValue.setText(MetricUtils.getValueFormatted("Density", density));
         labelDensityValue.setText(getMetricValueFormatted(density));
                       
         //Cardinality
         //String cardinality = util.getMetricValue("Cardinality", dataset, es_de_tipo_meka);
-        //labelCardinalityValue.setText(util.getValueFormatted("Cardinality", cardinality));
+        //labelCardinalityValue.setText(MetricUtils.getValueFormatted("Cardinality", cardinality));
         labelCardinalityValue.setText(getMetricValueFormatted(cardinality));
             
         //Diversity      
         //String diversity = util.getMetricValue("Diversity", dataset, es_de_tipo_meka);
-        //labelDiversityValue.setText(util.getValueFormatted("Diversity", diversity));
+        //labelDiversityValue.setText(MetricUtils.getValueFormatted("Diversity", diversity));
         labelDiversityValue.setText(getMetricValueFormatted(diversity));
                 
         //Bound
         //String bound = util.getMetricValue("Bound", dataset, es_de_tipo_meka);
-        //labelBoundValue.setText(util.getValueFormatted("Bound", bound));
+        //labelBoundValue.setText(MetricUtils.getValueFormatted("Bound", bound));
         labelBoundValue.setText(getMetricValueFormatted(bound));
                 
         //Distinct labelset     
         //String distinct_labelset = util.getMetricValue("Distinct labelsets", dataset, es_de_tipo_meka);
-        //labelDistinctValue.setText(util.getValueFormatted("Distinct labelsets", distinct_labelset));
+        //labelDistinctValue.setText(MetricUtils.getValueFormatted("Distinct labelsets", distinct_labelset));
         labelDistinctValue.setText(getMetricValueFormatted(distinct));
                 
         //LxIxF
         //String LIF = util.getMetricValue("Labels x instances x features", dataset, es_de_tipo_meka);
-        //labelLxIxFValue.setText(util.getValueFormatted("Labels x instances x features", LIF));    
+        //labelLxIxFValue.setText(MetricUtils.getValueFormatted("Labels x instances x features", LIF));    
         labelLxIxFValue.setText(getMetricValueFormatted(lif));
     }
     
@@ -6016,7 +6017,7 @@ public class RunApp extends javax.swing.JFrame {
         TableModel model = jtable.getModel();
         
         for(int i=0; i<model.getRowCount(); i++){
-            model.setValueAt(util.getValueFormatted(model.getValueAt(i, 0).toString(), tableMetrics.get(model.getValueAt(i, 0).toString())), i, 1);
+            model.setValueAt(MetricUtils.getValueFormatted(model.getValueAt(i, 0).toString(), tableMetrics.get(model.getValueAt(i, 0).toString())), i, 1);
         }
 
         jtable.repaint();
@@ -6578,7 +6579,7 @@ public class RunApp extends javax.swing.JFrame {
             fila[0]=count;    
              
             truncate = Double.toString(temp.getIRIntraClass());
-            fila[1] = util.getValueFormatted(truncate, 3);
+            fila[1] = MetricUtils.getValueFormatted(truncate, 3);
             //fila[1]= MetricUtils.truncateValue(truncate,5);
              
             table_model1.addRow(fila);
@@ -6678,7 +6679,7 @@ public class RunApp extends javax.swing.JFrame {
             String value_freq =Double.toString(freq);             
             fila[1]= value;             
             //fila[2]= MetricUtils.truncateValue(value_freq,4);
-            fila[2] = util.getValueFormatted(value_freq, 4);
+            fila[2] = MetricUtils.getValueFormatted(value_freq, 4);
             table_model1.addRow(fila);
 
             //String id = "ID: "+Integer.toString(count)+" , "+"Labelset: ";
@@ -7065,7 +7066,7 @@ public class RunApp extends javax.swing.JFrame {
             
             fila[0]= label_imbalanced[i].getName();          
             //fila[1]=MetricUtils.truncateValue(truncate, 5);
-            fila[1] = util.getValueFormatted(truncate, 3);
+            fila[1] = MetricUtils.getValueFormatted(truncate, 3);
       
             table_model1.addRow(fila);
         }
@@ -7097,7 +7098,7 @@ public class RunApp extends javax.swing.JFrame {
 
         String truncate;
  
-        IR_inter_class= util.get_ir_values_inter_class(label_frenquency); //calcula el ir inter class
+        IR_inter_class= MetricUtils.getIRInterClassValues(label_frenquency); //calcula el ir inter class
         
           int temp = IR_inter_class.length-1;
         for(int i=temp; i>=0; i--)
@@ -7106,7 +7107,7 @@ public class RunApp extends javax.swing.JFrame {
             
             fila[0]= label_frenquency[i].getName();          
             //fila[1]=MetricUtils.truncateValue(truncate, 5);
-            fila[1] = util.getValueFormatted(truncate, 3);
+            fila[1] = MetricUtils.getValueFormatted(truncate, 3);
                         
             table_model1.addRow(fila);
         }
@@ -7143,7 +7144,7 @@ public class RunApp extends javax.swing.JFrame {
         id_x_nums_label_inter_class = new int [label_frenquency.length];
         id_x_IR_inter_class = new double [label_frenquency.length];
         
-        double[] IR_inter_class= util.get_ir_values_inter_class(label_frenquency);
+        double[] IR_inter_class= MetricUtils.getIRInterClassValues(label_frenquency);
         
         for(int i=0; i< label_frenquency.length ; i++)
         {
@@ -7276,7 +7277,7 @@ public class RunApp extends javax.swing.JFrame {
             fila[0]= i;
             fila[1]=freq_current;
             truncate = Double.toString(freq);
-            fila[2] = util.getValueFormatted(truncate, 4);
+            fila[2] = MetricUtils.getValueFormatted(truncate, 4);
             //fila[2]=MetricUtils.truncateValue(truncate, 5);
                 
             table_model1.addRow(fila);
@@ -7325,7 +7326,7 @@ public class RunApp extends javax.swing.JFrame {
             
             truncate = Double.toString(freq);
             //fila[2]= MetricUtils.truncateValue(truncate, 5);
-            fila[2] = util.getValueFormatted(truncate, 4);
+            fila[2] = MetricUtils.getValueFormatted(truncate, 4);
 
             table_model1.addRow(fila);
         }
