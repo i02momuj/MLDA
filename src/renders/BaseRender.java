@@ -6,7 +6,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
-import utils.util;
+import utils.Utils;
 
 /**
  * 
@@ -40,7 +40,7 @@ public class BaseRender extends DefaultTableCellRenderer
                 table.setValueAt(value, row, column);
             }
            
-            if(util.isNumber(value.toString()))
+            if(Utils.isNumber(value.toString()))
             {
                 currentValue = Double.parseDouble(value.toString());
             }

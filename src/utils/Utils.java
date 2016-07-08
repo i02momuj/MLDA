@@ -1,43 +1,15 @@
 package utils;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-
-import mldc.attributes.*;
-import mldc.base.MLDataMetric;
-import mldc.imbalance.*;
-import mldc.labelsDistribution.*;
-import mldc.labelsRelation.*;
-import mldc.size.*;
-
-import mulan.data.InvalidDataFormatException;
-import mulan.data.LabelsPair;
-import mulan.data.MultiLabelInstances;
-import mulan.data.Statistics;
-import mulan.data.UnconditionalChiSquareIdentifier;
-
-import weka.core.Attribute;
-import weka.core.Instance;
-import weka.core.Instances;
 
 
 /**
  * 
  * @author Jose Maria Moyano Murillo
  */
-public class util {          
+public class Utils {          
     
     public  static int maxKey (HashMap<Integer,Integer> hm)
     {
@@ -249,7 +221,9 @@ public class util {
         int integerPlaces = text.indexOf('.');
         int decimalPlaces = text.length() - integerPlaces - 1;
         
-        if(decimalPlaces<=digits) return false;
+        if(decimalPlaces<=digits) {
+            return false;
+        }
         return true;
     }
     

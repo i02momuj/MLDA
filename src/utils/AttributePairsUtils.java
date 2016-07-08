@@ -2,7 +2,7 @@ package utils;
 
 import java.util.ArrayList;
 import mulan.data.MultiLabelInstances;
-import static utils.util.getPossibleCombinations;
+import static utils.Utils.getPossibleCombinations;
 import weka.core.Instances;
 
 /**

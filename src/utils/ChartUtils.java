@@ -18,7 +18,7 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import static utils.util.maxKey;
+import static utils.Utils.maxKey;
 import weka.core.Instance;
 import weka.core.Instances;
 
@@ -104,10 +104,10 @@ public class ChartUtils {
         double min = sortedArray[0];
         double max = sortedArray[sortedArray.length-1];
 
-        double median = util.getMedian(sortedArray);
+        double median = Utils.getMedian(sortedArray);
 
-        double q1 = util.getQ1(sortedArray);
-        double q3 = util.getQ3(sortedArray);
+        double q1 = Utils.getQ1(sortedArray);
+        double q3 = Utils.getQ3(sortedArray);
 
         XYTextAnnotation annotation ;
 

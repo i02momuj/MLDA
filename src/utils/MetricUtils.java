@@ -61,9 +61,9 @@ import mldc.size.LxIxF;
 import mldc.size.RatioInstancesToAttributes;
 import mulan.data.MultiLabelInstances;
 import static utils.DataInfoUtils.getLabelByLabelname;
-import static utils.util.existsValue;
-import static utils.util.getMax;
-import static utils.util.hasMoreNDigits;
+import static utils.Utils.existsValue;
+import static utils.Utils.getMax;
+import static utils.Utils.hasMoreNDigits;
 import weka.core.Attribute;
 import weka.core.Instances;
 

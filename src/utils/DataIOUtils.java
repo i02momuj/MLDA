@@ -9,8 +9,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import mulan.data.MultiLabelInstances;
-import static utils.util.getMax;
-import static utils.util.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
 import weka.core.Attribute;
 import weka.core.Instances;
 
