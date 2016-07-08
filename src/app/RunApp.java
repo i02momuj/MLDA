@@ -261,19 +261,15 @@ public class RunApp extends javax.swing.JFrame {
 
         initComponents();   
 
-        init_config(); //add jradionbutton
+        initConfig();
      
-        datasetCurrentName="";          
+        datasetCurrentName = "";          
         
-        start_config_multiples_datasets();
-       
-        // BOX DIAGRAM INICIALIZACION
-        jLabelChiFi_text.setVisible(false); // comentario de valores dependientes chiLabel- coefficient
-
-        jLabelIR.setVisible(false);
+        multipleDatasetsConfig();
     }
     
-    private void init_jtable_chi_phi()
+    
+    private void initChiPhiJTable()
     {
         fixedTableChiPhi.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTableChiPhi.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -309,13 +305,16 @@ public class RunApp extends javax.swing.JFrame {
         phiLabel.setToolTipText("Light gray cells corresponds to phi coefficients");
 
         panelChiPhi.add(phiLabel);
+        
+        jLabelChiFi_text.setVisible(false);
     } 
     
-    private void init_config()
-    {
-        
-                
-        //radiobutton to group
+    
+    private void initConfig()
+    {   
+        /*
+         * Preprocess
+         */
         buttonGroup1.add(radioRandomHoldout);
         radioRandomHoldout.setToolTipText("Split the dataset into random train and test files");
         textRandomHoldout.setToolTipText("Percentage of train instances");
@@ -387,9 +386,16 @@ public class RunApp extends javax.swing.JFrame {
         radioNoFS.setSelected(true);
         radioNoIS.setSelected(true);
 
+        textRandomHoldout.setEnabled(true);        
+        
         textRandomHoldout.setEnabled(true);
+        textIterativeStratifiedHoldout.setEnabled(false);
+        textRandomCV.setEnabled(false);
+        textIterativeStratifiedCV.setEnabled(false);
         
-        
+        /*
+         * Transformations
+         */
         radioBRTrans.setSelected(true);
         buttonGroup4.add(radioBRTrans);
         radioBRTrans.setToolTipText("Generates a binary dataset for each label");
@@ -404,7 +410,9 @@ public class RunApp extends javax.swing.JFrame {
         jButtonStartTrans.setToolTipText("Start transformation");
         jButtonSaveDatasetsTrans.setToolTipText("Save dataset files in a folder");
         
-
+        /*
+         * Dependences
+         */
         buttonShowCoOcurrence.setToolTipText("Show graph with labels selected in table");
         buttonShowMostFrequent.setToolTipText("Show graph with n most frequent labels");
         textMostFrequent.setToolTipText("Number of most frequent labels to show");
@@ -420,8 +428,45 @@ public class RunApp extends javax.swing.JFrame {
         textMostRelatedHeatMap.setToolTipText("Number of most related labels to show");
         buttonShowMostFrequentURelatedHeatMap.setToolTipText("Show heatmap with n most frequent union n most related labels");
         textMostFrequentURelatedHeatMap.setToolTipText("Show graph with n most frequent union n most related labels");
+        
+        jTableChiPhi = setChiPhiTableHelp(jTableChiPhi);
+        jTableCoocurrences = setCoocurrenceTableHelp(jTableCoocurrences);
+        jTableHeatmap = setHeatmapTableHelp(jTableHeatmap);
+        
+        initChiPhiJTable();
+        
+        //Config jTable Co-ocurrence values
+        jTableCoocurrences.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        JScrollPane scrollPane = new JScrollPane(jTableCoocurrences, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        
+        scrollPane.setBounds(20, 20, 780, 390);
+        jTableCoocurrences.setBorder(BorderFactory.createLineBorder(Color.black));
+        panelCoOcurrenceValues.add(scrollPane, BorderLayout.CENTER);
       
-        //Charts
+        //Config jTable heatmap values
+        jTableHeatmap.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        scrollPane = new JScrollPane(jTableHeatmap, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        scrollPane.setBounds(20, 20, 780, 390);
+        jTableHeatmap.setBorder(BorderFactory.createLineBorder(Color.black));
+        panelHeatmapValues.add(scrollPane, BorderLayout.CENTER);
+      
+        create_button_export_dependences_table(jTableChiPhi,fixedTableChiPhi ,panelChiPhi ,exportChiPhiTable,710,415, "ChiPhi"); // chiLabel and phiLabel values
+        create_button_export_dependences_table(jTableCoocurrences,fixedTableCoocurrences,panelCoOcurrenceValues ,exportCoocurrenceTable,710,415, "Coocurrence");//graph values
+        create_button_export_dependences_table(jTableHeatmap,fixedTableHeatmap,panelHeatmapValues ,exportHeatmapTable,710,415, "Heatmap");//heatmap values
+
+        create_button_export_dependences_graph(panelCoOcurrence ,exportCoocurrenceGraph,720,440);
+        create_button_export_dependences_graph(panelHeatmapGraph,exportHeatmapGraph,720,440);
+        Border border = BorderFactory.createLineBorder(Color.gray, 1);
+        
+        panelHeatmap.setBorder(border); 
+        jTableChiPhi.setBorder(border);
+        jTableCoocurrences.setBorder(border);
+        jTableHeatmap.setBorder(border);
+        
+        /*
+         * Charts
+         */
         labelFrequencyChart = createJChart(panelExamplesPerLabel,"bar","Frequency", "Labels",false, "Label frequency");
         labelsetsFrequencyChart = createJChart(panelExamplesPerLabelset, "bar","Frequency","Labelsets",false, "Labelset frequency");
         labelsHistogramChart =  createJChart(panelLabelsPerExample,"bar", "Frequency","Number of labels",false, "Labels histogram");
@@ -432,11 +477,12 @@ public class RunApp extends javax.swing.JFrame {
         IRIntraClassChart = createJChart(panelIRperLabelIntraClass, "bar", "IR intra-class","Labels",false, "IR intra class");
 
         IRLabelsetsChart = createJChart(panelIRperLabelset, "bar", "IR","Labelsets",false, "IR per labelset");
-      
-        jTableChiPhi = setChiPhiTableHelp(jTableChiPhi);
-        jTableCoocurrences = setCoocurrenceTableHelp(jTableCoocurrences);
-        jTableHeatmap = setHeatmapTableHelp(jTableHeatmap);
         
+        jLabelIR.setVisible(false);
+        
+        /*
+         * Metrics
+         */
         jTablePrincipal = setMetricsHelp(jTablePrincipal);
         create_jtable_metrics_principal(jTablePrincipal,panelSummary,buttonAll,buttonNone,buttonInvert,buttonCalculate,buttonSave, buttonClear, 30,190,780,280,"database"); //tab Database //35,155,500,355
 
@@ -446,43 +492,9 @@ public class RunApp extends javax.swing.JFrame {
         jButtonSaveDatasets.setEnabled(false);
         jComboBox_SaveFormat.setEnabled(false);
 
-        //Configure jTable Phi and Chi
-        init_jtable_chi_phi();
-        
-        //Config jTable Co-ocurrence values
-        jTableCoocurrences.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        JScrollPane scrollPane = new JScrollPane(jTableCoocurrences, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        
-        scrollPane.setBounds(20, 20, 780, 390);
-        jTableCoocurrences.setBorder(BorderFactory.createLineBorder(Color.black));
-        panelCoOcurrenceValues.add(scrollPane, BorderLayout.CENTER);
-      
-        //CONFIG JTABLE heapmap VALUES
-        jTableHeatmap.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        scrollPane = new JScrollPane(jTableHeatmap, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-        scrollPane.setBounds(20, 20, 780, 390);
-        jTableHeatmap.setBorder(BorderFactory.createLineBorder(Color.black));
-        panelHeatmapValues.add(scrollPane, BorderLayout.CENTER);
-
-        create_button_export_dependences_table(jTableChiPhi,fixedTableChiPhi ,panelChiPhi ,exportChiPhiTable,710,415, "ChiPhi"); // chiLabel and phiLabel values
-        create_button_export_dependences_table(jTableCoocurrences,fixedTableCoocurrences,panelCoOcurrenceValues ,exportCoocurrenceTable,710,415, "Coocurrence");//graph values
-        create_button_export_dependences_table(jTableHeatmap,fixedTableHeatmap,panelHeatmapValues ,exportHeatmapTable,710,415, "Heatmap");//heatmap values
-
-        create_button_export_dependences_graph(panelCoOcurrence ,exportCoocurrenceGraph,720,440);
-        create_button_export_dependences_graph(panelHeatmapGraph,exportHeatmapGraph,720,440);
-        Border border = BorderFactory.createLineBorder(Color.gray, 1);
-
-        panelHeatmap.setBorder(border); 
-        jTableChiPhi.setBorder(border);
-        jTableCoocurrences.setBorder(border);
-        jTableHeatmap.setBorder(border);
-
-        textRandomHoldout.setEnabled(true);
-        textIterativeStratifiedHoldout.setEnabled(false);
-        textRandomCV.setEnabled(false);
-        textIterativeStratifiedCV.setEnabled(false);
-
+        /*
+         * Progress bar
+         */
         progressBar = new JProgressBar(0, 100);
         progressBar.setValue(0);  
 
@@ -493,9 +505,17 @@ public class RunApp extends javax.swing.JFrame {
         progressFrame.setUndecorated(true);
         progressFrame.add(progressBar);   
         
-        //System.out.println("TabPrincipal.getComponentCount(): " + TabPrincipal.getComponentCount());
+        //Default tab
         TabPrincipal.setEnabledAt(7, false);
-        
+    }
+    
+    
+    private void multipleDatasetsConfig()
+    {
+        areMeka = new ArrayList();
+        listDatasets = new ArrayList();
+        datasetNames = new ArrayList();
+        listMultipleDatasetsLeft.setModel(list);
     }
         
     private void create_button_export_dependences_table(final JTable jtable,final JTable columns, JPanel jpanel, JButton jbutton_export, int posx,int posy, final String table)
@@ -5064,13 +5084,7 @@ public class RunApp extends javax.swing.JFrame {
         } 
     }
     
-    private void start_config_multiples_datasets()
-    {
-        areMeka = new ArrayList();
-        listDatasets = new ArrayList();
-        datasetNames = new ArrayList();
-        listMultipleDatasetsLeft.setModel(list);
-    }
+    
     
     private mxGraphComponent Create_jgraphx(JPanel jpanel , ArrayList<AttributesPair> mi_lista, String[] Label_name,mxGraphComponent graphComponent_viejo )
     {
