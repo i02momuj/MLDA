@@ -250,5 +250,27 @@ public class Utils {
             
         return true;
     }
+    
+    
+    public static boolean contains(int [] A, int n){
+        for(int a : A){
+            if(a == n){
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    
+    public static int[] toPrimitive(Integer[] IntegerArray) {
+        int[] result = new int[IntegerArray.length];
+	for (int i = 0; i < IntegerArray.length; i++) {
+            result[i] = IntegerArray[i].intValue();
+	}
+	return result;	
+    }
+    
+    
 
 }

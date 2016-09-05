@@ -451,12 +451,12 @@ public class RunApp extends javax.swing.JFrame {
         jTableHeatmap.setBorder(BorderFactory.createLineBorder(Color.black));
         panelHeatmapValues.add(scrollPane, BorderLayout.CENTER);
       
-        create_button_export_dependences_table(jTableChiPhi,fixedTableChiPhi ,panelChiPhi ,exportChiPhiTable,710,415, "ChiPhi"); // chiLabel and phiLabel values
-        create_button_export_dependences_table(jTableCoocurrences,fixedTableCoocurrences,panelCoOcurrenceValues ,exportCoocurrenceTable,710,415, "Coocurrence");//graph values
-        create_button_export_dependences_table(jTableHeatmap,fixedTableHeatmap,panelHeatmapValues ,exportHeatmapTable,710,415, "Heatmap");//heatmap values
+        createButtonExportDependencesTable(jTableChiPhi,fixedTableChiPhi ,panelChiPhi ,exportChiPhiTable,710,415, "ChiPhi"); // chiLabel and phiLabel values
+        createButtonExportDependencesTable(jTableCoocurrences,fixedTableCoocurrences,panelCoOcurrenceValues ,exportCoocurrenceTable,710,415, "Coocurrence");//graph values
+        createButtonExportDependencesTable(jTableHeatmap,fixedTableHeatmap,panelHeatmapValues ,exportHeatmapTable,710,415, "Heatmap");//heatmap values
 
-        create_button_export_dependences_graph(panelCoOcurrence ,exportCoocurrenceGraph,720,440);
-        create_button_export_dependences_graph(panelHeatmapGraph,exportHeatmapGraph,720,440);
+        createButtonExportDependencesChart(panelCoOcurrence ,exportCoocurrenceGraph,720,440);
+        createButtonExportDependencesChart(panelHeatmapGraph,exportHeatmapGraph,720,440);
         Border border = BorderFactory.createLineBorder(Color.gray, 1);
         
         panelHeatmap.setBorder(border); 
@@ -484,10 +484,10 @@ public class RunApp extends javax.swing.JFrame {
          * Metrics
          */
         jTablePrincipal = setMetricsHelp(jTablePrincipal);
-        create_jtable_metrics_principal(jTablePrincipal,panelSummary,buttonAll,buttonNone,buttonInvert,buttonCalculate,buttonSave, buttonClear, 30,190,780,280,"database"); //tab Database //35,155,500,355
+        createMetricsTable(jTablePrincipal,panelSummary,buttonAll,buttonNone,buttonInvert,buttonCalculate,buttonSave, buttonClear, 30,190,780,280); //tab Database //35,155,500,355
 
         jTableMulti = setMetricsHelp(jTableMulti);
-        create_jtable_metrics_multi(jTableMulti,jPanelMulti,buttonAll,buttonNone,buttonInvert,buttonCalculate,buttonSave, 25,15,510,420); //tab Multi
+        createMultiMetricsTable(jTableMulti,jPanelMulti,buttonAll,buttonNone,buttonInvert,buttonCalculate,buttonSave, 25,15,510,420); //tab Multi
 
         jButtonSaveDatasets.setEnabled(false);
         jComboBox_SaveFormat.setEnabled(false);
@@ -517,263 +517,7 @@ public class RunApp extends javax.swing.JFrame {
         datasetNames = new ArrayList();
         listMultipleDatasetsLeft.setModel(list);
     }
-        
-    private void create_button_export_dependences_table(final JTable jtable,final JTable columns, JPanel jpanel, JButton jbutton_export, int posx,int posy, final String table)
-    {
-        //button export table
-        jbutton_export = new JButton("Save");
-        jbutton_export.setBounds(posx, posy, 80, 25);
-
-        if(table.equals("ChiPhi")){
-            jbutton_export.setToolTipText("Save table with Chi and Phi coefficients");
-        }
-        else if(table.equals("Coocurrence")){
-            jbutton_export.setToolTipText("Save table with co-ocurrence values");
-        }
-        else if(table.equals("Heatmap")){
-            jbutton_export.setToolTipText("Save table with heatmap values");
-        }
-
-        jbutton_export.addActionListener(new java.awt.event.ActionListener() {
-              public void actionPerformed(java.awt.event.ActionEvent evt) {
-                  button_export_ActionPerformed(evt,jtable,columns, table);
-                              }
-          });
-        jpanel.add(jbutton_export);
-    }    
-        
-    private void create_button_export_dependences_graph(final JPanel jpanel, JButton jbutton_export, int posx,int posy)
-    {
-        //button export table
-        jbutton_export = new JButton("Save");
-        jbutton_export.setBounds(posx, posy, 80, 25);
-        jbutton_export.setToolTipText("Save graph as image");
-
-        jbutton_export.addActionListener(new java.awt.event.ActionListener() {
-              public void actionPerformed(java.awt.event.ActionEvent evt) {
-                if(jpanel.getName().equals("jpanel25")) try {  
-                    save_as_ActionPerformed(evt);
-                } catch (AWTException ex) {
-                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                }  
-                else try {
-                    save_as_ActionPerformed1(evt);
-                } catch (AWTException ex) {
-                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                }  
-                              }
-          });
-        jpanel.add(jbutton_export);
-    }
-  
-    private void create_jtable_metrics_principal(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_calculate,JButton button_save, JButton button_clear, int posx,int posy, int width, int heigh,String info)
-    {
-        create_jtable_metric_principal(jtable,jpanel, MetricUtils.getRowData(),posx,posy,width,heigh);        
-        //jtable.setToolTipText("<html>TOOLTIP<br>Hola<br>Tooltip<br></html>");
-        //TableCellRenderer rTable = jtable.getCellRenderer(posy, posy);
-        //JComponent row = (JComponent) jtable.prepareRenderer(rTable, 0, 0);
-        //row.setToolTipText("TOOLTIP");
-        
-        //button ALL
-        button_all = new JButton("All");
-        button_all.setBounds(posx, posy+heigh+5, 80, 20);
-        button_all.setToolTipText("Select all metrics");
-              //PRINCIPAL_ALL
-        button_all.addActionListener(new java.awt.event.ActionListener() {
-              public void actionPerformed(java.awt.event.ActionEvent evt) {
-                  button_allActionPerformed_principal(evt,jtable );
-                              }
-          });
-        jpanel.add(button_all);
-      
-      
-        //button NONE
-        button_none = new JButton("None");
-        button_none.setToolTipText("Deselect all metrics");
-        button_none.setBounds(posx+90, posy+heigh+5, 80, 20);
-
-        button_none.addActionListener(new java.awt.event.ActionListener() {
-              public void actionPerformed(java.awt.event.ActionEvent evt) {
-                  button_noneActionPerformed_principal(evt,jtable);
-                              }
-          });
-        jpanel.add(button_none);
-
-        //button INVERT
-        button_invert = new JButton("Invert");
-        button_invert.setToolTipText("Invert selection");
-        button_invert.setBounds(posx+180, posy+heigh+5, 80, 20);
-
-        button_invert.addActionListener(new java.awt.event.ActionListener() {
-              public void actionPerformed(java.awt.event.ActionEvent evt) {
-                  button_invertActionPerformed_principal(evt,jtable);
-                              }
-          });
-        jpanel.add(button_invert);
-
-        //button CLEAR
-        button_clear = new JButton("Clear");
-        button_clear.setToolTipText("Clear selection and metric values");
-        button_clear.setBounds(posx+270, posy+heigh+5, 80, 20);
-
-        button_clear.addActionListener(new java.awt.event.ActionListener() {
-              public void actionPerformed(java.awt.event.ActionEvent evt) {
-                  button_clearActionPerformed_principal(evt,jtable);
-                              }
-          });
-        jpanel.add(button_clear);
-
-           //button CALCULATE
-        button_calculate = new JButton("Calculate");
-        button_calculate.setBounds(posx+590, posy+heigh+5, 95, 25);
-        button_calculate.setToolTipText("Calculate selected metrics");
-
-        button_calculate.addActionListener(new java.awt.event.ActionListener() {
-              public void actionPerformed(final java.awt.event.ActionEvent evt) {
-
-                  progressBar.setIndeterminate(false);
-                  progressFrame.setVisible(true);
-
-                  progressFrame.repaint();
-
-                  new Thread(new Runnable() {
-                      @Override
-                      public void run() {
-                          // do the long-running work here
-                          button_calculateActionPerformed_principal(evt,jtable);
-                          // at the end:
-                          SwingUtilities.invokeLater(new Runnable() {
-                              @Override
-                              public void run() {
-                                  progressBar.setIndeterminate(false);
-                                  progressFrame.setVisible(false);
-                                  progressFrame.repaint();
-                              }//run
-                          }); //invokeLater
-                      }}
-                  ).start(); //Thread
-
-                  //button_calculateActionPerformed_principal(evt,jtable);
-              } //actionPerformed
-          });//ActionListener
-        jpanel.add(button_calculate);
-
-
-         //button SAVE
-        button_save = new JButton("Save");
-        button_save.setBounds(posx+695, posy+heigh+5, 80, 25);
-        button_save.setToolTipText("Save selected metrics in a file");
-
-        button_save.addActionListener(new java.awt.event.ActionListener() {
-              public void actionPerformed(java.awt.event.ActionEvent evt) {
-                  try {
-                      button_saveActionPerformed_principal(evt,jtable);
-                  } catch (IOException ex) {
-                      Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                  }
-                              }
-          });
-        jpanel.add(button_save);
-      
-    }
     
-    private void create_jtable_metrics_multi(final JTable jtable ,JPanel jpanel , JButton button_all, JButton button_none, JButton button_invert, JButton button_calculate,JButton button_save, int posx,int posy, int width, int heigh)
-    {
-
-        create_jtable_metric_multi(jtable,jpanel, MetricUtils.getRowDataMulti(),posx,posy,width,heigh);  
-        
-        //button ALL
-        button_all = new JButton("All");
-        button_all.setBounds(posx, posy+heigh+5, 80, 20);
-        button_all.setToolTipText("Select all metrics");
-              //PRINCIPAL_ALL
-        button_all.addActionListener(new java.awt.event.ActionListener() {
-              public void actionPerformed(java.awt.event.ActionEvent evt) {
-                  button_allActionPerformed_multi(evt,jtable );
-                              }
-          });
-        jpanel.add(button_all);
-      
-        //button NONE
-        button_none = new JButton("None");
-        button_none.setToolTipText("Deselect all metrics");
-        button_none.setBounds(posx+90, posy+heigh+5, 80, 20);
-
-        button_none.addActionListener(new java.awt.event.ActionListener() {
-              public void actionPerformed(java.awt.event.ActionEvent evt) {
-                  button_noneActionPerformed_multi(evt,jtable);
-                              }
-          });
-        jpanel.add(button_none);
-
-        //button INVERT
-        button_invert = new JButton("Invert");
-        button_invert.setToolTipText("Invert selection");
-        button_invert.setBounds(posx+180, posy+heigh+5, 80, 20);
-
-        button_invert.addActionListener(new java.awt.event.ActionListener() {
-              public void actionPerformed(java.awt.event.ActionEvent evt) {
-                  button_invertActionPerformed_multi(evt,jtable);
-                              }
-          });
-        jpanel.add(button_invert);
-      
-      
-        //button CALCULATE
-        button_calculate = new JButton("Calculate");
-        button_calculate.setBounds(posx+320, posy+heigh+5, 95, 20);
-        button_calculate.setToolTipText("Calculate selected metrics");
-
-        button_calculate.addActionListener(new java.awt.event.ActionListener() {
-              public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                  progressFrame.setVisible(true);
-                  progressFrame.repaint();
-                  progressBar.setIndeterminate(false);
-
-                  new Thread(new Runnable() {
-                      @Override
-                      public void run() {
-                          // do the long-running work here
-                          button_calculateActionPerformed_multi(evt,jtable);
-                          // at the end:
-                          SwingUtilities.invokeLater(new Runnable() {
-                              @Override
-                              public void run() {
-                                  progressBar.setIndeterminate(false);
-                                  progressFrame.setVisible(false);
-                                  progressFrame.repaint();
-                                  JOptionPane.showMessageDialog(null, "Metrics have been calculated succesfully.", "Successful", JOptionPane.INFORMATION_MESSAGE);
-
-                              }//run
-                          }); //invokeLater
-                      }}
-                  ).start(); //Thread
-              }
-          });
-        jpanel.add(button_calculate);
-
-
-         //button SAVE
-        button_save = new JButton("Save");
-        button_save.setBounds(posx+425, posy+heigh+5, 80, 20);
-        button_save.setToolTipText("Save selected metrics in a file");
-
-        button_save.addActionListener(new java.awt.event.ActionListener() {
-              public void actionPerformed(java.awt.event.ActionEvent evt) {
-                  try {
-                      button_saveActionPerformed_multi(evt,jtable);
-                  } catch (IOException ex) {
-                      Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                  }
-                              }
-          });
-        jpanel.add(button_save);
-      
-    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -2631,7 +2375,7 @@ public class RunApp extends javax.swing.JFrame {
             saver.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     try {
-                        save_as_ActionPerformed(evt);
+                        saveCoocurrenceGraph();
                     } catch (AWTException ex) {
                         Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IOException ex) {
@@ -2672,7 +2416,7 @@ public class RunApp extends javax.swing.JFrame {
 
         String[] labelname=Utils.listToArray(seleccionados);
 
-        graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
+        graphComponent  =  createJGraphX(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
     }//GEN-LAST:event_buttonShowMostRelatedActionPerformed
 
     private void buttonShowMostFrequentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostFrequentActionPerformed
@@ -2711,7 +2455,7 @@ public class RunApp extends javax.swing.JFrame {
 
         String[] labelname=Utils.listToArray(seleccionados);
 
-        graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
+        graphComponent  =  createJGraphX(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
     }//GEN-LAST:event_buttonShowMostFrequentActionPerformed
 
     private void buttonShowCoOcurrenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowCoOcurrenceActionPerformed
@@ -2738,7 +2482,7 @@ public class RunApp extends javax.swing.JFrame {
 
         String[] labelname=Utils.listToArray(seleccionados);//solo cambia el tipo de estructura de datos.
 
-        graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
+        graphComponent  =  createJGraphX(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
     }//GEN-LAST:event_buttonShowCoOcurrenceActionPerformed
 
     private void tabsImbalanceStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabsImbalanceStateChanged
@@ -3727,7 +3471,7 @@ public class RunApp extends javax.swing.JFrame {
 
         String[] labelname=Utils.listToArray(seleccionados);
 
-        graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
+        graphComponent  =  createJGraphX(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
     }//GEN-LAST:event_buttonShowMostFrequentURelatedActionPerformed
 
     private void buttonShowMostFrequentURelatedHeatMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostFrequentURelatedHeatMapActionPerformed
@@ -3838,6 +3582,257 @@ public class RunApp extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonSaveTableActionPerformed
 
     
+    private void createButtonExportDependencesTable(final JTable jtable, 
+            final JTable columns, JPanel jpanel, JButton jButtonExport, 
+            int posx, int posy, final String table)
+    {
+        jButtonExport = new JButton("Save");
+        jButtonExport.setBounds(posx, posy, 80, 25);
+
+        if(table.equals("ChiPhi")){
+            jButtonExport.setToolTipText("Save table with Chi and Phi coefficients");
+        }
+        else if(table.equals("Coocurrence")){
+            jButtonExport.setToolTipText("Save table with co-ocurrence values");
+        }
+        else if(table.equals("Heatmap")){
+            jButtonExport.setToolTipText("Save table with heatmap values");
+        }
+
+        jButtonExport.addActionListener(new java.awt.event.ActionListener() {
+              public void actionPerformed(java.awt.event.ActionEvent evt) {
+                  button_export_ActionPerformed(evt,jtable,columns, table);
+                              }
+          });
+        jpanel.add(jButtonExport);
+    }    
+        
+    
+    private void createButtonExportDependencesChart(final JPanel jpanel, 
+            JButton jButtonExport, int posx, int posy)
+    {
+        //button export table
+        jButtonExport = new JButton("Save");
+        jButtonExport.setBounds(posx, posy, 80, 25);
+        jButtonExport.setToolTipText("Save graph as image");
+
+        jButtonExport.addActionListener(new java.awt.event.ActionListener() {
+              public void actionPerformed(java.awt.event.ActionEvent evt) {
+                if(jpanel.getName().equals("jpanel25")) try {  
+                    saveCoocurrenceGraph();
+                } catch (AWTException | IOException ex) {
+                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                }  
+                else try {
+                    saveHeatmapGraph();
+                } catch (AWTException | IOException ex) {
+                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                }  
+                              }
+          });
+        jpanel.add(jButtonExport);
+    }
+  
+    
+    private void createMetricsTable(final JTable jtable ,
+            JPanel jpanel , JButton buttonAll, JButton buttonNone, 
+            JButton buttonInvert, JButton buttonCalculate, JButton buttonSave, 
+            JButton buttonClear, int posx, int posy, int width, int height)
+    {
+        create_jtable_metric_principal(jtable,jpanel, MetricUtils.getRowData(),posx,posy,width,height);        
+
+        //button ALL
+        buttonAll = new JButton("All");
+        buttonAll.setBounds(posx, posy+height+5, 80, 20);
+        buttonAll.setToolTipText("Select all metrics");
+        buttonAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_allActionPerformed_principal(evt,jtable );
+            }
+        });
+        jpanel.add(buttonAll);
+      
+        //button NONE
+        buttonNone = new JButton("None");
+        buttonNone.setToolTipText("Deselect all metrics");
+        buttonNone.setBounds(posx+90, posy+height+5, 80, 20);
+
+        buttonNone.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_noneActionPerformed_principal(evt,jtable);
+            }
+        });
+        jpanel.add(buttonNone);
+
+        //button INVERT
+        buttonInvert = new JButton("Invert");
+        buttonInvert.setToolTipText("Invert selection");
+        buttonInvert.setBounds(posx+180, posy+height+5, 80, 20);
+
+        buttonInvert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_invertActionPerformed_principal(evt,jtable);
+            }
+        });
+        jpanel.add(buttonInvert);
+
+        //button CLEAR
+        buttonClear = new JButton("Clear");
+        buttonClear.setToolTipText("Clear selection and metric values");
+        buttonClear.setBounds(posx+270, posy+height+5, 80, 20);
+
+        buttonClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_clearActionPerformed_principal(evt,jtable);
+            }
+        });
+        jpanel.add(buttonClear);
+
+        //button CALCULATE
+        buttonCalculate = new JButton("Calculate");
+        buttonCalculate.setBounds(posx+590, posy+height+5, 95, 25);
+        buttonCalculate.setToolTipText("Calculate selected metrics");
+
+        buttonCalculate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                progressBar.setIndeterminate(false);
+                progressFrame.setVisible(true);
+
+                progressFrame.repaint();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // do the long-running work here
+                        button_calculateActionPerformed_principal(evt,jtable);
+                        // at the end:
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                progressBar.setIndeterminate(false);
+                                progressFrame.setVisible(false);
+                                progressFrame.repaint();
+                            }//run
+                        }); //invokeLater
+                    }}
+                ).start(); //Thread
+            } //actionPerformed
+        });//ActionListener
+        jpanel.add(buttonCalculate);
+
+        //button SAVE
+        buttonSave = new JButton("Save");
+        buttonSave.setBounds(posx+695, posy+height+5, 80, 25);
+        buttonSave.setToolTipText("Save selected metrics in a file");
+
+        buttonSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                try {
+                    button_saveActionPerformed_principal(evt,jtable);
+                } catch (IOException ex) {
+                    Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        jpanel.add(buttonSave);
+    }
+    
+    
+    private void createMultiMetricsTable(final JTable jtable,
+            JPanel jpanel, JButton buttonAll, JButton buttonNone, 
+            JButton buttonInvert, JButton buttonCalculate, JButton buttonSave, 
+            int posx, int posy, int width, int height)
+    {
+
+        create_jtable_metric_multi(jtable,jpanel, MetricUtils.getRowDataMulti(),posx,posy,width,height);  
+        
+        //button ALL
+        buttonAll = new JButton("All");
+        buttonAll.setBounds(posx, posy+height+5, 80, 20);
+        buttonAll.setToolTipText("Select all metrics");
+        
+        buttonAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_allActionPerformed_multi(evt,jtable );
+            }
+        });
+        jpanel.add(buttonAll);
+      
+        //button NONE
+        buttonNone = new JButton("None");
+        buttonNone.setToolTipText("Deselect all metrics");
+        buttonNone.setBounds(posx+90, posy+height+5, 80, 20);
+
+        buttonNone.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_noneActionPerformed_multi(evt,jtable);
+            }
+        });
+        jpanel.add(buttonNone);
+
+        //button INVERT
+        buttonInvert = new JButton("Invert");
+        buttonInvert.setToolTipText("Invert selection");
+        buttonInvert.setBounds(posx+180, posy+height+5, 80, 20);
+
+        buttonInvert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                  button_invertActionPerformed_multi(evt,jtable);
+            }
+        });
+        jpanel.add(buttonInvert);
+      
+      
+        //button CALCULATE
+        buttonCalculate = new JButton("Calculate");
+        buttonCalculate.setBounds(posx+320, posy+height+5, 95, 20);
+        buttonCalculate.setToolTipText("Calculate selected metrics");
+
+        buttonCalculate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                progressFrame.setVisible(true);
+                progressFrame.repaint();
+                progressBar.setIndeterminate(false);
+                
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // do the long-running work here
+                        button_calculateActionPerformed_multi(evt,jtable);
+                        // at the end:
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override
+                            public void run() { 
+                                progressBar.setIndeterminate(false);
+                                progressFrame.setVisible(false);
+                                progressFrame.repaint();
+                                JOptionPane.showMessageDialog(null, "Metrics have been calculated succesfully.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                            }//run
+                        }); //invokeLater
+                    }}
+                ).start(); //Thread
+            }
+        });
+        jpanel.add(buttonCalculate);
+
+         //button SAVE
+        buttonSave = new JButton("Save");
+        buttonSave.setBounds(posx+425, posy+height+5, 80, 20);
+        buttonSave.setToolTipText("Save selected metrics in a file");
+
+        buttonSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                try {
+                    button_saveActionPerformed_multi(evt,jtable);
+                } catch (IOException ex) {
+                Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        jpanel.add(buttonSave);
+    }
+    
+    
     private int saveMultiView(){
         if(dataset == null){
             JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
@@ -3850,7 +3845,7 @@ public class RunApp extends javax.swing.JFrame {
             return -1;
         }
         
-        MultiLabelInstances mvData = null;
+        MultiLabelInstances mvData;
         
         int attSize = 0;
         for(int n : selecteds){
@@ -3866,29 +3861,23 @@ public class RunApp extends javax.swing.JFrame {
                 j++;
             }
         }
-        
-        System.out.println("attSize: " + attSize);
-        System.out.println(Arrays.toString(attToKeep));
+
         FeatureSelector fs = new FeatureSelector(dataset, attSize); 
         mvData = fs.keepAttributes(attToKeep);
-        
-        System.out.println(Arrays.toString(mvData.getFeatureIndices()));
-        
+
         try{
             String format = jComboBox_SaveFormat1.getSelectedItem().toString();
 
-            // JFILECHOOSER SAVE
             JFileChooser fc= new JFileChooser();
 
             fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            String path_train, path_test,path_xml;
+            String path_xml;
 
             int returnVal = fc.showSaveDialog(this);
 
             if (returnVal == JFileChooser.APPROVE_OPTION)
             {
                 File file = fc.getSelectedFile();
-                FileFilter f1 = fc.getFileFilter();
 
                 if(fc.isDirectorySelectionEnabled())
                 {
@@ -3898,27 +3887,25 @@ public class RunApp extends javax.swing.JFrame {
                         preprocessedType += "_" + (n+1);
                     }
 
-
-                    BufferedWriter bw_train = null;
+                    BufferedWriter bw_train;
                     try {
                         String name_dataset= datasetName.substring(0,datasetName.length()-5);
                         
                         int sumNotSelected = 0;
                         Hashtable<String, Integer[]> v = new Hashtable<>();
                         for(int i=0; i<views.size(); i++){
-                            if(contains(selecteds, i)){
+                            if(Utils.contains(selecteds, i)){
                                 Integer [] A = views.get("View " + (i+1));
                                 for(int a=0; a<A.length; a++){
                                     A[a] -= sumNotSelected;
                                 }
-                                //v.add("View " + (i+1), views.get("View " + (i+1)));
                                 v.put("View " + (i+1), A);
                             }
                             else{
                                 sumNotSelected += views.get("View " + (i+1))[views.get("View " + (i+1)).length - 1] - views.get("View " + (i+1))[0] + 1;
                             }
                         }
-                            
+
                         String viewsString = "-V:";
                         for(int n : selecteds){
                             attSize += v.get("View " + (n+1)).length;
@@ -3966,7 +3953,6 @@ public class RunApp extends javax.swing.JFrame {
                     }
                     Toolkit.getDefaultToolkit().beep();
                 }
-
             }
         }
         catch(Exception e){
@@ -3977,16 +3963,7 @@ public class RunApp extends javax.swing.JFrame {
         return 1;
     }
     
-    private boolean contains(int [] A, int n){
-        for(int a : A){
-            if(a == n){
-                return true;
-            }
-        }
-        
-        return false;
-    }
-    
+
     private int loadMultiDataset(int returnVal, JFileChooser chooser){
         
         if (returnVal == JFileChooser.OPEN_DIALOG)
@@ -4007,82 +3984,75 @@ public class RunApp extends javax.swing.JFrame {
                 xmlFilename = DataIOUtils.getXMLString(filename_database_arff);
                 xmlFilename = DataIOUtils.getFilePath(xmlFilename);
 
-                boolean es_meka=false;
+                boolean isMeka = false;
 
                 String filename_database_xml_path1=  filename_database_arff.substring(0,filename_database_arff.length()-5)+".xml";
-                //-------------------------------------------------------------------------------------------------------
+
                 FileReader fr;
                 try
                 {
                     fr = new FileReader(filename_database_arff);
                     BufferedReader bf = new BufferedReader(fr);
 
-                    String sCadena = bf.readLine();
-                    int label_found=0;
-                    String label_name;
-                    String[] label_names_found;
+                    String sString = bf.readLine();
+                    int labelFound = 0;
+                    String labelName;
+                    String[] labelNamesFound;
 
-                    es_meka = DataIOUtils.isMeka(sCadena);
-                    areMeka.add(es_meka);
+                    isMeka = DataIOUtils.isMeka(sString);
+                    areMeka.add(isMeka);
 
-                    if(es_meka)
+                    if(isMeka)
                     {
                         isMeka = true;
 
-                        int label_count = DataIOUtils.getLabelsFromARFF(sCadena);                
+                        int labelCount = DataIOUtils.getLabelsFromARFF(sString);                
 
-                        //---------------
+                        if(labelCount > 0){
+                            labelNamesFound = new String[labelCount];
 
-                        if(label_count > 0){
-                            label_names_found = new String[label_count];
-
-                            while(label_found < label_count)
+                            while(labelFound < labelCount)
                             {
-                                sCadena = bf.readLine();
-                                label_name = DataIOUtils.getLabelNameFromLine(sCadena);
+                                sString = bf.readLine();
+                                labelName = DataIOUtils.getLabelNameFromLine(sString);
 
-                                if(label_name!= null)
+                                if(labelName!= null)
                                 {
-                                    label_names_found[label_found]=label_name;
-                                    label_found++;
-
+                                    labelNamesFound[labelFound]=labelName;
+                                    labelFound++;
                                 }
-
                             }
                         }
                         else{
-                            label_count = Math.abs(label_count);
-                            label_names_found = new String[label_count];
+                            labelCount = Math.abs(labelCount);
+                            labelNamesFound = new String[labelCount];
 
-                            String [] sCadenas = new String[label_count];
+                            String [] sStrings = new String[labelCount];
 
-                            while(!(sCadena = bf.readLine()).contains("@data")){
-                                if(!sCadena.trim().equals("")){
-                                    for(int s=0; s<label_count-1; s++){
-                                        sCadenas[s] = sCadenas[s+1];
+                            while(!(sString = bf.readLine()).contains("@data")){
+                                if(!sString.trim().equals("")){
+                                    for(int s=0; s<labelCount-1; s++){
+                                        sStrings[s] = sStrings[s+1];
                                     }
-                                    sCadenas[label_count-1] = sCadena;
+                                    sStrings[labelCount-1] = sString;
                                 }
                             }
 
-                            for(int i=0; i<label_count; i++){
-                                label_name = DataIOUtils.getLabelNameFromLine(sCadenas[i]);
+                            for(int i=0; i<labelCount; i++){
+                                labelName = DataIOUtils.getLabelNameFromLine(sStrings[i]);
 
-                                if(label_name!= null)
+                                if(labelName!= null)
                                 {
-                                    label_names_found[label_found]=label_name;
-                                    label_found++;
-
+                                    labelNamesFound[labelFound]=labelName;
+                                    labelFound++;
                                 }
                             }
                         }
-
-                        //---------------
 
                         BufferedWriter bw_xml= new BufferedWriter(new FileWriter(filename_database_xml_path1));
                         PrintWriter wr_xml = new PrintWriter(bw_xml);
 
-                        DataIOUtils.writeXMLFile(wr_xml, label_names_found);
+                        DataIOUtils.writeXMLFile(wr_xml, labelNamesFound);
 
                         bw_xml.close();
                         wr_xml.close();
@@ -4100,15 +4070,10 @@ public class RunApp extends javax.swing.JFrame {
                     Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
-                //-------------------------------------------------------------------------------------------------------
-
-                //-------------------------------------------------------------------------------------------------------
-
                 try {
-
                     MultiLabelInstances current = new MultiLabelInstances(filename_database_arff, xmlFilename);
 
-                    if(es_meka){
+                    if(isMeka){
                         File f2 = new File(xmlFilename);
                         f2.delete();
                     }
@@ -4126,12 +4091,12 @@ public class RunApp extends javax.swing.JFrame {
         return 1;
     }
     
+    
     private int preprocess(){
         trainDatasets = new ArrayList();
         testDatasets = new ArrayList();
 
-        Instances train=null,test=null;
-        MultiLabelInstances train_ml=null,test_ml=null;
+        Instances train, test;
 
         if(dataset == null){
             JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
@@ -4152,10 +4117,9 @@ public class RunApp extends javax.swing.JFrame {
                 else if(nInstances > dataset.getNumInstances()){
                     JOptionPane.showMessageDialog(null, "The number of instances to select must be less than the original.", "alert", JOptionPane.ERROR_MESSAGE);
                     return -1;
-                }
+                }                
                 
-                
-                Instances dataIS = null;
+                Instances dataIS;
                 try {
                     Randomize randomize = new Randomize();                
                     dataIS = dataset.getDataSet();
@@ -4175,7 +4139,6 @@ public class RunApp extends javax.swing.JFrame {
                 } catch (Exception ex) {
                     Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
    
                 if(preprocessDataset == null)
                 {
@@ -4259,7 +4222,6 @@ public class RunApp extends javax.swing.JFrame {
 
         
         if(!radioNoSplit.isSelected()){
-            
             //Random Holdout
             if(radioRandomHoldout.isSelected()){
                 String split = textRandomHoldout.getText();
@@ -4272,12 +4234,9 @@ public class RunApp extends javax.swing.JFrame {
                 try{
 
                     RandomTrainTest pre = new RandomTrainTest();
-                    
                     MultiLabelInstances [] partitions = pre.split(preprocessDataset, percent_split);
-
                     trainDataset = partitions[0];
                 }
-
 
                 catch (InvalidDataFormatException ex) {
                     Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -4506,14 +4465,14 @@ public class RunApp extends javax.swing.JFrame {
                     }
                 }
             }
-
         }
 
-            jButtonSaveDatasets.setEnabled(true);
-            jComboBox_SaveFormat.setEnabled(true);
+        jButtonSaveDatasets.setEnabled(true);
+        jComboBox_SaveFormat.setEnabled(true);
             
         return 1;
     }
+    
     
     private int loadDataset(int returnVal, JFileChooser jfile1, boolean deleteXML){
         if (returnVal == JFileChooser.OPEN_DIALOG)
@@ -4527,10 +4486,8 @@ public class RunApp extends javax.swing.JFrame {
             xmlPath=  filename_database_arff.substring(0,filename_database_arff.length()-5)+".xml";
             xmlFilename = DataIOUtils.getFileName(xmlPath);
 
-            File  file_temp = new File(xmlPath);
+            File  fileTmp = new File(xmlPath);
 
-            //-------------------------------------------------------------------------------------------------------
-            
             FileReader fr;
             try
             {
@@ -4541,20 +4498,20 @@ public class RunApp extends javax.swing.JFrame {
                 fr = new FileReader(filename_database_arff);
                 BufferedReader bf = new BufferedReader(fr);
 
-                String sCadena = bf.readLine();
+                String sString = bf.readLine();
                 
-                if(sCadena.contains("-V:")){
+                if(sString.contains("-V:")){
                     mv = true;
                     
                     TabPrincipal.setEnabledAt(7, true);
-                    String sCadena2 = sCadena.split("'")[1];
-                    sCadena2 = sCadena2.split("-V:")[1];
-                    String [] intervals = sCadena2.split("!");
+                    String s2 = sString.split("'")[1];
+                    s2 = s2.split("-V:")[1];
+                    String [] intervals = s2.split("!");
                     int [] intervalsSize = new int[intervals.length];
                     int max = Integer.MIN_VALUE;
                     int min = Integer.MAX_VALUE;
                     double mean = 0;
-                    DefaultListModel listModel = new DefaultListModel();
+
                     for(int i=0; i<intervals.length; i++){
                         int a = Integer.parseInt(intervals[i].split("-")[0]);
                         int b = Integer.parseInt(intervals[i].split("-")[1]);
@@ -4574,10 +4531,7 @@ public class RunApp extends javax.swing.JFrame {
                             min = intervalsSize[i];
                         }
                         mean += intervalsSize[i];
-                        
-                        //((DefaultTableModel)jTable2.getModel()).addRow(new Object[]{"View " + (i+1), intervalsSize[i], 1, 2, 3});
                     }
-                    
                     
                     mean /= intervalsSize.length;
                     labelNumViewsValue.setText(Integer.toString(intervalsSize.length));
@@ -4590,58 +4544,54 @@ public class RunApp extends javax.swing.JFrame {
                     mv = false;
                 }
                 
-                int label_found=0;
-                String label_name;
-                String[] label_names_found;
+                int labelFound = 0;
+                String labelName;
+                String[] labelNamesFound;
 
-                if(DataIOUtils.isMeka(sCadena))
+                if(DataIOUtils.isMeka(sString))
                 {
                     deleteXML = true;
-
                     isMeka = true;
 
-                    int label_count = DataIOUtils.getLabelsFromARFF(sCadena);
+                    int labelCount = DataIOUtils.getLabelsFromARFF(sString);
                     
-                    if(label_count > 0){
-                        label_names_found = new String[label_count];
+                    if(labelCount > 0){
+                        labelNamesFound = new String[labelCount];
 
-                        while(label_found < label_count)
+                        while(labelFound < labelCount)
                         {
-                            sCadena = bf.readLine();
-                            label_name = DataIOUtils.getLabelNameFromLine(sCadena);
+                            sString = bf.readLine();
+                            labelName = DataIOUtils.getLabelNameFromLine(sString);
 
-                            if(label_name!= null)
+                            if(labelName!= null)
                             {
-                                label_names_found[label_found]=label_name;
-                                label_found++;
-
+                                labelNamesFound[labelFound]=labelName;
+                                labelFound++;
                             }
-
                         }
                     }
                     else{
-                        label_count = Math.abs(label_count);
-                        label_names_found = new String[label_count];
+                        labelCount = Math.abs(labelCount);
+                        labelNamesFound = new String[labelCount];
                         
-                        String [] sCadenas = new String[label_count];
+                        String [] sStrings = new String[labelCount];
                         
-                        while(!(sCadena = bf.readLine()).contains("@data")){
-                            if(!sCadena.trim().equals("")){
-                                for(int s=0; s<label_count-1; s++){
-                                    sCadenas[s] = sCadenas[s+1];
+                        while(!(sString = bf.readLine()).contains("@data")){
+                            if(!sString.trim().equals("")){
+                                for(int s=0; s<labelCount-1; s++){
+                                    sStrings[s] = sStrings[s+1];
                                 }
-                                sCadenas[label_count-1] = sCadena;
+                                sStrings[labelCount-1] = sString;
                             }
                         }
                         
-                        for(int i=0; i<label_count; i++){
-                            label_name = DataIOUtils.getLabelNameFromLine(sCadenas[i]);
+                        for(int i=0; i<labelCount; i++){
+                            labelName = DataIOUtils.getLabelNameFromLine(sStrings[i]);
 
-                            if(label_name!= null)
+                            if(labelName!= null)
                             {
-                                label_names_found[label_found]=label_name;
-                                label_found++;
-
+                                labelNamesFound[labelFound]=labelName;
+                                labelFound++;
                             }
                         }
                     }
@@ -4649,19 +4599,17 @@ public class RunApp extends javax.swing.JFrame {
                     BufferedWriter bw_xml= new BufferedWriter(new FileWriter(xmlPath));
                     PrintWriter wr_xml = new PrintWriter(bw_xml);
 
-                    DataIOUtils.writeXMLFile(wr_xml, label_names_found);
+                    DataIOUtils.writeXMLFile(wr_xml, labelNamesFound);
 
                     bw_xml.close();
                     wr_xml.close();
 
                     xmlFilename = DataIOUtils.getFilePath(xmlPath);
-                    file_temp = new File(xmlPath);
+                    fileTmp = new File(xmlPath);
                 }
-
                 else
                 {
                     isMeka= false;
-
                 }
             }
             catch (FileNotFoundException ex) {
@@ -4672,25 +4620,24 @@ public class RunApp extends javax.swing.JFrame {
                 return -1;
             }
 
-            //-------------------------------------------------------------------------------------------------------
-
-            if(!file_temp.exists())
+            
+            if(!fileTmp.exists())
             {
                 xmlPath = DataIOUtils.getXMLString(filename_database_arff);
                 xmlFilename = DataIOUtils.getFilePath(xmlPath);
             }
 
+            
             try {
                 File f = new File(xmlFilename);
                 if(f.exists() && !f.isDirectory()) { 
-                    MultiLabelInstances dataset_temp = new MultiLabelInstances(filename_database_arff, xmlFilename);
-                    
+                    //MultiLabelInstances dataset_temp = new MultiLabelInstances(filename_database_arff, xmlFilename);
                 }
                 else{
                     JOptionPane.showMessageDialog(null, "File could not be loaded.", "alert", JOptionPane.ERROR_MESSAGE); 
                     return -1;
                 }
-            } catch (InvalidDataFormatException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
                 progressBar.setVisible(false);
                 progressFrame.setVisible(false);
@@ -4698,10 +4645,9 @@ public class RunApp extends javax.swing.JFrame {
                 return -1;
             }
 
-            //--------------------------------------------------------------
-
+            
             initTableMetrics();
-            clearTable_metrics_principal();
+            clearTableMetricsPrincipal();
             
             File f = new File(xmlFilename);
             if(f.exists() && !f.isDirectory()) { 
@@ -4717,7 +4663,6 @@ public class RunApp extends javax.swing.JFrame {
             }
 
             textChooseFile.setText(filename_database_arff);
-
         }
         
         if(mv){   
@@ -4732,7 +4677,7 @@ public class RunApp extends javax.swing.JFrame {
                  try {
                     Instances inst = view.getDataSet();
                     
-                    int [] attributes = toPrimitive(views.get("View " + (i+1)));
+                    int [] attributes = Utils.toPrimitive(views.get("View " + (i+1)));
                     
                     int[] toKeep = new int[attributes.length + dataset.getNumLabels()];
                     System.arraycopy(attributes, 0, toKeep, 0, attributes.length);
@@ -4740,7 +4685,6 @@ public class RunApp extends javax.swing.JFrame {
                     for (int l = 0; l < dataset.getNumLabels(); l++) {
                         toKeep[attributes.length + l] = labelIndices[l];
                     }
-                    
                     
                     Remove filterRemove = new Remove();
                     filterRemove.setAttributeIndicesArray(toKeep);
@@ -4760,7 +4704,6 @@ public class RunApp extends javax.swing.JFrame {
                         getMetricValueFormatted(lif), 
                         getMetricValueFormatted(ratioInstAtt), 
                         getMetricValueFormatted(avgGainRatio)});
-                    
                 } catch (Exception ex) {
                     Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -4770,6 +4713,7 @@ public class RunApp extends javax.swing.JFrame {
         return 1;
     }
     
+    
     public JTable setMVTableHelp(JTable jtable){
         jtable = new JTable(jtable.getModel()){
             @Override
@@ -4777,36 +4721,28 @@ public class RunApp extends javax.swing.JFrame {
                 Component c = super.prepareRenderer(renderer, row, column);
                 if (c instanceof JComponent) {
                     JComponent jc = (JComponent) c;
-                        if(column == 0){
-                            jc.setToolTipText("View name");
-                        }
-                        else if(column == 1){
-                            jc.setToolTipText("Number of the attributes of the view");
-                        }
-                        else if(column == 2){
-                            jc.setToolTipText("Labels x Instances x Features");
-                        }
-                        else if(column == 3){
-                            jc.setToolTipText("Ratio of number of instances to the number of attributes");
-                        }
-                        else if(column == 4){
-                            jc.setToolTipText("Average gain ratio");
-                        }
+                        
+                    if(column == 0){
+                        jc.setToolTipText("View name");
+                    }
+                    else if(column == 1){
+                        jc.setToolTipText("Number of the attributes of the view");
+                    }
+                    else if(column == 2){
+                        jc.setToolTipText("Labels x Instances x Features");
+                    }
+                    else if(column == 3){
+                        jc.setToolTipText("Ratio of number of instances to the number of attributes");
+                    }
+                    else if(column == 4){
+                        jc.setToolTipText("Average gain ratio");
+                    }
                 }
                 return c;
             }
         };
         
         return jtable;
-    }
-    
-   
-    public static int[] toPrimitive(Integer[] IntegerArray) {
-        int[] result = new int[IntegerArray.length];
-	for (int i = 0; i < IntegerArray.length; i++) {
-            result[i] = IntegerArray[i].intValue();
-	}
-	return result;	
     }
 
     
@@ -4819,6 +4755,7 @@ public class RunApp extends javax.swing.JFrame {
         
         return(-1);
     }
+    
     
     private int transform(){
         
@@ -4884,36 +4821,31 @@ public class RunApp extends javax.swing.JFrame {
         return 1;
     }
     
+    
     private void showHeatMap(){
-        if(pairs== null) 
+        if(pairs == null) 
         {
             JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
             return;
         }
 
-        ArrayList<String> seleccionados= new  ArrayList();
         Vector<Integer> selectedIndex = new Vector<Integer>();
 
         int[] selecteds=tableHeatmapLeft.getSelectedRows();
-        //System.out.println(Arrays.toString(selecteds));
         
         if(selecteds.length<= 1) {
             JOptionPane.showMessageDialog(null, "You must choose two or more labels.", "alert", JOptionPane.ERROR_MESSAGE); 
             return;
         }
         
-
-        
         for(int i=0;i<selecteds.length; i++)
         {
-            seleccionados.add((tableHeatmapLeft.getValueAt(selecteds[i], 0).toString()));
             selectedIndex.add(getLabelIndex((tableHeatmapLeft.getValueAt(selecteds[i], 0).toString())));
         }
           
         Collections.sort(selectedIndex);
 
         double [][] newCoeffs = new double[selectedIndex.size()][selectedIndex.size()];
-
         
         for(int i=0; i<selectedIndex.size(); i++){
             for(int j=0; j<selectedIndex.size(); j++){
@@ -4924,29 +4856,8 @@ public class RunApp extends javax.swing.JFrame {
         heatMap = Create_heatmap_graph(panelHeatmap, newCoeffs, null, heatMap);
     }
     
-    private void showMostFrequentsHeatMap(int n){
-        if(pairs== null) 
-        {
-            JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
-            return;
-        }
-        
-         if(n <= 1) {
-            JOptionPane.showMessageDialog(null, "You must choose two or more labels.", "alert", JOptionPane.ERROR_MESSAGE); 
-            return;
-        }
-        else if (n > dataset.getNumLabels()){
-            JOptionPane.showMessageDialog(null, "The number of labels to show must be less than the number of labels in the dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
-            return;
-        }
-        
-        tableHeatmapLeft.setRowSelectionInterval(0, n-1);
-        showHeatMap();
-    }
     
-    private void showMostFrequentURelatedHeatMap(int n){
-        selectTopHeatmapLabels(n ,true);
-        
+    private void showMostFrequentsHeatMap(int n){
         if(pairs== null) 
         {
             JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
@@ -4961,12 +4872,10 @@ public class RunApp extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "The number of labels to show must be less than the number of labels in the dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
             return;
         }
-
-        int[] selecteds = getTopRelatedHeatmap(n);
-        Arrays.sort(selecteds);
-        tableHeatmapLeft.addRowSelectionInterval(0, n-1);
+        
+        tableHeatmapLeft.setRowSelectionInterval(0, n-1);
         showHeatMap();
-    }
+    }    
     
     
     private void showMostRelatedHeatMap(int n){
@@ -5009,6 +4918,31 @@ public class RunApp extends javax.swing.JFrame {
     }
     
     
+    private void showMostFrequentURelatedHeatMap(int n){
+        selectTopHeatmapLabels(n ,true);
+        
+        if(pairs== null) 
+        {
+            JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+        
+        if(n <= 1) {
+            JOptionPane.showMessageDialog(null, "You must choose two or more labels.", "alert", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+        else if (n > dataset.getNumLabels()){
+            JOptionPane.showMessageDialog(null, "The number of labels to show must be less than the number of labels in the dataset.", "alert", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+
+        int[] selecteds = getTopRelatedHeatmap(n);
+        Arrays.sort(selecteds);
+        tableHeatmapLeft.addRowSelectionInterval(0, n-1);
+        showHeatMap();
+    }
+    
+    
     private void initTableMetrics(){
         ArrayList<String> metricsList = MetricUtils.getAllMetrics();
         
@@ -5024,6 +4958,7 @@ public class RunApp extends javax.swing.JFrame {
         }
     }
     
+    
     private void initTableMetricsMulti(String dataName){
         ArrayList<String> metricsList = MetricUtils.Get_metrics_multi();
         
@@ -5034,7 +4969,8 @@ public class RunApp extends javax.swing.JFrame {
         }
     }
     
-    private void save_as_ActionPerformed1(java.awt.event.ActionEvent evt) throws AWTException, IOException
+    
+    private void saveHeatmapGraph() throws AWTException, IOException
     {
         BufferedImage image = new Robot().createScreenCapture(new Rectangle(panelHeatmap.getLocationOnScreen().x+31, panelHeatmap.getLocationOnScreen().y+31, panelHeatmap.getWidth()-61, panelHeatmap.getHeight()-61));
         JFileChooser fc= new JFileChooser();
@@ -5058,7 +4994,8 @@ public class RunApp extends javax.swing.JFrame {
         } 
     }
     
-    private void save_as_ActionPerformed(java.awt.event.ActionEvent evt) throws AWTException, IOException
+    
+    private void saveCoocurrenceGraph() throws AWTException, IOException
     {
         BufferedImage image = new Robot().createScreenCapture(new Rectangle(panelCoOcurrenceRight.getLocationOnScreen().x, panelCoOcurrenceRight.getLocationOnScreen().y, panelCoOcurrenceRight.getWidth(), panelCoOcurrenceRight.getHeight()));
 
@@ -5085,8 +5022,9 @@ public class RunApp extends javax.swing.JFrame {
     }
     
     
-    
-    private mxGraphComponent Create_jgraphx(JPanel jpanel , ArrayList<AttributesPair> mi_lista, String[] Label_name,mxGraphComponent graphComponent_viejo )
+    private mxGraphComponent createJGraphX(JPanel jpanel, 
+            ArrayList<AttributesPair> list, String[] labelNames, 
+            mxGraphComponent oldGraph)
     {
         mxGraph graph = new mxGraph();
         Object parent = graph.getDefaultParent();
@@ -5097,7 +5035,7 @@ public class RunApp extends javax.swing.JFrame {
         
         Random aleatorio=new Random();
 	
-        Object[] lista_vertices = new Object[Label_name.length];
+        Object[] lista_vertices = new Object[labelNames.length];
         
         ImbalancedFeature current;
         double freq;
@@ -5110,41 +5048,41 @@ public class RunApp extends javax.swing.JFrame {
         try
         {
             //create vertices
-            for(int i=0;i<Label_name.length;i++)
+            for(int i=0;i<labelNames.length;i++)
             {
-                current = DataInfoUtils.getLabelByLabelname(Label_name[i],labelsFreqSorted);
+                current = DataInfoUtils.getLabelByLabelname(labelNames[i],labelsFreqSorted);
                 freq = current.getAppearances()/(dataset.getNumInstances()*1.0);
 
                 fortaleza =  ChartUtils.getBorderStrength(min, max, cant_intervalos, freq);
                 
-                if(fortaleza==1)lista_vertices[i]= graph.insertVertex(parent, null,Label_name[i], aleatorio.nextInt(430), aleatorio.nextInt(280), Label_name[i].length()*6,20);      
-                else if (fortaleza==2) lista_vertices[i]= graph.insertVertex(parent, null,Label_name[i], aleatorio.nextInt(430), aleatorio.nextInt(280), Label_name[i].length()*5,20,"ROUNDED;strokeWidth=2");      
-                else if (fortaleza==3) lista_vertices[i]= graph.insertVertex(parent, null,Label_name[i], aleatorio.nextInt(430), aleatorio.nextInt(280), Label_name[i].length()*5,20,"ROUNDED;strokeWidth=3");      
-                else if (fortaleza==4) lista_vertices[i]= graph.insertVertex(parent, null,Label_name[i], aleatorio.nextInt(430), aleatorio.nextInt(280), Label_name[i].length()*5,20,"ROUNDED;strokeWidth=4");      
-                else if (fortaleza==5) lista_vertices[i]= graph.insertVertex(parent, null,Label_name[i], aleatorio.nextInt(430), aleatorio.nextInt(280), Label_name[i].length()*5,20,"strokeWidth=5");      
-                else if (fortaleza==6) lista_vertices[i]= graph.insertVertex(parent, null,Label_name[i], aleatorio.nextInt(430), aleatorio.nextInt(280), Label_name[i].length()*5,20,"strokeWidth=6");      
-                else if (fortaleza==7) lista_vertices[i]= graph.insertVertex(parent, null,Label_name[i], aleatorio.nextInt(430), aleatorio.nextInt(280), Label_name[i].length()*5,20,"strokeWidth=7");      
-                else if (fortaleza==8) lista_vertices[i]= graph.insertVertex(parent, null,Label_name[i], aleatorio.nextInt(430), aleatorio.nextInt(280), Label_name[i].length()*5,20,"strokeWidth=8");      
-                else if (fortaleza==9) lista_vertices[i]= graph.insertVertex(parent, null,Label_name[i], aleatorio.nextInt(430), aleatorio.nextInt(280), Label_name[i].length()*5,20,"strokeWidth=9");      
-                else lista_vertices[i]= graph.insertVertex(parent, null,Label_name[i], aleatorio.nextInt(430), aleatorio.nextInt(280), Label_name[i].length()*5,20,"strokeWidth=10");       
+                if(fortaleza==1)lista_vertices[i]= graph.insertVertex(parent, null,labelNames[i], aleatorio.nextInt(430), aleatorio.nextInt(280), labelNames[i].length()*6,20);      
+                else if (fortaleza==2) lista_vertices[i]= graph.insertVertex(parent, null,labelNames[i], aleatorio.nextInt(430), aleatorio.nextInt(280), labelNames[i].length()*5,20,"ROUNDED;strokeWidth=2");      
+                else if (fortaleza==3) lista_vertices[i]= graph.insertVertex(parent, null,labelNames[i], aleatorio.nextInt(430), aleatorio.nextInt(280), labelNames[i].length()*5,20,"ROUNDED;strokeWidth=3");      
+                else if (fortaleza==4) lista_vertices[i]= graph.insertVertex(parent, null,labelNames[i], aleatorio.nextInt(430), aleatorio.nextInt(280), labelNames[i].length()*5,20,"ROUNDED;strokeWidth=4");      
+                else if (fortaleza==5) lista_vertices[i]= graph.insertVertex(parent, null,labelNames[i], aleatorio.nextInt(430), aleatorio.nextInt(280), labelNames[i].length()*5,20,"strokeWidth=5");      
+                else if (fortaleza==6) lista_vertices[i]= graph.insertVertex(parent, null,labelNames[i], aleatorio.nextInt(430), aleatorio.nextInt(280), labelNames[i].length()*5,20,"strokeWidth=6");      
+                else if (fortaleza==7) lista_vertices[i]= graph.insertVertex(parent, null,labelNames[i], aleatorio.nextInt(430), aleatorio.nextInt(280), labelNames[i].length()*5,20,"strokeWidth=7");      
+                else if (fortaleza==8) lista_vertices[i]= graph.insertVertex(parent, null,labelNames[i], aleatorio.nextInt(430), aleatorio.nextInt(280), labelNames[i].length()*5,20,"strokeWidth=8");      
+                else if (fortaleza==9) lista_vertices[i]= graph.insertVertex(parent, null,labelNames[i], aleatorio.nextInt(430), aleatorio.nextInt(280), labelNames[i].length()*5,20,"strokeWidth=9");      
+                else lista_vertices[i]= graph.insertVertex(parent, null,labelNames[i], aleatorio.nextInt(430), aleatorio.nextInt(280), labelNames[i].length()*5,20,"strokeWidth=10");       
             }
             
             ArrayList<String> lista_del_otro_par;
             
             //create edges             
-            if(!mi_lista.isEmpty()){         
+            if(!list.isEmpty()){         
             
                 AttributesPair temp;
 
-                for(int i=0;i<Label_name.length;i++)
+                for(int i=0;i<labelNames.length;i++)
                 {
-                    lista_del_otro_par=ChartUtils.getVertices(Label_name[i], mi_lista);
+                    lista_del_otro_par=ChartUtils.getVertices(labelNames[i], list);
 
                     for(String actual : lista_del_otro_par)
                     {
-                        int index = DataInfoUtils.getLabelIndex(Label_name, actual);
+                        int index = DataInfoUtils.getLabelIndex(labelNames, actual);
 
-                        temp =AttributePairsUtils.searchAndGet(Label_name[i], actual, mi_lista);
+                        temp =AttributePairsUtils.searchAndGet(labelNames[i], actual, list);
                         freq = temp.getAppearances()/(dataset.getNumInstances()*1.0);
 
                         fortaleza =  ChartUtils.getBorderStrength(min, max, cant_intervalos,freq );
@@ -5168,7 +5106,7 @@ public class RunApp extends javax.swing.JFrame {
             graph.getModel().endUpdate();
         }
         
-        if(graphComponent_viejo !=null) jpanel.remove(graphComponent_viejo);
+        if(oldGraph !=null) jpanel.remove(oldGraph);
        
         
         graph.setCellsEditable(false);
@@ -5489,7 +5427,7 @@ public class RunApp extends javax.swing.JFrame {
         
             String[] labelname1=Utils.listToArray(seleccionados);
        
-            graphComponent  =  Create_jgraphx(panelCoOcurrenceRight,pares_seleccionados,labelname1,graphComponent);
+            graphComponent  =  createJGraphX(panelCoOcurrenceRight,pares_seleccionados,labelname1,graphComponent);
 
             //label_indices_seleccionados = dataset.getLabelIndices();
             heatMap = Create_heatmap_graph(panelHeatmap, getHeatMapCoefficients(), null, heatMap);
@@ -6068,7 +6006,7 @@ public class RunApp extends javax.swing.JFrame {
         jtable.repaint();
     }   
 
-    private void clearTable_metrics_principal()
+    private void clearTableMetricsPrincipal()
     {
         ArrayList<String> metric_list = MetricUtils.getAllMetrics();
 
@@ -6218,7 +6156,7 @@ public class RunApp extends javax.swing.JFrame {
             tmodel.setValueAt(Boolean.FALSE, i, 2);
         }
 
-        clearTable_metrics_principal();
+        clearTableMetricsPrincipal();
     }
 
     private void button_export_ActionPerformed(java.awt.event.ActionEvent evt ,JTable jtable)
