@@ -1,0 +1,2 @@
+commit_dialog_history_messages=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<messages>\r\n<message>Changed inheritance from MeanKurtosis and MeanSkewnessNumericAttributes</message>\r\n<message>Changed metricNames package to mldc.metricNames</message>\r\n<message>Moved two metrics to attributes package&\#x0A;Included javadoc</message>\r\n<message>Minor changes</message>\r\n<message>Moved classes with metric names to a new package called metricNames</message>\r\n<message>renamed packages as mldc.*</message>\r\n</messages>
+eclipse.preferences.version=1

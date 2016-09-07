@@ -1,0 +1,149 @@
+1465373559161	Rename type 'main'
+1465374656795	Copy compilation unit
+1465374660598	Delete element
+1465374667449	Copy compilation unit
+1465374680635	Rename type 'SizeMetrics'
+1465374820246	Copy compilation unit
+1465374829894	Rename type 'Attributes'
+1465374940763	Copy compilation unit
+1465375046695	Copy compilation unit
+1465375533411	Copy compilation unit
+1465375642588	Copy compilation unit
+1465376150546	Copy compilation unit
+1465376157990	Rename type 'StDvCardinality'
+1465377837603	Copy compilation unit
+1465377847930	Rename type 'LabelsDistribution'
+1465378120569	Copy compilation unit
+1465378139241	Rename type 'Cardinality'
+1465378493481	Copy compilation unit
+1465378594039	Copy compilation unit
+1465378658842	Copy compilation unit
+1465378880903	Copy compilation unit
+1465379061723	Copy compilation unit
+1465379119257	Copy compilation unit
+1465379124301	Copy compilation unit
+1465379128572	Copy compilation unit
+1465379218852	Copy compilation unit
+1465379297540	Copy compilation unit
+1465379365467	Copy compilation unit
+1465379437641	Copy compilation unit
+1465379559287	Copy compilation unit
+1465379620493	Copy compilation unit
+1465379627755	Rename type 'NumUnconditionalDependentLabelPairsByChiSquare2'
+1465379631600	Rename type 'RatioUnconditionalDependentLabelPairsByChiSquare2'
+1465379777904	Copy compilation unit
+1465379914427	Copy compilation unit
+1465380166349	Copy compilation unit
+1465380450926	Copy compilation unit
+1465380454854	Rename type 'LabelsDistribution'
+1465380656926	Copy compilation unit
+1465380661345	Rename type 'Cardinality'
+1465382397027	Delete element
+1465382684646	Copy compilation unit
+1465382690023	Delete element
+1465382701601	Copy compilation unit
+1465382854267	Copy compilation unit
+1465383269661	Copy compilation unit
+1465383576346	Copy compilation unit
+1465383615025	Copy compilation unit
+1465383736851	Copy compilation unit
+1465383839453	Copy compilation unit
+1465383865661	Copy compilation unit
+1465384004778	Copy compilation unit
+1465384143777	Copy compilation unit
+1465384445383	Copy compilation unit
+1465384563019	Copy compilation unit
+1465384653954	Copy compilation unit
+1465384760102	Copy compilation unit
+1465384768958	Rename type 'SkwenessCardinality'
+1465385046593	Copy compilation unit
+1465385056593	Rename type 'LabelsDistribution'
+1465385096617	Rename type 'Attributes'
+1465385104385	Rename type 'Instances'
+1465385110588	Rename type 'Labels'
+1465385125741	Rename type 'AttributesMetrics'
+1465385131310	Rename type 'AttributesM'
+1465385254653	Copy compilation unit
+1465385267008	Rename type 'Cardinality'
+1465385415945	Copy compilation unit
+1465385505651	Copy compilation unit
+1465385790066	Copy compilation unit
+1465385866772	Copy compilation unit
+1465386070193	Copy compilation unit
+1465386218856	Copy compilation unit
+1465386271766	Copy compilation unit
+1465386450335	Copy compilation unit
+1465386584278	Copy compilation unit
+1465386612022	Copy compilation unit
+1465386651510	Copy compilation unit
+1465386902918	Rename type 'Attributes'
+1465386918891	Rename type 'NumBinaryAttributes'
+1465386926267	Rename type 'NumNominalAttributes'
+1465386935326	Rename type 'NumNumericAttributes'
+1465386959553	Rename type 'Imbalance'
+1465386967588	Rename type 'LabelsDistribution'
+1465386983180	Rename type 'LabelsRelation'
+1465402154118	Copy compilation unit
+1465402159512	Copy compilation unit
+1465402163433	Copy compilation unit
+1465402642681	Rename type 'NumAttributes'
+1465402652502	Rename type 'NumInstances'
+1465402661449	Rename type 'NumLabels'
+1465465664323	Rename type 'atributo'
+1465466069927	Rename field 'ir'
+1465466091991	Rename field 'ir_inter_class'
+1465466485258	Rename method 'get_name'
+1465466501000	Rename method 'get_frequency'
+1465466519923	Rename method 'get_ir'
+1465466549935	Rename method 'get_variance'
+1465466559983	Rename method 'get_ir_inter_class'
+1465466798693	Rename local variable 'label_indices'
+1465466812868	Rename local variable 'frequencia_x_labels'
+1465466824941	Rename local variable 'Instancias'
+1465466834037	Rename field 'frequency'
+1465466852795	Rename method 'getFrequency'
+1465466991424	Rename local variable 'frequency'
+1465467010455	Rename local variable 'esta'
+1465467014481	Rename local variable 'current'
+1465467081881	Rename method 'Get_Frequency_x_label'
+1465467280336	Rename method 'Ordenar_freq_x_attr'
+1465467298836	Rename local variable 'lista'
+1465467332366	Rename local variable 'label_frenquency'
+1465467420917	Rename local variable 'ordenado'
+1465467910730	Rename method 'Devuelve_mayor'
+1465467973957	Rename method 'Get_data_imbalanced_x_label_inter_class'
+1465467995300	Rename local variable 'label_frequency'
+1465468002826	Rename local variable 'label_indices'
+1465469012478	Rename local variable 'mayor_ocurrencia'
+1465469028062	Rename local variable 'esta'
+1465469167062	Rename local variable 'media'
+1465469177088	Rename local variable 'current_label_freq'
+1465469218782	Rename local variable 'Instancias'
+1465469507501	Rename local variable 'ir'
+1465469513151	Rename local variable 'ir_inter_class'
+1465469738181	Rename method 'Get_label_x_labelname'
+1465469978468	Rename method 'getSortedByIRInterClass'
+1465470014648	Rename local variable 'lista'
+1465470023178	Rename local variable 'lista'
+1465470256901	Rename local variable 'mayor'
+1465470294733	Rename method 'getMax'
+1465472768008	Copy package
+1465472770612	Delete element
+1465472781907	Delete element
+1465472803846	Delete element
+1465472805865	Delete element
+1465472923115	Delete element
+1465484492361	Delete element
+1465484654324	Rename package 'attributes'
+1465484680296	Rename package 'base'
+1465484683595	Rename package 'imbalance'
+1465484688960	Rename package 'labelsDistribution'
+1465484692125	Rename package 'labelsRelation'
+1465484698795	Rename package 'size'
+1465484720242	Rename package 'util'
+1465500937083	Move compilation unit
+1465500947338	Move compilation unit
+1465500953914	Move compilation unit
+1465500966402	Move compilation unit
+1465500973761	Move compilation unit
+1465546994067	Rename field 'imbalanced_data'
