@@ -222,6 +222,7 @@ public class RunApp extends javax.swing.JFrame {
      * MVML
      */
     Hashtable<String, Integer[]> views = new Hashtable<String, Integer[]>();
+    Hashtable<String, String> viewsIntervals = new Hashtable<String, String>();
     boolean mv = false;
     
     ArrayList<Boolean> areMeka;
@@ -3909,7 +3910,8 @@ public class RunApp extends javax.swing.JFrame {
                         String viewsString = "-V:";
                         for(int n : selecteds){
                             attSize += v.get("View " + (n+1)).length;
-                            viewsString += v.get("View " + (n+1))[0] + "-" + v.get("View " + (n+1))[v.get("View " + (n+1)).length-1] + "!";
+                            viewsString += viewsIntervals.get("View " + (n+1)) + "!";
+                            //viewsString += v.get("View " + (n+1))[0] + "-" + v.get("View " + (n+1))[v.get("View " + (n+1)).length-1] + "!";
                         }
                         viewsString += ";";
                         viewsString = viewsString.replace("!;", "");
@@ -4507,14 +4509,79 @@ public class RunApp extends javax.swing.JFrame {
                     String s2 = sString.split("'")[1];
                     s2 = s2.split("-V:")[1];
                     String [] intervals = s2.split("!");
+                    Vector<Vector<Integer>> newIntervals = new Vector<Vector<Integer>>();
                     int [] intervalsSize = new int[intervals.length];
                     int max = Integer.MIN_VALUE;
                     int min = Integer.MAX_VALUE;
                     double mean = 0;
-
+                    
                     for(int i=0; i<intervals.length; i++){
+                        newIntervals.add(new Vector<Integer>());
+                        String [] aux2;
+                        
+                        viewsIntervals.put("View " + (i+1), intervals[i]);
+                        
+                        if(intervals[i].contains(",")){
+                            aux2 = intervals[i].split(",");
+                            for(int j=0; j<aux2.length; j++){
+                                if(aux2[j].contains("-")){
+                                    int a = Integer.parseInt(aux2[j].split("-")[0]);
+                                    int b = Integer.parseInt(aux2[j].split("-")[1]);
+ 
+                                    for(int k=a ; k<=b; k++){
+                                        newIntervals.get(i).add(k);
+                                    }
+                                }
+                                else{
+                                    newIntervals.get(i).add(Integer.parseInt(aux2[j]));
+                                }
+                                
+                            }
+                        }
+                        else{
+                            if(intervals[i].contains("-")){
+                                int a = Integer.parseInt(intervals[i].split("-")[0]);
+                                int b = Integer.parseInt(intervals[i].split("-")[1]);
+ 
+                                for(int k=a ; k<=b; k++){
+                                    newIntervals.get(i).add(k);
+                                }
+                            }
+                            else{
+                                newIntervals.get(i).add(Integer.parseInt(intervals[i]));
+                            }
+                        }
+                    }
+                    
+                    for(int i=0; i<newIntervals.size(); i++){
+                        System.out.println("n: " + newIntervals.get(i));
+                    }
+
+                    for(int i=0; i<newIntervals.size(); i++){
+                        
+                        Integer [] indices = new Integer[newIntervals.get(i).size()];
+                        for(int j=0; j<newIntervals.get(i).size(); j++){
+                            indices[j] = newIntervals.get(i).get(j);
+                        }
+                        
+                        System.out.println(Arrays.toString(indices));
+                        
+                        views.put("View " + (i+1), indices);
+                        
+                        if(newIntervals.get(i).size() > max){
+                            max = newIntervals.get(i).size();
+                        }
+                        if(newIntervals.get(i).size() < min){
+                            min = newIntervals.get(i).size();
+                        }
+                        mean += newIntervals.get(i).size();
+                    }
+                    
+                    /*for(int i=0; i<intervals.length; i++){
                         int a = Integer.parseInt(intervals[i].split("-")[0]);
                         int b = Integer.parseInt(intervals[i].split("-")[1]);
+                        
+                        System.out.println(intervals[i]);
                         
                         intervalsSize[i] = b-a+1; //both a and b are included
                         
@@ -4531,7 +4598,7 @@ public class RunApp extends javax.swing.JFrame {
                             min = intervalsSize[i];
                         }
                         mean += intervalsSize[i];
-                    }
+                    }*/
                     
                     mean /= intervalsSize.length;
                     labelNumViewsValue.setText(Integer.toString(intervalsSize.length));
