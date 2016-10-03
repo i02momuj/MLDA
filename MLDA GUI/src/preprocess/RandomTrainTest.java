@@ -1,4 +1,15 @@
 /*
+ * This file is part of the MLDA.
+ *
+ * (c)  Jose Maria Moyano Murillo
+ *      Eva Lucrecia Gibaja Galindo
+ *      Sebastian Ventura Soto <sventura@uco.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/*
  *    This program is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
  *    the Free Software Foundation; either version 2 of the License, or

@@ -1,4 +1,16 @@
+/*
+ * This file is part of the MLDA.
+ *
+ * (c)  Jose Maria Moyano Murillo
+ *      Eva Lucrecia Gibaja Galindo
+ *      Sebastian Ventura Soto <sventura@uco.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 package app;
+
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 import conversion.MekaToMulan;
@@ -55,6 +67,7 @@ import models.AbstractTableModel2;
 import utils.Exporter;
 import utils.HeapSort;
 import charts.HeatMap;
+import java.io.InputStream;
 import utils.LabelsPairValue;
 import renders.BaseRender;
 import renders.IRRender;
@@ -105,7 +118,6 @@ import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.DefaultXYDataset;
 import org.jfree.data.xy.XYDataset;
-import org.tc33.jheatchart.HeatChart;
 import preprocess.FeatureSelector;
 import preprocess.RandomTrainTest;
 import preprocess.IterativeTrainTest;
@@ -127,8 +139,9 @@ import weka.filters.unsupervised.instance.RemoveRange;
 
 
 /**
- *
  * @author Jose Maria Moyano Murillo
+ * 
+ * RunApp class is the main class for the GUI
  */
 public class RunApp extends javax.swing.JFrame {
 
@@ -152,7 +165,7 @@ public class RunApp extends javax.swing.JFrame {
      */
     MultiLabelInstances trainDataset, testDataset;
     MultiLabelInstances preprocessedDataset;
-    ArrayList<Instances> transformedDatasets = new ArrayList<Instances>();
+    ArrayList<Instances> transformedDatasets = new ArrayList<>();
     ArrayList<MultiLabelInstances> trainDatasets, testDatasets;
     
     /*
@@ -215,14 +228,14 @@ public class RunApp extends javax.swing.JFrame {
     /*
      * Metrics
      */
-    Hashtable<String, String> tableMetrics = new Hashtable<String, String>();  
-    Hashtable<String, Hashtable<String, String>> tableMetricsMulti = new Hashtable<String, Hashtable<String, String>>();
+    Hashtable<String, String> tableMetrics = new Hashtable<>();  
+    Hashtable<String, Hashtable<String, String>> tableMetricsMulti = new Hashtable<>();
     
     /*
      * MVML
      */
-    Hashtable<String, Integer[]> views = new Hashtable<String, Integer[]>();
-    Hashtable<String, String> viewsIntervals = new Hashtable<String, String>();
+    Hashtable<String, Integer[]> views = new Hashtable<>();
+    Hashtable<String, String> viewsIntervals = new Hashtable<>();
     boolean mv = false;
     
     ArrayList<Boolean> areMeka;
@@ -234,6 +247,9 @@ public class RunApp extends javax.swing.JFrame {
     ArrayList<String> labelsetStringByIR;
     
     
+    /**
+     * Runs the GUI
+     */
     public RunApp() 
     {
         //For menus language at charts
@@ -254,7 +270,7 @@ public class RunApp extends javax.swing.JFrame {
             this.setIconImage(ImageIO.read(new File("src/images/64.png")));
         }
         catch (IOException exc) {
-            //exc.printStackTrace();
+            exc.printStackTrace();
         }
         
         this.setMinimumSize(new Dimension(780,500));       
@@ -270,6 +286,9 @@ public class RunApp extends javax.swing.JFrame {
     }
     
     
+    /**
+     * Initialic
+     */
     private void initChiPhiJTable()
     {
         fixedTableChiPhi.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -507,6 +526,12 @@ public class RunApp extends javax.swing.JFrame {
         progressFrame.add(progressBar);   
         
         //Default tab
+        TabPrincipal.setEnabledAt(1, false);
+        TabPrincipal.setEnabledAt(2, false);
+        TabPrincipal.setEnabledAt(3, false);
+        TabPrincipal.setEnabledAt(4, false);
+        TabPrincipal.setEnabledAt(5, false);
+        TabPrincipal.setEnabledAt(6, false);
         TabPrincipal.setEnabledAt(7, false);
     }
     
@@ -4694,6 +4719,13 @@ public class RunApp extends javax.swing.JFrame {
                 xmlFilename = DataIOUtils.getFilePath(xmlPath);
             }
 
+            //Enable tabs
+            TabPrincipal.setEnabledAt(1, true);
+            TabPrincipal.setEnabledAt(2, true);
+            TabPrincipal.setEnabledAt(3, true);
+            TabPrincipal.setEnabledAt(4, true);
+            TabPrincipal.setEnabledAt(5, true);
+            TabPrincipal.setEnabledAt(6, true);
             
             try {
                 File f = new File(xmlFilename);
