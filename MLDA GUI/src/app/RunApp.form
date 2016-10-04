@@ -389,7 +389,7 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jButtonSaveDatasets" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jComboBox_SaveFormat" min="-2" max="-2" attributes="0"/>
+                              <Component id="jComboBoxSaveFormat" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
@@ -417,7 +417,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jButtonStartPreprocess" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jButtonSaveDatasets" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBox_SaveFormat" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jComboBoxSaveFormat" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="191" max="32767" attributes="0"/>
                   </Group>
@@ -760,17 +760,17 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="labelBRFS" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
-                                  <Component id="labelBRFS_Comb" min="-2" max="-2" attributes="0"/>
+                                  <Component id="labelBRFSComb" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                                  <Component id="jComboBox_BRFS_Comb" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jComboBoxBRFSComb" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="labelBRFS_Norm" min="-2" max="-2" attributes="0"/>
+                                  <Component id="labelBRFSNorm" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jComboBox_BRFS_Norm" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jComboBoxBRFSNorm" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="labelBRFS_Out" min="-2" max="-2" attributes="0"/>
+                                  <Component id="labelBRFSOut" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jComboBox_BRFS_Out" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jComboBoxBRFSOut" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace pref="114" max="32767" attributes="0"/>
@@ -786,12 +786,12 @@
                               <Component id="radioBRFS" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="textBRFS" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="labelBRFS" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="labelBRFS_Comb" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jComboBox_BRFS_Comb" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                              <Component id="labelBRFS_Norm" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jComboBox_BRFS_Norm" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                              <Component id="labelBRFS_Out" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jComboBox_BRFS_Out" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                              <Component id="labelBRFSComb" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jComboBoxBRFSComb" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                              <Component id="labelBRFSNorm" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jComboBoxBRFSNorm" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                              <Component id="labelBRFSOut" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jComboBoxBRFSOut" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -833,7 +833,7 @@
                     <Property name="text" type="java.lang.String" value="features"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="labelBRFS_Comb">
+                <Component class="javax.swing.JLabel" name="labelBRFSComb">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Arial" size="12" style="0"/>
@@ -842,7 +842,7 @@
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="jComboBox_BRFS_Comb">
+                <Component class="javax.swing.JComboBox" name="jComboBoxBRFSComb">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Arial" size="12" style="0"/>
@@ -860,7 +860,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="labelBRFS_Norm">
+                <Component class="javax.swing.JLabel" name="labelBRFSNorm">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Arial" size="12" style="0"/>
@@ -869,7 +869,7 @@
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="jComboBox_BRFS_Norm">
+                <Component class="javax.swing.JComboBox" name="jComboBoxBRFSNorm">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Arial" size="12" style="0"/>
@@ -887,7 +887,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="labelBRFS_Out">
+                <Component class="javax.swing.JLabel" name="labelBRFSOut">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Arial" size="12" style="0"/>
@@ -896,7 +896,7 @@
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="jComboBox_BRFS_Out">
+                <Component class="javax.swing.JComboBox" name="jComboBoxBRFSOut">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Arial" size="12" style="0"/>
@@ -954,7 +954,7 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JComboBox" name="jComboBox_SaveFormat">
+            <Component class="javax.swing.JComboBox" name="jComboBoxSaveFormat">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="2">
@@ -1070,11 +1070,11 @@
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-                              <Component id="jButtonStartTrans" min="-2" pref="89" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                              <Component id="jButtonStartTrans" min="-2" pref="100" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="jButtonSaveDatasetsTrans" min="-2" pref="89" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="625" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -1090,7 +1090,7 @@
                           <Component id="jButtonStartTrans" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jButtonSaveDatasetsTrans" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="362" max="32767" attributes="0"/>
+                      <EmptySpace pref="302" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1711,7 +1711,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
-                              <Component id="jLabelChiFi_text" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabelChiFiText" min="-2" max="-2" attributes="0"/>
                               <EmptySpace pref="153" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -1720,14 +1720,14 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace pref="429" max="32767" attributes="0"/>
-                              <Component id="jLabelChiFi_text" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabelChiFiText" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
                   </Layout>
                   <SubComponents>
-                    <Component class="javax.swing.JLabel" name="jLabelChiFi_text">
+                    <Component class="javax.swing.JLabel" name="jLabelChiFiText">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="When the Chi coefficient is &gt; 6.635 the labels are dependent at 99% confidence (marked in red)"/>
                       </Properties>

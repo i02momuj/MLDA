@@ -67,7 +67,6 @@ import models.AbstractTableModel2;
 import utils.Exporter;
 import utils.HeapSort;
 import charts.HeatMap;
-import java.io.InputStream;
 import utils.LabelsPairValue;
 import renders.BaseRender;
 import renders.IRRender;
@@ -287,7 +286,7 @@ public class RunApp extends javax.swing.JFrame {
     
     
     /**
-     * Initialic
+     * Initializes Chi and Phi tables
      */
     private void initChiPhiJTable()
     {
@@ -326,10 +325,13 @@ public class RunApp extends javax.swing.JFrame {
 
         panelChiPhi.add(phiLabel);
         
-        jLabelChiFi_text.setVisible(false);
+        jLabelChiFiText.setVisible(false);
     } 
     
     
+    /**
+     * Initializes the default configuration of the app
+     */
     private void initConfig()
     {   
         /*
@@ -366,20 +368,20 @@ public class RunApp extends javax.swing.JFrame {
         radioBRFS.setToolTipText("Feature selection by Binary Relevance Feature Selection method");
         textBRFS.setToolTipText("Number of features to select");
 
-        labelBRFS_Comb.setToolTipText("Combiantion approach mode");
-        jComboBox_BRFS_Comb.setToolTipText("<html>Combiantion approach mode: <br>"
+        labelBRFSComb.setToolTipText("Combiantion approach mode");
+        jComboBoxBRFSComb.setToolTipText("<html>Combiantion approach mode: <br>"
                                           + "max: maximum <br>"
                                           + "avg: average <br>"
                                           + "min: minumum </html>");
 
-        labelBRFS_Norm.setToolTipText("Normalization mode");
-        jComboBox_BRFS_Norm.setToolTipText("<html>Normalization mode: <br>"
+        labelBRFSNorm.setToolTipText("Normalization mode");
+        jComboBoxBRFSNorm.setToolTipText("<html>Normalization mode: <br>"
                                           + "dl: divide by length <br>"
                                           + "dm: divide by maximum <br>"
                                           + "none: no normalization </html>");
 
-        labelBRFS_Out.setToolTipText("Scoring mode");
-        jComboBox_BRFS_Out.setToolTipText("<html>Scoring mode: <br>"
+        labelBRFSOut.setToolTipText("Scoring mode");
+        jComboBoxBRFSOut.setToolTipText("<html>Scoring mode: <br>"
                                           + "eval: evaluation score <br>"
                                           + "rank: ranking score </html>");
 
@@ -393,7 +395,7 @@ public class RunApp extends javax.swing.JFrame {
 
         jButtonStartPreprocess.setToolTipText("Start preprocessing");
         jButtonSaveDatasets.setToolTipText("Save dataset files in a folder");
-        jComboBox_SaveFormat.setToolTipText("Select Mulan or Meka format to save datasets");
+        jComboBoxSaveFormat.setToolTipText("Select Mulan or Meka format to save datasets");
 
         buttonGroup3.add(radioNoIS);
         radioNoIS.setToolTipText("No instance selection is done");
@@ -510,7 +512,7 @@ public class RunApp extends javax.swing.JFrame {
         createMultiMetricsTable(jTableMulti,jPanelMulti,buttonAll,buttonNone,buttonInvert,buttonCalculate,buttonSave, 25,15,510,420); //tab Multi
 
         jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
+        jComboBoxSaveFormat.setEnabled(false);
 
         /*
          * Progress bar
@@ -536,6 +538,9 @@ public class RunApp extends javax.swing.JFrame {
     }
     
     
+    /**
+     * Control multiple datasets configuration
+     */
     private void multipleDatasetsConfig()
     {
         areMeka = new ArrayList();
@@ -607,17 +612,17 @@ public class RunApp extends javax.swing.JFrame {
         radioBRFS = new javax.swing.JRadioButton();
         textBRFS = new javax.swing.JTextField();
         labelBRFS = new javax.swing.JLabel();
-        labelBRFS_Comb = new javax.swing.JLabel();
-        jComboBox_BRFS_Comb = new javax.swing.JComboBox();
-        labelBRFS_Norm = new javax.swing.JLabel();
-        jComboBox_BRFS_Norm = new javax.swing.JComboBox();
-        labelBRFS_Out = new javax.swing.JLabel();
-        jComboBox_BRFS_Out = new javax.swing.JComboBox();
+        labelBRFSComb = new javax.swing.JLabel();
+        jComboBoxBRFSComb = new javax.swing.JComboBox();
+        labelBRFSNorm = new javax.swing.JLabel();
+        jComboBoxBRFSNorm = new javax.swing.JComboBox();
+        labelBRFSOut = new javax.swing.JLabel();
+        jComboBoxBRFSOut = new javax.swing.JComboBox();
         radioRandomFS = new javax.swing.JRadioButton();
         textRandomFS = new javax.swing.JTextField();
         labelRandomFS = new javax.swing.JLabel();
         radioNoFS = new javax.swing.JRadioButton();
-        jComboBox_SaveFormat = new javax.swing.JComboBox();
+        jComboBoxSaveFormat = new javax.swing.JComboBox();
         panelIS = new javax.swing.JPanel();
         radioRandomIS = new javax.swing.JRadioButton();
         textRandomIS = new javax.swing.JTextField();
@@ -656,7 +661,7 @@ public class RunApp extends javax.swing.JFrame {
         panelDependences = new javax.swing.JPanel();
         tabsDependences = new javax.swing.JTabbedPane();
         panelChiPhi = new javax.swing.JPanel();
-        jLabelChiFi_text = new javax.swing.JLabel();
+        jLabelChiFiText = new javax.swing.JLabel();
         panelCoOcurrence = new javax.swing.JPanel();
         panelCoOcurrenceRight = new javax.swing.JPanel();
         buttonShowCoOcurrence = new javax.swing.JButton();
@@ -830,7 +835,7 @@ public class RunApp extends javax.swing.JFrame {
                                 .addComponent(labelDensity)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(labelDensityValue, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(144, Short.MAX_VALUE))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
         panelCurrentDatasetLayout.setVerticalGroup(
             panelCurrentDatasetLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1102,32 +1107,32 @@ public class RunApp extends javax.swing.JFrame {
         labelBRFS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         labelBRFS.setText("features");
 
-        labelBRFS_Comb.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        labelBRFS_Comb.setText("Comb");
-        labelBRFS_Comb.setEnabled(false);
+        labelBRFSComb.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        labelBRFSComb.setText("Comb");
+        labelBRFSComb.setEnabled(false);
 
-        jComboBox_BRFS_Comb.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jComboBox_BRFS_Comb.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "max", "min", "avg" }));
-        jComboBox_BRFS_Comb.setEnabled(false);
-        jComboBox_BRFS_Comb.setPreferredSize(new java.awt.Dimension(58, 20));
+        jComboBoxBRFSComb.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jComboBoxBRFSComb.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "max", "min", "avg" }));
+        jComboBoxBRFSComb.setEnabled(false);
+        jComboBoxBRFSComb.setPreferredSize(new java.awt.Dimension(58, 20));
 
-        labelBRFS_Norm.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        labelBRFS_Norm.setText("Norm");
-        labelBRFS_Norm.setEnabled(false);
+        labelBRFSNorm.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        labelBRFSNorm.setText("Norm");
+        labelBRFSNorm.setEnabled(false);
 
-        jComboBox_BRFS_Norm.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jComboBox_BRFS_Norm.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "dm", "dl", "none" }));
-        jComboBox_BRFS_Norm.setEnabled(false);
-        jComboBox_BRFS_Norm.setPreferredSize(new java.awt.Dimension(63, 20));
+        jComboBoxBRFSNorm.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jComboBoxBRFSNorm.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "dm", "dl", "none" }));
+        jComboBoxBRFSNorm.setEnabled(false);
+        jComboBoxBRFSNorm.setPreferredSize(new java.awt.Dimension(63, 20));
 
-        labelBRFS_Out.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        labelBRFS_Out.setText("Score");
-        labelBRFS_Out.setEnabled(false);
+        labelBRFSOut.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        labelBRFSOut.setText("Score");
+        labelBRFSOut.setEnabled(false);
 
-        jComboBox_BRFS_Out.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jComboBox_BRFS_Out.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "eval", "rank" }));
-        jComboBox_BRFS_Out.setEnabled(false);
-        jComboBox_BRFS_Out.setPreferredSize(new java.awt.Dimension(59, 20));
+        jComboBoxBRFSOut.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jComboBoxBRFSOut.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "eval", "rank" }));
+        jComboBoxBRFSOut.setEnabled(false);
+        jComboBoxBRFSOut.setPreferredSize(new java.awt.Dimension(59, 20));
 
         radioRandomFS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         radioRandomFS.setText("Random attribute selection");
@@ -1173,17 +1178,17 @@ public class RunApp extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelBRFS)
                         .addGap(44, 44, 44)
-                        .addComponent(labelBRFS_Comb)
+                        .addComponent(labelBRFSComb)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox_BRFS_Comb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBoxBRFSComb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(labelBRFS_Norm)
+                        .addComponent(labelBRFSNorm)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox_BRFS_Norm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBoxBRFSNorm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(labelBRFS_Out)
+                        .addComponent(labelBRFSOut)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox_BRFS_Out, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jComboBoxBRFSOut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(114, Short.MAX_VALUE))
         );
         panelFSLayout.setVerticalGroup(
@@ -1195,12 +1200,12 @@ public class RunApp extends javax.swing.JFrame {
                     .addComponent(radioBRFS)
                     .addComponent(textBRFS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelBRFS)
-                    .addComponent(labelBRFS_Comb)
-                    .addComponent(jComboBox_BRFS_Comb, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelBRFS_Norm)
-                    .addComponent(jComboBox_BRFS_Norm, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelBRFS_Out)
-                    .addComponent(jComboBox_BRFS_Out, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(labelBRFSComb)
+                    .addComponent(jComboBoxBRFSComb, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelBRFSNorm)
+                    .addComponent(jComboBoxBRFSNorm, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelBRFSOut)
+                    .addComponent(jComboBoxBRFSOut, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelFSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radioRandomFS)
@@ -1209,8 +1214,8 @@ public class RunApp extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jComboBox_SaveFormat.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Mulan .arff", "Meka .arff" }));
-        jComboBox_SaveFormat.setEnabled(false);
+        jComboBoxSaveFormat.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Mulan .arff", "Meka .arff" }));
+        jComboBoxSaveFormat.setEnabled(false);
 
         panelIS.setBorder(javax.swing.BorderFactory.createTitledBorder("Instance Selection"));
 
@@ -1278,7 +1283,7 @@ public class RunApp extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jButtonSaveDatasets)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox_SaveFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBoxSaveFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(panelPreprocessLayout.createSequentialGroup()
                         .addGroup(panelPreprocessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1300,7 +1305,7 @@ public class RunApp extends javax.swing.JFrame {
                 .addGroup(panelPreprocessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonStartPreprocess)
                     .addComponent(jButtonSaveDatasets)
-                    .addComponent(jComboBox_SaveFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBoxSaveFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(191, Short.MAX_VALUE))
         );
 
@@ -1396,10 +1401,10 @@ public class RunApp extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(panelTransformationLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(jButtonStartTrans, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addComponent(jButtonStartTrans, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonSaveDatasetsTrans, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(625, Short.MAX_VALUE))))
         );
         panelTransformationLayout.setVerticalGroup(
             panelTransformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1410,7 +1415,7 @@ public class RunApp extends javax.swing.JFrame {
                 .addGroup(panelTransformationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonStartTrans)
                     .addComponent(jButtonSaveDatasetsTrans))
-                .addContainerGap(362, Short.MAX_VALUE))
+                .addContainerGap(302, Short.MAX_VALUE))
         );
 
         TabPrincipal.addTab("Transformation", panelTransformation);
@@ -1712,7 +1717,7 @@ public class RunApp extends javax.swing.JFrame {
             }
         });
 
-        jLabelChiFi_text.setText("When the Chi coefficient is > 6.635 the labels are dependent at 99% confidence (marked in red)");
+        jLabelChiFiText.setText("When the Chi coefficient is > 6.635 the labels are dependent at 99% confidence (marked in red)");
 
         javax.swing.GroupLayout panelChiPhiLayout = new javax.swing.GroupLayout(panelChiPhi);
         panelChiPhi.setLayout(panelChiPhiLayout);
@@ -1720,14 +1725,14 @@ public class RunApp extends javax.swing.JFrame {
             panelChiPhiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelChiPhiLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addComponent(jLabelChiFi_text)
+                .addComponent(jLabelChiFiText)
                 .addContainerGap(153, Short.MAX_VALUE))
         );
         panelChiPhiLayout.setVerticalGroup(
             panelChiPhiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelChiPhiLayout.createSequentialGroup()
                 .addContainerGap(429, Short.MAX_VALUE)
-                .addComponent(jLabelChiFi_text)
+                .addComponent(jLabelChiFiText)
                 .addGap(27, 27, 27))
         );
 
@@ -1826,7 +1831,7 @@ public class RunApp extends javax.swing.JFrame {
                         .addComponent(buttonShowMostFrequentURelated)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(textMostFrequentURelated, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelCoOcurrenceLayout.setVerticalGroup(
             panelCoOcurrenceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1980,7 +1985,7 @@ public class RunApp extends javax.swing.JFrame {
                 .addGroup(panelHeatmapGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonShowMostFrequentURelatedHeatMap)
                     .addComponent(textMostFrequentURelatedHeatMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         tabsDependences.addTab(" Heatmap graph", panelHeatmapGraph);
@@ -2315,7 +2320,6 @@ public class RunApp extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonRemoveMultipleDatasetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRemoveMultipleDatasetsActionPerformed
-        // TODO add your handling code here:
         int current = listMultipleDatasetsLeft.getSelectedIndex();
 
         if(current < 0){
@@ -2334,8 +2338,6 @@ public class RunApp extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonRemoveMultipleDatasetsActionPerformed
 
     private void buttonAddMultipleDatasetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddMultipleDatasetsActionPerformed
-        // TODO add your handling code here:
-
         //Choose dataset
         final JFileChooser chooser = new JFileChooser();
         chooser.setMultiSelectionEnabled(true);
@@ -2365,15 +2367,14 @@ public class RunApp extends javax.swing.JFrame {
             }
         }
         ).start();
-
     }//GEN-LAST:event_buttonAddMultipleDatasetsActionPerformed
 
     private void tabsDependencesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabsDependencesStateChanged
         if(tabsDependences.getSelectedIndex() == 0) {
-            jLabelChiFi_text.setVisible(true);
+            jLabelChiFiText.setVisible(true);
         }
         else {
-            jLabelChiFi_text.setVisible(false);
+            jLabelChiFiText.setVisible(false);
         }
     }//GEN-LAST:event_tabsDependencesStateChanged
 
@@ -2399,12 +2400,11 @@ public class RunApp extends javax.swing.JFrame {
             JMenuItem saver = new JMenuItem("Save as...");
 
             saver.addActionListener(new java.awt.event.ActionListener() {
+                @Override
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     try {
                         saveCoocurrenceGraph();
-                    } catch (AWTException ex) {
-                        Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
+                    } catch (AWTException | IOException ex) {
                         Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -2428,21 +2428,19 @@ public class RunApp extends javax.swing.JFrame {
             return;
         }
 
-        if(pairs== null)
+        if(pairs == null)
         {
             JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        ArrayList<String> seleccionados= new  ArrayList();
+        ArrayList<String> selectedsList = selectTopCoocurrenceLabels(n, true);
 
-        seleccionados = selectTopCoocurrenceLabels(n, true);
+        ArrayList<AttributesPair> selectedPairs = AttributePairsUtils.findSelectedAttributesPair(pairs, selectedsList);
 
-        ArrayList<AttributesPair> pares_seleccionados =  AttributePairsUtils.findSelectedAttributesPair(pairs, seleccionados);
+        String[] labelNames = Utils.listToArray(selectedsList);
 
-        String[] labelname=Utils.listToArray(seleccionados);
-
-        graphComponent  =  createJGraphX(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
+        graphComponent = createJGraphX(panelCoOcurrenceRight,selectedPairs,labelNames,graphComponent);
     }//GEN-LAST:event_buttonShowMostRelatedActionPerformed
 
     private void buttonShowMostFrequentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostFrequentActionPerformed
@@ -2465,23 +2463,23 @@ public class RunApp extends javax.swing.JFrame {
 
         tableCoOcurrenceLeft.setRowSelectionInterval(0, n-1);
 
-        ArrayList<String> seleccionados= new  ArrayList();
+        ArrayList<String> selectedsList = new ArrayList<>();
 
-        String current = new String();
+        String current;
         for(int i=0;i<n; i++)
         {
             current = (tableCoOcurrenceLeft.getValueAt(i, 0).toString());
             if(current != null){
-                seleccionados.add(current);
+                selectedsList.add(current);
             }
             else break;
         }
 
-        ArrayList<AttributesPair> pares_seleccionados =  AttributePairsUtils.findSelectedAttributesPair(pairs, seleccionados);
+        ArrayList<AttributesPair> selectedPairs = AttributePairsUtils.findSelectedAttributesPair(pairs, selectedsList);
 
-        String[] labelname=Utils.listToArray(seleccionados);
+        String[] labelnames = Utils.listToArray(selectedsList);
 
-        graphComponent  =  createJGraphX(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
+        graphComponent  =  createJGraphX(panelCoOcurrenceRight, selectedPairs, labelnames, graphComponent);
     }//GEN-LAST:event_buttonShowMostFrequentActionPerformed
 
     private void buttonShowCoOcurrenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowCoOcurrenceActionPerformed
@@ -2491,7 +2489,7 @@ public class RunApp extends javax.swing.JFrame {
             return;
         }
 
-        ArrayList<String> seleccionados= new  ArrayList();
+        ArrayList<String> selectedsList = new ArrayList();
         int[] selecteds = tableCoOcurrenceLeft.getSelectedRows();
 
         if(selecteds.length<= 1) {
@@ -2501,94 +2499,76 @@ public class RunApp extends javax.swing.JFrame {
 
         for(int i=0;i<selecteds.length; i++)
         {
-            seleccionados.add((tableCoOcurrenceLeft.getValueAt(selecteds[i], 0).toString()));
+            selectedsList.add((tableCoOcurrenceLeft.getValueAt(selecteds[i], 0).toString()));
         }
 
-        ArrayList<AttributesPair> pares_seleccionados =  AttributePairsUtils.findSelectedAttributesPair(pairs, seleccionados);
+        ArrayList<AttributesPair> selectedPairs =  AttributePairsUtils.findSelectedAttributesPair(pairs, selectedsList);
 
-        String[] labelname=Utils.listToArray(seleccionados);//solo cambia el tipo de estructura de datos.
+        String[] labelname = Utils.listToArray(selectedsList);
 
-        graphComponent  =  createJGraphX(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
+        graphComponent = createJGraphX(panelCoOcurrenceRight, selectedPairs, labelname, graphComponent);
     }//GEN-LAST:event_buttonShowCoOcurrenceActionPerformed
 
     private void tabsImbalanceStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabsImbalanceStateChanged
 
         if(tmLabelFrequency !=null && tmLabelsetFrequency!=null){
 
-            if(tabsImbalance.getSelectedIndex()==1)
-            {
-                tableImbalance.setModel(tmLabelsetFrequency);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset frequency"));
-                tableImbalance.setDefaultRenderer(Object.class, new DefaultRender());
-            }
-
-            else if (tabsImbalance.getSelectedIndex()==4)
-            {
-                tableImbalance.setModel(tmIRLabelset);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelsets Imbalance Ratio"));
-
-                tableImbalance.setDefaultRenderer(Object.class, new IRRender(1));
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-            }
-            else if (tabsImbalance.getSelectedIndex()==0)
-            {
-                tableImbalance.setModel(tmLabelFrequency);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Label frequency"));
-
-                tableImbalance.setDefaultRenderer(Object.class, new DefaultRender());
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-            }
-
-            else if (tabsImbalance.getSelectedIndex()==3)
-            {
-                tableImbalance.setModel(tmIRIntraClass);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance Ratio intra class"));
-
-                tableImbalance.setDefaultRenderer(Object.class, new IRRender(1));
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-            }
-            else if (tabsImbalance.getSelectedIndex()==2)
-            {
-                tableImbalance.setModel(tmLabelsHistogram);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels histogram"));
-
-                tableImbalance.setDefaultRenderer(Object.class, new DefaultRender());
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-            }
-
-            else if (tabsImbalance.getSelectedIndex()==6)
-            {
-                tableImbalance.setModel(tmIRInterClass);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance Ratio inter class"));
-
-                tableImbalance.setDefaultRenderer(Object.class, new IRRender(1));
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-            }
-
-            else if (tabsImbalance.getSelectedIndex()==5)
-            {
-                tableImbalance.setModel(tmBox);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Box diagrams"));
-                //panelImbalanceLeft.setVisible(false);
-
-                tableImbalance.setDefaultRenderer(Object.class, new DefaultRender());
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
-            }
-
-            else
-            {
-                tableImbalance.setModel(tmLabelsHistogram);
-                panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels histogram"));
-
-                tableImbalance.setDefaultRenderer(Object.class, new DefaultRender());
-                panelImbalanceLeft.repaint();
-                panelImbalanceLeft.validate();
+            switch (tabsImbalance.getSelectedIndex()) {
+                case 0:
+                    tableImbalance.setModel(tmLabelFrequency);
+                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Label frequency"));
+                    tableImbalance.setDefaultRenderer(Object.class, new DefaultRender());
+                    panelImbalanceLeft.repaint();
+                    panelImbalanceLeft.validate();
+                    break;
+                case 1:
+                    tableImbalance.setModel(tmLabelsetFrequency);
+                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset frequency"));
+                    tableImbalance.setDefaultRenderer(Object.class, new DefaultRender());
+                    break;
+                case 2:
+                    tableImbalance.setModel(tmLabelsHistogram);
+                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels histogram"));
+                    tableImbalance.setDefaultRenderer(Object.class, new DefaultRender());
+                    panelImbalanceLeft.repaint();
+                    panelImbalanceLeft.validate();
+                    break;
+                case 3:
+                    tableImbalance.setModel(tmIRIntraClass);
+                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance Ratio intra class"));
+                    tableImbalance.setDefaultRenderer(Object.class, new IRRender(1));
+                    panelImbalanceLeft.repaint();
+                    panelImbalanceLeft.validate();
+                    break;
+                case 4:
+                    tableImbalance.setModel(tmIRLabelset);
+                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelsets Imbalance Ratio"));
+                    tableImbalance.setDefaultRenderer(Object.class, new IRRender(1));
+                    panelImbalanceLeft.repaint();
+                    panelImbalanceLeft.validate();
+                    break;
+                case 5:
+                    tableImbalance.setModel(tmBox);
+                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Box diagrams"));
+                    //panelImbalanceLeft.setVisible(false);
+                    tableImbalance.setDefaultRenderer(Object.class, new DefaultRender());
+                    panelImbalanceLeft.repaint();
+                    panelImbalanceLeft.validate();
+                    break;
+                case 6:
+                    tableImbalance.setModel(tmIRInterClass);
+                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance Ratio inter class"));
+                    tableImbalance.setDefaultRenderer(Object.class, new IRRender(1));
+                    panelImbalanceLeft.repaint();
+                    panelImbalanceLeft.validate();
+                    break;
+                default:
+                    tableImbalance.setModel(tmLabelsHistogram);
+                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels histogram"));
+                    tableImbalance.setDefaultRenderer(Object.class, new DefaultRender());
+                    panelImbalanceLeft.repaint();
+                    panelImbalanceLeft.validate();
+                    break;
             }
 
             tableImbalance.repaint();
@@ -2597,153 +2577,143 @@ public class RunApp extends javax.swing.JFrame {
     }//GEN-LAST:event_tabsImbalanceStateChanged
 
     private void export2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_export2ActionPerformed
-        button_export_ActionPerformed(evt, tableImbalance);
+        buttonExportActionPerformed(evt, tableImbalance);
     }//GEN-LAST:event_export2ActionPerformed
 
     private void tableImbalanceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableImbalanceMouseClicked
         //#Examples per labelset
-        if(tabsImbalance.getSelectedIndex()==1)
-        {
-            int seleccionada = tableImbalance.getSelectedRow();
-
-            if(labelsetsSorted == null){
-                return;
-            }
-
-            ArrayList<String> label_names= DataInfoUtils.getLabelNamesByLabelset(dataset, labelsetsSorted[seleccionada].getName());
-
-            String[] args = new String[2];
-
-            args[0]= labelsetsSorted[seleccionada].getName();
-            args[1]= Integer.toString(labelsetsSorted[seleccionada].getAppearances());
-
-            int posx = this.getBounds().x;
-            int posy = this.getBounds().y;
-
-            EmergentOutput mo = new EmergentOutput(dataset, posx, posy+50,args,label_names,labelsFreqSorted, isMeka);
-
-            mo.setVisible(true);
-        }
-
-        else if(tabsImbalance.getSelectedIndex()==5)
-        {
-            int seleccionada = tableImbalance.getSelectedRow();
-            if(seleccionada == 0){
-                tableImbalance.clearSelection();
-                if(labelAppearances == null) return;
-
-                double [] label_frenquency_values = DataInfoUtils.getLabelAppearances(labelAppearances);
-
-                HeapSort.sort(label_frenquency_values);
-
-                labelsBoxDiagram.getChart().setTitle("# Examples per Label");
-                labelsBoxDiagram.getChart().getXYPlot().clearAnnotations();
-
-                ChartUtils.updateXYChart(labelsBoxDiagram, HeapSort.getSortedArray());
-            }
-            else if(seleccionada == 1){
-                tableImbalance.clearSelection();
-
-                if(labelsetsFrequency == null) return;
-
-                HeapSort.sort(labelsetsFrequency);
-
-                labelsBoxDiagram.getChart().setTitle("# Examples per Labelset");
-                labelsBoxDiagram.getChart().getXYPlot().clearAnnotations();
-
-                ChartUtils.updateXYChart(labelsBoxDiagram, HeapSort.getSortedArray());
-            }
-            /*
-            jRadioButton8.setSelected(true);
-            int seleccionada = tableImbalance.getSelectedRow();
-            String attr= tableImbalance.getValueAt(seleccionada, 0).toString();
-            Instances instancias = dataset.getDataSet();
-            Attribute attr_current = instancias.attribute(attr);
-            double[] valores_attr= instancias.attributeToDoubleArray(attr_current.index());
-            HeapSort.sort(valores_attr);
-            labelsBoxDiagram.getChart().setTitle(attr_current.name());
-            labelsBoxDiagram.getChart().getXYPlot().clearAnnotations();
-            Utils.updateXYChart(labelsBoxDiagram, HeapSort.getSortedArray());
-            */
-        }
-
-        else if(tabsImbalance.getSelectedIndex()==6)
-        {
-            int seleccionada = tableImbalance.getSelectedRow();
-
-            if(labelsetsIRSorted == null) return;
-
-            ArrayList<String> label_names= DataInfoUtils.getLabelNamesByLabelset(dataset, labelsetsIRSorted[seleccionada].getName());
-
-            String[] args = new String[2];
-
-            args[0]= labelsetsIRSorted[seleccionada].getName();
-            args[1]= Integer.toString(labelsetsIRSorted[seleccionada].getAppearances());
-
-            int posx = this.getBounds().x;
-            int posy = this.getBounds().y;
-
-            EmergentOutput mo = new EmergentOutput(dataset, posx, posy+50,args,label_names,labelsFreqSorted, isMeka);
-
-            mo.setVisible(true);
+        int selected;
+        ArrayList<String> labelNames;
+        String[] args;
+        int posx;
+        int posy;
+        EmergentOutput mo;
+        
+        switch (tabsImbalance.getSelectedIndex()) {
+            case 1:
+                selected = tableImbalance.getSelectedRow();
+                if(labelsetsSorted == null){
+                    return;
+                }       
+                labelNames = DataInfoUtils.getLabelNamesByLabelset(dataset, labelsetsSorted[selected].getName());
+                args = new String[2];
+                args[0]= labelsetsSorted[selected].getName();
+                args[1]= Integer.toString(labelsetsSorted[selected].getAppearances());
+                posx = this.getBounds().x;
+                posy = this.getBounds().y;
+                mo = new EmergentOutput(dataset, posx, posy+50,args,labelNames,labelsFreqSorted, isMeka);
+                mo.setVisible(true);
+                break;
+            case 5:
+                selected = tableImbalance.getSelectedRow();
+                if(selected == 0){
+                    tableImbalance.clearSelection();
+                    if(labelAppearances == null) {
+                        return;
+                    }
+                        
+                    double [] labelFrequencies = DataInfoUtils.getLabelAppearances(labelAppearances);
+                    
+                    HeapSort.sort(labelFrequencies);
+                        
+                    labelsBoxDiagram.getChart().setTitle("# Examples per Label");
+                    labelsBoxDiagram.getChart().getXYPlot().clearAnnotations();
+                        
+                    ChartUtils.updateXYChart(labelsBoxDiagram, HeapSort.getSortedArray());
+                }
+                else if(selected == 1){
+                    tableImbalance.clearSelection();
+                        
+                    if(labelsetsFrequency == null) {
+                        return;
+                    }
+                        
+                    HeapSort.sort(labelsetsFrequency);
+                        
+                    labelsBoxDiagram.getChart().setTitle("# Examples per Labelset");
+                    labelsBoxDiagram.getChart().getXYPlot().clearAnnotations();
+                        
+                    ChartUtils.updateXYChart(labelsBoxDiagram, HeapSort.getSortedArray());
+                }
+                break;
+            case 4:
+                selected = tableImbalance.getSelectedRow();
+                if(labelsetsIRSorted == null) {
+                    return;
+                }
+                labelNames= DataInfoUtils.getLabelNamesByLabelset(dataset, labelsetsIRSorted[selected].getName());
+                args = new String[2];
+                args[0]= labelsetsIRSorted[selected].getName();
+                args[1]= Integer.toString(labelsetsIRSorted[selected].getAppearances());
+                posx = this.getBounds().x;
+                posy = this.getBounds().y;
+                mo = new EmergentOutput(dataset, posx, posy+50,args,labelNames,labelsFreqSorted, isMeka);
+                mo.setVisible(true);
+                break;
+            default:
+                break;
         }
     }//GEN-LAST:event_tableImbalanceMouseClicked
 
     private void comboBoxLabelsInformationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxLabelsInformationActionPerformed
 
-        if(comboBoxLabelsInformation.getSelectedIndex() == 0){
-            tabsImbalance.setSelectedIndex(0);
-            export2.setVisible(true);
-            export2.repaint();
-            jLabelIR.setVisible(false);
-            jLabelIR.repaint();
-        }
-        else if(comboBoxLabelsInformation.getSelectedIndex() == 1){
-            tabsImbalance.setSelectedIndex(1);
-            export2.setVisible(true);
-            export2.repaint();
-            jLabelIR.setVisible(false);
-            jLabelIR.repaint();
-        }
-        else if(comboBoxLabelsInformation.getSelectedIndex() == 2){
-            tabsImbalance.setSelectedIndex(2);
-            export2.setVisible(true);
-            export2.repaint();
-            jLabelIR.setVisible(false);
-            jLabelIR.repaint();
-        }
-        else if(comboBoxLabelsInformation.getSelectedIndex() == 3){
-            tabsImbalance.setSelectedIndex(5);
-            export2.setVisible(false);
-            export2.repaint();
-            jLabelIR.setVisible(false);
-            jLabelIR.repaint();
-        }
-        else if(comboBoxLabelsInformation.getSelectedIndex() == 4){
-            tabsImbalance.setSelectedIndex(6);
-            export2.setVisible(true);
-            export2.repaint();
-            jLabelIR.setText("<html>When IR > 1.5, the label is <br> imbalanced and it is marked in red</html>");
-            jLabelIR.setVisible(true);
-            jLabelIR.repaint();
-        }
-        else if(comboBoxLabelsInformation.getSelectedIndex() == 5){
-            //tabsImbalance.setSelectedIndex(9);
-            tabsImbalance.setSelectedIndex(3);
-            export2.setVisible(true);
-            export2.repaint();
-            jLabelIR.setText("<html>When IR > 1.5, the label is <br> imbalanced and it is marked in red</html>");
-            jLabelIR.setVisible(true);
-            jLabelIR.repaint();
-        }
-        else if(comboBoxLabelsInformation.getSelectedIndex() == 6){
-            //tabsImbalance.setSelectedIndex(3);
-            tabsImbalance.setSelectedIndex(4);
-            export2.setVisible(true);
-            export2.repaint();
-            jLabelIR.setText("<html>When IR > 1.5, the labelset is <br> imbalanced and it is marked in red</html>");
-            jLabelIR.setVisible(true);
-            jLabelIR.repaint();
+        switch (comboBoxLabelsInformation.getSelectedIndex()) {
+            case 0:
+                tabsImbalance.setSelectedIndex(0);
+                export2.setVisible(true);
+                export2.repaint();
+                jLabelIR.setVisible(false);
+                jLabelIR.repaint();
+                break;
+            case 1:
+                tabsImbalance.setSelectedIndex(1);
+                export2.setVisible(true);
+                export2.repaint();
+                jLabelIR.setVisible(false);
+                jLabelIR.repaint();
+                break;
+            case 2:
+                tabsImbalance.setSelectedIndex(2);
+                export2.setVisible(true);
+                export2.repaint();
+                jLabelIR.setVisible(false);
+                jLabelIR.repaint();
+                break;
+            case 3:
+                tabsImbalance.setSelectedIndex(5);
+                export2.setVisible(false);
+                export2.repaint();
+                jLabelIR.setVisible(false);
+                jLabelIR.repaint();
+                break;
+            case 4:
+                tabsImbalance.setSelectedIndex(6);
+                export2.setVisible(true);
+                export2.repaint();
+                jLabelIR.setText("<html>When IR > 1.5, the label is <br> imbalanced and it is marked in red</html>");
+                jLabelIR.setVisible(true);
+                jLabelIR.repaint();
+                break;
+            case 5:
+                //tabsImbalance.setSelectedIndex(9);
+                tabsImbalance.setSelectedIndex(3);
+                export2.setVisible(true);
+                export2.repaint();
+                jLabelIR.setText("<html>When IR > 1.5, the label is <br> imbalanced and it is marked in red</html>");
+                jLabelIR.setVisible(true);
+                jLabelIR.repaint();
+                break;
+            case 6:
+                //tabsImbalance.setSelectedIndex(3);
+                tabsImbalance.setSelectedIndex(4);
+                export2.setVisible(true);
+                export2.repaint();
+                jLabelIR.setText("<html>When IR > 1.5, the labelset is <br> imbalanced and it is marked in red</html>");
+                jLabelIR.setVisible(true);
+                jLabelIR.repaint();
+                break;
+            default:
+                break;
         }
     }//GEN-LAST:event_comboBoxLabelsInformationActionPerformed
 
@@ -2764,7 +2734,6 @@ public class RunApp extends javax.swing.JFrame {
     }//GEN-LAST:event_radioLPTransActionPerformed
 
     private void jButtonSaveDatasetsTransActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveDatasetsTransActionPerformed
-        // TODO add your handling code here:
         try{
             if(dataset == null){
                 JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
@@ -2778,45 +2747,42 @@ public class RunApp extends javax.swing.JFrame {
             JFileChooser fc= new JFileChooser();
 
             fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            String path_train, path_test,path_xml;
 
             int returnVal = fc.showSaveDialog(this);
 
             if (returnVal == JFileChooser.APPROVE_OPTION)
             {
                 File file = fc.getSelectedFile();
-                FileFilter f1 = fc.getFileFilter();
 
-                String name_dataset= datasetName.substring(0,datasetName.length()-5);
+                String dataName = datasetName.substring(0,datasetName.length()-5);
 
                 if(fc.isDirectorySelectionEnabled()){
                     if(radioBRTrans.isSelected()){
                         for(int i=0; i<transformedDatasets.size(); i++){
                             ArffSaver saver = new ArffSaver();
                             saver.setInstances(transformedDatasets.get(i));
-                            saver.setFile(new File(file.getAbsolutePath() + "/" + name_dataset + "_BRTransformed_" + i + ".arff"));
-                            //saver.setDestination(new File("./data/test.arff"));   // **not** necessary in 3.5.4 and later
+                            saver.setFile(new File(file.getAbsolutePath() + "/" + dataName + "_BRTransformed_" + i + ".arff"));
                             saver.writeBatch();
                         }
                     }
                     else if(radioLPTrans.isSelected()){
                         ArffSaver saver = new ArffSaver();
                         saver.setInstances(transformedDatasets.get(0));
-                        saver.setFile(new File(file.getAbsolutePath() + "/" + name_dataset + "_LPTransformed" + ".arff"));
+                        saver.setFile(new File(file.getAbsolutePath() + "/" + dataName + "_LPTransformed" + ".arff"));
                         saver.writeBatch();
                     }
                     else if(radioRemoveLabelsTrans.isSelected())
                     {
                         ArffSaver saver = new ArffSaver();
                         saver.setInstances(transformedDatasets.get(0));
-                        saver.setFile(new File(file.getAbsolutePath() + "/" + name_dataset + "_RemoveAllLabelsTransformed" + ".arff"));
+                        saver.setFile(new File(file.getAbsolutePath() + "/" + dataName + "_RemoveAllLabelsTransformed" + ".arff"));
                         saver.writeBatch();
                     }
                     else if(radioIncludeLabelsTrans.isSelected())
                     {
                         ArffSaver saver = new ArffSaver();
                         saver.setInstances(transformedDatasets.get(0));
-                        saver.setFile(new File(file.getAbsolutePath() + "/" + name_dataset + "_IncludeLabelsTransformed" + ".arff"));
+                        saver.setFile(new File(file.getAbsolutePath() + "/" + dataName + "_IncludeLabelsTransformed" + ".arff"));
                         saver.writeBatch();
                     }
 
@@ -2824,7 +2790,7 @@ public class RunApp extends javax.swing.JFrame {
                 }
             }
         }
-        catch(Exception e){
+        catch(HeadlessException | IOException e){
             JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -2864,56 +2830,56 @@ public class RunApp extends javax.swing.JFrame {
         textRandomIS.setEnabled(false);
 
         jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
+        jComboBoxSaveFormat.setEnabled(false);
     }//GEN-LAST:event_radioNoISActionPerformed
 
     private void radioRandomISActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomISActionPerformed
         textRandomIS.setEnabled(true);
 
         jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
+        jComboBoxSaveFormat.setEnabled(false);
     }//GEN-LAST:event_radioRandomISActionPerformed
 
     private void radioNoFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioNoFSActionPerformed
         textBRFS.setEnabled(false);
-        labelBRFS_Comb.setEnabled(false);
-        jComboBox_BRFS_Comb.setEnabled(false);
-        labelBRFS_Norm.setEnabled(false);
-        jComboBox_BRFS_Norm.setEnabled(false);
-        labelBRFS_Out.setEnabled(false);
-        jComboBox_BRFS_Out.setEnabled(false);
+        labelBRFSComb.setEnabled(false);
+        jComboBoxBRFSComb.setEnabled(false);
+        labelBRFSNorm.setEnabled(false);
+        jComboBoxBRFSNorm.setEnabled(false);
+        labelBRFSOut.setEnabled(false);
+        jComboBoxBRFSOut.setEnabled(false);
         textRandomFS.setEnabled(false);
 
         jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
+        jComboBoxSaveFormat.setEnabled(false);
     }//GEN-LAST:event_radioNoFSActionPerformed
 
     private void radioRandomFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomFSActionPerformed
         textBRFS.setEnabled(false);
-        labelBRFS_Comb.setEnabled(false);
-        jComboBox_BRFS_Comb.setEnabled(false);
-        labelBRFS_Norm.setEnabled(false);
-        jComboBox_BRFS_Norm.setEnabled(false);
-        labelBRFS_Out.setEnabled(false);
-        jComboBox_BRFS_Out.setEnabled(false);
+        labelBRFSComb.setEnabled(false);
+        jComboBoxBRFSComb.setEnabled(false);
+        labelBRFSNorm.setEnabled(false);
+        jComboBoxBRFSNorm.setEnabled(false);
+        labelBRFSOut.setEnabled(false);
+        jComboBoxBRFSOut.setEnabled(false);
         textRandomFS.setEnabled(true);
 
         jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
+        jComboBoxSaveFormat.setEnabled(false);
     }//GEN-LAST:event_radioRandomFSActionPerformed
 
     private void radioBRFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioBRFSActionPerformed
         textBRFS.setEnabled(true);
-        labelBRFS_Comb.setEnabled(true);
-        jComboBox_BRFS_Comb.setEnabled(true);
-        labelBRFS_Norm.setEnabled(true);
-        jComboBox_BRFS_Norm.setEnabled(true);
-        labelBRFS_Out.setEnabled(true);
-        jComboBox_BRFS_Out.setEnabled(true);
+        labelBRFSComb.setEnabled(true);
+        jComboBoxBRFSComb.setEnabled(true);
+        labelBRFSNorm.setEnabled(true);
+        jComboBoxBRFSNorm.setEnabled(true);
+        labelBRFSOut.setEnabled(true);
+        jComboBoxBRFSOut.setEnabled(true);
         textRandomFS.setEnabled(false);
 
         jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
+        jComboBoxSaveFormat.setEnabled(false);
     }//GEN-LAST:event_radioBRFSActionPerformed
 
     private void jButtonSaveDatasetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveDatasetsActionPerformed
@@ -2923,7 +2889,7 @@ public class RunApp extends javax.swing.JFrame {
             If any splitting method is selected, save the splitted datasets (those are FS too if it has been selected)
             */
 
-            String format = jComboBox_SaveFormat.getSelectedItem().toString();
+            String format = jComboBoxSaveFormat.getSelectedItem().toString();
 
             if(dataset == null){
                 JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
@@ -2944,63 +2910,63 @@ public class RunApp extends javax.swing.JFrame {
                 }
             }
 
-            // JFILECHOOSER SAVE
+            //JFileChooser save
             JFileChooser fc= new JFileChooser();
 
             fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            String path_train, path_test,path_xml;
+            String trainPath, testPath, xmlPath;
 
             int returnVal = fc.showSaveDialog(this);
 
             if (returnVal == JFileChooser.APPROVE_OPTION)
             {
                 File file = fc.getSelectedFile();
-                FileFilter f1 = fc.getFileFilter();
 
                 if(fc.isDirectorySelectionEnabled())
                 {
                     //Check if none were selected -> Dataset conversion
                     if(radioNoFS.isSelected() && radioNoIS.isSelected() && radioNoSplit.isSelected())
                     {
-                        BufferedWriter bw_train = null;
+                        BufferedWriter bwTrain;
                         try {
 
-                            String name_dataset= datasetName.substring(0,datasetName.length()-5);
+                            String dataName;
+                            dataName = datasetName.substring(0,datasetName.length()-5);
 
                             if(format.toLowerCase().contains("meka")){
-                                String dataPath = file.getAbsolutePath()+"/"+name_dataset+"-MekaConverted.arff";
+                                String dataPath = file.getAbsolutePath()+"/"+dataName+"-MekaConverted.arff";
 
-                                bw_train = new BufferedWriter(new FileWriter(dataPath));
-                                PrintWriter wr_train = new PrintWriter(bw_train);
+                                bwTrain = new BufferedWriter(new FileWriter(dataPath));
+                                PrintWriter wrTrain = new PrintWriter(bwTrain);
 
-                                DataIOUtils.saveMekaDataset(wr_train, dataset, dataset.getDataSet().relationName());
+                                DataIOUtils.saveMekaDataset(wrTrain, dataset, dataset.getDataSet().relationName());
 
-                                wr_train.close();
-                                bw_train.close();
+                                wrTrain.close();
+                                bwTrain.close();
                             }
                             else{
                                 //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
                                 //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
                                 //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
 
-                                String dataPath = file.getAbsolutePath()+"/"+name_dataset+"-MulanConverted.arff";
-                                path_xml = file.getAbsolutePath()+"/"+name_dataset+"-MulanConverted.xml";
+                                String dataPath = file.getAbsolutePath()+"/"+dataName+"-MulanConverted.arff";
+                                xmlPath = file.getAbsolutePath()+"/"+dataName+"-MulanConverted.xml";
 
-                                bw_train = new BufferedWriter(new FileWriter(dataPath));
-                                PrintWriter wr_train = new PrintWriter(bw_train);
+                                bwTrain = new BufferedWriter(new FileWriter(dataPath));
+                                PrintWriter wrTrain = new PrintWriter(bwTrain);
                                 
-                                DataIOUtils.saveDataset(wr_train, dataset, dataset.getDataSet().relationName());
+                                DataIOUtils.saveDataset(wrTrain, dataset, dataset.getDataSet().relationName());
 
-                                wr_train.close();
-                                bw_train.close();
+                                wrTrain.close();
+                                bwTrain.close();
 
-                                BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
-                                PrintWriter wr_xml = new PrintWriter(bw_xml);
+                                BufferedWriter bwXml = new BufferedWriter(new FileWriter(xmlPath));
+                                PrintWriter wrXml = new PrintWriter(bwXml);
 
-                                DataIOUtils.saveXMLFile(wr_xml, dataset);
+                                DataIOUtils.saveXMLFile(wrXml, dataset);
 
-                                wr_xml.close();
-                                bw_xml.close();
+                                wrXml.close();
+                                bwXml.close();
                             }
 
                             JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
@@ -3027,50 +2993,49 @@ public class RunApp extends javax.swing.JFrame {
                     if((radioBRFS.isSelected() || radioRandomFS.isSelected() || radioRandomIS.isSelected()) && radioNoSplit.isSelected())//Feature and/or instance selection
                     {
 
-                        BufferedWriter bw_train = null;
+                        BufferedWriter bwTrain;
                         try {
 
-                            String name_dataset= datasetName.substring(0,datasetName.length()-5);
+                            String dataName = datasetName.substring(0,datasetName.length()-5);
 
                             if(format.toLowerCase().contains("meka")){
-                                String dataPath = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".arff";
+                                String dataPath = file.getAbsolutePath()+"/"+dataName+ preprocessedType + ".arff";
 
-                                bw_train = new BufferedWriter(new FileWriter(dataPath));
-                                PrintWriter wr_train = new PrintWriter(bw_train);
+                                bwTrain = new BufferedWriter(new FileWriter(dataPath));
+                                PrintWriter wrTrain = new PrintWriter(bwTrain);
 
                                 if(radioNoFS.isSelected()){
-                                    DataIOUtils.saveMekaDataset(wr_train, preprocessedDataset, preprocessedDataset.getDataSet().relationName() + preprocessedType);
+                                    DataIOUtils.saveMekaDataset(wrTrain, preprocessedDataset, preprocessedDataset.getDataSet().relationName() + preprocessedType);
                                 }
                                 else{
-                                    DataIOUtils.saveMekaDataset(wr_train, preprocessedDataset, name_dataset + preprocessedType);
+                                    DataIOUtils.saveMekaDataset(wrTrain, preprocessedDataset, dataName + preprocessedType);
                                 }
 
-                                wr_train.close();
-                                bw_train.close();
+                                wrTrain.close();
+                                bwTrain.close();
                             }
                             else{
                                 //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
                                 //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
                                 //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
 
-                                String dataPath = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".arff";
-                                path_xml = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType +".xml";
+                                String dataPath = file.getAbsolutePath()+"/"+dataName+ preprocessedType + ".arff";
+                                xmlPath = file.getAbsolutePath()+"/"+dataName+ preprocessedType +".xml";
 
-                                bw_train = new BufferedWriter(new FileWriter(dataPath));
-                                PrintWriter wr_train = new PrintWriter(bw_train);
+                                bwTrain = new BufferedWriter(new FileWriter(dataPath));
+                                PrintWriter wrTrain = new PrintWriter(bwTrain);
                                 
                                 if(radioNoFS.isSelected()){
-                                    DataIOUtils.saveDataset(wr_train, preprocessedDataset, preprocessedDataset.getDataSet().relationName() + preprocessedType);
+                                    DataIOUtils.saveDataset(wrTrain, preprocessedDataset, preprocessedDataset.getDataSet().relationName() + preprocessedType);
                                 }
                                 else{
-                                    DataIOUtils.saveDataset(wr_train, preprocessedDataset, name_dataset+ preprocessedType);
+                                    DataIOUtils.saveDataset(wrTrain, preprocessedDataset, dataName+ preprocessedType);
                                 }
-                                
 
-                                wr_train.close();
-                                bw_train.close();
+                                wrTrain.close();
+                                bwTrain.close();
 
-                                BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
+                                BufferedWriter bw_xml = new BufferedWriter(new FileWriter(xmlPath));
                                 PrintWriter wr_xml = new PrintWriter(bw_xml);
 
                                 DataIOUtils.saveXMLFile(wr_xml,preprocessedDataset);
@@ -3089,89 +3054,87 @@ public class RunApp extends javax.swing.JFrame {
 
                     if(radioIterativeStratifiedHoldout.isSelected()|| radioRandomHoldout.isSelected() || radioLPStratifiedHoldout.isSelected()) //holdout
                     {
-                        BufferedWriter bw_train = null;
+                        BufferedWriter bwTrain;
                         try {
 
-                            String name_dataset= datasetName.substring(0,datasetName.length()-5);
+                            String dataName = datasetName.substring(0,datasetName.length()-5);
 
                             //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
                             //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
                             //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
 
                             if(radioNoFS.isSelected() && radioNoIS.isSelected()){
-                                path_train = file.getAbsolutePath()+"/"+name_dataset+"-train.arff";
-                                path_test = file.getAbsolutePath()+"/"+name_dataset+"-test.arff";
-                                path_xml = file.getAbsolutePath()+"/"+name_dataset+".xml";
+                                trainPath = file.getAbsolutePath()+"/"+dataName+"-train.arff";
+                                testPath = file.getAbsolutePath()+"/"+dataName+"-test.arff";
+                                xmlPath = file.getAbsolutePath()+"/"+dataName+".xml";
                             }
                             else{
-                                path_train = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + "-train.arff";
-                                path_test = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + "-test.arff";
-                                path_xml = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".xml";
+                                trainPath = file.getAbsolutePath()+"/"+dataName+ preprocessedType + "-train.arff";
+                                testPath = file.getAbsolutePath()+"/"+dataName+ preprocessedType + "-test.arff";
+                                xmlPath = file.getAbsolutePath()+"/"+dataName+ preprocessedType + ".xml";
                             }
 
                             if(format.toLowerCase().contains("meka")){
-                                bw_train = new BufferedWriter(new FileWriter(path_train));
-                                PrintWriter wr_train = new PrintWriter(bw_train);
+                                bwTrain = new BufferedWriter(new FileWriter(trainPath));
+                                PrintWriter wrTrain = new PrintWriter(bwTrain);
 
                                 if(radioNoFS.isSelected()){
-                                    DataIOUtils.saveMekaDataset(wr_train, trainDataset, trainDataset.getDataSet().relationName());
+                                    DataIOUtils.saveMekaDataset(wrTrain, trainDataset, trainDataset.getDataSet().relationName());
                                 }
                                 else{
-                                    DataIOUtils.saveMekaDataset(wr_train, trainDataset, name_dataset);
+                                    DataIOUtils.saveMekaDataset(wrTrain, trainDataset, dataName);
                                 }
-                                
 
-                                wr_train.close();
-                                bw_train.close();
+                                wrTrain.close();
+                                bwTrain.close();
 
-                                BufferedWriter bw_test = new BufferedWriter(new FileWriter(path_test));
-                                PrintWriter wr_test = new PrintWriter(bw_test);
+                                BufferedWriter bwTest = new BufferedWriter(new FileWriter(testPath));
+                                PrintWriter wrTest = new PrintWriter(bwTest);
 
                                 if(radioNoFS.isSelected()){
-                                    DataIOUtils.saveMekaDataset(wr_test, testDataset, testDataset.getDataSet().relationName());
+                                    DataIOUtils.saveMekaDataset(wrTest, testDataset, testDataset.getDataSet().relationName());
                                 }
                                 else{
-                                    DataIOUtils.saveMekaDataset(wr_test, testDataset, name_dataset);
+                                    DataIOUtils.saveMekaDataset(wrTest, testDataset, dataName);
                                 }
                                 
-                                wr_test.close();
-                                bw_test.close();
+                                wrTest.close();
+                                bwTest.close();
                             }
                             else{
-                                bw_train = new BufferedWriter(new FileWriter(path_train));
-                                PrintWriter wr_train = new PrintWriter(bw_train);
+                                bwTrain = new BufferedWriter(new FileWriter(trainPath));
+                                PrintWriter wrTrain = new PrintWriter(bwTrain);
 
                                 if(radioNoFS.isSelected()){
-                                    DataIOUtils.saveDataset(wr_train, trainDataset, trainDataset.getDataSet().relationName());
+                                    DataIOUtils.saveDataset(wrTrain, trainDataset, trainDataset.getDataSet().relationName());
                                 }
                                 else{
-                                    DataIOUtils.saveDataset(wr_train, trainDataset, name_dataset);
+                                    DataIOUtils.saveDataset(wrTrain, trainDataset, dataName);
                                 }
-                                
 
-                                wr_train.close();
-                                bw_train.close();
+                                wrTrain.close();
+                                bwTrain.close();
 
-                                BufferedWriter bw_test = new BufferedWriter(new FileWriter(path_test));
-                                PrintWriter wr_test = new PrintWriter(bw_test);
+                                BufferedWriter bwTest = new BufferedWriter(new FileWriter(testPath));
+                                PrintWriter wrTest = new PrintWriter(bwTest);
 
                                 if(radioNoFS.isSelected()){
-                                    DataIOUtils.saveDataset(wr_test, testDataset, testDataset.getDataSet().relationName());
+                                    DataIOUtils.saveDataset(wrTest, testDataset, testDataset.getDataSet().relationName());
                                 }
                                 else{
-                                    DataIOUtils.saveDataset(wr_test, testDataset, name_dataset);
+                                    DataIOUtils.saveDataset(wrTest, testDataset, dataName);
                                 }
                                 
-                                wr_test.close();
-                                bw_test.close();
+                                wrTest.close();
+                                bwTest.close();
 
-                                BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
-                                PrintWriter wr_xml = new PrintWriter(bw_xml);
+                                BufferedWriter bwXml = new BufferedWriter(new FileWriter(xmlPath));
+                                PrintWriter wrXml = new PrintWriter(bwXml);
 
-                                DataIOUtils.saveXMLFile(wr_xml, trainDataset);
+                                DataIOUtils.saveXMLFile(wrXml, trainDataset);
 
-                                wr_xml.close();
-                                bw_xml.close();
+                                wrXml.close();
+                                bwXml.close();
                             }
 
                             JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
@@ -3205,26 +3168,26 @@ public class RunApp extends javax.swing.JFrame {
                                 if(radioNoFS.isSelected() && radioNoIS.isSelected()){
                                     DataIOUtils.saveDataset(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5), "-train");
                                     DataIOUtils.saveDataset(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5), "-test");
-                                    path_xml = file.getAbsolutePath()+"/"+datasetName.substring(0,datasetName.length()-5)+".xml";
+                                    xmlPath = file.getAbsolutePath()+"/"+datasetName.substring(0,datasetName.length()-5)+".xml";
                                 }
                                 else if(radioNoFS.isSelected()){
                                     DataIOUtils.saveDataset(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-train");
                                     DataIOUtils.saveDataset(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-test");
-                                    path_xml = file.getAbsolutePath()+"/"+datasetName.substring(0,datasetName.length()-5)+ preprocessedType + ".xml";
+                                    xmlPath = file.getAbsolutePath()+"/"+datasetName.substring(0,datasetName.length()-5)+ preprocessedType + ".xml";
                                 }
                                 else{
                                     DataIOUtils.saveMVDataset(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-train");
                                     DataIOUtils.saveMVDataset(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-test");
-                                    path_xml = file.getAbsolutePath()+"/"+datasetName.substring(0,datasetName.length()-5)+ preprocessedType + ".xml";
+                                    xmlPath = file.getAbsolutePath()+"/"+datasetName.substring(0,datasetName.length()-5)+ preprocessedType + ".xml";
                                 }
 
-                                BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
-                                PrintWriter wr_xml = new PrintWriter(bw_xml);
+                                BufferedWriter bwXml = new BufferedWriter(new FileWriter(xmlPath));
+                                PrintWriter wrXml = new PrintWriter(bwXml);
 
-                                DataIOUtils.saveXMLFile(wr_xml,trainDatasets.get(0));
+                                DataIOUtils.saveXMLFile(wrXml,trainDatasets.get(0));
 
-                                wr_xml.close();
-                                bw_xml.close();
+                                wrXml.close();
+                                bwXml.close();
                             }
 
                             JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
@@ -3234,19 +3197,16 @@ public class RunApp extends javax.swing.JFrame {
                             JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
                             e1.printStackTrace();
                         }
-
                     }
 
                     Toolkit.getDefaultToolkit().beep();
                 }
-
             }
         }
         catch(Exception e){
             JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
-
     }//GEN-LAST:event_jButtonSaveDatasetsActionPerformed
 
     private void jButtonStartPreprocessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartPreprocessActionPerformed
@@ -3289,7 +3249,7 @@ public class RunApp extends javax.swing.JFrame {
         textLPStratifiedCV.setEnabled(false);
 
         jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
+        jComboBoxSaveFormat.setEnabled(false);
 
     }//GEN-LAST:event_radioNoSplitActionPerformed
 
@@ -3302,7 +3262,7 @@ public class RunApp extends javax.swing.JFrame {
         textLPStratifiedCV.setEnabled(true);
 
         jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
+        jComboBoxSaveFormat.setEnabled(false);
     }//GEN-LAST:event_radioLPStratifiedCVActionPerformed
 
     private void radioLPStratifiedHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioLPStratifiedHoldoutActionPerformed
@@ -3314,7 +3274,7 @@ public class RunApp extends javax.swing.JFrame {
         textLPStratifiedCV.setEnabled(false);
 
         jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
+        jComboBoxSaveFormat.setEnabled(false);
     }//GEN-LAST:event_radioLPStratifiedHoldoutActionPerformed
 
     private void radioIterativeStratifiedCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioIterativeStratifiedCVActionPerformed
@@ -3326,7 +3286,7 @@ public class RunApp extends javax.swing.JFrame {
         textLPStratifiedCV.setEnabled(false);
 
         jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
+        jComboBoxSaveFormat.setEnabled(false);
     }//GEN-LAST:event_radioIterativeStratifiedCVActionPerformed
 
     private void radioRandomCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomCVActionPerformed
@@ -3338,7 +3298,7 @@ public class RunApp extends javax.swing.JFrame {
         textLPStratifiedCV.setEnabled(false);
 
         jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
+        jComboBoxSaveFormat.setEnabled(false);
     }//GEN-LAST:event_radioRandomCVActionPerformed
 
     private void radioIterativeStratifiedHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioIterativeStratifiedHoldoutActionPerformed
@@ -3350,7 +3310,7 @@ public class RunApp extends javax.swing.JFrame {
         textLPStratifiedCV.setEnabled(false);
 
         jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
+        jComboBoxSaveFormat.setEnabled(false);
     }//GEN-LAST:event_radioIterativeStratifiedHoldoutActionPerformed
 
     private void radioRandomHoldoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomHoldoutActionPerformed
@@ -3362,16 +3322,16 @@ public class RunApp extends javax.swing.JFrame {
         textLPStratifiedCV.setEnabled(false);
 
         jButtonSaveDatasets.setEnabled(false);
-        jComboBox_SaveFormat.setEnabled(false);
+        jComboBoxSaveFormat.setEnabled(false);
     }//GEN-LAST:event_radioRandomHoldoutActionPerformed
 
     private void textChooseFileKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textChooseFileKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER)
         {
-            String filename_database_arff = textChooseFile.getText();
-            xmlFilename = DataIOUtils.getXMLString(filename_database_arff);
+            String arffFilename = textChooseFile.getText();
+            xmlFilename = DataIOUtils.getXMLString(arffFilename);
             xmlFilename = DataIOUtils.getFilePath(xmlFilename);
-            Load_dataset(filename_database_arff, xmlFilename);
+            loadDataset(arffFilename, xmlFilename);
         }
     }//GEN-LAST:event_textChooseFileKeyPressed
 
@@ -3419,19 +3379,19 @@ public class RunApp extends javax.swing.JFrame {
     private void tableAttributesLeftMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableAttributesLeftMouseClicked
         if(tabsAttributes.getSelectedIndex()==0)
         {
-            int seleccionada = tableAttributesLeft.getSelectedRow();
+            int selected = tableAttributesLeft.getSelectedRow();
 
-            String attr= tableAttributesLeft.getValueAt(seleccionada, 0).toString();
+            String attr= tableAttributesLeft.getValueAt(selected, 0).toString();
 
-            Instances instancias = dataset.getDataSet();
+            Instances instances = dataset.getDataSet();
 
-            Attribute attr_current = instancias.attribute(attr);
+            Attribute currentAttr = instances.attribute(attr);
 
-            double[] valores_attr= instancias.attributeToDoubleArray(attr_current.index());
+            double[] attributeValues= instances.attributeToDoubleArray(currentAttr.index());
 
-            HeapSort.sort(valores_attr);
+            HeapSort.sort(attributeValues);
 
-            attributesBoxDiagram2.getChart().setTitle(attr_current.name());
+            attributesBoxDiagram2.getChart().setTitle(currentAttr.name());
 
             attributesBoxDiagram2.getChart().getXYPlot().clearAnnotations();
             
@@ -3444,7 +3404,7 @@ public class RunApp extends javax.swing.JFrame {
         
         if (tabsAttributes.getSelectedIndex()==0)
         {
-//            tableAttributesLeft.setModel(tmAttributes);
+//          tableAttributesLeft.setModel(tmAttributes);
             panelAttributeLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Numeric attributes"));
 
             tableAttributesLeft.setDefaultRenderer(Object.class, new DefaultRender());
@@ -3473,31 +3433,33 @@ public class RunApp extends javax.swing.JFrame {
 
         //tableCoOcurrenceLeft.setRowSelectionInterval(0, n-1);
         
-        ArrayList<String> seleccionados= new  ArrayList();
+        ArrayList<String> selecteds = new ArrayList();
 
-        String current = new String();
+        String current;
         for(int i=0;i<n; i++)
         {
             current = (tableCoOcurrenceLeft.getValueAt(i, 0).toString());
             if(current != null){
-                seleccionados.add(current);
+                selecteds.add(current);
             }
-            else break;
+            else {
+                break;
+            }
         }
         
-        ArrayList<String> seleccionados2 = selectTopCoocurrenceLabels(n, true);
+        ArrayList<String> topCoocurrenceSelected = selectTopCoocurrenceLabels(n, true);
         for(int i=0; i<n; i++){
-            if(! seleccionados.contains(seleccionados2.get(i))){
-                seleccionados.add(seleccionados2.get(i));
+            if(! selecteds.contains(topCoocurrenceSelected.get(i))){
+                selecteds.add(topCoocurrenceSelected.get(i));
             }
         }
         tableCoOcurrenceLeft.addRowSelectionInterval(0, n-1);
 
-        ArrayList<AttributesPair> pares_seleccionados =  AttributePairsUtils.findSelectedAttributesPair(pairs, seleccionados);
+        ArrayList<AttributesPair> selectedPairs =  AttributePairsUtils.findSelectedAttributesPair(pairs, selecteds);
 
-        String[] labelname=Utils.listToArray(seleccionados);
+        String[] labelname = Utils.listToArray(selecteds);
 
-        graphComponent  =  createJGraphX(panelCoOcurrenceRight,pares_seleccionados,labelname,graphComponent);
+        graphComponent = createJGraphX(panelCoOcurrenceRight,selectedPairs,labelname,graphComponent);
     }//GEN-LAST:event_buttonShowMostFrequentURelatedActionPerformed
 
     private void buttonShowMostFrequentURelatedHeatMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowMostFrequentURelatedHeatMapActionPerformed
@@ -3506,11 +3468,10 @@ public class RunApp extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonShowMostFrequentURelatedHeatMapActionPerformed
 
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
-        // TODO add your handling code here:
         /*for(int i=0; i<((DefaultTableModel)jTable3.getModel()).getRowCount(); i++){
             ((DefaultTableModel)jTable3.getModel()).removeRow(i);
         }*/
-        //
+
         ((DefaultTableModel)jTable3.getModel()).getDataVector().removeAllElements();
         
         int [] selected = jTable2.getSelectedRows();
@@ -3521,9 +3482,6 @@ public class RunApp extends javax.swing.JFrame {
                 ((DefaultTableModel)jTable3.getModel()).addRow(new Object[]{dataset.getDataSet().attribute(indices[j]).name()});
             }
         }
-        
-        
-        
     }//GEN-LAST:event_jTable2MouseClicked
 
     private void buttonSaveViewsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSaveViewsActionPerformed
@@ -3557,7 +3515,6 @@ public class RunApp extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonSaveViewsActionPerformed
 
     private void buttonSaveTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSaveTableActionPerformed
-        // TODO add your handling code here:
         if(jTable2.getRowCount()==0 || dataset == null)
         {
             JOptionPane.showMessageDialog(null, "The table is empty.", "Error", JOptionPane.ERROR_MESSAGE); 
@@ -3566,7 +3523,6 @@ public class RunApp extends javax.swing.JFrame {
 
         JFileChooser fc= new JFileChooser();
         
-        // extension 
         //FileNameExtensionFilter fname = new FileNameExtensionFilter(".xls", "xls"); 
         FileNameExtensionFilter fname1 =  new FileNameExtensionFilter(".csv", "csv");
         
@@ -3598,16 +3554,25 @@ public class RunApp extends javax.swing.JFrame {
                     
                     JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);                     
                 }
-                catch(Exception e1)
+                catch(IOException | HeadlessException e1)
                 {
                     JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
-                }   
-                             
+                }                 
             }
         }
     }//GEN-LAST:event_buttonSaveTableActionPerformed
-
     
+    /**
+     * Creates button for exporting table of dependences
+     * 
+     * @param jtable Table of dependences
+     * @param columns Columns
+     * @param jpanel Panel
+     * @param jButtonExport Export button
+     * @param posx Position x
+     * @param posy Position y
+     * @param table Table type
+     */
     private void createButtonExportDependencesTable(final JTable jtable, 
             final JTable columns, JPanel jpanel, JButton jButtonExport, 
             int posx, int posy, final String table)
@@ -3615,25 +3580,37 @@ public class RunApp extends javax.swing.JFrame {
         jButtonExport = new JButton("Save");
         jButtonExport.setBounds(posx, posy, 80, 25);
 
-        if(table.equals("ChiPhi")){
-            jButtonExport.setToolTipText("Save table with Chi and Phi coefficients");
-        }
-        else if(table.equals("Coocurrence")){
-            jButtonExport.setToolTipText("Save table with co-ocurrence values");
-        }
-        else if(table.equals("Heatmap")){
-            jButtonExport.setToolTipText("Save table with heatmap values");
+        switch (table) {
+            case "ChiPhi":
+                jButtonExport.setToolTipText("Save table with Chi and Phi coefficients");
+                break;
+            case "Coocurrence":
+                jButtonExport.setToolTipText("Save table with co-ocurrence values");
+                break;
+            case "Heatmap":
+                jButtonExport.setToolTipText("Save table with heatmap values");
+                break;
+            default:
+                break;
         }
 
         jButtonExport.addActionListener(new java.awt.event.ActionListener() {
+              @Override
               public void actionPerformed(java.awt.event.ActionEvent evt) {
-                  button_export_ActionPerformed(evt,jtable,columns, table);
+                  buttonExportActionPerformed(evt,jtable,columns, table);
                               }
           });
         jpanel.add(jButtonExport);
     }    
         
-    
+    /**
+     * Creates button for exporting dependences chart
+     * 
+     * @param jpanel Panel of dependences
+     * @param jButtonExport Export button
+     * @param posx Position x
+     * @param posy Position Y
+     */
     private void createButtonExportDependencesChart(final JPanel jpanel, 
             JButton jButtonExport, int posx, int posy)
     {
@@ -3643,6 +3620,7 @@ public class RunApp extends javax.swing.JFrame {
         jButtonExport.setToolTipText("Save graph as image");
 
         jButtonExport.addActionListener(new java.awt.event.ActionListener() {
+              @Override
               public void actionPerformed(java.awt.event.ActionEvent evt) {
                 if(jpanel.getName().equals("jpanel25")) try {  
                     saveCoocurrenceGraph();
@@ -3658,68 +3636,88 @@ public class RunApp extends javax.swing.JFrame {
           });
         jpanel.add(jButtonExport);
     }
-  
     
-    private void createMetricsTable(final JTable jtable ,
-            JPanel jpanel , JButton buttonAll, JButton buttonNone, 
+    /**
+     * Creates table of metrics and its buttons
+     * 
+     * @param jtable Table with metrics
+     * @param jpanel Panel
+     * @param buttonAll "All" button
+     * @param buttonNone "None" button
+     * @param buttonInvert "Invert" button
+     * @param buttonCalculate "Calculate" button
+     * @param buttonSave "Save" button
+     * @param buttonClear "Clear" button
+     * @param posx Position x
+     * @param posy Position Y
+     * @param width Width
+     * @param height Height
+     */
+    private void createMetricsTable(final JTable jtable,
+            JPanel jpanel, JButton buttonAll, JButton buttonNone, 
             JButton buttonInvert, JButton buttonCalculate, JButton buttonSave, 
             JButton buttonClear, int posx, int posy, int width, int height)
     {
-        create_jtable_metric_principal(jtable,jpanel, MetricUtils.getRowData(),posx,posy,width,height);        
+        createJTableMetricsPrincipal(jtable, jpanel, MetricUtils.getRowData(), posx, posy, width, height);        
 
-        //button ALL
+        //button All
         buttonAll = new JButton("All");
         buttonAll.setBounds(posx, posy+height+5, 80, 20);
         buttonAll.setToolTipText("Select all metrics");
         buttonAll.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_allActionPerformed_principal(evt,jtable );
+                buttonAllActionPerformedPrincipal(evt,jtable );
             }
         });
         jpanel.add(buttonAll);
       
-        //button NONE
+        //button None
         buttonNone = new JButton("None");
         buttonNone.setToolTipText("Deselect all metrics");
         buttonNone.setBounds(posx+90, posy+height+5, 80, 20);
 
         buttonNone.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_noneActionPerformed_principal(evt,jtable);
+                buttonNoneActionPerformedPrincipal(evt,jtable);
             }
         });
         jpanel.add(buttonNone);
 
-        //button INVERT
+        //button Invert
         buttonInvert = new JButton("Invert");
         buttonInvert.setToolTipText("Invert selection");
         buttonInvert.setBounds(posx+180, posy+height+5, 80, 20);
 
         buttonInvert.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_invertActionPerformed_principal(evt,jtable);
+                buttonInvertActionButtonPerformed(evt,jtable);
             }
         });
         jpanel.add(buttonInvert);
 
-        //button CLEAR
+        //button Clear
         buttonClear = new JButton("Clear");
         buttonClear.setToolTipText("Clear selection and metric values");
         buttonClear.setBounds(posx+270, posy+height+5, 80, 20);
 
         buttonClear.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_clearActionPerformed_principal(evt,jtable);
+                buttonClearActionPerformedPrincipal(evt,jtable);
             }
         });
         jpanel.add(buttonClear);
 
-        //button CALCULATE
+        //button Calculate
         buttonCalculate = new JButton("Calculate");
         buttonCalculate.setBounds(posx+590, posy+height+5, 95, 25);
         buttonCalculate.setToolTipText("Calculate selected metrics");
 
         buttonCalculate.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(final java.awt.event.ActionEvent evt) {
                 progressBar.setIndeterminate(false);
                 progressFrame.setVisible(true);
@@ -3730,7 +3728,7 @@ public class RunApp extends javax.swing.JFrame {
                     @Override
                     public void run() {
                         // do the long-running work here
-                        button_calculateActionPerformed_principal(evt,jtable);
+                        buttonCalculateActionPerformedPrincipal(evt,jtable);
                         // at the end:
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override
@@ -3746,15 +3744,16 @@ public class RunApp extends javax.swing.JFrame {
         });//ActionListener
         jpanel.add(buttonCalculate);
 
-        //button SAVE
+        //button Save
         buttonSave = new JButton("Save");
         buttonSave.setBounds(posx+695, posy+height+5, 80, 25);
         buttonSave.setToolTipText("Save selected metrics in a file");
 
         buttonSave.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
-                    button_saveActionPerformed_principal(evt,jtable);
+                    buttonSaveActionPerformedPrincipal(evt,jtable);
                 } catch (IOException ex) {
                     Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -3763,58 +3762,75 @@ public class RunApp extends javax.swing.JFrame {
         jpanel.add(buttonSave);
     }
     
-    
+    /**
+     * Creates multiple datasets table of metrics and its buttons
+     * 
+     * @param jtable Table with metrics
+     * @param jpanel Panel
+     * @param buttonAll "All" button
+     * @param buttonNone "None" button
+     * @param buttonInvert "Invert" button
+     * @param buttonCalculate "Calculate" button
+     * @param buttonSave "Save" button
+     * @param posx Position X
+     * @param posy Position Y
+     * @param width Width
+     * @param height Height
+     */
     private void createMultiMetricsTable(final JTable jtable,
             JPanel jpanel, JButton buttonAll, JButton buttonNone, 
             JButton buttonInvert, JButton buttonCalculate, JButton buttonSave, 
             int posx, int posy, int width, int height)
     {
 
-        create_jtable_metric_multi(jtable,jpanel, MetricUtils.getRowDataMulti(),posx,posy,width,height);  
+        createJTableMetricsMultipleDatasets(jtable,jpanel, MetricUtils.getRowDataMulti(),posx,posy,width,height);  
         
-        //button ALL
+        //button All
         buttonAll = new JButton("All");
         buttonAll.setBounds(posx, posy+height+5, 80, 20);
         buttonAll.setToolTipText("Select all metrics");
         
         buttonAll.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_allActionPerformed_multi(evt,jtable );
+                buttonAllActionPerformedMulti(evt,jtable );
             }
         });
         jpanel.add(buttonAll);
       
-        //button NONE
+        //button None
         buttonNone = new JButton("None");
         buttonNone.setToolTipText("Deselect all metrics");
         buttonNone.setBounds(posx+90, posy+height+5, 80, 20);
 
         buttonNone.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_noneActionPerformed_multi(evt,jtable);
+                buttonNoneActionPerformedMulti(evt,jtable);
             }
         });
         jpanel.add(buttonNone);
 
-        //button INVERT
+        //button Invert
         buttonInvert = new JButton("Invert");
         buttonInvert.setToolTipText("Invert selection");
         buttonInvert.setBounds(posx+180, posy+height+5, 80, 20);
 
         buttonInvert.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                  button_invertActionPerformed_multi(evt,jtable);
+                  buttonInvertActionPerformedMulti(evt,jtable);
             }
         });
         jpanel.add(buttonInvert);
       
-      
-        //button CALCULATE
+        //button Calculate
         buttonCalculate = new JButton("Calculate");
         buttonCalculate.setBounds(posx+320, posy+height+5, 95, 20);
         buttonCalculate.setToolTipText("Calculate selected metrics");
 
         buttonCalculate.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(final java.awt.event.ActionEvent evt) {
                 progressFrame.setVisible(true);
                 progressFrame.repaint();
@@ -3824,7 +3840,7 @@ public class RunApp extends javax.swing.JFrame {
                     @Override
                     public void run() {
                         // do the long-running work here
-                        button_calculateActionPerformed_multi(evt,jtable);
+                        buttonCalculateActionPerformedMulti(evt,jtable);
                         // at the end:
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override
@@ -3841,15 +3857,16 @@ public class RunApp extends javax.swing.JFrame {
         });
         jpanel.add(buttonCalculate);
 
-         //button SAVE
+        //button Save
         buttonSave = new JButton("Save");
         buttonSave.setBounds(posx+425, posy+height+5, 80, 20);
         buttonSave.setToolTipText("Save selected metrics in a file");
 
         buttonSave.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
-                    button_saveActionPerformed_multi(evt,jtable);
+                    buttonSaveActionPerformedMulti(evt,jtable);
                 } catch (IOException ex) {
                 Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -3858,7 +3875,11 @@ public class RunApp extends javax.swing.JFrame {
         jpanel.add(buttonSave);
     }
     
-    
+    /**
+     * Save MVML datasets
+     * 
+     * @return Positive number if successfull and negative otherwise
+     */
     private int saveMultiView(){
         if(dataset == null){
             JOptionPane.showMessageDialog(null, "You must load a dataset.", "alert", JOptionPane.ERROR_MESSAGE);
@@ -3897,7 +3918,7 @@ public class RunApp extends javax.swing.JFrame {
             JFileChooser fc= new JFileChooser();
 
             fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            String path_xml;
+            String xmlPath;
 
             int returnVal = fc.showSaveDialog(this);
 
@@ -3913,9 +3934,9 @@ public class RunApp extends javax.swing.JFrame {
                         preprocessedType += "_" + (n+1);
                     }
 
-                    BufferedWriter bw_train;
+                    BufferedWriter bwTrain;
                     try {
-                        String name_dataset= datasetName.substring(0,datasetName.length()-5);
+                        String dataName = datasetName.substring(0,datasetName.length()-5);
                         
                         int sumNotSelected = 0;
                         Hashtable<String, Integer[]> v = new Hashtable<>();
@@ -3942,35 +3963,35 @@ public class RunApp extends javax.swing.JFrame {
                         viewsString = viewsString.replace("!;", "");
 
                         if(format.toLowerCase().contains("meka")){
-                            String dataPath = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".arff";
+                            String dataPath = file.getAbsolutePath()+"/"+dataName+ preprocessedType + ".arff";
 
-                            bw_train = new BufferedWriter(new FileWriter(dataPath));
-                            PrintWriter wr_train = new PrintWriter(bw_train);                           
+                            bwTrain = new BufferedWriter(new FileWriter(dataPath));
+                            PrintWriter wrTrain = new PrintWriter(bwTrain);                           
                                                       
-                            DataIOUtils.saveMVMekaDataset(wr_train, mvData, name_dataset, viewsString);
+                            DataIOUtils.saveMVMekaDataset(wrTrain, mvData, dataName, viewsString);
 
-                            wr_train.close();
-                            bw_train.close();   
+                            wrTrain.close();
+                            bwTrain.close();   
                         }
                         else{
-                            String dataPath = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType + ".arff";
-                            path_xml = file.getAbsolutePath()+"/"+name_dataset+ preprocessedType +".xml";
+                            String dataPath = file.getAbsolutePath()+"/"+dataName+ preprocessedType + ".arff";
+                            xmlPath = file.getAbsolutePath()+"/"+dataName+ preprocessedType +".xml";
 
-                            bw_train = new BufferedWriter(new FileWriter(dataPath));
-                            PrintWriter wr_train = new PrintWriter(bw_train);
+                            bwTrain = new BufferedWriter(new FileWriter(dataPath));
+                            PrintWriter wrTrain = new PrintWriter(bwTrain);
 
-                            DataIOUtils.saveDatasetMV(wr_train, mvData, name_dataset, viewsString);
+                            DataIOUtils.saveDatasetMV(wrTrain, mvData, dataName, viewsString);
 
-                            wr_train.close();
-                            bw_train.close();
+                            wrTrain.close();
+                            bwTrain.close();
 
-                            BufferedWriter bw_xml = new BufferedWriter(new FileWriter(path_xml));
-                            PrintWriter wr_xml = new PrintWriter(bw_xml);
+                            BufferedWriter bwXml = new BufferedWriter(new FileWriter(xmlPath));
+                            PrintWriter wrXml = new PrintWriter(bwXml);
 
-                            DataIOUtils.saveXMLFile(wr_xml, mvData);
+                            DataIOUtils.saveXMLFile(wrXml, mvData);
 
-                            wr_xml.close();
-                            bw_xml.close();
+                            wrXml.close();
+                            bwXml.close();
                         }
 
                         JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
@@ -3990,7 +4011,13 @@ public class RunApp extends javax.swing.JFrame {
         return 1;
     }
     
-
+    /**
+     * Load multiple datasets
+     * 
+     * @param returnVal Value returned from openDialog
+     * @param chooser Chooser
+     * @return Positive number if successfull and negative otherwise
+     */
     private int loadMultiDataset(int returnVal, JFileChooser chooser){
         
         if (returnVal == JFileChooser.OPEN_DIALOG)
@@ -3998,27 +4025,27 @@ public class RunApp extends javax.swing.JFrame {
             File [] files = chooser.getSelectedFiles();
             
             for(File f1 : files){
-                String dataset_name = f1.getName();
-                dataset_name = dataset_name.substring(0,dataset_name.length()-5);
+                String datasetName = f1.getName();
+                datasetName = datasetName.substring(0,datasetName.length()-5);
 
-                if(datasetNames.contains(dataset_name))
+                if(datasetNames.contains(datasetName))
                 {
                     JOptionPane.showMessageDialog(null, "The dataset is duplicated.", "alert", JOptionPane.ERROR_MESSAGE);
                     return -1;
                 }
 
-                String filename_database_arff = f1.getAbsolutePath();
-                xmlFilename = DataIOUtils.getXMLString(filename_database_arff);
+                String arffFilename = f1.getAbsolutePath();
+                xmlFilename = DataIOUtils.getXMLString(arffFilename);
                 xmlFilename = DataIOUtils.getFilePath(xmlFilename);
 
                 boolean isMeka = false;
 
-                String filename_database_xml_path1=  filename_database_arff.substring(0,filename_database_arff.length()-5)+".xml";
+                String xmlPath = arffFilename.substring(0,arffFilename.length()-5)+".xml";
 
                 FileReader fr;
                 try
                 {
-                    fr = new FileReader(filename_database_arff);
+                    fr = new FileReader(arffFilename);
                     BufferedReader bf = new BufferedReader(fr);
 
                     String sString = bf.readLine();
@@ -4076,15 +4103,15 @@ public class RunApp extends javax.swing.JFrame {
                             }
                         }
 
-                        BufferedWriter bw_xml= new BufferedWriter(new FileWriter(filename_database_xml_path1));
-                        PrintWriter wr_xml = new PrintWriter(bw_xml);
+                        BufferedWriter bwXml= new BufferedWriter(new FileWriter(xmlPath));
+                        PrintWriter wrXml = new PrintWriter(bwXml);
 
-                        DataIOUtils.writeXMLFile(wr_xml, labelNamesFound);
+                        DataIOUtils.writeXMLFile(wrXml, labelNamesFound);
 
-                        bw_xml.close();
-                        wr_xml.close();
+                        bwXml.close();
+                        wrXml.close();
 
-                        xmlFilename = DataIOUtils.getFilePath(filename_database_xml_path1);
+                        xmlFilename = DataIOUtils.getFilePath(xmlPath);
                     }
                     else
                     {
@@ -4098,7 +4125,7 @@ public class RunApp extends javax.swing.JFrame {
                 }
 
                 try {
-                    MultiLabelInstances current = new MultiLabelInstances(filename_database_arff, xmlFilename);
+                    MultiLabelInstances current = new MultiLabelInstances(arffFilename, xmlFilename);
 
                     if(isMeka){
                         File f2 = new File(xmlFilename);
@@ -4106,8 +4133,8 @@ public class RunApp extends javax.swing.JFrame {
                     }
 
                     listDatasets.add(current);
-                    datasetNames.add(dataset_name);
-                    list.addElement(dataset_name );
+                    datasetNames.add(datasetName);
+                    list.addElement(datasetName );
                 }
                 catch (InvalidDataFormatException ex) {
                     Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -4118,7 +4145,11 @@ public class RunApp extends javax.swing.JFrame {
         return 1;
     }
     
-    
+    /**
+     * Preprocess dataset
+     * 
+     * @return Positive number if successfull and negative otherwise
+     */
     private int preprocess(){
         trainDatasets = new ArrayList();
         testDatasets = new ArrayList();
@@ -4190,9 +4221,9 @@ public class RunApp extends javax.swing.JFrame {
                     return -1;
                 }
 
-                String combination = jComboBox_BRFS_Comb.getSelectedItem().toString();
-                String normalization = jComboBox_BRFS_Norm.getSelectedItem().toString();
-                String output = jComboBox_BRFS_Out.getSelectedItem().toString();
+                String combination = jComboBoxBRFSComb.getSelectedItem().toString();
+                String normalization = jComboBoxBRFSNorm.getSelectedItem().toString();
+                String output = jComboBoxBRFSOut.getSelectedItem().toString();
 
                 FeatureSelector fs;
                 if(radioNoIS.isSelected()){
@@ -4252,19 +4283,17 @@ public class RunApp extends javax.swing.JFrame {
             //Random Holdout
             if(radioRandomHoldout.isSelected()){
                 String split = textRandomHoldout.getText();
-                double percent_split = Double.parseDouble(split);
-                if((percent_split <= 0) || (percent_split >= 100)){
+                double percentage = Double.parseDouble(split);
+                if((percentage <= 0) || (percentage >= 100)){
                     JOptionPane.showMessageDialog(null, "The percentage must be a number in the range (0, 100).", "alert", JOptionPane.ERROR_MESSAGE);
                     return -1;
                 }
 
                 try{
-
                     RandomTrainTest pre = new RandomTrainTest();
-                    MultiLabelInstances [] partitions = pre.split(preprocessDataset, percent_split);
+                    MultiLabelInstances [] partitions = pre.split(preprocessDataset, percentage);
                     trainDataset = partitions[0];
                 }
-
                 catch (InvalidDataFormatException ex) {
                     Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (Exception ex) {
@@ -4277,11 +4306,11 @@ public class RunApp extends javax.swing.JFrame {
 
                 if(split.equals(""))
                 {
-                    JOptionPane.showMessageDialog(null, "You must enter a number of folds.", "alert", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "You must enter the number of folds.", "alert", JOptionPane.ERROR_MESSAGE);
                     return -1;
                 }
 
-                int nFolds = 0;
+                int nFolds;
 
                 try{
                     nFolds = Integer.parseInt(split);
@@ -4303,20 +4332,20 @@ public class RunApp extends javax.swing.JFrame {
 
                 try{
                     MultiLabelInstances temp = preprocessDataset.clone();
-                    Instances dataset_temp = temp.getDataSet();
+                    Instances dataTemp = temp.getDataSet();
 
                     int seed = (int)(Math.random()*100)+100;
                     Random rand = new Random(seed);
 
-                    dataset_temp.randomize(rand);
+                    dataTemp.randomize(rand);
 
                     Instances [] foldsCV = new Instances[nFolds];
                     for(int i=0; i<nFolds; i++){
                         foldsCV[i] = new Instances(preprocessDataset.getDataSet(), 1);
                     }
 
-                    for(int i=0; i<dataset_temp.numInstances(); i++){
-                        foldsCV[i%nFolds].add(dataset_temp.get(i));
+                    for(int i=0; i<dataTemp.numInstances(); i++){
+                        foldsCV[i%nFolds].add(dataTemp.get(i));
                     }
 
                     train = new Instances(preprocessDataset.getDataSet(), 0);
@@ -4342,15 +4371,15 @@ public class RunApp extends javax.swing.JFrame {
             //Iterative stratified holdout
             else if(radioIterativeStratifiedHoldout.isSelected()){
                 String split = textIterativeStratifiedHoldout.getText();
-                double percent_split = Double.parseDouble(split);
-                if((percent_split <= 0) || (percent_split >= 100)){
+                double percentage = Double.parseDouble(split);
+                if((percentage <= 0) || (percentage >= 100)){
                     JOptionPane.showMessageDialog(null, "The percentage must be a number in the range (0, 100).", "alert", JOptionPane.ERROR_MESSAGE);
                     return -1;
                 }
 
                 try{
                     IterativeTrainTest pre = new IterativeTrainTest();
-                    MultiLabelInstances [] partitions = pre.split(preprocessDataset, percent_split);
+                    MultiLabelInstances [] partitions = pre.split(preprocessDataset, percentage);
 
                     trainDataset = partitions[0];
                     testDataset = partitions[1];
@@ -4365,7 +4394,7 @@ public class RunApp extends javax.swing.JFrame {
 
                 if(split.equals(""))
                 {
-                    JOptionPane.showMessageDialog(null, "You must enter a number of folds.", "alert", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "You must enter the number of folds.", "alert", JOptionPane.ERROR_MESSAGE);
                     return -1;
                 }
 
@@ -4423,15 +4452,15 @@ public class RunApp extends javax.swing.JFrame {
             //LP stratified holdout
             else if(radioLPStratifiedHoldout.isSelected()){
                 String split = textLPStratifiedHoldout.getText();
-                double percent_split = Double.parseDouble(split);
-                if((percent_split <= 0) || (percent_split >= 100)){
+                double percentage = Double.parseDouble(split);
+                if((percentage <= 0) || (percentage >= 100)){
                     JOptionPane.showMessageDialog(null, "The percentage must be a number in the range (0, 100).", "alert", JOptionPane.ERROR_MESSAGE);
                     return -1;
                 }
 
                 try{
                     IterativeTrainTest pre = new IterativeTrainTest();
-                    MultiLabelInstances [] partitions = pre.split(preprocessDataset, percent_split);
+                    MultiLabelInstances [] partitions = pre.split(preprocessDataset, percentage);
 
                     trainDataset = partitions[0];
                     testDataset = partitions[1];
@@ -4446,7 +4475,7 @@ public class RunApp extends javax.swing.JFrame {
 
                 if(split.equals(""))
                 {
-                    JOptionPane.showMessageDialog(null, "You must enter a number of folds.", "alert", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "You must enter the number of folds.", "alert", JOptionPane.ERROR_MESSAGE);
                     return -1;
                 }
 
@@ -4495,25 +4524,33 @@ public class RunApp extends javax.swing.JFrame {
         }
 
         jButtonSaveDatasets.setEnabled(true);
-        jComboBox_SaveFormat.setEnabled(true);
+        jComboBoxSaveFormat.setEnabled(true);
             
         return 1;
     }
     
-    
-    private int loadDataset(int returnVal, JFileChooser jfile1, boolean deleteXML){
+    /**
+     * Load dataset in principal tab
+     * 
+     * @param returnVal Positive number if successfull and negative otherwise
+     * @param fileChooser Chooser
+     * @param deleteXML Boolean indicating if the generated xml must be removed
+     * @return 
+     */
+    private int loadDataset(int returnVal, JFileChooser fileChooser, 
+            boolean deleteXML){
         if (returnVal == JFileChooser.OPEN_DIALOG)
         {
-            File f1 = jfile1.getSelectedFile();
+            File f1 = fileChooser.getSelectedFile();
             datasetName = f1.getName();
             datasetCurrentName = datasetName.substring(0,datasetName.length()-5);
 
-            String filename_database_arff = f1.getAbsolutePath();
+            String arffFilename = f1.getAbsolutePath();
 
-            xmlPath=  filename_database_arff.substring(0,filename_database_arff.length()-5)+".xml";
+            xmlPath=  arffFilename.substring(0, arffFilename.length()-5)+".xml";
             xmlFilename = DataIOUtils.getFileName(xmlPath);
 
-            File  fileTmp = new File(xmlPath);
+            File fileTmp = new File(xmlPath);
 
             FileReader fr;
             try
@@ -4522,7 +4559,7 @@ public class RunApp extends javax.swing.JFrame {
                 ((DefaultTableModel)jTable2.getModel()).getDataVector().removeAllElements();
                 ((DefaultTableModel)jTable3.getModel()).getDataVector().removeAllElements();
                 
-                fr = new FileReader(filename_database_arff);
+                fr = new FileReader(arffFilename);
                 BufferedReader bf = new BufferedReader(fr);
 
                 String sString = bf.readLine();
@@ -4534,7 +4571,7 @@ public class RunApp extends javax.swing.JFrame {
                     String s2 = sString.split("'")[1];
                     s2 = s2.split("-V:")[1];
                     String [] intervals = s2.split("!");
-                    Vector<Vector<Integer>> newIntervals = new Vector<Vector<Integer>>();
+                    Vector<Vector<Integer>> newIntervals = new Vector<>();
                     int [] intervalsSize = new int[intervals.length];
                     int max = Integer.MIN_VALUE;
                     int min = Integer.MAX_VALUE;
@@ -4577,10 +4614,6 @@ public class RunApp extends javax.swing.JFrame {
                             }
                         }
                     }
-                    
-                    for(int i=0; i<newIntervals.size(); i++){
-                        System.out.println("n: " + newIntervals.get(i));
-                    }
 
                     for(int i=0; i<newIntervals.size(); i++){
                         
@@ -4601,30 +4634,7 @@ public class RunApp extends javax.swing.JFrame {
                         }
                         mean += newIntervals.get(i).size();
                     }
-                    
-                    /*for(int i=0; i<intervals.length; i++){
-                        int a = Integer.parseInt(intervals[i].split("-")[0]);
-                        int b = Integer.parseInt(intervals[i].split("-")[1]);
-                        
-                        System.out.println(intervals[i]);
-                        
-                        intervalsSize[i] = b-a+1; //both a and b are included
-                        
-                        Integer [] indices = new Integer[intervalsSize[i]];
-                        for(int j=a ; j<=b; j++){
-                            indices[j-a] = j;
-                        }
-                        views.put("View " + (i+1), indices);
-                        
-                        if(intervalsSize[i] > max){
-                            max = intervalsSize[i];
-                        }
-                        if(intervalsSize[i] < min){
-                            min = intervalsSize[i];
-                        }
-                        mean += intervalsSize[i];
-                    }*/
-                    
+                                        
                     mean /= intervalsSize.length;
                     labelNumViewsValue.setText(Integer.toString(intervalsSize.length));
                     labelMaxNumAttrViewValue.setText(Integer.toString(max));
@@ -4688,13 +4698,13 @@ public class RunApp extends javax.swing.JFrame {
                         }
                     }
 
-                    BufferedWriter bw_xml= new BufferedWriter(new FileWriter(xmlPath));
-                    PrintWriter wr_xml = new PrintWriter(bw_xml);
+                    BufferedWriter bwXml= new BufferedWriter(new FileWriter(xmlPath));
+                    PrintWriter wrXml = new PrintWriter(bwXml);
 
-                    DataIOUtils.writeXMLFile(wr_xml, labelNamesFound);
+                    DataIOUtils.writeXMLFile(wrXml, labelNamesFound);
 
-                    bw_xml.close();
-                    wr_xml.close();
+                    bwXml.close();
+                    wrXml.close();
 
                     xmlFilename = DataIOUtils.getFilePath(xmlPath);
                     fileTmp = new File(xmlPath);
@@ -4715,7 +4725,7 @@ public class RunApp extends javax.swing.JFrame {
             
             if(!fileTmp.exists())
             {
-                xmlPath = DataIOUtils.getXMLString(filename_database_arff);
+                xmlPath = DataIOUtils.getXMLString(arffFilename);
                 xmlFilename = DataIOUtils.getFilePath(xmlPath);
             }
 
@@ -4744,16 +4754,15 @@ public class RunApp extends javax.swing.JFrame {
                 return -1;
             }
 
-            
             initTableMetrics();
             clearTableMetricsPrincipal();
             
             File f = new File(xmlFilename);
             if(f.exists() && !f.isDirectory()) { 
-                Load_dataset(filename_database_arff, xmlFilename);
+                loadDataset(arffFilename, xmlFilename);
             }
             else{
-                Load_dataset(filename_database_arff, null);
+                loadDataset(arffFilename, null);
             }
 
             if(deleteXML){
@@ -4761,7 +4770,7 @@ public class RunApp extends javax.swing.JFrame {
                 f2.delete();
             }
 
-            textChooseFile.setText(filename_database_arff);
+            textChooseFile.setText(arffFilename);
         }
         
         if(mv){   
@@ -4781,9 +4790,7 @@ public class RunApp extends javax.swing.JFrame {
                     int[] toKeep = new int[attributes.length + dataset.getNumLabels()];
                     System.arraycopy(attributes, 0, toKeep, 0, attributes.length);
                     int[] labelIndices = dataset.getLabelIndices();
-                    for (int l = 0; l < dataset.getNumLabels(); l++) {
-                        toKeep[attributes.length + l] = labelIndices[l];
-                    }
+                    System.arraycopy(labelIndices, 0, toKeep, attributes.length, dataset.getNumLabels());
                     
                     Remove filterRemove = new Remove();
                     filterRemove.setAttributeIndicesArray(toKeep);
@@ -4812,7 +4819,11 @@ public class RunApp extends javax.swing.JFrame {
         return 1;
     }
     
-    
+    /**
+     * Set help for MVML table
+     * @param jtable Table
+     * @return Table with help
+     */
     public JTable setMVTableHelp(JTable jtable){
         jtable = new JTable(jtable.getModel()){
             @Override
@@ -4821,20 +4832,24 @@ public class RunApp extends javax.swing.JFrame {
                 if (c instanceof JComponent) {
                     JComponent jc = (JComponent) c;
                         
-                    if(column == 0){
-                        jc.setToolTipText("View name");
-                    }
-                    else if(column == 1){
-                        jc.setToolTipText("Number of the attributes of the view");
-                    }
-                    else if(column == 2){
-                        jc.setToolTipText("Labels x Instances x Features");
-                    }
-                    else if(column == 3){
-                        jc.setToolTipText("Ratio of number of instances to the number of attributes");
-                    }
-                    else if(column == 4){
-                        jc.setToolTipText("Average gain ratio");
+                    switch (column) {
+                        case 0:
+                            jc.setToolTipText("View name");
+                            break;
+                        case 1:
+                            jc.setToolTipText("Number of the attributes of the view");
+                            break;
+                        case 2:
+                            jc.setToolTipText("Labels x Instances x Features");
+                            break;
+                        case 3:
+                            jc.setToolTipText("Ratio of number of instances to the number of attributes");
+                            break;
+                        case 4:
+                            jc.setToolTipText("Average gain ratio");
+                            break;
+                        default:
+                            break;
                     }
                 }
                 return c;
@@ -4844,7 +4859,11 @@ public class RunApp extends javax.swing.JFrame {
         return jtable;
     }
 
-    
+    /**
+     * Get label index given a label name
+     * @param name Name of the label
+     * @return Label index
+     */
     private int getLabelIndex(String name){
         for(int i=0; i<jTableCoocurrences.getColumnCount(); i++){
             if(jTableCoocurrences.getColumnName(i).equals(name)){
@@ -4855,7 +4874,10 @@ public class RunApp extends javax.swing.JFrame {
         return(-1);
     }
     
-    
+    /**
+     * Transform multi-label dataset into one or more multi-class or binary datasets
+     * @return Positive number if successfull and negative otherwise
+     */
     private int transform(){
         
         if(dataset == null){
@@ -4896,8 +4918,7 @@ public class RunApp extends javax.swing.JFrame {
         }
         else if(radioRemoveLabelsTrans.isSelected()){
             try{
-                RemoveAllLabels removeAllTrans = new RemoveAllLabels();
-                Instances inst = removeAllTrans.transformInstances(dataset);
+                Instances inst = RemoveAllLabels.transformInstances(dataset);
                 transformedDatasets.add(inst);
             } catch(Exception ex){
                 Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -4920,7 +4941,9 @@ public class RunApp extends javax.swing.JFrame {
         return 1;
     }
     
-    
+    /**
+     * Show heatmap with selected labels
+     */
     private void showHeatMap(){
         if(pairs == null) 
         {
@@ -4928,11 +4951,11 @@ public class RunApp extends javax.swing.JFrame {
             return;
         }
 
-        Vector<Integer> selectedIndex = new Vector<Integer>();
+        Vector<Integer> selectedIndex = new Vector<>();
 
-        int[] selecteds=tableHeatmapLeft.getSelectedRows();
+        int[] selecteds = tableHeatmapLeft.getSelectedRows();
         
-        if(selecteds.length<= 1) {
+        if(selecteds.length <= 1) {
             JOptionPane.showMessageDialog(null, "You must choose two or more labels.", "alert", JOptionPane.ERROR_MESSAGE); 
             return;
         }
@@ -4952,10 +4975,14 @@ public class RunApp extends javax.swing.JFrame {
             }
         }
         
-        heatMap = Create_heatmap_graph(panelHeatmap, newCoeffs, null, heatMap);
+        heatMap = createHeatmapGraph(panelHeatmap, newCoeffs, null, heatMap);
     }
     
-    
+    /**
+     * Show heatmap with n most frequent labels
+     * 
+     * @param n Number of labels to show
+     */
     private void showMostFrequentsHeatMap(int n){
         if(pairs== null) 
         {
@@ -4976,7 +5003,11 @@ public class RunApp extends javax.swing.JFrame {
         showHeatMap();
     }    
     
-    
+    /**
+     * Show heatmap with n most related labels
+     * 
+     * @param n Number of labels to show
+     */
     private void showMostRelatedHeatMap(int n){
         selectTopHeatmapLabels(n ,true);
         
@@ -4995,7 +5026,7 @@ public class RunApp extends javax.swing.JFrame {
             return;
         }
 
-        Vector<Integer> selectedIndex = new Vector<Integer>();
+        Vector<Integer> selectedIndex = new Vector<>();
         int[] selecteds = getTopRelatedHeatmap(n);
         Arrays.sort(selecteds);
         
@@ -5013,10 +5044,14 @@ public class RunApp extends javax.swing.JFrame {
             }
         }
         
-        heatMap = Create_heatmap_graph(panelHeatmap, newCoeffs, null, heatMap);
+        heatMap = createHeatmapGraph(panelHeatmap, newCoeffs, null, heatMap);
     }
     
-    
+    /**
+     * Show heatmap with n most frequent labels U n most frequent labels
+     * 
+     * @param n Number of labels to select for each set
+     */
     private void showMostFrequentURelatedHeatMap(int n){
         selectTopHeatmapLabels(n ,true);
         
@@ -5041,7 +5076,9 @@ public class RunApp extends javax.swing.JFrame {
         showHeatMap();
     }
     
-    
+    /**
+     * Initializes table of metrics
+     */
     private void initTableMetrics(){
         ArrayList<String> metricsList = MetricUtils.getAllMetrics();
         
@@ -5057,7 +5094,10 @@ public class RunApp extends javax.swing.JFrame {
         }
     }
     
-    
+    /**
+     * Initializes table of metrics of multiple datasets tab
+     * @param dataName Dataset name to add
+     */
     private void initTableMetricsMulti(String dataName){
         ArrayList<String> metricsList = MetricUtils.Get_metrics_multi();
         
@@ -5068,7 +5108,12 @@ public class RunApp extends javax.swing.JFrame {
         }
     }
     
-    
+    /**
+     * Save heatmap graph as image
+     * 
+     * @throws AWTException
+     * @throws IOException 
+     */
     private void saveHeatmapGraph() throws AWTException, IOException
     {
         BufferedImage image = new Robot().createScreenCapture(new Rectangle(panelHeatmap.getLocationOnScreen().x+31, panelHeatmap.getLocationOnScreen().y+31, panelHeatmap.getWidth()-61, panelHeatmap.getHeight()-61));
@@ -5093,7 +5138,12 @@ public class RunApp extends javax.swing.JFrame {
         } 
     }
     
-    
+    /**
+     * Save co-ocurrence graph as image
+     * 
+     * @throws AWTException
+     * @throws IOException 
+     */
     private void saveCoocurrenceGraph() throws AWTException, IOException
     {
         BufferedImage image = new Robot().createScreenCapture(new Rectangle(panelCoOcurrenceRight.getLocationOnScreen().x, panelCoOcurrenceRight.getLocationOnScreen().y, panelCoOcurrenceRight.getWidth(), panelCoOcurrenceRight.getHeight()));
@@ -5120,7 +5170,15 @@ public class RunApp extends javax.swing.JFrame {
         } 
     }
     
-    
+    /**
+     * Create JGraphX chart
+     * 
+     * @param jpanel Panel
+     * @param list List
+     * @param labelNames Names of labels
+     * @param oldGraph Old graph
+     * @return 
+     */
     private mxGraphComponent createJGraphX(JPanel jpanel, 
             ArrayList<AttributesPair> list, String[] labelNames, 
             mxGraphComponent oldGraph)
@@ -5132,17 +5190,17 @@ public class RunApp extends javax.swing.JFrame {
         
         graph.setLabelsClipped(true);
         
-        Random aleatorio=new Random();
+        Random rand = new Random();
 	
-        Object[] lista_vertices = new Object[labelNames.length];
+        Object[] corners = new Object[labelNames.length];
         
         ImbalancedFeature current;
         double freq;
         
         int min = 0;
         int max = 1;
-        int cant_intervalos = 10;           
-        int fortaleza;
+        int numIntervals = 10;           
+        int strength;
   
         try
         {
@@ -5152,50 +5210,93 @@ public class RunApp extends javax.swing.JFrame {
                 current = DataInfoUtils.getLabelByLabelname(labelNames[i],labelsFreqSorted);
                 freq = current.getAppearances()/(dataset.getNumInstances()*1.0);
 
-                fortaleza =  ChartUtils.getBorderStrength(min, max, cant_intervalos, freq);
+                strength =  ChartUtils.getBorderStrength(min, max, numIntervals, freq);
                 
-                if(fortaleza==1)lista_vertices[i]= graph.insertVertex(parent, null,labelNames[i], aleatorio.nextInt(430), aleatorio.nextInt(280), labelNames[i].length()*6,20);      
-                else if (fortaleza==2) lista_vertices[i]= graph.insertVertex(parent, null,labelNames[i], aleatorio.nextInt(430), aleatorio.nextInt(280), labelNames[i].length()*5,20,"ROUNDED;strokeWidth=2");      
-                else if (fortaleza==3) lista_vertices[i]= graph.insertVertex(parent, null,labelNames[i], aleatorio.nextInt(430), aleatorio.nextInt(280), labelNames[i].length()*5,20,"ROUNDED;strokeWidth=3");      
-                else if (fortaleza==4) lista_vertices[i]= graph.insertVertex(parent, null,labelNames[i], aleatorio.nextInt(430), aleatorio.nextInt(280), labelNames[i].length()*5,20,"ROUNDED;strokeWidth=4");      
-                else if (fortaleza==5) lista_vertices[i]= graph.insertVertex(parent, null,labelNames[i], aleatorio.nextInt(430), aleatorio.nextInt(280), labelNames[i].length()*5,20,"strokeWidth=5");      
-                else if (fortaleza==6) lista_vertices[i]= graph.insertVertex(parent, null,labelNames[i], aleatorio.nextInt(430), aleatorio.nextInt(280), labelNames[i].length()*5,20,"strokeWidth=6");      
-                else if (fortaleza==7) lista_vertices[i]= graph.insertVertex(parent, null,labelNames[i], aleatorio.nextInt(430), aleatorio.nextInt(280), labelNames[i].length()*5,20,"strokeWidth=7");      
-                else if (fortaleza==8) lista_vertices[i]= graph.insertVertex(parent, null,labelNames[i], aleatorio.nextInt(430), aleatorio.nextInt(280), labelNames[i].length()*5,20,"strokeWidth=8");      
-                else if (fortaleza==9) lista_vertices[i]= graph.insertVertex(parent, null,labelNames[i], aleatorio.nextInt(430), aleatorio.nextInt(280), labelNames[i].length()*5,20,"strokeWidth=9");      
-                else lista_vertices[i]= graph.insertVertex(parent, null,labelNames[i], aleatorio.nextInt(430), aleatorio.nextInt(280), labelNames[i].length()*5,20,"strokeWidth=10");       
+                switch (strength) {
+                    case 1:
+                        corners[i] = graph.insertVertex(parent, null,labelNames[i], rand.nextInt(430), rand.nextInt(280), labelNames[i].length()*6,20);
+                        break;
+                    case 2:
+                        corners[i] = graph.insertVertex(parent, null,labelNames[i], rand.nextInt(430), rand.nextInt(280), labelNames[i].length()*5,20,"ROUNDED;strokeWidth=2");
+                        break;
+                    case 3:
+                        corners[i] = graph.insertVertex(parent, null,labelNames[i], rand.nextInt(430), rand.nextInt(280), labelNames[i].length()*5,20,"ROUNDED;strokeWidth=3");
+                        break;       
+                    case 4:
+                        corners[i] = graph.insertVertex(parent, null,labelNames[i], rand.nextInt(430), rand.nextInt(280), labelNames[i].length()*5,20,"ROUNDED;strokeWidth=4");
+                        break;
+                    case 5:
+                        corners[i] = graph.insertVertex(parent, null,labelNames[i], rand.nextInt(430), rand.nextInt(280), labelNames[i].length()*5,20,"strokeWidth=5");
+                        break;
+                    case 6:
+                        corners[i] = graph.insertVertex(parent, null,labelNames[i], rand.nextInt(430), rand.nextInt(280), labelNames[i].length()*5,20,"strokeWidth=6");
+                        break;
+                    case 7:
+                        corners[i] = graph.insertVertex(parent, null,labelNames[i], rand.nextInt(430), rand.nextInt(280), labelNames[i].length()*5,20,"strokeWidth=7");
+                        break;
+                    case 8:
+                        corners[i] = graph.insertVertex(parent, null,labelNames[i], rand.nextInt(430), rand.nextInt(280), labelNames[i].length()*5,20,"strokeWidth=8");
+                        break;
+                    case 9:
+                        corners[i] = graph.insertVertex(parent, null,labelNames[i], rand.nextInt(430), rand.nextInt(280), labelNames[i].length()*5,20,"strokeWidth=9");
+                        break;
+                    default:
+                        corners[i] = graph.insertVertex(parent, null,labelNames[i], rand.nextInt(430), rand.nextInt(280), labelNames[i].length()*5,20,"strokeWidth=10");
+                        break;
+                }
             }
             
-            ArrayList<String> lista_del_otro_par;
+            ArrayList<String> otherList;
             
             //create edges             
-            if(!list.isEmpty()){         
-            
+            if(!list.isEmpty()){
                 AttributesPair temp;
 
                 for(int i=0;i<labelNames.length;i++)
                 {
-                    lista_del_otro_par=ChartUtils.getVertices(labelNames[i], list);
+                    otherList = ChartUtils.getVertices(labelNames[i], list);
 
-                    for(String actual : lista_del_otro_par)
+                    for(String actual : otherList)
                     {
                         int index = DataInfoUtils.getLabelIndex(labelNames, actual);
 
-                        temp =AttributePairsUtils.searchAndGet(labelNames[i], actual, list);
+                        temp = AttributePairsUtils.searchAndGet(labelNames[i], actual, list);
                         freq = temp.getAppearances()/(dataset.getNumInstances()*1.0);
 
-                        fortaleza =  ChartUtils.getBorderStrength(min, max, cant_intervalos,freq );
+                        strength =  ChartUtils.getBorderStrength(min, max, numIntervals,freq );
 
-                        if(fortaleza==1) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=1");
-                        else if (fortaleza==2) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=2");
-                        else if (fortaleza==3) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=3");
-                        else if (fortaleza==4) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=4");
-                        else if (fortaleza==5) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=5");
-                        else if (fortaleza==6) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=6");
-                        else if (fortaleza==7) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=7");
-                        else if (fortaleza==8) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=8");
-                        else if (fortaleza==9) graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=9");
-                        else graph.insertEdge(parent, null,"",lista_vertices[i], lista_vertices[index], "startArrow=none;endArrow=none;strokeWidth=3");
+                        switch (strength) {
+                            case 1:
+                                graph.insertEdge(parent, null,"",corners[i], corners[index], "startArrow=none;endArrow=none;strokeWidth=1");
+                                break;
+                            case 2:
+                                graph.insertEdge(parent, null,"",corners[i], corners[index], "startArrow=none;endArrow=none;strokeWidth=2");
+                                break;
+                            case 3:
+                                graph.insertEdge(parent, null,"",corners[i], corners[index], "startArrow=none;endArrow=none;strokeWidth=3");
+                                break;
+                            case 4:
+                                graph.insertEdge(parent, null,"",corners[i], corners[index], "startArrow=none;endArrow=none;strokeWidth=4");
+                                break;
+                            case 5:
+                                graph.insertEdge(parent, null,"",corners[i], corners[index], "startArrow=none;endArrow=none;strokeWidth=5");
+                                break;
+                            case 6:
+                                graph.insertEdge(parent, null,"",corners[i], corners[index], "startArrow=none;endArrow=none;strokeWidth=6");
+                                break;
+                            case 7:
+                                graph.insertEdge(parent, null,"",corners[i], corners[index], "startArrow=none;endArrow=none;strokeWidth=7");
+                                break;
+                            case 8:
+                                graph.insertEdge(parent, null,"",corners[i], corners[index], "startArrow=none;endArrow=none;strokeWidth=8");
+                                break;
+                            case 9:
+                                graph.insertEdge(parent, null,"",corners[i], corners[index], "startArrow=none;endArrow=none;strokeWidth=9");
+                                break;
+                            default:
+                                graph.insertEdge(parent, null,"",corners[i], corners[index], "startArrow=none;endArrow=none;strokeWidth=3");
+                                break;
+                        }
                     }
                 }           
             }
@@ -5205,8 +5306,9 @@ public class RunApp extends javax.swing.JFrame {
             graph.getModel().endUpdate();
         }
         
-        if(oldGraph !=null) jpanel.remove(oldGraph);
-       
+        if(oldGraph !=null) {
+            jpanel.remove(oldGraph);
+        }
         
         graph.setCellsEditable(false);
         graph.setAllowDanglingEdges(false);
@@ -5214,7 +5316,6 @@ public class RunApp extends javax.swing.JFrame {
 	mxGraphComponent graphComponent = new mxGraphComponent(graph);               
         graphComponent.getGraph().getModel().endUpdate();
                 
- 
         jpanel.setLayout(new BorderLayout());
         jpanel.setPreferredSize(new Dimension(550, 425));
         jpanel.add(graphComponent,BorderLayout.CENTER);
@@ -5222,13 +5323,20 @@ public class RunApp extends javax.swing.JFrame {
         jpanel.validate();
         jpanel.repaint();
         
-   
         return graphComponent;
-        
- 
     }
     
-    private HeatMap Create_heatmap_graph(JPanel jpanel, double [][] coefficients, ArrayList<AttributesPair> mi_lista, HeatMap old_heatmap)
+    /**
+     * Create heatmap graph
+     * 
+     * @param jpanel Panel
+     * @param coefficients Coefficients
+     * @param list List
+     * @param oldHeatmap Old heatmap
+     * @return Heatmap
+     */
+    private HeatMap createHeatmapGraph(JPanel jpanel, double [][] coefficients, 
+            ArrayList<AttributesPair> list, HeatMap oldHeatmap)
     {
         Color [] colors = new Color[256];
         
@@ -5248,12 +5356,12 @@ public class RunApp extends javax.swing.JFrame {
             }
         }
         
-        if((mi_lista != null) && (mi_lista.size() > 0)){
-            HashSet<Integer> selected = new HashSet<Integer>();
+        if((list != null) && (list.size() > 0)){
+            HashSet<Integer> selected = new HashSet<>();
             
-            for(int i=0; i<mi_lista.size(); i++){
-                selected.add(mi_lista.get(i).getAttribute1Index());
-                selected.add(mi_lista.get(i).getAttribute2Index());
+            for(int i=0; i<list.size(); i++){
+                selected.add(list.get(i).getAttribute1Index());
+                selected.add(list.get(i).getAttribute2Index());
             }
             
             newCoefs = new double[selected.size()][selected.size()];
@@ -5270,8 +5378,8 @@ public class RunApp extends javax.swing.JFrame {
         
         heatMap = new HeatMap(newCoefs, false, colors);
         
-        if(old_heatmap != null){
-            jpanel.remove(old_heatmap);
+        if(oldHeatmap != null){
+            jpanel.remove(oldHeatmap);
         }
             
         jpanel.setLayout(new BorderLayout());
@@ -5284,16 +5392,22 @@ public class RunApp extends javax.swing.JFrame {
         return heatMap;
     }
     
-    private void Load_dataset(String filename_database_arff, String filename_database_xml )
+    /**
+     * Load dataset
+     * 
+     * @param arffFilename Arff filename
+     * @param xmlFilename Xml filename
+     */
+    private void loadDataset(String arffFilename, String xmlFilename)
     {
         try {        
             export2.setVisible(true);
                          
             if(tabsDependences.getSelectedIndex()==0){
-                jLabelChiFi_text.setVisible(true);
+                jLabelChiFiText.setVisible(true);
             }
             else{
-                jLabelChiFi_text.setVisible(false);
+                jLabelChiFiText.setVisible(false);
             }
              
             trainDataset= null;
@@ -5301,15 +5415,15 @@ public class RunApp extends javax.swing.JFrame {
             
             //new Instances
               
-            if(filename_database_xml == null){
+            if(xmlFilename == null){
                 MekaToMulan m = new MekaToMulan();
-                m.convert(filename_database_arff, filename_database_arff+"_mulan");
-                dataset = new MultiLabelInstances(filename_database_arff+"_mulan.arff", filename_database_arff+"_mulan.xml");
-                File f2 = new File(filename_database_arff+"_mulan.xml");
+                m.convert(arffFilename, arffFilename+"_mulan");
+                dataset = new MultiLabelInstances(arffFilename+"_mulan.arff", arffFilename+"_mulan.xml");
+                File f2 = new File(arffFilename+"_mulan.xml");
                 f2.delete();
             }
             else{
-                dataset = new MultiLabelInstances(filename_database_arff, filename_database_xml);
+                dataset = new MultiLabelInstances(arffFilename, xmlFilename);
             }
 
             labelAppearances = MetricUtils.getImbalancedDataByAppearances(dataset);
@@ -5323,154 +5437,124 @@ public class RunApp extends javax.swing.JFrame {
 
             stat = new Statistics();
             stat.calculateStats(dataset);
-                                    
-            //radio=  metrics.DistincLabelset(stat) /(double)dataset.getNumInstances();
 
-
-            Print_main_metric_dataset(dataset);
+            printMainMetrics(dataset);
 
             labelsFreqSorted = MetricUtils.getImbalancedDataByAppearances(dataset);
-             
 
             CategoryPlot temp1 = labelFrequencyChart.getChart().getCategoryPlot();
             temp1.clearRangeMarkers();
             ChartUtils.updateValuesBarChart(labelsFreqSorted,dataset.getNumInstances(),temp1);
 
-            HashMap<Integer,Integer> labels_x_example = DataInfoUtils.getLabelsetByValues(stat);
+            HashMap<Integer,Integer> labelsPerExample = DataInfoUtils.getLabelsetByValues(stat);
                             
-            ChartUtils.updateLineChart(dataset.getNumInstances(),labelsHistogramChart.getChart().getCategoryPlot(),labels_x_example);
+            ChartUtils.updateLineChart(dataset.getNumInstances(),labelsHistogramChart.getChart().getCategoryPlot(),labelsPerExample);
                    
             temp1 = labelsetsFrequencyChart.getChart().getCategoryPlot();
             temp1.clearRangeMarkers();
-            tmLabelsetFrequency= jchart_and_jtable_label_combination_freq(tableImbalance,dataset,stat,temp1);
+            tmLabelsetFrequency= labelsetsFrequencyTableModel(tableImbalance,dataset,stat,temp1);
 
-            tmIR = jtable_imbalanced(tableImbalance,dataset);  
+            tmIR = imbalancedTableModel(tableImbalance,dataset);  
                                 
-            tmLabelFrequency= jtable_frequency(tableImbalance,dataset);
-            tmAttributes = jtable_attributes(tableImbalance, dataset);
-            tmBox = jtable_labelBox(tableImbalance, dataset);
-            tmCoocurrences = jtable_label_graph(tableCoOcurrenceLeft, dataset);
-            tmHeatmap = jtable_label_graph(tableCoOcurrenceLeft, dataset);
-            tmLabelsHistogram = jtable_lablelsxExamples(tableImbalance, labels_x_example);
+            tmLabelFrequency= frequencyTableModel(tableImbalance,dataset);
+            tmAttributes = attributesTableModel(tableImbalance, dataset);
+            tmBox = boxplotTableModel(tableImbalance);
+            tmCoocurrences = labelFrequencyTableModel(tableCoOcurrenceLeft, dataset);
+            tmHeatmap = labelFrequencyTableModel(tableCoOcurrenceLeft, dataset);
+            tmLabelsHistogram = labelsPerExampleTableModel(tableImbalance, labelsPerExample);
 
-            tmIRInterClass = jtable_ir_per_label_inter_class_only(tableImbalance);
-            tmIRIntraClass = jtable_ir_per_label_intra_class_only(tableImbalance);
+            tmIRInterClass = irInterClassTableModel(tableImbalance);
+            tmIRIntraClass = irIntraClassTableModel(tableImbalance);
             
             temp1=IRLabelsetsChart.getChart().getCategoryPlot();
             temp1.clearRangeMarkers();
-            tmIRLabelset = jchart_and_jtable_label_set_IR(tableImbalance,dataset,stat,IRLabelsetsChart.getChart().getCategoryPlot());
-            //util.updateIRBarChart(labelsetsIRSorted,temp1);
+            tmIRLabelset = irLabelsetsTableModel(tableImbalance,stat,IRLabelsetsChart.getChart().getCategoryPlot());
             
-            //ir per label inter class only
             temp1= IRInterClassChart.getChart().getCategoryPlot();
             temp1.clearRangeMarkers();
-            //util.updateLineChart(IRInterClass,temp1,true);
             ChartUtils.updateIRBarChart(labelsFreqSorted, IRInterClass, temp1);
             
-            //ir per label intra class only
             temp1= IRIntraClassChart.getChart().getCategoryPlot();
             temp1.clearRangeMarkers();
-            //util.updateLineChart(IRIntraClass,temp1,true);
             ChartUtils.updateIRBarChart(labelsFreqSorted, IRIntraClass, temp1);
-            
             
             if(tmLabelFrequency !=null && tmLabelsetFrequency!=null)
             {               
-                if(tabsImbalance.getSelectedIndex()==1)
-                {
-                    tableImbalance.setModel(tmLabelsetFrequency);
-                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset frequency"));
-
-                    tableImbalance.setDefaultRenderer(Object.class, new DefaultRender());
-                    panelImbalanceLeft.repaint();
-                    panelImbalanceLeft.validate();
-
-                }
-                else if (tabsImbalance.getSelectedIndex()==4) // ir per labelset
-                {
-                    tableImbalance.setModel(tmIRLabelset);
-                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelsets Imbalance Ratio"));
-
-                    tableImbalance.setDefaultRenderer(Object.class, new IRRender(1));
-                    panelImbalanceLeft.repaint();
-                    panelImbalanceLeft.validate();
-
-                }
-                else if (tabsImbalance.getSelectedIndex()==0)
-                {
-                    tableImbalance.setModel(tmLabelFrequency);
-                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Label frequency"));
-
-                    tableImbalance.setDefaultRenderer(Object.class, new DefaultRender());
-                    panelImbalanceLeft.repaint();
-                    panelImbalanceLeft.validate();
-                }
-                else if (tabsImbalance.getSelectedIndex()==3)
-                {
-                    tableImbalance.setModel(tmIRIntraClass);
-                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance Ratio intra class"));
-
-                    tableImbalance.setDefaultRenderer(Object.class, new IRRender(1));
-                    panelImbalanceLeft.repaint();
-                    panelImbalanceLeft.validate();
-                }
-                else if (tabsImbalance.getSelectedIndex()==2)
-                {
-                    tableImbalance.setModel(tmLabelsHistogram);
-                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels histogram"));
-
-                    tableImbalance.setDefaultRenderer(Object.class, new DefaultRender());
-                    panelImbalanceLeft.repaint();
-                    panelImbalanceLeft.validate();
-                }
-                else if (tabsImbalance.getSelectedIndex()==6)
-                {
-                    tableImbalance.setModel(tmIRInterClass);
-                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance ratio inter class"));
-
-                    tableImbalance.setDefaultRenderer(Object.class, new IRRender(1));
-                    panelImbalanceLeft.repaint();
-                    panelImbalanceLeft.validate();
-                }
-                else if (tabsImbalance.getSelectedIndex()==5)
-                {
-                    tableImbalance.setModel(tmBox);
-                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Box diagrams"));
-                    
-                    //tableImbalance.setDefaultRenderer(Object.class, new DefaultRender());
-                    panelImbalanceLeft.repaint();
-                    panelImbalanceLeft.validate();
-
-                }
-                else
-                {
-                    tableImbalance.setModel(tmLabelsHistogram);
-                    panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels histogram"));
-
-                    tableImbalance.setDefaultRenderer(Object.class, new DefaultRender());
-                    panelImbalanceLeft.repaint();
-                    panelImbalanceLeft.validate();
+                switch (tabsImbalance.getSelectedIndex()) {
+                    case 0:
+                        tableImbalance.setModel(tmLabelFrequency);
+                        panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Label frequency"));
+                        tableImbalance.setDefaultRenderer(Object.class, new DefaultRender());
+                        panelImbalanceLeft.repaint();
+                        panelImbalanceLeft.validate();
+                        break;
+                    case 1:
+                        tableImbalance.setModel(tmLabelsetFrequency);
+                        panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelset frequency"));
+                        tableImbalance.setDefaultRenderer(Object.class, new DefaultRender());
+                        panelImbalanceLeft.repaint();
+                        panelImbalanceLeft.validate();
+                        break;
+                    case 2:
+                        tableImbalance.setModel(tmLabelsHistogram);
+                        panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels histogram"));
+                        tableImbalance.setDefaultRenderer(Object.class, new DefaultRender());
+                        panelImbalanceLeft.repaint();
+                        panelImbalanceLeft.validate();
+                        break;
+                    case 3:
+                        tableImbalance.setModel(tmIRIntraClass);
+                        panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance Ratio intra class"));
+                        tableImbalance.setDefaultRenderer(Object.class, new IRRender(1));
+                        panelImbalanceLeft.repaint();
+                        panelImbalanceLeft.validate();
+                        break;
+                    case 4:
+                        tableImbalance.setModel(tmIRLabelset);
+                        panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labelsets Imbalance Ratio"));
+                        tableImbalance.setDefaultRenderer(Object.class, new IRRender(1));
+                        panelImbalanceLeft.repaint();
+                        panelImbalanceLeft.validate();
+                        break;
+                    case 5:
+                        tableImbalance.setModel(tmBox);
+                        panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Box diagrams"));
+                        //tableImbalance.setDefaultRenderer(Object.class, new DefaultRender());
+                        panelImbalanceLeft.repaint();
+                        panelImbalanceLeft.validate();
+                        break;                    
+                    case 6:
+                        tableImbalance.setModel(tmIRInterClass);
+                        panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Imbalance ratio inter class"));
+                        tableImbalance.setDefaultRenderer(Object.class, new IRRender(1));
+                        panelImbalanceLeft.repaint();
+                        panelImbalanceLeft.validate();
+                        break;
+                    default:
+                        tableImbalance.setModel(tmLabelsHistogram);
+                        panelImbalanceLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Labels histogram"));
+                        tableImbalance.setDefaultRenderer(Object.class, new DefaultRender());
+                        panelImbalanceLeft.repaint();
+                        panelImbalanceLeft.validate();
+                        break;
                 }
                 tableImbalance.repaint();
                 tableImbalance.validate();
                 
-                
                 if (tabsAttributes.getSelectedIndex()==0)
                 {
-                    //attributesBoxDiagram2 =createGraph(panelBoxDiagramAtt);
                     tableAttributesLeft.setModel(tmAttributes);
                     panelAttributeLeft.setBorder(javax.swing.BorderFactory.createTitledBorder("Numeric attributes"));
 
                     tableAttributesLeft.setDefaultRenderer(Object.class, new DefaultRender());
                     panelAttributeLeft.repaint();
                     panelAttributeLeft.validate();
-
                 }
             }
             
+            fillTableChiPhiCoefficients(dataset);
             
-            jtable_chi_phi_coefficient(dataset);
-            
+            //Critical value for 99% confidence
             double critical_value = 6.635;
 
             jTableChiPhi.setDefaultRenderer(Object.class, new BaseRender("chi_fi",critical_value ));
@@ -5482,14 +5566,14 @@ public class RunApp extends javax.swing.JFrame {
             //tm_coocurrences   
             pairs = AttributePairsUtils.getAttributePairs(dataset);   
              
-            jtable_coefficient_values(dataset, pairs,"coocurrence");
+            fillTableCoefficients(dataset, "coocurrence");
             jTableCoocurrences.setDefaultRenderer(Object.class, new BaseRender("estandar",Double.MAX_VALUE));
             fixedTableCoocurrences.setDefaultRenderer(Object.class, new BaseRender("chi_fi_fixed",Double.MAX_VALUE));
            
             panelCoOcurrenceValues.repaint();
             panelCoOcurrenceValues.validate();
 
-            jtable_coefficient_values(dataset, pairs,"heapmap");
+            fillTableCoefficients(dataset,"heapmap");
             jTableHeatmap.setDefaultRenderer(Object.class, new BaseRender("heatmap",Double.MAX_VALUE));
             fixedTableHeatmap.setDefaultRenderer(Object.class, new BaseRender("chi_fi_fixed",Double.MAX_VALUE));
              
@@ -5504,14 +5588,15 @@ public class RunApp extends javax.swing.JFrame {
 
             ArrayList<String> seleccionados= new  ArrayList();
 
-            int primeros_seleccionados=10;
-            if(primeros_seleccionados> dataset.getNumLabels()) {
-                primeros_seleccionados = dataset.getNumLabels();
+            /*
+            int firstSelected=10;
+            if(firstSelected> dataset.getNumLabels()) {
+                firstSelected = dataset.getNumLabels();
             }
          
-            String current=null; 
+            String current; 
 
-            for(int i=0;i<primeros_seleccionados; i++)
+            for(int i=0;i<firstSelected; i++)
             {
                 current = (tableCoOcurrenceLeft.getValueAt(i, 0).toString());
                 if(current != null){
@@ -5519,23 +5604,23 @@ public class RunApp extends javax.swing.JFrame {
                 }
                 else break;
             }
+            */
         
             seleccionados = selectTopCoocurrenceLabels(10, true);
 
-            ArrayList<AttributesPair> pares_seleccionados = AttributePairsUtils.findSelectedAttributesPair(pairs, seleccionados);
+            ArrayList<AttributesPair> selectedPairs = AttributePairsUtils.findSelectedAttributesPair(pairs, seleccionados);
         
-            String[] labelname1=Utils.listToArray(seleccionados);
+            String[] labelname1 = Utils.listToArray(seleccionados);
        
-            graphComponent  =  createJGraphX(panelCoOcurrenceRight,pares_seleccionados,labelname1,graphComponent);
+            graphComponent = createJGraphX(panelCoOcurrenceRight,selectedPairs,labelname1,graphComponent);
 
-            //label_indices_seleccionados = dataset.getLabelIndices();
-            heatMap = Create_heatmap_graph(panelHeatmap, getHeatMapCoefficients(), null, heatMap);
+            heatMap = createHeatmapGraph(panelHeatmap, getHeatMapCoefficients(), null, heatMap);
         
             // jpanel8 box diagram
-             labelsBoxDiagram.getChart().getXYPlot().clearAnnotations();
-             labelsBoxDiagram.getChart().setTitle("");
-             attributesBoxDiagram2.getChart().getXYPlot().clearAnnotations();
-             attributesBoxDiagram2.getChart().setTitle("");
+            labelsBoxDiagram.getChart().getXYPlot().clearAnnotations();
+            labelsBoxDiagram.getChart().setTitle("");
+            attributesBoxDiagram2.getChart().getXYPlot().clearAnnotations();
+            attributesBoxDiagram2.getChart().setTitle("");
                
             DefaultXYDataset xyseriescollection = new DefaultXYDataset();
             DefaultXYDataset xyseriescollection1 = new DefaultXYDataset();
@@ -5546,9 +5631,8 @@ public class RunApp extends javax.swing.JFrame {
             attributesBoxDiagram2.getChart().getXYPlot().setDataset(xyseriescollection);             
             attributesBoxDiagram2.getChart().getXYPlot().setDataset(1, xyseriescollection1);
             
-            //TRAIN TEST
             jButtonSaveDatasets.setEnabled(false);
-            jComboBox_SaveFormat.setEnabled(false);
+            jComboBoxSaveFormat.setEnabled(false);
             
         } catch (InvalidDataFormatException ex) {
             Logger.getLogger(CrossValidationExperiment.class.getName()).log(Level.SEVERE, null, ex);
@@ -5557,14 +5641,20 @@ public class RunApp extends javax.swing.JFrame {
             Logger.getLogger(CrossValidationExperiment.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public ArrayList<String> selectTopCoocurrenceLabels(int n, boolean selectInTable){
+
+    /**
+     * Select n top co-ocurrence labels
+     * 
+     * @param n Number of labels to select
+     * @param selectInTable Indicates if the rows are selected in the table
+     * @return List with the names of the selected labels
+     */
+    public ArrayList<String> selectTopCoocurrenceLabels(int n, 
+            boolean selectInTable){
+
+        ArrayList<String> pairsString = new ArrayList<>();
             
-        LabelsPairValue p = new LabelsPairValue();
-            
-        ArrayList<String> pares = new ArrayList<String>();
-            
-        ArrayList<LabelsPairValue> pairs = new ArrayList<LabelsPairValue>();
+        ArrayList<LabelsPairValue> pairs = new ArrayList<>();
         for(int i=0; i<coocurrenceCoefficients.length; i++){
             for(int j=0; j<coocurrenceCoefficients.length; j++){
                 if(coocurrenceCoefficients[i][j] >= 0){
@@ -5577,7 +5667,7 @@ public class RunApp extends javax.swing.JFrame {
         int numLabels = n;
         int currentSelectedLabels = 0;
 
-        Vector<Integer> selectedLabels = new Vector<Integer>();
+        Vector<Integer> selectedLabels = new Vector<>();
 
         do{
             if(!selectedLabels.contains(pairs.get(0).label1)){
@@ -5601,7 +5691,7 @@ public class RunApp extends javax.swing.JFrame {
             s = jTableCoocurrences.getColumnName(selectedLabels.get(i));
 
             if(s != null){
-                pares.add(s);
+                pairsString.add(s);
             }
         }
         
@@ -5618,16 +5708,22 @@ public class RunApp extends javax.swing.JFrame {
                 }   
             }
         }
-        return pares;
+        return pairsString;
     }
      
-    public ArrayList<String> selectTopHeatmapLabels(int n, boolean selectInTable){
+    /**
+     * Select n top heatmap labels
+     * 
+     * @param n Number of labels to select
+     * @param selectInTable Indicates if the rows are selected in the table
+     * @return List with the names of the selected labels
+     */
+    public ArrayList<String> selectTopHeatmapLabels(int n, 
+            boolean selectInTable){
             
-        LabelsPairValue p = new LabelsPairValue();
+        ArrayList<String> pairsString = new ArrayList<>();
             
-        ArrayList<String> pares = new ArrayList<String>();
-            
-        ArrayList<LabelsPairValue> pairs = new ArrayList<LabelsPairValue>();
+        ArrayList<LabelsPairValue> pairs = new ArrayList<>();
         for(int i=0; i<heatmapCoefficients.length; i++){
             for(int j=0; j<heatmapCoefficients.length; j++){
                 if(heatmapCoefficients[i][j] >= 0){
@@ -5640,7 +5736,7 @@ public class RunApp extends javax.swing.JFrame {
         int numLabels = n;
         int currentSelectedLabels = 0;
 
-        Vector<Integer> selectedLabels = new Vector<Integer>();
+        Vector<Integer> selectedLabels = new Vector<>();
 
         do{
             if(!selectedLabels.contains(pairs.get(0).label1)){
@@ -5658,13 +5754,13 @@ public class RunApp extends javax.swing.JFrame {
             pairs.remove(pairs.get(0));
         }while((pairs.size() > 0) && (currentSelectedLabels < numLabels));
 
-        String s = new String();
+        String s;
             
         for(int i=0; i<selectedLabels.size(); i++){
             s = jTableHeatmap.getColumnName(selectedLabels.get(i));
 
             if(s != null){
-                pares.add(s);
+                pairsString.add(s);
             }
         }
             
@@ -5683,10 +5779,15 @@ public class RunApp extends javax.swing.JFrame {
             }
         }
         
-        return pares;
+        return pairsString;
     }
     
-    private void Print_main_metric_dataset(MultiLabelInstances dataset)
+    /**
+     * Print the maint metrics for a dataset
+     * 
+     * @param dataset Multi-label dataset to calculate the metrics
+     */
+    private void printMainMetrics(MultiLabelInstances dataset)
     {
         //Relation
         if(datasetCurrentName.length() > 30){
@@ -5696,6 +5797,7 @@ public class RunApp extends javax.swing.JFrame {
             labelRelationValue.setText(datasetCurrentName);
         }
 
+        //Metrics
         mldc.size.Instances instances = new mldc.size.Instances();
         instances.calculate(dataset);
         mldc.size.Attributes attributes = new mldc.size.Attributes();
@@ -5715,53 +5817,25 @@ public class RunApp extends javax.swing.JFrame {
         LxIxF lif = new LxIxF();
         lif.calculate(dataset);
 
-        //Instances
-        //labelInstancesValue.setText(MetricUtils.getValueFormatted("Instances", num_instancias));
         labelInstancesValue.setText(getMetricValueFormatted(instances));
-        //System.out.println("Instances: " + mldEvaluator.getMetricValueFormatted("Instances"));
-            
-        //Attributes
-        //labelAttributesValue.setText(MetricUtils.getValueFormatted("Attributes", num_atributos));
         labelAttributesValue.setText(getMetricValueFormatted(attributes));
-            
-        //Labels
-        //labelLabelsValue.setText(MetricUtils.getValueFormatted("Labels", Utils.getMetricValue("Labels", dataset, isMeka)));
         labelLabelsValue.setText(getMetricValueFormatted(labels));    
-        
-        //Density
-        //String density = Utils.getMetricValue("Density", dataset, isMeka);
-        //labelDensityValue.setText(MetricUtils.getValueFormatted("Density", density));
         labelDensityValue.setText(getMetricValueFormatted(density));
-                      
-        //Cardinality
-        //String cardinality = Utils.getMetricValue("Cardinality", dataset, isMeka);
-        //labelCardinalityValue.setText(MetricUtils.getValueFormatted("Cardinality", cardinality));
         labelCardinalityValue.setText(getMetricValueFormatted(cardinality));
-            
-        //Diversity      
-        //String diversity = Utils.getMetricValue("Diversity", dataset, isMeka);
-        //labelDiversityValue.setText(MetricUtils.getValueFormatted("Diversity", diversity));
         labelDiversityValue.setText(getMetricValueFormatted(diversity));
-                
-        //Bound
-        //String bound = Utils.getMetricValue("Bound", dataset, isMeka);
-        //labelBoundValue.setText(MetricUtils.getValueFormatted("Bound", bound));
         labelBoundValue.setText(getMetricValueFormatted(bound));
-                
-        //Distinct labelset     
-        //String distinct_labelset = Utils.getMetricValue("Distinct labelsets", dataset, isMeka);
-        //labelDistinctValue.setText(MetricUtils.getValueFormatted("Distinct labelsets", distinct_labelset));
         labelDistinctValue.setText(getMetricValueFormatted(distinct));
-                
-        //LxIxF
-        //String LIF = Utils.getMetricValue("Labels x instances x features", dataset, isMeka);
-        //labelLxIxFValue.setText(MetricUtils.getValueFormatted("Labels x instances x features", LIF));    
         labelLxIxFValue.setText(getMetricValueFormatted(lif));
     }
     
-    
+    /**
+     * Get the metric value formatted for the GUI
+     * 
+     * @param metric Metric to format
+     * @return String with the formatted metric value
+     */
     public String getMetricValueFormatted(MLDataMetric metric){
-        String value = new String();
+        String value;
         NumberFormat formatter;
         String name = metric.getName();
         
@@ -5803,9 +5877,16 @@ public class RunApp extends javax.swing.JFrame {
         return(value.replace(",", "."));
     }
   
-    private void button_saveActionPerformed_principal(java.awt.event.ActionEvent evt, JTable jtable) throws IOException
+    /**
+     * Action for Save button from principal tab
+     * @param evt Event
+     * @param jtable Table
+     * @throws IOException 
+     */
+    private void buttonSaveActionPerformedPrincipal(java.awt.event.ActionEvent 
+            evt, JTable jtable) throws IOException
     {
-        ArrayList<String> metric_list = Get_metrics_selected_principal(jtable);
+        ArrayList<String> metricsList = getMetricsSelectedPrincipal(jtable);
                 
         if(dataset == null) {
             JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
@@ -5837,81 +5918,75 @@ public class RunApp extends javax.swing.JFrame {
             File file = fc.getSelectedFile();
             FileFilter f1 = fc.getFileFilter();
                 
-            if(f1.getDescription().equals(".txt"))
-            {
-                String path = file.getAbsolutePath() +".txt";
-                
-                BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                PrintWriter wr = new PrintWriter(bw);
-                
-                ResultsIOUtils.saveMetricsTxt(wr, metric_list, dataset, imbalancedLabels, isMeka, tableMetrics);
-                
-                wr.close();
-                bw.close(); 
-                    
-                JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);     
-            }
-            else if(f1.getDescription().equals(".tex"))
-            {
-                String path = file.getAbsolutePath() +".tex";
-                
-                BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                PrintWriter wr = new PrintWriter(bw);
-                
-                ResultsIOUtils.saveMetricsTex(wr, metric_list, dataset, imbalancedLabels, isMeka, tableMetrics);
-                
-                wr.close();
-                bw.close(); 
-                    
-                JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-            }
-            else if(f1.getDescription().equals(".csv"))
-            {
-                String path = file.getAbsolutePath() +".csv";
-
-                BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                PrintWriter wr = new PrintWriter(bw);
-                
-                ResultsIOUtils.saveMetricsCsv(wr, metric_list, dataset, imbalancedLabels, isMeka, tableMetrics);
-                
-                wr.close();
-                bw.close(); 
-                    
-                JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-            }
-            else if (f1.getDescription().equals(".arff"))
-            {
-                String path = file.getAbsolutePath() +".arff";
-                
-                BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                PrintWriter wr = new PrintWriter(bw);
-                
-                ResultsIOUtils.saveMetricsArff(wr, metric_list, dataset, imbalancedLabels, isMeka, tableMetrics);
-                
-                wr.close();
-                bw.close(); 
-                    
-                JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                
+            String path;
+            BufferedWriter bw;
+            PrintWriter wr;
+            
+            switch (f1.getDescription()) {
+                case ".txt":
+                    path = file.getAbsolutePath() +".txt";
+                    bw = new BufferedWriter(new FileWriter(path));
+                    wr = new PrintWriter(bw);
+                    ResultsIOUtils.saveMetricsTxt(wr, metricsList, dataset, imbalancedLabels, isMeka, tableMetrics);
+                    wr.close();
+                    bw.close();
+                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                case ".tex":
+                    path = file.getAbsolutePath() +".tex";
+                    bw = new BufferedWriter(new FileWriter(path));
+                    wr = new PrintWriter(bw);
+                    ResultsIOUtils.saveMetricsTex(wr, metricsList, dataset, imbalancedLabels, isMeka, tableMetrics);
+                    wr.close();
+                    bw.close();
+                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                case ".csv":
+                    path = file.getAbsolutePath() +".csv";
+                    bw = new BufferedWriter(new FileWriter(path));
+                    wr = new PrintWriter(bw);
+                    ResultsIOUtils.saveMetricsCsv(wr, metricsList, dataset, imbalancedLabels, isMeka, tableMetrics);
+                    wr.close();
+                    bw.close();
+                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                case ".arff":
+                    path = file.getAbsolutePath() +".arff";
+                    bw = new BufferedWriter(new FileWriter(path));
+                    wr = new PrintWriter(bw);
+                    ResultsIOUtils.saveMetricsArff(wr, metricsList, dataset, imbalancedLabels, isMeka, tableMetrics);
+                    wr.close();
+                    bw.close();
+                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                default:
+                    break; 
             }
                 
             Toolkit.getDefaultToolkit().beep();
         }
     }
       
-    private void button_saveActionPerformed_multi(java.awt.event.ActionEvent evt, JTable jtable) throws IOException
+    /**
+     * Action for Save button from multiple datasets tab
+     * 
+     * @param evt Event
+     * @param jtable Table
+     * @throws IOException 
+     */
+    private void buttonSaveActionPerformedMulti(java.awt.event.ActionEvent evt, 
+            JTable jtable) throws IOException
     {
-        ArrayList<String> metric_list = Get_metrics_selected_multi(jtable);
+        ArrayList<String> metricsList = getSelectedMetricsMulti(jtable);
         
         if(listDatasets == null || listDatasets.isEmpty() || datasetNames.isEmpty()) {
            JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
            return; 
         }
              
-        // JFILECHOOSER SAVE
+        //JFileChooser save
         JFileChooser fc= new JFileChooser();
         
-        // extension txt
         FileNameExtensionFilter fname = new FileNameExtensionFilter(".txt", "txt");
         FileNameExtensionFilter fname2 = new FileNameExtensionFilter(".csv", "csv");
         FileNameExtensionFilter fname3 = new FileNameExtensionFilter(".arff", ".arff");
@@ -5933,108 +6008,92 @@ public class RunApp extends javax.swing.JFrame {
         {
             File file = fc.getSelectedFile();
             FileFilter f1 = fc.getFileFilter();
-                
-            if(f1.getDescription().equals(".txt"))
-            {
-                String path = file.getAbsolutePath() +".txt";
-                
-                BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                PrintWriter wr = new PrintWriter(bw);
-                
-                ResultsIOUtils.saveMultiMetricsTxt(wr, metric_list, datasetNames, tableMetricsMulti);
-                
-                wr.close();
-                bw.close(); 
-                    
-                JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                    
-            }
-            else if(f1.getDescription().equals(".tex"))
-            {
-                String path = file.getAbsolutePath() +".tex";
-                
-                BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                PrintWriter wr = new PrintWriter(bw);
-                
-                ResultsIOUtils.saveMultiMetricsTex(wr, metric_list, datasetNames, tableMetricsMulti);
-                
-                wr.close();
-                bw.close(); 
-                    
-                JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                    
-            }
-            else if(f1.getDescription().equals(".csv"))
-            {
-                String path = file.getAbsolutePath() +".csv";
-                
-                BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                PrintWriter wr = new PrintWriter(bw);
-                
-                ResultsIOUtils.saveMultiMetricsCsv(wr, metric_list, datasetNames, tableMetricsMulti);
-                
-                wr.close();
-                bw.close(); 
-                    
-                JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                
-            }
-            else if (f1.getDescription().equals(".arff"))
-            {
-                String path = file.getAbsolutePath() +".arff";
-                
-                BufferedWriter bw = new BufferedWriter(new FileWriter(path));
-                PrintWriter wr = new PrintWriter(bw);
-                
-                ResultsIOUtils.saveMultiMetricsArff(wr, metric_list, datasetNames, tableMetricsMulti);
-                
-                wr.close();
-                bw.close(); 
-                    
-                JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
+            
+            String path;
+            BufferedWriter bw;
+            PrintWriter wr;
+            
+            switch (f1.getDescription()) {
+                case ".txt":
+                    path = file.getAbsolutePath() +".txt";
+                    bw = new BufferedWriter(new FileWriter(path));
+                    wr = new PrintWriter(bw);
+                    ResultsIOUtils.saveMultiMetricsTxt(wr, metricsList, datasetNames, tableMetricsMulti);
+                    wr.close();
+                    bw.close();
+                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                case ".tex":
+                    path = file.getAbsolutePath() +".tex";
+                    bw = new BufferedWriter(new FileWriter(path));
+                    wr = new PrintWriter(bw);
+                    ResultsIOUtils.saveMultiMetricsTex(wr, metricsList, datasetNames, tableMetricsMulti);
+                    wr.close();
+                    bw.close();
+                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                case ".csv":
+                    path = file.getAbsolutePath() +".csv";
+                    bw = new BufferedWriter(new FileWriter(path));
+                    wr = new PrintWriter(bw);
+                    ResultsIOUtils.saveMultiMetricsCsv(wr, metricsList, datasetNames, tableMetricsMulti);
+                    wr.close();
+                    bw.close();
+                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                case ".arff":
+                    path = file.getAbsolutePath() +".arff";
+                    bw = new BufferedWriter(new FileWriter(path));
+                    wr = new PrintWriter(bw);
+                    ResultsIOUtils.saveMultiMetricsArff(wr, metricsList, datasetNames, tableMetricsMulti);
+                    wr.close();
+                    bw.close();
+                    JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                default:
+                    break; 
             }
                 
             Toolkit.getDefaultToolkit().beep();
         } 
     }
      
-    private void button_calculateActionPerformed_principal(java.awt.event.ActionEvent evt, JTable jtable)
+    /**
+     * Action for Calculate button from principal tab
+     * 
+     * @param evt Event
+     * @param jtable Table
+     */
+    private void buttonCalculateActionPerformedPrincipal(
+            java.awt.event.ActionEvent evt, JTable jtable)
     {
-        ArrayList<String> metric_list = Get_metrics_selected_principal(jtable);
+        ArrayList<String> metricsList = getMetricsSelectedPrincipal(jtable);
 
         if(dataset == null) {
             JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
             return; 
         }
-        else if(metric_list.size()==0){
+        else if(metricsList.isEmpty()){
             JOptionPane.showMessageDialog(null, "You must select any metric.", "Warning", JOptionPane.ERROR_MESSAGE);
             return; 
         }
 
-        ImbalancedFeature[] label_frenquency = MetricUtils.getImbalancedDataByAppearances(dataset);
-        label_frenquency = MetricUtils.sortByFrequency(label_frenquency);// ordena de mayor a menor
-                
-        ImbalancedFeature[] imbalanced_data = MetricUtils.getImbalancedDataByIRInterClass(dataset,label_frenquency);
-        
-        String value = new String();
+        //ImbalancedFeature[] label_frenquency = MetricUtils.getImbalancedDataByAppearances(dataset);
+        //label_frenquency = MetricUtils.sortByFrequency(label_frenquency);// ordena de mayor a menor
+
+        String value;
 
         progressBar.setMinimum(0);
-        progressBar.setMaximum(metric_list.size()+1);
+        progressBar.setMaximum(metricsList.size()+1);
         progressBar.setValue(0);
         int v = 1;
-        for(String metric : metric_list)
+        for(String metric : metricsList)
         {
             progressBar.setValue(v);
             //If metric value exists, don't calculate
            if((tableMetrics.get(metric) == null) || (tableMetrics.get(metric).equals("-"))){
                value = MetricUtils.getMetricValue(metric, dataset);
-                //if(value.equals("-1.0") || value.equals("-1,0")){
-                  //  value = Utils.get_value_metric_imbalanced(metric, dataset, imbalanced_data);
-                //} 	
-
-               //System.out.println(metric + " --- " + value + " --> " + value.replace(",", "."));
                 tableMetrics.put(metric, value.replace(",", "."));
-                //jTextArea1.append(metric + Utils.get_tabs_multi_datasets(metric) + value + "\n"); 
            }
            
            v++;
@@ -6049,50 +6108,51 @@ public class RunApp extends javax.swing.JFrame {
         jtable.repaint();
     }   
 
-    private void button_calculateActionPerformed_multi(java.awt.event.ActionEvent evt, JTable jtable)
+    /**
+     * Action for Calculate button from multiple datasets tab
+     * 
+     * @param evt Event
+     * @param jtable Table
+     */
+    private void buttonCalculateActionPerformedMulti(java.awt.event.ActionEvent 
+            evt, JTable jtable)
     {
-        ArrayList<String> metric_list = Get_metrics_selected_multi(jtable);
+        ArrayList<String> metricsList = getSelectedMetricsMulti(jtable);
 
         if(listDatasets == null || listDatasets.size() < 1) {
             JOptionPane.showMessageDialog(null, "You must load a dataset.", "Warning", JOptionPane.ERROR_MESSAGE);
             return; 
         }
-        else if(metric_list.isEmpty()){
+        else if(metricsList.isEmpty()){
             JOptionPane.showMessageDialog(null, "You must select any metric.", "Warning", JOptionPane.ERROR_MESSAGE);
             return; 
         }
 
-        ImbalancedFeature[] label_frenquency;      
-        ImbalancedFeature[] imbalanced_data;        
-        String value = new String();
+        ImbalancedFeature[] labelsFrequency;            
+        String value;
 
         progressBar.setMinimum(0);
-        progressBar.setMaximum(metric_list.size() * datasetNames.size() + 1);
+        progressBar.setMaximum(metricsList.size() * datasetNames.size() + 1);
         progressBar.setValue(0);
         int v = 1;
         
         int d = 0;
         for(String dataName : datasetNames){
-            label_frenquency = MetricUtils.getImbalancedDataByAppearances(listDatasets.get(d));
-            label_frenquency = MetricUtils.sortByFrequency(label_frenquency);
-            imbalanced_data = MetricUtils.getImbalancedDataByIRInterClass(listDatasets.get(d), label_frenquency);
-            
+            labelsFrequency = MetricUtils.getImbalancedDataByAppearances(listDatasets.get(d));
+            labelsFrequency = MetricUtils.sortByFrequency(labelsFrequency);
+
             if(!tableMetricsMulti.contains(dataName)){
                 tableMetricsMulti.put(dataName, new Hashtable<String, String>());
                 initTableMetricsMulti(dataName);
             }
             
-            for(String metric : metric_list)
+            for(String metric : metricsList)
             {
                 progressBar.setValue(v);
                 
                 //If metric value exists, don't calculate
                if((tableMetricsMulti.get(dataName).get(metric) == null) || (tableMetricsMulti.get(dataName).get(metric).equals("-"))){
                    value = MetricUtils.getMetricValue(metric, listDatasets.get(d));
-                    //if(value.equals("-1.0") || value.equals("-1,0")){
-                      //  value = Utils.get_value_metric_imbalanced(metric, listDatasets.get(d), imbalanced_data);
-                    //} 	
-
                     tableMetricsMulti.get(dataName).put(metric, value.replace(",", "."));
                } 
                
@@ -6105,11 +6165,14 @@ public class RunApp extends javax.swing.JFrame {
         jtable.repaint();
     }   
 
+    /**
+     * Clear table of metrics from principal tab
+     */
     private void clearTableMetricsPrincipal()
     {
-        ArrayList<String> metric_list = MetricUtils.getAllMetrics();
+        ArrayList<String> metricsList = MetricUtils.getAllMetrics();
 
-        for(String metric : metric_list)
+        for(String metric : metricsList)
         {
             if(metric.charAt(0) != '<'){
               tableMetrics.put(metric, "-");  
@@ -6122,7 +6185,7 @@ public class RunApp extends javax.swing.JFrame {
         TableModel model = jTablePrincipal.getModel();
         
         for(int i=0; i<model.getRowCount(); i++){
-            if(metric_list.get(i).charAt(0) != '<'){
+            if(metricsList.get(i).charAt(0) != '<'){
                model.setValueAt(tableMetrics.get(model.getValueAt(i, 0).toString()), i, 1); 
             }
         }
@@ -6130,25 +6193,37 @@ public class RunApp extends javax.swing.JFrame {
         jTablePrincipal.repaint();
     } 
      
-    private ArrayList<String> Get_metrics_selected_principal(JTable jtable)
+    /**
+     * Get selected metrics in table from principal tab
+     * 
+     * @param jtable Table
+     * @return List with the selected metrics
+     */
+    private ArrayList<String> getMetricsSelectedPrincipal(JTable jtable)
     {
-        ArrayList<String> result= new ArrayList();
+        ArrayList<String> result = new ArrayList();
         TableModel tmodel = jtable.getModel();
 
         for(int i=0; i<tmodel.getRowCount();i++)
         {
             if((Boolean)tmodel.getValueAt(i, 2))
             {
-                String selected =(String)tmodel.getValueAt(i, 0);
+                String selected = (String)tmodel.getValueAt(i, 0);
                 result.add(selected);                      
             }                
         }   
         return result;
     }
 
-    private ArrayList<String> Get_metrics_selected_multi(JTable jtable)
+    /**
+     * Get selected metrics in table from multiple datasets tab
+     * 
+     * @param jtable Table
+     * @return List with the selected metrics
+     */
+    private ArrayList<String> getSelectedMetricsMulti(JTable jtable)
     {
-        ArrayList<String> result= new ArrayList();
+        ArrayList<String> result = new ArrayList();
         TableModel tmodel = jtable.getModel();
 
         for(int i=0; i<tmodel.getRowCount();i++)
@@ -6162,7 +6237,14 @@ public class RunApp extends javax.swing.JFrame {
         return result;
     }
 
-    private void button_invertActionPerformed_principal(java.awt.event.ActionEvent evt,JTable jtable )
+    /**
+     * Action for Invert button from principal tab
+     * 
+     * @param evt Event
+     * @param jtable Table
+     */
+    private void buttonInvertActionButtonPerformed(java.awt.event.ActionEvent 
+            evt, JTable jtable )
     {
         TableModel tmodel = jtable.getModel();
 
@@ -6180,7 +6262,14 @@ public class RunApp extends javax.swing.JFrame {
         jtable.repaint();
     }     
 
-    private void button_invertActionPerformed_multi(java.awt.event.ActionEvent evt,JTable jtable )
+    /**
+     * Action for Invert button from multiple datasets tab
+     * 
+     * @param evt Event
+     * @param jtable Table
+     */
+    private void buttonInvertActionPerformedMulti(java.awt.event.ActionEvent 
+            evt, JTable jtable )
     {
         TableModel tmodel = jtable.getModel();
 
@@ -6196,9 +6285,16 @@ public class RunApp extends javax.swing.JFrame {
 
         jtable.setModel(tmodel);
         jtable.repaint();
-    }     
+    }    
     
-    private void button_noneActionPerformed_principal(java.awt.event.ActionEvent evt,JTable jtable)
+    /**
+     * Action for None button from principal tab
+     * 
+     * @param evt Event
+     * @param jtable Table
+     */
+    private void buttonNoneActionPerformedPrincipal(java.awt.event.ActionEvent 
+            evt,JTable jtable)
     {
         TableModel tmodel = jtable.getModel();
        
@@ -6211,7 +6307,14 @@ public class RunApp extends javax.swing.JFrame {
         jtable.repaint();
     }      
     
-    private void button_noneActionPerformed_multi(java.awt.event.ActionEvent evt,JTable jtable)
+    /**
+     * Action for None button from multiple datasets tab
+     * 
+     * @param evt Event
+     * @param jtable Table
+     */
+    private void buttonNoneActionPerformedMulti(java.awt.event.ActionEvent evt, 
+            JTable jtable)
     {
         TableModel tmodel = jtable.getModel();
        
@@ -6224,29 +6327,54 @@ public class RunApp extends javax.swing.JFrame {
         jtable.repaint();
     }      
     
-    private void button_allActionPerformed_principal(java.awt.event.ActionEvent evt ,JTable jtable)
+    /**
+     * Action for All button from principal tab
+     * 
+     * @param evt Event
+     * @param jtable Table
+     */
+    private void buttonAllActionPerformedPrincipal(java.awt.event.ActionEvent 
+            evt, JTable jtable)
     {
         TableModel tmodel = jtable.getModel();
 
         for(int i=0; i<tmodel.getRowCount();i++)
+        {
             tmodel.setValueAt(Boolean.TRUE, i, 2);
+        }
 
         jtable.setModel(tmodel);
         jtable.repaint();
     }
     
-    private void button_allActionPerformed_multi(java.awt.event.ActionEvent evt ,JTable jtable)
+    /**
+     * Action for All button from multiple datasets tab
+     * 
+     * @param evt Event
+     * @param jtable Table
+     */
+    private void buttonAllActionPerformedMulti(java.awt.event.ActionEvent evt,
+            JTable jtable)
     {
         TableModel tmodel = jtable.getModel();
 
         for(int i=0; i<tmodel.getRowCount();i++)
+        {
             tmodel.setValueAt(Boolean.TRUE, i, 1);
+        }
 
         jtable.setModel(tmodel);
         jtable.repaint();
     }
     
-    private void button_clearActionPerformed_principal(java.awt.event.ActionEvent evt ,JTable jtable)
+    /**
+     * Action for Clear button from principal tab
+     * 
+     * @param evt Event
+     * @param jtable Table
+     */
+    private void buttonClearActionPerformedPrincipal(java.awt.event.ActionEvent 
+            evt, JTable jtable)
     {
         TableModel tmodel = jtable.getModel();
 
@@ -6258,7 +6386,14 @@ public class RunApp extends javax.swing.JFrame {
         clearTableMetricsPrincipal();
     }
 
-    private void button_export_ActionPerformed(java.awt.event.ActionEvent evt ,JTable jtable)
+    /**
+     * Action for Export button
+     * 
+     * @param evt Event
+     * @param jtable Table
+     */
+    private void buttonExportActionPerformed(java.awt.event.ActionEvent evt, 
+            JTable jtable)
     {
         if(jtable.getRowCount()==0 || dataset == null)
         {
@@ -6266,9 +6401,8 @@ public class RunApp extends javax.swing.JFrame {
             return;
         }
 
-        JFileChooser fc= new JFileChooser();
+        JFileChooser fc = new JFileChooser();
         
-        // extension 
         //FileNameExtensionFilter fname = new FileNameExtensionFilter(".xls", "xls"); 
         FileNameExtensionFilter fname1 =  new FileNameExtensionFilter(".csv", "csv");
         
@@ -6293,24 +6427,24 @@ public class RunApp extends javax.swing.JFrame {
                     BufferedWriter bw = new BufferedWriter(new FileWriter(path));
                     PrintWriter wr = new PrintWriter(bw);
                     
-                    if(comboBoxLabelsInformation.getSelectedIndex()==1){
-                        //Labelsets tables
-                        ResultsIOUtils.saveTableLabelsetsFrequencyCsv(wr, jtable, labelsetStringsByFreq);
+                    switch (comboBoxLabelsInformation.getSelectedIndex()) {
+                        case 1:
+                            ResultsIOUtils.saveTableLabelsetsFrequencyCsv(wr, jtable, labelsetStringsByFreq);
+                            break;
+                        case 6:
+                            ResultsIOUtils.saveTableLabelsetsIRCsv(wr, jtable, labelsetStringByIR);
+                            break;
+                        default:
+                            ResultsIOUtils.saveTableCsv(wr, jtable);
+                            break;
                     }
-                    else if(comboBoxLabelsInformation.getSelectedIndex()==6){
-                        ResultsIOUtils.saveTableLabelsetsIRCsv(wr, jtable, labelsetStringByIR);
-                    }
-                    else{
-                        ResultsIOUtils.saveTableCsv(wr, jtable);
-                    }
-                    
                 
                     wr.close();
                     bw.close(); 
                     
                     JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);                     
                 }
-                catch(Exception e1)
+                catch(IOException | HeadlessException e1)
                 {
                     JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
                 }   
@@ -6319,7 +6453,16 @@ public class RunApp extends javax.swing.JFrame {
         }
     }
     
-    private void button_export_ActionPerformed(java.awt.event.ActionEvent evt ,JTable jtable, JTable columns, String table)
+    /**
+     * Action for Export button
+     * 
+     * @param evt Event
+     * @param jtable Table
+     * @param columns Columns
+     * @param table Table type
+     */
+    private void buttonExportActionPerformed(java.awt.event.ActionEvent evt, 
+            JTable jtable, JTable columns, String table)
     {
         if(jtable.getRowCount()==0 || dataset == null)
         {
@@ -6328,8 +6471,7 @@ public class RunApp extends javax.swing.JFrame {
         }
         
         JFileChooser fc= new JFileChooser();
-        
-        // extension 
+
         //FileNameExtensionFilter fname = new FileNameExtensionFilter(".xls", "xls"); 
         FileNameExtensionFilter fname1 =  new FileNameExtensionFilter(".csv", "csv");
         
@@ -6348,8 +6490,8 @@ public class RunApp extends javax.swing.JFrame {
             //Saving csv chi_phi
             if(f1.getDescription().equals(".csv"))
             {
-                BufferedWriter bw = null;
-                PrintWriter wr = null;
+                BufferedWriter bw;
+                PrintWriter wr;
                 
                 try
                 {
@@ -6357,17 +6499,19 @@ public class RunApp extends javax.swing.JFrame {
                     bw = new BufferedWriter(new FileWriter(path));
                     wr = new PrintWriter(bw);
                     
-                    if(table.equals("ChiPhi")){
-                        ResultsIOUtils.saveChiPhiTableCsv(wr, chiPhiCoefficients, dataset.getLabelNames());
-                    }
-                    else if(table.equals("Coocurrence")){
-                        ResultsIOUtils.saveCoocurrenceTableCsv(wr, coocurrenceCoefficients, dataset.getLabelNames());
-                    }
-                    else if(table.equals("Heatmap")){
-                        ResultsIOUtils.saveHeatmapTableCsv(wr, heatmapCoefficients, dataset.getLabelNames());
-                    }
-                    else{
-                        JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
+                    switch (table) {
+                        case "ChiPhi":
+                            ResultsIOUtils.saveChiPhiTableCsv(wr, chiPhiCoefficients, dataset.getLabelNames());
+                            break;
+                        case "Coocurrence":
+                            ResultsIOUtils.saveCoocurrenceTableCsv(wr, coocurrenceCoefficients, dataset.getLabelNames());
+                            break;
+                        case "Heatmap":
+                            ResultsIOUtils.saveHeatmapTableCsv(wr, heatmapCoefficients, dataset.getLabelNames());
+                            break;
+                        default: 
+                            JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE);
+                            break;
                     }
                     
                     wr.close();
@@ -6375,9 +6519,8 @@ public class RunApp extends javax.swing.JFrame {
                     
                     JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
                 }
-                catch(Exception e1)
+                catch(IOException | HeadlessException e1)
                 {
-                    //System.out.println("otro mensaje "+e1.toString());
                     JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
                 }         
             }              
@@ -6401,12 +6544,18 @@ public class RunApp extends javax.swing.JFrame {
         }  
     }
 
+    /**
+     * Create graph
+     * 
+     * @param jpanel Panel
+     * @return ChartPanel with the generated graph
+     */
     private ChartPanel createGraph(JPanel jpanel) 
     {
         XYDataset xydataset  = new DefaultXYDataset();
-        JFreeChart jfreechart = ChartFactory.createXYLineChart("Box diagram", "Values", "", xydataset, PlotOrientation.VERTICAL, false, true, false);
+        JFreeChart chart = ChartFactory.createXYLineChart("Box diagram", "Values", "", xydataset, PlotOrientation.VERTICAL, false, true, false);
  
-        XYPlot xyplot = (XYPlot) jfreechart.getPlot();
+        XYPlot xyplot = (XYPlot) chart.getPlot();
         xyplot.setBackgroundPaint(Color.white);
         xyplot.setDomainGridlinePaint(Color.gray);
         xyplot.setRangeGridlinePaint(Color.gray);
@@ -6414,13 +6563,12 @@ public class RunApp extends javax.swing.JFrame {
         //Hide Y axis
         xyplot.getRangeAxis().setTickLabelsVisible(false);  
  
-        ChartPanel cp1 = new ChartPanel(jfreechart);
+        ChartPanel cp1 = new ChartPanel(chart);
         cp1.setSize(new Dimension(450,300));        
         cp1.setBounds(260,100,450,300);
         cp1.setPreferredSize(new Dimension(450,300));
         cp1.repaint();
         
-        //ChartFrame f1= new ChartFrame("PROBANDO", chart1);
         jpanel.setBounds(260,100,450,300);
         jpanel.setLayout(new BorderLayout());
         jpanel.add(cp1,BorderLayout.CENTER);
@@ -6429,96 +6577,98 @@ public class RunApp extends javax.swing.JFrame {
         
         return cp1;       
     }
-    
-    private ChartPanel createJChart(JPanel jpanel, String type, String title_x_axis, String title_y_axis, boolean show_x_axis){
-        return(createJChart(jpanel, type, title_x_axis, title_y_axis, show_x_axis, ""));
-    }
-    
-    private ChartPanel createJChart(JPanel jpanel, String type, String title_x_axis, String title_y_axis, boolean show_x_axis, String charTitle)
+
+    /**
+     * Create Chart
+     * 
+     * @param jpanel Panel
+     * @param type Chart type
+     * @param titleX Title for X axis
+     * @param titleY Title for Y axis
+     * @param showXAxis Indicates if shows X axis
+     * @param chartTitle Chart title
+     * @return ChartPanel with the generated chart
+     */
+    private ChartPanel createJChart(JPanel jpanel, String type, 
+            String titleX, String titleY, boolean showXAxis, String chartTitle)
     {
-        DefaultCategoryDataset my_data = new DefaultCategoryDataset();
+        DefaultCategoryDataset myData = new DefaultCategoryDataset();
         JFreeChart chart1;
 
         CategoryPlot plot1;
         
+        LineAndShapeRenderer lineandshaperenderer;
+        
         //hide horizontal axis
-        if(type.equals("bar"))
-        {
-            //chart1 = ChartFactory.createBarChart(" ", title_x_axis, title_y_axis, my_data, PlotOrientation.VERTICAL, false, true, false);
-            chart1 = ChartFactory.createBarChart(charTitle, title_y_axis, title_x_axis, my_data, PlotOrientation.VERTICAL, false, true, false);
-            //chart1 = ChartFactory.createBarChart(" ", title_y_axis, title_x_axis, my_data);
-            
-            plot1 =  chart1.getCategoryPlot();
-
-            //Custom tooltips
-            BarRenderer renderer = (BarRenderer) plot1.getRenderer();
-            
-            if(charTitle.toLowerCase().equals("label frequency")){
-                renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
-                "{0} = {2}", NumberFormat.getInstance()));
-            }
-            else if(charTitle.toLowerCase().equals("labelset frequency")){
-                renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
-                "{0} = {2}", NumberFormat.getInstance()));
-            }
-            else if(charTitle.toLowerCase().equals("labels histogram")){
-                renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
-                "Instances with {1} labels = {2}", NumberFormat.getInstance()));
-            }
-            else if(charTitle.toLowerCase().equals("ir inter class")){
-                renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
-                "{0} = {2}", NumberFormat.getInstance()));
-            }
-            else if(charTitle.toLowerCase().equals("ir intra class")){
-                renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
-                "{0} = {2}", NumberFormat.getInstance()));
-            }
-            else if(charTitle.toLowerCase().equals("ir per labelset")){
-                renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
-                "ID: {0} = {2}", NumberFormat.getInstance()));
-            }
-            else{
-                renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator());
-            }
-            
-            
-            plot1.setBackgroundAlpha(0);
-            plot1.setRangeGridlinePaint(Color.black);
-        }
-        else if(type.equals("line_2_axis"))
-        {
-            chart1 = ChartFactory.createLineChart(" ",title_x_axis,title_y_axis , my_data, PlotOrientation.VERTICAL, false, true, false);
-
-            plot1 =  chart1.getCategoryPlot();
-            plot1.setRangeGridlinePaint(Color.black);
-
-            //show little rectangles
-            LineAndShapeRenderer lineandshaperenderer = (LineAndShapeRenderer)plot1.getRenderer();
-            lineandshaperenderer.setBaseShapesVisible(true);
-
-            CategoryAxis domainAxis = plot1.getDomainAxis();
-            domainAxis.setCategoryLabelPositions(CategoryLabelPositions.DOWN_45);
-            ValueAxis axis2 = new NumberAxis("# Labels");
-            plot1.setRangeAxis(1, axis2);
-            plot1.mapDatasetToRangeAxis(1, 1);
-
-            LineAndShapeRenderer renderer2 = new LineAndShapeRenderer();
-            plot1.setRenderer(1, renderer2);
-        }
-        else //type == "line")
-        {
-            chart1 = ChartFactory.createLineChart(" ",title_x_axis,title_y_axis , my_data, PlotOrientation.VERTICAL, false, true, false);
-
-            plot1 =  chart1.getCategoryPlot();
-            plot1.setRangeGridlinePaint(Color.black);
-
-            //show little rectangles
-            LineAndShapeRenderer lineandshaperenderer = (LineAndShapeRenderer)plot1.getRenderer();
-            lineandshaperenderer.setBaseShapesVisible(true);        
+        switch (type) {
+            case "bar":
+                chart1 = ChartFactory.createBarChart(chartTitle, titleY, titleX, myData, PlotOrientation.VERTICAL, false, true, false);
+                plot1 =  chart1.getCategoryPlot();
+                //Custom tooltips
+                BarRenderer renderer = (BarRenderer) plot1.getRenderer();
+                switch (chartTitle.toLowerCase()) {
+                    case "label frequency":
+                        renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
+                                "{0} = {2}", NumberFormat.getInstance()));
+                        break;
+                    case "labelset frequency":
+                        renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
+                                "{0} = {2}", NumberFormat.getInstance()));
+                        break;
+                    case "labels histogram":
+                        renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
+                                "Instances with {1} labels = {2}", NumberFormat.getInstance()));
+                        break;
+                    case "ir inter class":
+                        renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
+                                "{0} = {2}", NumberFormat.getInstance()));
+                        break;
+                    case "ir intra class":
+                        renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
+                                "{0} = {2}", NumberFormat.getInstance()));
+                        break;
+                    case "ir per labelset":
+                        renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
+                                "ID: {0} = {2}", NumberFormat.getInstance()));
+                        break;
+                    default:
+                        renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator());
+                        break;
+                }
+                plot1.setBackgroundAlpha(0);
+                plot1.setRangeGridlinePaint(Color.black);
+                break;
+            case "line_2_axis":
+                chart1 = ChartFactory.createLineChart(" ",titleX,titleY , myData, PlotOrientation.VERTICAL, false, true, false);
+                plot1 =  chart1.getCategoryPlot();
+                plot1.setRangeGridlinePaint(Color.black);
+                
+                //show little rectangles
+                lineandshaperenderer = (LineAndShapeRenderer)plot1.getRenderer();
+                lineandshaperenderer.setBaseShapesVisible(true);
+                CategoryAxis domainAxis = plot1.getDomainAxis();
+                domainAxis.setCategoryLabelPositions(CategoryLabelPositions.DOWN_45);
+                
+                ValueAxis axis2 = new NumberAxis("# Labels");
+                plot1.setRangeAxis(1, axis2);
+                plot1.mapDatasetToRangeAxis(1, 1);
+                LineAndShapeRenderer renderer2 = new LineAndShapeRenderer();
+                plot1.setRenderer(1, renderer2);
+                break;
+            default:
+                //type == "line")
+                chart1 = ChartFactory.createLineChart(" ",titleX,titleY , myData, PlotOrientation.VERTICAL, false, true, false);
+                plot1 =  chart1.getCategoryPlot();
+                plot1.setRangeGridlinePaint(Color.black);
+                
+                //show little rectangles
+                lineandshaperenderer = (LineAndShapeRenderer)plot1.getRenderer();
+                lineandshaperenderer.setBaseShapesVisible(true);
+                break;    
         }
         
         //Hide X axis
-        plot1.getDomainAxis().setTickLabelsVisible(show_x_axis);     
+        plot1.getDomainAxis().setTickLabelsVisible(showXAxis);     
                  
         ChartPanel cp1 = new ChartPanel(chart1);
         cp1.setSize(new Dimension(450,300));        
@@ -6526,7 +6676,6 @@ public class RunApp extends javax.swing.JFrame {
         cp1.setPreferredSize(new Dimension(450,300));
         cp1.repaint();
         
-        //ChartFrame f1= new ChartFrame("PROBANDO", chart1);
         jpanel.setBounds(260,100,450,300);
         jpanel.setLayout(new BorderLayout());
         jpanel.add(cp1,BorderLayout.CENTER);
@@ -6536,99 +6685,119 @@ public class RunApp extends javax.swing.JFrame {
         return cp1;       
     }
     
-    public static int getMax(Set<LabelSet> keysets ,HashMap<LabelSet,Integer> result)
+    /**
+     * Get the maximum value
+     * 
+     * @param keysets Set of keys
+     * @param result Hashmap for searching through
+     * @return Maximum value of the hashmap values
+     */
+    public static int getMax(Set<LabelSet> keysets, 
+            HashMap<LabelSet,Integer> result)
     {
-        int mayor=0;
+        int max=0;
         
-        for(LabelSet current : keysets)
-            if(mayor<result.get(current))mayor=result.get(current);
+        for(LabelSet current : keysets){
+            if(max < result.get(current)){
+                max = result.get(current);
+            }
+        }
         
-        return mayor;
+        return max;
     }
    
-    private TableModel jchart_and_jtable_label_set_IR(JTable jtable, MultiLabelInstances dataset ,Statistics stat, CategoryPlot cp ) throws Exception
+    /**
+     * Set label IR
+     * 
+     * @param jtable Table
+     * @param stat Statistics
+     * @param cp CategoryPlot
+     * @return Generated TableModel
+     * @throws Exception 
+     */
+    private TableModel irLabelsetsTableModel(JTable jtable, Statistics stat, 
+            CategoryPlot cp ) throws Exception
     {
-        //graph
-        DefaultTableModel table_model1= new DefaultTableModel()
+        DefaultTableModel tableModel = new DefaultTableModel()
         {
+            @Override
             public boolean isCellEditable(int row, int column)
             {
-                return false;//This causes all cells to be not editable
+                //This causes all cells to be not editable
+                return false;
             }
         };
 
-        DefaultCategoryDataset my_data = new DefaultCategoryDataset();
+        DefaultCategoryDataset myData = new DefaultCategoryDataset();
                
-        table_model1.addColumn("Labelset id");
-        table_model1.addColumn("IR values");
+        tableModel.addColumn("Labelset id");
+        tableModel.addColumn("IR values");
 
         //Labelsets frequency
-        HashMap<LabelSet,Integer> result = stat.labelCombCount();
-        labelsetStringByIR = new ArrayList<>(result.size());
+        HashMap<LabelSet,Integer> labelsetsFrequency = stat.labelCombCount();
+        labelsetStringByIR = new ArrayList<>(labelsetsFrequency.size());
         
-        Set<LabelSet> keysets = result.keySet();
+        Set<LabelSet> keysets = labelsetsFrequency.keySet();
         
-        Object[] fila = new Object[2];
+        Object[] row = new Object[2];
         
-        int count=1;
+        int count = 1;
         double IR_labelset;
-        int mayor = getMax(keysets, result);
+        int max = getMax(keysets, labelsetsFrequency);
         
-        ArrayList<ImbalancedFeature> lista1 = new ArrayList();
+        ArrayList<ImbalancedFeature> listImbalanced = new ArrayList();
         ImbalancedFeature temp;
 
         int value;
         
         for(LabelSet current : keysets)
         {
-            value=  result.get(current); //es la cantidad de veces que aparece el labelset en el dataset
-            IR_labelset = mayor /(value*1.0);
-            String temp1 =MetricUtils.truncateValue(IR_labelset, 4);
+            value = labelsetsFrequency.get(current);
+            IR_labelset = max /(value*1.0);
+            String temp1 = MetricUtils.truncateValue(IR_labelset, 4);
             IR_labelset = Double.parseDouble(temp1);
             
-            temp = new ImbalancedFeature(current.toString(), value,IR_labelset);
-            lista1.add(temp);
+            temp = new ImbalancedFeature(current.toString(), value, IR_labelset);
+            listImbalanced.add(temp);
         }      
          
-        labelsetsIRSorted = new ImbalancedFeature[lista1.size()];
-        labelsetsByIR = new double[lista1.size()]; //stores IR per labelset
+        labelsetsIRSorted = new ImbalancedFeature[listImbalanced.size()];
+        labelsetsByIR = new double[listImbalanced.size()]; //stores IR per labelset
          
         String truncate;
          
-        while(!lista1.isEmpty())
+        while(!listImbalanced.isEmpty())
         {
-            temp = Utils.getMin(lista1);
+            temp = Utils.getMin(listImbalanced);
             
             labelsetsIRSorted[count-1]= temp;
             labelsetsByIR[count-1]=temp.getIRIntraClass();
 
-            fila[0]=count;    
+            row[0] = count;    
              
             truncate = Double.toString(temp.getIRIntraClass());
-            fila[1] = MetricUtils.getValueFormatted(truncate, 3);
-            //fila[1]= MetricUtils.truncateValue(truncate,5);
+            row[1] = MetricUtils.getValueFormatted(truncate, 3);
              
-            table_model1.addRow(fila);
-             
-            //my_data.setValue(temp.getIRIntraClass(), "",Integer.toString(count));
-            my_data.setValue(temp.getIRIntraClass(), Integer.toString(count),"");
+            tableModel.addRow(row);
+
+            myData.setValue(temp.getIRIntraClass(), Integer.toString(count),"");
             labelsetStringByIR.add(temp.getName());
             
             count++;
-            lista1.remove(temp);
+            listImbalanced.remove(temp);
         }
         
-        jtable.setModel(table_model1);
+        jtable.setModel(tableModel);
         jtable.setBounds(jtable.getBounds());
           
-        //RESIZE COLUMNS! jtable
+        //Resize columns
         TableColumnModel tcm = jtable.getColumnModel();
             
         tcm.getColumn(0).setPreferredWidth(50);
         tcm.getColumn(1).setPreferredWidth(50);
             
         //graph
-        cp.setDataset(my_data);
+        cp.setDataset(myData);
           
         //get mean
         double sum=0;
@@ -6636,9 +6805,7 @@ public class RunApp extends javax.swing.JFrame {
         {
             sum+= labelsetsIRSorted[i].getIRIntraClass();
         }
-          sum = sum/labelsetsIRSorted.length;
-         
-        // add a labelled marker for the bid start price...
+        sum = sum/labelsetsIRSorted.length;
           
         Marker start = new ValueMarker(sum);
         start.setPaint(Color.blue);
@@ -6649,37 +6816,50 @@ public class RunApp extends javax.swing.JFrame {
         return jtable.getModel();
     }
 
-    private TableModel jchart_and_jtable_label_combination_freq(JTable jtable, MultiLabelInstances dataset ,Statistics stat, CategoryPlot cp ) throws Exception
+    /**
+     * Set frequency of labelsets
+     * 
+     * @param jtable Table
+     * @param dataset Dataset
+     * @param stat Statistics
+     * @param cp Plot
+     * @return Generated TableModel
+     * @throws Exception 
+     */
+    private TableModel labelsetsFrequencyTableModel(JTable jtable, 
+            MultiLabelInstances dataset, Statistics stat, CategoryPlot cp) 
+            throws Exception
     {
-        //graph
-        DefaultTableModel table_model1= new DefaultTableModel()
+        DefaultTableModel tableModel = new DefaultTableModel()
         {
+            @Override
             public boolean isCellEditable(int row, int column)
             {
-                return false;//This causes all cells to be not editable
+                //This causes all cells to be not editable
+                return false;
             }
         };
 
-        DefaultCategoryDataset my_data = new DefaultCategoryDataset();
+        DefaultCategoryDataset myData = new DefaultCategoryDataset();
                
-        table_model1.addColumn("Labelset Id");
-        table_model1.addColumn("# Examples");
-        table_model1.addColumn("Frequency");
+        tableModel.addColumn("Labelset Id");
+        tableModel.addColumn("# Examples");
+        tableModel.addColumn("Frequency");
                       
-        double freq ;
+        double freq;
         
         //Labelsets frequency
         HashMap<LabelSet,Integer> result = stat.labelCombCount();
         labelsetStringsByFreq = new ArrayList<>(result.size());
         
-        double sum=0.0;
+        double sum = 0.0;
         Set<LabelSet> keysets = result.keySet();
         
-        Object[] fila = new Object[3];
+        Object[] row = new Object[3];
         
-        int count=1;
+        int count = 1;
         
-        ArrayList<ImbalancedFeature> lista1 = new ArrayList();
+        ArrayList<ImbalancedFeature> listImbalanced = new ArrayList();
         ImbalancedFeature temp;
 
         int value;
@@ -6687,39 +6867,38 @@ public class RunApp extends javax.swing.JFrame {
         {
             value = result.get(current);
             temp = new ImbalancedFeature(current.toString(), value);
-            lista1.add(temp);
+            listImbalanced.add(temp);
         }      
         
-        labelsetsSorted = new ImbalancedFeature[lista1.size()];
-        labelsetsFrequency = new double[lista1.size()];
+        labelsetsSorted = new ImbalancedFeature[listImbalanced.size()];
+        labelsetsFrequency = new double[listImbalanced.size()];
          
-        while(!lista1.isEmpty())
+        while(!listImbalanced.isEmpty())
         {
-            temp = Utils.getMax(lista1);
+            temp = Utils.getMax(listImbalanced);
             labelsetsSorted[count-1]= temp;
             value = temp.getAppearances();            
             labelsetsFrequency[count-1]= value;                    
-            fila[0]=count;             
+            row[0]=count;             
             freq =value*1.0/dataset.getNumInstances();             
-            sum += freq;             
-            String value_freq =Double.toString(freq);             
-            fila[1]= value;             
-            //fila[2]= MetricUtils.truncateValue(value_freq,4);
-            fila[2] = MetricUtils.getValueFormatted(value_freq, 4);
-            table_model1.addRow(fila);
+            sum += freq;  
+            
+            String valueFreq = Double.toString(freq);             
+            row[1]= value;             
 
-            //String id = "ID: "+Integer.toString(count)+" , "+"Labelset: ";
+            row[2] = MetricUtils.getValueFormatted(valueFreq, 4);
+            tableModel.addRow(row);
+
             String id = "ID: " + Integer.toString(count);
-             
-            //my_data.setValue(freq, id + temp.getName(),"");
-            my_data.setValue(freq, id,"");
+
+            myData.setValue(freq, id,"");
             labelsetStringsByFreq.add(temp.getName());
              
             count++;
-            lista1.remove(temp);
+            listImbalanced.remove(temp);
         }
         
-        jtable.setModel(table_model1);
+        jtable.setModel(tableModel);
         jtable.setBounds(jtable.getBounds());
           
         TableColumnModel tcm = jtable.getColumnModel();
@@ -6728,9 +6907,8 @@ public class RunApp extends javax.swing.JFrame {
         tcm.getColumn(2).setPreferredWidth(60);
 
         //graph
-        cp.setDataset(my_data);
-          
-        // add a labelled marker for the bid start price...
+        cp.setDataset(myData);
+
         sum = sum/keysets.size();
         Marker start = new ValueMarker(sum);
         start.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
@@ -6741,71 +6919,73 @@ public class RunApp extends javax.swing.JFrame {
         return jtable.getModel();
     }
     
-    
-    
-    private void jtable_coefficient_values(MultiLabelInstances dataset ,ArrayList<AttributesPair> pairs,String tipo_tabla)
+    /**
+     * Fill the table with coefficient values
+     * 
+     * @param dataset
+     * @param pairs
+     * @param type 
+     */
+    private void fillTableCoefficients(MultiLabelInstances dataset, String type)
     {
-        double[][] pair_label_values;
+        double[][] pairLabelValues;
          
         //coocurrence values table
-        if(tipo_tabla.equals("coocurrence")) {
-            pair_label_values = ChartUtils.getCoocurrences(dataset);
-            coocurrenceCoefficients = pair_label_values;
+        if(type.equals("coocurrence")) {
+            pairLabelValues = ChartUtils.getCoocurrences(dataset);
+            coocurrenceCoefficients = pairLabelValues;
         }
         //heatmap values table
         else {
-            pair_label_values = getHeatMapCoefficients();
-            heatmapCoefficients = pair_label_values.clone();
+            pairLabelValues = getHeatMapCoefficients();
+            heatmapCoefficients = pairLabelValues.clone();
         }
 
-        //-----------------------------------------------------------------------------------
+        /**     **/
         
-        data = new Object[pair_label_values.length][pair_label_values.length+1];
+        data = new Object[pairLabelValues.length][pairLabelValues.length+1];
         column = new Object[data.length+1];
          
-        if(tipo_tabla.equals("coocurrence")) {
-            for(int num_fila=0;  num_fila< pair_label_values.length;num_fila++)
+        if(type.equals("coocurrence")) {
+            for(int i=0;  i<pairLabelValues.length;i++)
             {            
-                for(int num_col=0; num_col < pair_label_values.length; num_col++){
+                for(int j=0; j<pairLabelValues.length; j++){
                     
-                    if(num_col == 0){
-                        data[num_fila][num_col] = dataset.getLabelNames()[num_fila];
+                    if(j == 0){
+                        data[i][j] = dataset.getLabelNames()[i];
                     }
-                    else if(num_fila == num_col-1){
-                        data[num_fila][num_col] = "";
+                    else if(i == (j-1)){
+                        data[i][j] = "";
                     }
-                    else if(num_col > num_fila){
-                        data[num_fila][num_col] = "";
+                    else if(j > i){
+                        data[i][j] = "";
                     }
                     else{             
-                        if(pair_label_values[num_col-1][num_fila] <= 0.0){
-                            data[num_fila][num_col] = "";
+                        if(pairLabelValues[j-1][i] <= 0.0){
+                            data[i][j] = "";
                         }
                         else{
-                            data[num_fila][num_col] = (int) pair_label_values[num_col-1][num_fila];
+                            data[i][j] = (int) pairLabelValues[j-1][i];
                         }
                     }
                 }
             }
         }
         else{
-            for(int num_fila=0;  num_fila< pair_label_values.length;num_fila++)
+            for(int i=0;  i<pairLabelValues.length;i++)
             {
-                for(int num_col=0; num_col < pair_label_values.length+1; num_col++){
+                for(int j=0; j<pairLabelValues.length+1; j++){
                     
-                    if(num_col == 0){
-                        data[num_fila][num_col] = dataset.getLabelNames()[num_fila];
+                    if(j == 0){
+                        data[i][j] = dataset.getLabelNames()[i];
                     }
-                    //else if(num_fila == num_col-1){
-                     //   data[num_fila][num_col] = "---";
-                   // }
                     else{
-                        if(pair_label_values[num_col-1][num_fila] <= 0.0){
-                            data[num_fila][num_col] = "";
+                        if(pairLabelValues[j-1][i] <= 0.0){
+                            data[i][j] = "";
                         }
                         else{
                             NumberFormat formatter = new DecimalFormat("#0.000"); 
-                            data[num_fila][num_col] = formatter.format(pair_label_values[num_col-1][num_fila]).replace(",", ".");
+                            data[i][j] = formatter.format(pairLabelValues[j-1][i]).replace(",", ".");
                         }
                     }
                 }
@@ -6821,14 +7001,14 @@ public class RunApp extends javax.swing.JFrame {
                 column[i]=(dataset.getLabelNames()[i-1]);
             }
         } 
-          
+
         AbstractTableModel1 fixedModel = new AbstractTableModel1(data, column);
         AbstractTableModel2 model = new AbstractTableModel2(data, column);   
         
-        JTable temp,fixedTable_temp;
+        JTable temp, fixedTable_temp;
         JPanel jpanel_temp;
        
-        if(tipo_tabla.equals("coocurrence")){
+        if(type.equals("coocurrence")){
             temp=jTableCoocurrences; 
             jpanel_temp=panelCoOcurrenceValues; 
             fixedTable_temp=fixedTableCoocurrences;
@@ -6858,21 +7038,30 @@ public class RunApp extends javax.swing.JFrame {
         jpanel_temp.add(scroll, BorderLayout.CENTER, 0);
     }
     
-    private void jtable_chi_phi_coefficient(MultiLabelInstances dataset )
+    /**
+     * Fill the table with Chi and Phi coefficients
+     * 
+     * @param dataset Multi-label dataset
+     */
+    private void fillTableChiPhiCoefficients(MultiLabelInstances dataset)
     {
         chiPhiCoefficients = ChartUtils.getChiPhiCoefficients(dataset);
         data = new Object[chiPhiCoefficients.length][chiPhiCoefficients.length+1];        
         column = new Object[data.length+1];
                           
-        for(int num_fila=0;  num_fila< chiPhiCoefficients.length;num_fila++)
+        for(int i=0; i< chiPhiCoefficients.length; i++)
         {            
-            data[num_fila]  = Utils.getValuesByRow(num_fila, chiPhiCoefficients,dataset.getLabelNames()[num_fila]);
+            data[i] = Utils.getValuesByRow(i, chiPhiCoefficients,dataset.getLabelNames()[i]);
         }
         
-        for(int i = 0; i< column.length;i++)//se le agrega 1 pq realmente se emieza en 1 y no en 0.
+        for(int i=0; i<column.length; i++)
         {
-            if(i==0) column[i]="Labels"; //table_model1.addColumn("Labels");
-            else column[i]=(dataset.getLabelNames()[i-1]);
+            if(i==0) {
+                column[i]="Labels";
+            }
+            else {
+                column[i]=(dataset.getLabelNames()[i-1]);
+            }
         }    
      
         AbstractTableModel1 fixedModel = new AbstractTableModel1(data, column);
@@ -6881,7 +7070,6 @@ public class RunApp extends javax.swing.JFrame {
         fixedTableChiPhi.setModel(fixedModel);
         jTableChiPhi.setModel(model);
         
-      
         JScrollPane scroll = new JScrollPane(jTableChiPhi);
         JViewport viewport = new JViewport();
         viewport.setView(fixedTableChiPhi);
@@ -6899,46 +7087,56 @@ public class RunApp extends javax.swing.JFrame {
             return; 
         }
         
-        panelChiPhi.remove(0); //una curiosa manera de resolver el problema
+        panelChiPhi.remove(0);
         panelChiPhi.add(scroll, BorderLayout.CENTER, 0); 
     }
   
-    private TableModel jtable_label_graph(JTable jtable, MultiLabelInstances dataset )
+    /**
+     * Generate TableModel for label frequency
+     * 
+     * @param jtable Table
+     * @param dataset Multi-label dataset
+     * @return Generated TableModel
+     */
+    private TableModel labelFrequencyTableModel(JTable jtable, 
+            MultiLabelInstances dataset)
     {
-        DefaultTableModel table_model1= new DefaultTableModel()
+        DefaultTableModel tableModel = new DefaultTableModel()
         {
+            @Override
             public boolean isCellEditable(int row, int column)
             {
-                return false;//This causes all cells to be not editable
+                //This causes all cells to be not editable
+                return false;
             }
         };
 
-        table_model1.addColumn("Label");
-        table_model1.addColumn("# Examples");
-        table_model1.addColumn("Frequency");
+        tableModel.addColumn("Label");
+        tableModel.addColumn("# Examples");
+        tableModel.addColumn("Frequency");
 
-        Object[] fila = new Object[3];
+        Object[] row = new Object[3];
         
         ImbalancedFeature current;
-        double freq ;
+        double freq;
         String truncate;
 
         for(int i=0;i<dataset.getNumLabels();i++)
         {
             current = labelAppearances[i];
             
-            fila[0]=current.getName();
+            row[0]=current.getName();
             freq =current.getAppearances()*1.0/dataset.getNumInstances();
 
-            fila[1]= current.getAppearances();
+            row[1]= current.getAppearances();
             
             truncate = Double.toString(freq);
-            fila[2]= MetricUtils.truncateValue(truncate, 4);
+            row[2]= MetricUtils.truncateValue(truncate, 4);
 
-            table_model1.addRow(fila);
+            tableModel.addRow(row);
         }
         
-        jtable.setModel(table_model1);
+        jtable.setModel(tableModel);
 
         TableColumnModel tcm = jtable.getColumnModel();
             
@@ -6949,140 +7147,107 @@ public class RunApp extends javax.swing.JFrame {
         return jtable.getModel();
     }
     
-    private TableModel jtable_attributes(JTable jtable, MultiLabelInstances dataset )
+    /**
+     * Generates TableModel for attributes
+     * 
+     * @param jtable Table
+     * @param dataset Multi-label dataset
+     * @return Generated TableModel
+     */
+    private TableModel attributesTableModel(JTable jtable, 
+            MultiLabelInstances dataset)
     {
-        DefaultTableModel table_model1= new DefaultTableModel()
+        DefaultTableModel tableModel = new DefaultTableModel()
         {
+            @Override
             public boolean isCellEditable(int row, int column)
             {
-                return false;//This causes all cells to be not editable
+                //This causes all cells to be not editable
+                return false;
             }
         };
                
-        table_model1.addColumn("Attribute");
+        tableModel.addColumn("Attribute");
 
-        Object[] fila = new Object[1];
+        Object[] row = new Object[1];
         
-        Instances instancias = dataset.getDataSet();
+        Instances instances = dataset.getDataSet();
         
-        int num_atributos= instancias.numAttributes();
-        int numero_etiquetas = dataset.getNumLabels();
+        int numLabels = dataset.getNumLabels();
         
-        int cant_attr =num_atributos -numero_etiquetas;
+        int numAttributes = instances.numAttributes() -numLabels;
          
         Attribute att;
-        for (int i=0;i<cant_attr;i++) 
+        for (int i=0;i<numAttributes;i++) 
         {
-            att = instancias.attribute(i);
+            att = instances.attribute(i);
             if(att.isNumeric())
             {
-                fila[0]= att.name();
-                table_model1.addRow(fila);
+                row[0]= att.name();
+                tableModel.addRow(row);
             }
-            
         }
         
-        jtable.setModel(table_model1);
+        jtable.setModel(tableModel);
 
         return jtable.getModel();
     }
     
-    
-    private TableModel jtable_labelBox(JTable jtable, MultiLabelInstances dataset)
+    /**
+     * Generates TableModel for Box Diagrams
+     * 
+     * @param jtable Table
+     * @param dataset Multi-label dataset
+     * @return Generated TableModel
+     */
+    private TableModel boxplotTableModel(JTable jtable)
     {
-        DefaultTableModel table_model1= new DefaultTableModel()
+        DefaultTableModel tableModel = new DefaultTableModel()
         {
+            @Override
             public boolean isCellEditable(int row, int column)
             {
-                return false;//This causes all cells to be not editable
+                //This causes all cells to be not editable
+                return false;
             }
         };
                
-        table_model1.addColumn("Diagram");
+        tableModel.addColumn("Diagram");
 
-        Object[] fila = new Object[1];
+        Object[] row = new Object[1];
         
-        fila[0] = "#Examples per label";
-        table_model1.addRow(fila);
-        fila[0] = "#Examples per labelset";
-        table_model1.addRow(fila);       
+        row[0] = "#Examples per label";
+        tableModel.addRow(row);
+        row[0] = "#Examples per labelset";
+        tableModel.addRow(row);       
         
-     
-        jtable.setModel(table_model1);
+        jtable.setModel(tableModel);
 
         return jtable.getModel();
     }
     
-    private TableModel jtable_ir_per_label_intra_class(JTable jtable)
+    /**
+     * Generates TableModel for IR intra class
+     * 
+     * @param jtable
+     * @return 
+     */
+    private TableModel irIntraClassTableModel(JTable jtable)
     {
-        DefaultTableModel table_model1= new DefaultTableModel()
+        DefaultTableModel tableModel = new DefaultTableModel()
         {
+            @Override
             public boolean isCellEditable(int row, int column)
             {
-                return false;//This causes all cells to be not editable
+                //This causes all cells to be not editable
+                return false;
             }
         };
                
-        table_model1.addColumn("Label id");
-        table_model1.addColumn("# Labels");
-        table_model1.addColumn("IR");
+        tableModel.addColumn("Label");
+        tableModel.addColumn("IR");
         
-        Object[] fila = new Object[3];
-        double[] visitados = new  double[imbalancedLabels.length];
-        int cant_veces,id=1;
-        String truncate;
-        double current;
-        
-        // = new int [imbalancedLabels.length];
-        //id_x_IR = new double [imbalancedLabels.length];
-        
-        for(int i=0; i< imbalancedLabels.length ; i++)
-        {
-            current= (imbalancedLabels[i].getIRIntraClass());
-            truncate = Double.toString(current);
-            
-            cant_veces=  MetricUtils.getNumLabelsByIR(imbalancedLabels, visitados,current );
-
-            if(cant_veces ==-1) continue;
-            
-            fila[0]=id;          
-            fila[1]= cant_veces;
-            fila[2]= MetricUtils.truncateValue(truncate, 5);
-                        
-            table_model1.addRow(fila);
-
-            //[id-1]=cant_veces;
-            //id_x_IR[id-1]=current;
-            visitados[id-1]=current;
-
-            id++;
-        }
-
-        jtable.setModel(table_model1);
-        
-        TableColumnModel tcm = jtable.getColumnModel();
-        tcm.getColumn(0).setPreferredWidth(80);
-        tcm.getColumn(1).setPreferredWidth(50);
-        tcm.getColumn(2).setPreferredWidth(60);
-            
-        return jtable.getModel();
-    }
-    
-    
-    private TableModel jtable_ir_per_label_intra_class_only(JTable jtable)
-    {
-        DefaultTableModel table_model1= new DefaultTableModel()
-        {
-            public boolean isCellEditable(int row, int column)
-            {
-                return false;//This causes all cells to be not editable
-            }
-        };
-               
-        table_model1.addColumn("Label");
-        table_model1.addColumn("IR");
-        
-        Object[] fila = new Object[2];
+        Object[] row = new Object[2];
 
         String truncate;
 
@@ -7090,14 +7255,13 @@ public class RunApp extends javax.swing.JFrame {
         {                       
             truncate = Double.toString(imbalancedLabels[i].getIRIntraClass());
             
-            fila[0]= imbalancedLabels[i].getName();          
-            //fila[1]=MetricUtils.truncateValue(truncate, 5);
-            fila[1] = MetricUtils.getValueFormatted(truncate, 3);
+            row[0] = imbalancedLabels[i].getName();          
+            row[1] = MetricUtils.getValueFormatted(truncate, 3);
       
-            table_model1.addRow(fila);
+            tableModel.addRow(row);
         }
 
-        jtable.setModel(table_model1);
+        jtable.setModel(tableModel);
 
         TableColumnModel tcm = jtable.getColumnModel();
             
@@ -7107,38 +7271,45 @@ public class RunApp extends javax.swing.JFrame {
         return jtable.getModel();
     }
     
-    private TableModel jtable_ir_per_label_inter_class_only(JTable jtable)
+    /**
+     * Generates TableModel for IR inter class
+     * 
+     * @param jtable
+     * @return 
+     */
+    private TableModel irInterClassTableModel(JTable jtable)
     {
-        DefaultTableModel table_model1= new DefaultTableModel()
+        DefaultTableModel tableModel= new DefaultTableModel()
         {
+            @Override
             public boolean isCellEditable(int row, int column)
             {
-                return false;//This causes all cells to be not editable
+                //This causes all cells to be not editable
+                return false;
             }
         };
                
-        table_model1.addColumn("Label");
-        table_model1.addColumn("IR");
+        tableModel.addColumn("Label");
+        tableModel.addColumn("IR");
         
-        Object[] fila = new Object[2];
+        Object[] row = new Object[2];
 
         String truncate;
  
-        IRInterClass= MetricUtils.getIRInterClassValues(labelAppearances); //calcula el ir inter class
+        IRInterClass = MetricUtils.getIRInterClassValues(labelAppearances);
         
-          int temp = IRInterClass.length-1;
+        int temp = IRInterClass.length-1;
         for(int i=temp; i>=0; i--)
         {                  
             truncate = Double.toString(IRInterClass[i]);
             
-            fila[0]= labelAppearances[i].getName();          
-            //fila[1]=MetricUtils.truncateValue(truncate, 5);
-            fila[1] = MetricUtils.getValueFormatted(truncate, 3);
+            row[0]= labelAppearances[i].getName();          
+            row[1] = MetricUtils.getValueFormatted(truncate, 3);
                         
-            table_model1.addRow(fila);
+            tableModel.addRow(row);
         }
 
-        jtable.setModel(table_model1);
+        jtable.setModel(tableModel);
         
         TableColumnModel tcm = jtable.getColumnModel();
         tcm.getColumn(0).setPreferredWidth(80);
@@ -7147,93 +7318,33 @@ public class RunApp extends javax.swing.JFrame {
         return jtable.getModel();
     }
   
-    private TableModel jtable_ir_per_label_inter_class(JTable jtable)
+    /**
+     * Generates TableModel for imbalanced data
+     * 
+     * @param jtable Table
+     * @param dataset Multi-label dataset
+     * @return Generated TableModel
+     */
+    private TableModel imbalancedTableModel(JTable jtable, 
+            MultiLabelInstances dataset)
     {
-        DefaultTableModel table_model1= new DefaultTableModel()
+        DefaultTableModel tableModel = new DefaultTableModel()
         {
+            @Override
             public boolean isCellEditable(int row, int column)
             {
-                return false;//This causes all cells to be not editable
+                //This causes all cells to be not editable
+                return false;
             }
         };
                
-        table_model1.addColumn("Label id");
-        table_model1.addColumn("# Labels");
-        table_model1.addColumn("IR");
-        
-        Object[] fila = new Object[3];
-        double[] visitados = new  double[labelAppearances.length];
-        int cant_veces,id=1;
-        String truncate;
-        double current;
-        
-        idByNLabelsInterClass = new int [labelAppearances.length];
-        idByIRInterClass = new double [labelAppearances.length];
-        
-        double[] IR_inter_class= MetricUtils.getIRInterClassValues(labelAppearances);
-        
-        for(int i=0; i< labelAppearances.length ; i++)
-        {
-            current= IR_inter_class[i];
-            
-            cant_veces=  MetricUtils.getNumLabelsByIR(IR_inter_class, visitados,current ); //calcula la cantidad de veces que aparece un mismo ir inter class
-
-            if(cant_veces ==-1) continue;
-            
-            idByNLabelsInterClass[id-1]=cant_veces;
-            idByIRInterClass[id-1]=current;
-            visitados[id-1]=current;
-
-            id++;
-        }
-        
-        irTimes = new ContainerIRInterClass(idByNLabelsInterClass, idByIRInterClass);
-        irTimes.sortByIR();
-        
-        idByNLabelsInterClass = irTimes.getIdByFrequency();
-        idByIRInterClass = irTimes.getIdByIR();
-
-        for(int i=0; i<idByIRInterClass.length; i++)
-        {
-            if(idByNLabelsInterClass[i] ==0) continue;
-                        
-            truncate = Double.toString(idByIRInterClass[i]);
-            
-            fila[0]= i+1;          
-            fila[1]= idByNLabelsInterClass[i];
-            fila[2]= MetricUtils.truncateValue(truncate, 5);
-                        
-            table_model1.addRow(fila);
-        }
-
-        jtable.setModel(table_model1);
-        
-        TableColumnModel tcm = jtable.getColumnModel();
-            
-        tcm.getColumn(0).setPreferredWidth(80);
-        tcm.getColumn(1).setPreferredWidth(50);
-        tcm.getColumn(2).setPreferredWidth(60);
-            
-        return jtable.getModel();
-    }
-
-    private TableModel jtable_imbalanced(JTable jtable, MultiLabelInstances dataset )
-    {
-        DefaultTableModel table_model1= new DefaultTableModel()
-        {
-            public boolean isCellEditable(int row, int column)
-            {
-                return false;//This causes all cells to be not editable
-            }
-        };
-               
-        table_model1.addColumn("Label");
-        table_model1.addColumn("IR intra class");
-        table_model1.addColumn("IR inter class");
-        table_model1.addColumn("STDEV intra class");
+        tableModel.addColumn("Label");
+        tableModel.addColumn("IR intra class");
+        tableModel.addColumn("IR inter class");
+        tableModel.addColumn("STDEV intra class");
         imbalancedLabels = MetricUtils.sortImbalancedDataByIRIntraClass(imbalancedLabels);
 
-        Object[] fila = new Object[4];
+        Object[] row = new Object[4];
         double std;
         String truncate;
         
@@ -7243,21 +7354,21 @@ public class RunApp extends javax.swing.JFrame {
         {
             current = imbalancedLabels[i];
             
-            fila[0]=current.getName();          
+            row[0]=current.getName();          
             
             truncate = Double.toString(current.getIRIntraClass());            
-            fila[1]= MetricUtils.truncateValue(truncate, 5);
+            row[1]= MetricUtils.truncateValue(truncate, 5);
             
             truncate = Double.toString(current.getIRInterClass());            
-            fila[2]= MetricUtils.truncateValue(truncate, 5);
+            row[2]= MetricUtils.truncateValue(truncate, 5);
             
             std = Math.sqrt(current.getVariance());
-            fila[3]= MetricUtils.truncateValue(std,4);
+            row[3]= MetricUtils.truncateValue(std,4);
             
-            table_model1.addRow(fila);
+            tableModel.addRow(row);
         }
         
-        jtable.setModel(table_model1);
+        jtable.setModel(tableModel);
         
         TableColumnModel tcm = jtable.getColumnModel();
         tcm.getColumn(0).setPreferredWidth(100);
@@ -7268,48 +7379,56 @@ public class RunApp extends javax.swing.JFrame {
         return jtable.getModel();
     }
 
-    private TableModel jtable_lablelsxExamples(JTable jtable , HashMap<Integer,Integer> labels_x_example)
+    /**
+     * Generates TableModel for labels per example values
+     * 
+     * @param jtable Table
+     * @param labelsPerExample Number of labels per example
+     * @return Generated TableModel
+     */
+    private TableModel labelsPerExampleTableModel(JTable jtable, 
+            HashMap<Integer,Integer> labelsPerExample)
     {
-        DefaultTableModel table_model1= new DefaultTableModel()
+        DefaultTableModel tableModel = new DefaultTableModel()
         {
+            @Override
             public boolean isCellEditable(int row, int column)
             {
-                return false;//This causes all cells to be not editable
+                //This causes all cells to be not editable
+                return false;
             }
         };
                
-        table_model1.addColumn("# Labels");
-        table_model1.addColumn("# Examples");
-        table_model1.addColumn("Frequency");
+        tableModel.addColumn("# Labels");
+        tableModel.addColumn("# Examples");
+        tableModel.addColumn("Frequency");
 
-        Object[] fila = new Object[3];
+        Object[] row = new Object[3];
        
         double freq ;
-        int freq_current;
+        int freqCurrent;
         String truncate;
 
-        int max = Utils.maxKey(labels_x_example);
-				 
-				            
+        int max = Utils.maxKey(labelsPerExample);
+				 			            
 	for(int i=0; i<=max ; i++)
         {
-            freq_current=0;
-            if(labels_x_example.get(i)!=null){
-                freq_current=labels_x_example.get(i);
+            freqCurrent = 0;
+            if(labelsPerExample.get(i)!=null){
+                freqCurrent=labelsPerExample.get(i);
             }
                
-            freq= freq_current*1.0/dataset.getNumInstances();
+            freq= freqCurrent*1.0/dataset.getNumInstances();
             
-            fila[0]= i;
-            fila[1]=freq_current;
+            row[0]= i;
+            row[1]=freqCurrent;
             truncate = Double.toString(freq);
-            fila[2] = MetricUtils.getValueFormatted(truncate, 4);
-            //fila[2]=MetricUtils.truncateValue(truncate, 5);
-                
-            table_model1.addRow(fila);
+            row[2] = MetricUtils.getValueFormatted(truncate, 4);
+            
+            tableModel.addRow(row);
         }
         
-        jtable.setModel(table_model1);
+        jtable.setModel(tableModel);
         
         TableColumnModel tcm = jtable.getColumnModel();
         tcm.getColumn(0).setPreferredWidth(80);
@@ -7319,45 +7438,52 @@ public class RunApp extends javax.swing.JFrame {
         return jtable.getModel();
     }
 
-    private TableModel jtable_frequency(JTable jtable, MultiLabelInstances dataset )
+    /**
+     * Generates TableModel for frequency values
+     * 
+     * @param jtable Table
+     * @param dataset Multi-label dataset
+     * @return Generated TableModel
+     */
+    private TableModel frequencyTableModel(JTable jtable, 
+            MultiLabelInstances dataset)
     {
-        DefaultTableModel table_model1= new DefaultTableModel()
+        DefaultTableModel tableModel = new DefaultTableModel()
         {
+            @Override
             public boolean isCellEditable(int row, int column)
             {
-                return false;//This causes all cells to be not editable
+                //This causes all cells to be not editable
+                return false;
             }
         };
       
-        table_model1.addColumn("Label");
-        table_model1.addColumn("# Examples");
-        table_model1.addColumn("Frequency");
+        tableModel.addColumn("Label");
+        tableModel.addColumn("# Examples");
+        tableModel.addColumn("Frequency");
         
-        Object[] fila = new Object[3];
+        Object[] row = new Object[3];
         
         ImbalancedFeature current;
-        double freq ;
+        double freq;
         String truncate;
 
         for(int i=0;i<dataset.getNumLabels();i++)
         {
             current = labelAppearances[i];
             
-            
-            
-            fila[0]=current.getName();
+            row[0]=current.getName();
             freq =current.getAppearances()*1.0/dataset.getNumInstances();
             
-            fila[1]= current.getAppearances(); //numero de ejemplos
+            row[1]= current.getAppearances();
             
             truncate = Double.toString(freq);
-            //fila[2]= MetricUtils.truncateValue(truncate, 5);
-            fila[2] = MetricUtils.getValueFormatted(truncate, 4);
+            row[2] = MetricUtils.getValueFormatted(truncate, 4);
 
-            table_model1.addRow(fila);
+            tableModel.addRow(row);
         }
         
-        jtable.setModel(table_model1);
+        jtable.setModel(tableModel);
 
         TableColumnModel tcm = jtable.getColumnModel();
         tcm.getColumn(0).setPreferredWidth(80);
@@ -7367,10 +7493,20 @@ public class RunApp extends javax.swing.JFrame {
         return jtable.getModel();
     }
      
-    public void create_jtable_metric_principal(JTable table,JPanel jpanel , Object rowData[][], int posx, int posy, int width,int height)
-    {
-        //table = setMetricsHelp(table);
-        
+    /**
+     * Create table of metrics for principal tab
+     * 
+     * @param table Table of metrics
+     * @param jpanel Panel
+     * @param rowData Cell values
+     * @param posx Pos X
+     * @param posy Pos Y
+     * @param width Width
+     * @param height Height
+     */
+    public void createJTableMetricsPrincipal(JTable table, JPanel jpanel, 
+            Object rowData[][], int posx, int posy, int width, int height)
+    {       
         TableModel model = new MetricsTableModel(rowData);
         
         table.setModel(model);
@@ -7399,16 +7535,20 @@ public class RunApp extends javax.swing.JFrame {
         jpanel.validate();
     }
      
+    /**
+     * Set help for metrics table
+     * 
+     * @param jtable Table
+     * @return Table with help
+     */
     public JTable setMetricsHelp(JTable jtable){
         jtable = new JTable(jtable.getModel()){
             @Override
             public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
                 Component c = super.prepareRenderer(renderer, row, column);
                 if (c instanceof JComponent) {
-                    //if(column == 0){
-                        JComponent jc = (JComponent) c;
-                        jc.setToolTipText(MetricUtils.getMetricTooltip(getValueAt(row, 0).toString()));
-                    //}
+                    JComponent jc = (JComponent) c;
+                    jc.setToolTipText(MetricUtils.getMetricTooltip(getValueAt(row, 0).toString()));
                 }
                 return c;
             }
@@ -7417,23 +7557,25 @@ public class RunApp extends javax.swing.JFrame {
         return jtable;
     }
     
-    
+    /**
+     * Set help for Chi and Phi 
+     * 
+     * @param jtable Table
+     * @return Table with help
+     */
     public JTable setChiPhiTableHelp(JTable jtable){
         jtable = new JTable(jtable.getModel()){
             @Override
             public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
                 Component c = super.prepareRenderer(renderer, row, column);
                 if (c instanceof JComponent) {
-                    //if(column == 0){
-                        JComponent jc = (JComponent) c;
-                        //jc.setToolTipText(getValueAt(1, 0).toString());
-                        if(row > column){
-                            jc.setToolTipText("Chi(" + getColumnName(row) + ", " + getColumnName(column) + ")");
-                        }
-                        else if(column > row){
-                            jc.setToolTipText("Phi(" + getColumnName(row) + ", " + getColumnName(column) + ")");
-                        }
-                    //}
+                    JComponent jc = (JComponent) c;
+                    if(row > column){
+                        jc.setToolTipText("Chi(" + getColumnName(row) + ", " + getColumnName(column) + ")");
+                    }
+                    else if(column > row){
+                        jc.setToolTipText("Phi(" + getColumnName(row) + ", " + getColumnName(column) + ")");
+                    }
                 }
                 return c;
             }
@@ -7442,23 +7584,25 @@ public class RunApp extends javax.swing.JFrame {
         return jtable;
     }
     
+    /**
+     * Set help for Co-ocurrence table
+     * 
+     * @param jtable Table
+     * @return Table with help
+     */
     public JTable setCoocurrenceTableHelp(JTable jtable){
         jtable = new JTable(jtable.getModel()){
             @Override
             public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
                 Component c = super.prepareRenderer(renderer, row, column);
                 if (c instanceof JComponent) {
-                    //if(column == 0){
-                        JComponent jc = (JComponent) c;
-                        //jc.setToolTipText(getValueAt(1, 0).toString());
-                        if(row > column){
-                            jc.setToolTipText("Coocurrence(" + getColumnName(row) + ", " + getColumnName(column) + ")");
-                        }
-                        else{
-                            jc.setToolTipText(null);
-                        }
-                        
-                    //}
+                    JComponent jc = (JComponent) c;
+                    if(row > column){
+                        jc.setToolTipText("Coocurrence(" + getColumnName(row) + ", " + getColumnName(column) + ")");
+                    }
+                    else{
+                        jc.setToolTipText(null);
+                    }
                 }
                 return c;
             }
@@ -7467,24 +7611,26 @@ public class RunApp extends javax.swing.JFrame {
         return jtable;
     }
     
+    /**
+     * Set help for heatmap table
+     * 
+     * @param jtable Table
+     * @return Table with help
+     */
     public JTable setHeatmapTableHelp(JTable jtable){
         jtable = new JTable(jtable.getModel()){
             @Override
             public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
                 Component c = super.prepareRenderer(renderer, row, column);
                 if (c instanceof JComponent) {
-                    //if(column == 0){
-                        JComponent jc = (JComponent) c;
-                        //jc.setToolTipText(getValueAt(1, 0).toString());
+                    JComponent jc = (JComponent) c;
                         
-                        if(column == row){
-                            jc.setToolTipText("P(" + getColumnName(row) + ")");
-                        }
-                        else{
-                            jc.setToolTipText("P(" + getColumnName(row) + " | " + getColumnName(column) + ")");
-                        }
-                        
-                    //}
+                    if(column == row){
+                        jc.setToolTipText("P(" + getColumnName(row) + ")");
+                    }
+                    else{
+                        jc.setToolTipText("P(" + getColumnName(row) + " | " + getColumnName(column) + ")");
+                    }
                 }
                 return c;
             }
@@ -7493,8 +7639,19 @@ public class RunApp extends javax.swing.JFrame {
         return jtable;
     }
     
-    
-    public void create_jtable_metric_multi(JTable table,JPanel jpanel , Object rowData[][], int posx, int posy, int width,int height)
+    /**
+     * Create metrics table for multiple datasets tab
+     * 
+     * @param table Table of metrics
+     * @param jpanel Panel
+     * @param rowData Cell values
+     * @param posx Position X
+     * @param posy Position Y
+     * @param width Width
+     * @param height Height
+     */
+    public void createJTableMetricsMultipleDatasets(JTable table, JPanel jpanel, 
+            Object rowData[][], int posx, int posy, int width, int height)
     {
         TableModel model = new MetricsTableModel(rowData, "multi");
         
@@ -7519,50 +7676,55 @@ public class RunApp extends javax.swing.JFrame {
         jpanel.validate();
     }
 
+    /**
+     * Get heatmap coefficients
+     * 
+     * @return Matrix with heatmap coefficients
+     */
     private double[][] getHeatMapCoefficients(){
          
-        ImbalancedFeature [] label_frenquency = MetricUtils.getImbalancedDataByAppearances(dataset);;
-        double [] label_frenquency_values = DataInfoUtils.getLabelAppearances(label_frenquency);
+        ImbalancedFeature [] labelsByFrequency = MetricUtils.getImbalancedDataByAppearances(dataset);;
+        double [] frequencies = DataInfoUtils.getLabelAppearances(labelsByFrequency);
          
         double [][] coeffs = new double[dataset.getNumLabels()][dataset.getNumLabels()];
          
         for(int i=0; i<dataset.getNumLabels(); i++){
             for(int j=0; j<dataset.getNumLabels(); j++){
                 
-                if(label_frenquency_values[j] <= 0){
+                if(frequencies[j] <= 0){
                     coeffs[i][j] = 0;
                 }
                 else if (i==j){
-                    coeffs[i][j] = label_frenquency_values[i] / dataset.getNumInstances();
+                    coeffs[i][j] = frequencies[i] / dataset.getNumInstances();
                 }
                 else{
                     if(coocurrenceCoefficients[i][j] > 0){
-                        coeffs[i][j] = coocurrenceCoefficients[i][j] / label_frenquency_values[j];
+                        coeffs[i][j] = coocurrenceCoefficients[i][j] / frequencies[j];
                     }
                     else{
                         if(coocurrenceCoefficients[j][i] > 0){
-                            coeffs[i][j] = coocurrenceCoefficients[j][i] / label_frenquency_values[j];
+                            coeffs[i][j] = coocurrenceCoefficients[j][i] / frequencies[j];
                         }
                         else{
                            coeffs[i][j] = 0; 
                         }
                     }
                 }
-                
-                
             }
         }
 
         return coeffs;
     }
 
+    /**
+     * Get top n related labels for heatmap
+     * 
+     * @param n Number of labels to select
+     * @return Selected label indices
+     */
     public int[] getTopRelatedHeatmap(int n){   
         
-        LabelsPairValue p = new LabelsPairValue();
-            
-        ArrayList<String> pares = new ArrayList<String>();
-            
-        ArrayList<LabelsPairValue> pairs = new ArrayList<LabelsPairValue>();
+        ArrayList<LabelsPairValue> pairs = new ArrayList<>();
         for(int i=0; i<heatmapCoefficients.length; i++){
             for(int j=0; j<heatmapCoefficients.length; j++){
                 if(heatmapCoefficients[i][j] > 0){
@@ -7575,7 +7737,7 @@ public class RunApp extends javax.swing.JFrame {
         int numLabels = n;
         int currentSelectedLabels = 0;
 
-        Vector<Integer> selectedLabels = new Vector<Integer>();
+        Vector<Integer> selectedLabels = new Vector<>();
 
         do{
             if(!selectedLabels.contains(pairs.get(0).label1)){
@@ -7595,7 +7757,7 @@ public class RunApp extends javax.swing.JFrame {
 
         int [] labelIndices = new int[n];
             
-        String s = new String();
+        String s;
 
         if(selectedLabels.size() < n){
             int[] selectedsFreq = new int[dataset.getNumLabels()];
@@ -7616,7 +7778,6 @@ public class RunApp extends javax.swing.JFrame {
         for(int i=0; i<selectedLabels.size(); i++){
             s = jTableHeatmap.getColumnName(selectedLabels.get(i));
             if(s != null){
-                pares.add(s);
                 labelIndices[i] = selectedLabels.get(i);
             }
         }
@@ -7624,11 +7785,10 @@ public class RunApp extends javax.swing.JFrame {
         return labelIndices;
     }
 
+    
     /**
      * @param args the command line arguments
      */
-    
-
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -7688,12 +7848,12 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JButton jButtonSaveDatasetsTrans;
     private javax.swing.JButton jButtonStartPreprocess;
     private javax.swing.JButton jButtonStartTrans;
-    private javax.swing.JComboBox jComboBox_BRFS_Comb;
-    private javax.swing.JComboBox jComboBox_BRFS_Norm;
-    private javax.swing.JComboBox jComboBox_BRFS_Out;
-    private javax.swing.JComboBox jComboBox_SaveFormat;
+    private javax.swing.JComboBox jComboBoxBRFSComb;
+    private javax.swing.JComboBox jComboBoxBRFSNorm;
+    private javax.swing.JComboBox jComboBoxBRFSOut;
+    private javax.swing.JComboBox jComboBoxSaveFormat;
     private javax.swing.JComboBox jComboBox_SaveFormat1;
-    private javax.swing.JLabel jLabelChiFi_text;
+    private javax.swing.JLabel jLabelChiFiText;
     private javax.swing.JLabel jLabelIR;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -7711,9 +7871,9 @@ public class RunApp extends javax.swing.JFrame {
     private javax.swing.JLabel labelAttributes;
     private javax.swing.JLabel labelAttributesValue;
     private javax.swing.JLabel labelBRFS;
-    private javax.swing.JLabel labelBRFS_Comb;
-    private javax.swing.JLabel labelBRFS_Norm;
-    private javax.swing.JLabel labelBRFS_Out;
+    private javax.swing.JLabel labelBRFSComb;
+    private javax.swing.JLabel labelBRFSNorm;
+    private javax.swing.JLabel labelBRFSOut;
     private javax.swing.JLabel labelBound;
     private javax.swing.JLabel labelBoundValue;
     private javax.swing.JLabel labelCardinality;
