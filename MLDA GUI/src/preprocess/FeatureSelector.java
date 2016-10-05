@@ -39,6 +39,14 @@ public class FeatureSelector {
         this.nFeatures = nFeatures;
     }
     
+    /**
+     * Select features from dataset by BR method
+     * 
+     * @param combination Combination type
+     * @param normalization Normalization type
+     * @param output Output type
+     * @return Feature-selected dataset
+     */
     public MultiLabelInstances select(String combination, String normalization, String output){
         
         MultiLabelInstances modifiedDataset = null;
@@ -59,9 +67,7 @@ public class FeatureSelector {
             int[] toKeep = new int[nFeatures + dataset.getNumLabels()];
             System.arraycopy(result, 0, toKeep, 0, nFeatures);
             int[] labelIndices = dataset.getLabelIndices();
-            for (int i = 0; i < dataset.getNumLabels(); i++) {
-                toKeep[nFeatures + i] = labelIndices[i];
-            }
+            System.arraycopy(labelIndices, 0, toKeep, nFeatures, dataset.getNumLabels());
             
             Remove filterRemove = new Remove();
             filterRemove.setAttributeIndicesArray(toKeep);
@@ -77,7 +83,11 @@ public class FeatureSelector {
         return modifiedDataset;
     }
     
-    
+    /**
+     * Randomly feature selection
+     * 
+     * @return Preprocessed dataset
+     */
     public MultiLabelInstances randomSelect(){
         
         MultiLabelInstances modifiedDataset = null;
@@ -117,7 +127,12 @@ public class FeatureSelector {
         return modifiedDataset;
     }
     
-    
+    /**
+     * Generates new dataset with selected attributes
+     * 
+     * @param indicesToKeep Indices of the attributes to keep in the new dataset
+     * @return New multi-label dataset
+     */
     public MultiLabelInstances keepAttributes(int [] indicesToKeep){
         
         MultiLabelInstances modifiedDataset = null;

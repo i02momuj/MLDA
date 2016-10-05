@@ -24,6 +24,68 @@ import static utils.Utils.getMax;
 import static utils.Utils.getMin;
 import weka.core.Attribute;
 import weka.core.Instances;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
+import static utils.Utils.getMax;
+import static utils.Utils.getMin;
 
 /**
  * 
@@ -31,7 +93,13 @@ import weka.core.Instances;
  */
 public class DataIOUtils {
     
-    public static void writeXMLFile(PrintWriter wr , String[] labels)
+    /**
+     * Write mulan XML file
+     * 
+     * @param wr PrintWriter
+     * @param labels Label names
+     */
+    public static void writeXMLFile(PrintWriter wr, String[] labels)
     {
         String line = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
     
@@ -55,7 +123,12 @@ public class DataIOUtils {
         wr.write(System.getProperty("line.separator"));
     }
     
-    
+    /**
+     * Chek if the dataset is in meka format
+     * 
+     * @param relationName Line of @relation
+     * @return True if it is in meka format and false otherwise
+     */
     public static boolean isMeka(String relationName)
     {
         String type = "-C";
@@ -63,7 +136,12 @@ public class DataIOUtils {
         return relationName.contains(type);
     }
     
-    
+    /**
+     * Obtain number of label from meka @relation line
+     * 
+     * @param line @relation line
+     * @return Number of labels
+     */
     public static int getLabelsFromARFF(String line)
     {
         int labels;
@@ -81,7 +159,12 @@ public class DataIOUtils {
         return labels;
     }
     
-    
+    /**
+     * Obtain label name from @attribute line
+     * 
+     * @param attributeLine @attribute line
+     * @return Label name
+     */
     public static String getLabelNameFromLine(String attributeLine)
     {
         String result = null;
@@ -108,12 +191,17 @@ public class DataIOUtils {
         return result;
     }
     
-        
-    public static String getXMLString( String arff_text)
+    /**
+     * Obtain Xml string
+     * 
+     * @param arffText
+     * @return 
+     */
+    public static String getXMLString(String arffText)
     {
         String result = new String();
 
-        String [] words = arff_text.split("-t");
+        String [] words = arffText.split("-t");
         if(words.length > 1){
             for(int i=0; i<words.length-1; i++){
                 if(i == (words.length-2)){
@@ -126,14 +214,21 @@ public class DataIOUtils {
             result = result.substring(0, result.length()) + ".xml";
         }
         else{
-            result = arff_text.substring(0,arff_text.length()-5)+".xml";
+            result = arffText.substring(0,arffText.length()-5)+".xml";
         }
         
         return result;
     }
     
-    
-    public static void saveXMLFile(PrintWriter wr, MultiLabelInstances dataset) throws IOException
+    /**
+     * Save mulan xml file
+     * 
+     * @param wr PrintWriter
+     * @param dataset Multi-label dataset
+     * @throws IOException 
+     */
+    public static void saveXMLFile(PrintWriter wr, MultiLabelInstances dataset) 
+            throws IOException
     {       
         wr.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
         wr.write(System.getProperty("line.separator")); 
@@ -151,138 +246,210 @@ public class DataIOUtils {
         wr.write(System.getProperty("line.separator"));    
     }
     
-    
-    public static void saveDataset(ArrayList<MultiLabelInstances> dataset, 
+    /**
+     * Save datasets
+     * 
+     * @param datasets List of datasets
+     * @param path Path to store
+     * @param dataName Dataset name
+     * @param type Type
+     * @throws IOException 
+     */
+    public static void saveDatasets(ArrayList<MultiLabelInstances> datasets, 
             String path, String dataName, String type) throws IOException
     {
-        BufferedWriter  bw_current;
+        BufferedWriter  bwCurrent;
         PrintWriter wr;        
               
-        int index=1;
+        int index = 1;
         String currentPath;
 
-        for(MultiLabelInstances dataset_current : dataset)
+        for(MultiLabelInstances currentData : datasets)
         {
-            currentPath = path + "/"+dataName+type+index+".arff";
+            currentPath = path + "/" + dataName + type + index + ".arff";
 
-            bw_current = new BufferedWriter(new FileWriter(currentPath));
-            wr = new PrintWriter(bw_current);
+            bwCurrent = new BufferedWriter(new FileWriter(currentPath));
+            wr = new PrintWriter(bwCurrent);
 
-            saveDataset(wr,dataset_current);
+            saveDataset(wr,currentData);
 
             wr.close();
-            bw_current.close();
+            bwCurrent.close();
 
             index++;
         }
         
     }
     
-    
-    public static void saveMVDataset(ArrayList<MultiLabelInstances> dataset, 
+    /**
+     * Save multi-view multi-label datasets
+     * 
+     * @param datasets List of datasets
+     * @param path Path to store
+     * @param dataName Dataset name
+     * @param type Type
+     * @throws IOException 
+     */
+    public static void saveMVDatasets(ArrayList<MultiLabelInstances> datasets, 
             String path, String dataName, String type) throws IOException
     {
-        BufferedWriter  bw_current;
+        BufferedWriter  bwCurrent;
         PrintWriter wr;        
 
         int index = 1;
         String currentPath;
 
-        for(MultiLabelInstances dataset_current : dataset)
+        for(MultiLabelInstances currentData : datasets)
         {
-            currentPath = path + "/"+dataName+type+index+".arff";
+            currentPath = path + "/"+ dataName + type + index + ".arff";
 
-            bw_current = new BufferedWriter(new FileWriter(currentPath));
-            wr = new PrintWriter(bw_current);
+            bwCurrent = new BufferedWriter(new FileWriter(currentPath));
+            wr = new PrintWriter(bwCurrent);
 
-            saveDataset(wr,dataset_current, dataName);
+            saveDataset(wr, currentData, dataName);
 
             wr.close();
-            bw_current.close();
+            bwCurrent.close();
 
             index++;
         }
     }
     
-    
-    public static void saveMekaDataset(ArrayList<MultiLabelInstances> dataset, 
-            String path, String dataName, String type, String relationName) throws IOException
+    /**
+     * Save meka datasets
+     * 
+     * @param datasets List of datasets
+     * @param path Path to store
+     * @param dataName Dataset name
+     * @param type Type
+     * @param relationName Name of the relation
+     * @throws IOException 
+     */
+    public static void saveMekaDatasets(ArrayList<MultiLabelInstances> datasets, 
+            String path, String dataName, String type, String relationName) 
+            throws IOException
     {
-        BufferedWriter  bw_current;
+        BufferedWriter  bwCurrent;
         PrintWriter wr;        
 
         int index = 1;
         String currentPath;
 
-        for(MultiLabelInstances dataset_current : dataset)
+        for(MultiLabelInstances currentData : datasets)
         {
-            currentPath = path + "/"+dataName+"-"+type+index+".arff";
+            currentPath = path + "/" + dataName + "-" + type + index + ".arff";
 
-            bw_current = new BufferedWriter(new FileWriter(currentPath));
-            wr = new PrintWriter(bw_current);
+            bwCurrent = new BufferedWriter(new FileWriter(currentPath));
+            wr = new PrintWriter(bwCurrent);
 
-            saveMekaDataset(wr,dataset_current);
+            saveMekaDataset(wr, currentData);
 
             wr.close();
-            bw_current.close();
+            bwCurrent.close();
 
             index++;
         }
     }
     
-    
-    public static void saveMekaDatasetNoViews(ArrayList<MultiLabelInstances> dataset, 
-            String path, String dataset_name, String type, String relationName) throws IOException
+    /**
+     * Save meka datasets with no views
+     * 
+     * @param datasets List of datasets
+     * @param path Path to store
+     * @param dataName Dataset name
+     * @param type Type
+     * @param relationName Name of the relation
+     * @throws IOException 
+     */
+    public static void saveMekaDatasetsNoViews(ArrayList<MultiLabelInstances> 
+            datasets, String path, String dataName, String type, String 
+                    relationName) throws IOException
     {
-        BufferedWriter  bw_current;
+        BufferedWriter  bwCurrent;
         PrintWriter wr;        
 
         int index = 1;
         String currentPath;
 
-        for(MultiLabelInstances dataset_current : dataset)
+        for(MultiLabelInstances currentData : datasets)
         {
-            currentPath = path + "/"+dataset_name+"-"+type+index+".arff";
+            currentPath = path + "/" + dataName + "-" + type + index + ".arff";
 
-            bw_current = new BufferedWriter(new FileWriter(currentPath));
-            wr = new PrintWriter(bw_current);
+            bwCurrent = new BufferedWriter(new FileWriter(currentPath));
+            wr = new PrintWriter(bwCurrent);
 
-            saveMekaDataset(wr,dataset_current, dataset_name);
+            saveMekaDataset(wr, currentData, dataName);
 
             wr.close();
-            bw_current.close();
+            bwCurrent.close();
 
             index++;
         }
     }
     
-    
-    public static void saveMekaDataset(ArrayList<MultiLabelInstances> dataset, 
+    /**
+     * Save meka datasets
+     * 
+     * @param datasets List of datasets
+     * @param path path to store
+     * @param dataName Dataset name
+     * @param type Type
+     * @throws IOException 
+     */
+    public static void saveMekaDataset(ArrayList<MultiLabelInstances> datasets, 
             String path, String dataName, String type) throws IOException
     {
-        saveMekaDataset(dataset, path, dataName, type, dataName);        
+        saveMekaDatasets(datasets, path, dataName, type, dataName);        
     }
     
-    
-    public static void saveMekaDatasetNoViews(ArrayList<MultiLabelInstances> dataset, 
-            String path, String dataName, String type) throws IOException
+    /**
+     * Save meka datasets with no views
+     * 
+     * @param datasets List of datasets
+     * @param path Path to store
+     * @param dataName Dataset name
+     * @param type Type
+     * @throws IOException 
+     */
+    public static void saveMekaDatasetsNoViews(ArrayList<MultiLabelInstances> 
+            datasets, String path, String dataName, String type) 
+            throws IOException
     {
-        saveMekaDatasetNoViews(dataset, path, dataName, type, dataName);        
+        DataIOUtils.saveMekaDatasetsNoViews(datasets, path, dataName, type, dataName);        
     }
     
-    
+    /**
+     * Save dataset
+     * 
+     * @param wr PrintWriter
+     * @param dataset Dataset
+     */
     public static void saveDataset(PrintWriter wr, MultiLabelInstances dataset)
     {
         saveDataset(wr, dataset, dataset.getDataSet().relationName());   
     }
     
-    public static void saveMekaDataset(PrintWriter wr, MultiLabelInstances dataset)
+    /**
+     * Save meka dataset
+     * 
+     * @param wr PrintWriter
+     * @param dataset Dataset
+     */
+    public static void saveMekaDataset(PrintWriter wr, MultiLabelInstances 
+            dataset)
     {
         saveMekaDataset(wr, dataset, dataset.getDataSet().relationName());   
     }
     
-    
-    public static void saveDataset(PrintWriter wr, MultiLabelInstances dataset, String relationName)
+    /**
+     * Save dataset
+     * 
+     * @param wr PrintWriter
+     * @param dataset Dataset
+     * @param relationName Name of the relation
+     */
+    public static void saveDataset(PrintWriter wr, MultiLabelInstances dataset, 
+            String relationName)
     {
         //relationName = relationName.replaceAll(" ", "_");
         if(relationName.contains("-")){
@@ -297,17 +464,17 @@ public class DataIOUtils {
 
         wr.write(System.getProperty("line.separator"));  
 
-        Instances instancias = dataset.getDataSet();
+        Instances instances = dataset.getDataSet();
        
         Attribute att;
-        for (int i=0; i< instancias.numAttributes();i++)
+        for (int i=0; i< instances.numAttributes();i++)
         {
-            att = instancias.attribute(i);
+            att = instances.attribute(i);
             wr.write(att.toString());
             wr.write(System.getProperty("line.separator")); 
         }   
 
-        String current ;
+        String current;
         
         wr.write("@data");
         wr.write(System.getProperty("line.separator"));  
@@ -319,8 +486,16 @@ public class DataIOUtils {
         }
     }
     
-    
-    public static void saveDatasetMV(PrintWriter wr, MultiLabelInstances dataset, String relationName, String views)
+    /**
+     * Save multi-label multi-view dataset
+     * 
+     * @param wr PrintWriter
+     * @param dataset Dataset
+     * @param relationName Name of the relation
+     * @param views String with views intervals
+     */
+    public static void saveDatasetMV(PrintWriter wr, MultiLabelInstances 
+            dataset, String relationName, String views)
     {
         //relationName = relationName.replaceAll(" ", "_");
         
@@ -349,9 +524,15 @@ public class DataIOUtils {
         } 
     }
     
-    
-    public static void saveMekaDataset(PrintWriter wr, MultiLabelInstances dataset, 
-            String relationName)
+    /**
+     * Save meka dataset
+     * 
+     * @param wr PrintWriter
+     * @param dataset Dataset
+     * @param relationName Name of the relation
+     */
+    public static void saveMekaDataset(PrintWriter wr, MultiLabelInstances 
+            dataset, String relationName)
     {
         int maxAttIndex;
         int minAttIndex;
@@ -404,17 +585,17 @@ public class DataIOUtils {
         
         wr.write(System.getProperty("line.separator"));  
 
-        Instances instancias = dataset.getDataSet();
+        Instances instances = dataset.getDataSet();
        
         Attribute att;
-        for (int i=0; i< instancias.numAttributes();i++)
+        for (int i=0; i< instances.numAttributes();i++)
         {
-            att = instancias.attribute(i);
+            att = instances.attribute(i);
             wr.write(att.toString());
             wr.write(System.getProperty("line.separator")); 
         }   
 
-        String current ;
+        String current;
         
         wr.write("@data");
         wr.write(System.getProperty("line.separator"));  
@@ -426,6 +607,14 @@ public class DataIOUtils {
         }
     }
     
+    /**
+     * Save multi-view multi-label meka dataset
+     * 
+     * @param wr PrintWriter
+     * @param dataset Dataset
+     * @param relationName Name of the relation
+     * @param views String with views intervals
+     */
     public static void saveMVMekaDataset(PrintWriter wr, MultiLabelInstances dataset, 
             String relationName, String views)
     {
@@ -475,17 +664,17 @@ public class DataIOUtils {
         wr.write("@relation " + "\'" + relationName + ": " + c + " " + views + "\'");
         wr.write(System.getProperty("line.separator"));  
 
-        Instances instancias = dataset.getDataSet();
+        Instances instances = dataset.getDataSet();
        
         Attribute att;
-        for (int i=0; i< instancias.numAttributes();i++)
+        for (int i=0; i< instances.numAttributes();i++)
         {
-            att = instancias.attribute(i);
+            att = instances.attribute(i);
             wr.write(att.toString());
             wr.write(System.getProperty("line.separator")); 
         }   
 
-        String current ;
+        String current;
         
         wr.write("@data");
         wr.write(System.getProperty("line.separator"));  
@@ -497,7 +686,12 @@ public class DataIOUtils {
         }
     }
     
-    
+    /**
+     * Get filename from a path
+     * 
+     * @param path Path
+     * @return Filename
+     */
     public static String getFileName(String path)
     {           
         for(int i=path.length()-1;i>0;i--)
@@ -507,7 +701,11 @@ public class DataIOUtils {
         return path;
     }
     
-    
+    /**
+     * Get filepath
+     * @param path Path
+     * @return Filepath
+     */
     public static String getFilePath(String path)
     {           
         String [] words;

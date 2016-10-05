@@ -39,6 +39,13 @@ import weka.core.Instances;
  */
 public class ChartUtils {
     
+    /**
+     * Update values of a bar chart
+     * 
+     * @param labelsByFreq Labels ordered by frequency
+     * @param nInstances Number of instances
+     * @param cp CategoryPlot
+     */
     public static void updateValuesBarChart(ImbalancedFeature[] labelsByFreq, 
             int nInstances, CategoryPlot cp)
     {
@@ -68,11 +75,16 @@ public class ChartUtils {
         cp.addRangeMarker(start);
     }
     
-    
+    /**
+     * Update IR bar chart
+     * @param labelsByFrequency Labels ordered by frequency
+     * @param IR Imbalance Ratio values
+     * @param cp CategoryPlot
+     */
     public static void updateIRBarChart(ImbalancedFeature[] labelsByFrequency, 
             double[] IR, CategoryPlot cp)
     {
-        DefaultCategoryDataset my_data = new DefaultCategoryDataset();
+        DefaultCategoryDataset myData = new DefaultCategoryDataset();
       
         double prob = 0;
             
@@ -83,10 +95,10 @@ public class ChartUtils {
         {
             prob= IR[i];
             sum += prob;
-            my_data.setValue(prob, labelsByFrequency[i].getName()," ");
+            myData.setValue(prob, labelsByFrequency[i].getName()," ");
         }
           
-        cp.setDataset(my_data);
+        cp.setDataset(myData);
             
         // add mean mark
         sum = sum/labelsByFrequency.length;
@@ -107,7 +119,12 @@ public class ChartUtils {
         cp.addRangeMarker(limitMark);
     }
     
-    
+    /**
+     * Update XY chart
+     * 
+     * @param plot ChartPanel Plot
+     * @param sortedArray Sorted array of values
+     */
     public static void updateXYChart(ChartPanel plot, double[] sortedArray) {
 
         XYPlot xyplot = plot.getChart().getXYPlot();
@@ -255,9 +272,15 @@ public class ChartUtils {
         xyplot.setRenderer(1, renderer1);
     }
     
-    
+    /**
+     * Update line chart
+     * 
+     * @param nInstances Number of instances
+     * @param cp CategoryPlot
+     * @param labelsetsByFrequency Labelsets ordered by frequency
+     */
     public static void updateLineChart(int nInstances, CategoryPlot cp, 
-            HashMap<Integer,Integer> labelsetsByFrequency )
+            HashMap<Integer,Integer> labelsetsByFrequency)
     {      
         DefaultCategoryDataset data = new DefaultCategoryDataset();
         
@@ -267,12 +290,12 @@ public class ChartUtils {
                      
         for(int i=0; i<=max ; i++)
         {
-            int freq_current=0;
+            int currentFreq=0;
             if(labelsetsByFrequency.get(i)!=null) {
-                freq_current=labelsetsByFrequency.get(i);
+                currentFreq=labelsetsByFrequency.get(i);
             }
             
-            prob= freq_current*1.0/nInstances;
+            prob= currentFreq*1.0/nInstances;
             
             if(prob==0.0) {
                 data.setValue(0 , "Label-Combination: ",Integer.toString(i));
@@ -292,7 +315,12 @@ public class ChartUtils {
         }
     }
     
-    
+    /**
+     * Get co-ocurrences matrix
+     * 
+     * @param dataset Multi-label dataset
+     * @return Matrix of doubles with co-ocurrence values
+     */
     public static double[][] getCoocurrences (MultiLabelInstances dataset)
     {
         double [][] coocurrences;
@@ -300,7 +328,12 @@ public class ChartUtils {
         return(coocurrences);
     }
     
-    
+    /**
+     * Get Chi and Phi coefficients
+     * 
+     * @param dataset Multi-label dataset
+     * @return Matrix of doubles with Chi and Phi values
+     */
     public static double[][] getChiPhiCoefficients (MultiLabelInstances dataset)
     {
         double[][] coefficients = new double[dataset.getNumLabels()][dataset.getNumLabels()];
@@ -326,7 +359,13 @@ public class ChartUtils {
         return coefficients;  
     }
     
-    
+    /**
+     * Get vertices of co-ocurrence graph
+     * 
+     * @param labelName Label name
+     * @param list List of attribute pairs
+     * @return List of vertices
+     */
     public static ArrayList<String> getVertices(String labelName, ArrayList<AttributesPair> list)
     {
         ArrayList<String> result = new ArrayList<>();    
@@ -346,7 +385,15 @@ public class ChartUtils {
         return result;     
     }
     
-    
+    /**
+     * Get border strength for a node in a co-ocurrence graph
+     * 
+     * @param min Minimum value
+     * @param max Maximum value
+     * @param n n
+     * @param edgeValue Edge value
+     * @return Strength
+     */
     public static int getBorderStrength (int min, int max, int n, double edgeValue)
     {
         double interval = (max-min)/(n*1.0);
@@ -363,7 +410,12 @@ public class ChartUtils {
         return strength;
     }
     
-    
+    /**
+     * Calculate co-ocurrences of labels
+     * 
+     * @param mldata Multi-label dataset
+     * @return Matrix of double with co-ocurrence values
+     */
     public static double[][] calculateCoocurrences(MultiLabelInstances mldata)
     {        
         int nLabels = mldata.getNumLabels();

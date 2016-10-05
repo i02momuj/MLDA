@@ -26,7 +26,15 @@ import weka.core.Instances;
  */
 public class DataInfoUtils {
     
-    public static ArrayList<String> getLabelNamesByLabelset(MultiLabelInstances dataset, String labelset)
+    /**
+     * Obtain label names from a labelset
+     * 
+     * @param dataset Dataset
+     * @param labelset Labelset
+     * @return List with label names
+     */
+    public static ArrayList<String> getLabelNamesByLabelset(MultiLabelInstances
+            dataset, String labelset)
     {
         ArrayList<String> labelNames = new ArrayList();
         
@@ -41,7 +49,13 @@ public class DataInfoUtils {
         return labelNames;
     }
     
-    
+    /**
+     * Obtain label by index
+     * 
+     * @param dataset Dataset
+     * @param id Label id
+     * @return Label
+     */
     public static Attribute getLabelByIndex(MultiLabelInstances dataset, int id)
     {
         int[] labelIndices = dataset.getLabelIndices();
@@ -51,12 +65,18 @@ public class DataInfoUtils {
         return result;
     }
     
-    
-    public static double[] getLabelAppearances(ImbalancedFeature[] imbalancedData)
+    /**
+     * Obtain number of appearances of a label
+     * 
+     * @param imbalancedData Labels as ImbalancedFeature object
+     * @return 
+     */
+    public static double[] getLabelAppearances(ImbalancedFeature[] 
+            imbalancedData)
     {
         double[] labelFrequency = new double[imbalancedData.length];
         
-        for(int i=0;i<imbalancedData.length; i++)
+        for(int i=0; i<imbalancedData.length; i++)
         {
             labelFrequency[i]=(double)imbalancedData[i].getAppearances();
         }
@@ -64,7 +84,12 @@ public class DataInfoUtils {
         return labelFrequency;
     }
     
-    
+    /**
+     * Get labelset with appearances
+     * 
+     * @param stat Statistics
+     * @return Combinations of labelset-appearances
+     */
     //KEY: num of labels, VALUE: appearances of the labelset
     public static HashMap<Integer,Integer> getLabelsetByValues(Statistics stat)
     {
@@ -95,8 +120,15 @@ public class DataInfoUtils {
         return labelsetsByFrequency;
     }
     
-    
-    public static double getLabelFrequency(MultiLabelInstances dataset, int labelIndex)
+    /**
+     * Get label frequency given the index
+     * 
+     * @param dataset Dataset
+     * @param labelIndex Label index
+     * @return 
+     */
+    public static double getLabelFrequency(MultiLabelInstances dataset, 
+            int labelIndex)
     {
         double value = 0.0;
         
@@ -115,19 +147,35 @@ public class DataInfoUtils {
         return value/dataset.getNumInstances();
     }
     
-    
-    public static boolean existsAttribute (ArrayList<String> visited, ImbalancedFeature attribute)
+    /**
+     * Check if the attribute exists
+     * 
+     * @param visited Attribute names
+     * @param attribute Attribute
+     * @return True if it exists and false otherwise
+     */
+    public static boolean existsAttribute (ArrayList<String> visited, 
+            ImbalancedFeature attribute)
     {
         for(String current : visited)
         {
-            if(current.equals(attribute.getName())) return true;
+            if(current.equals(attribute.getName())) {
+                return true;
+            }
         }
          
         return false;
     }
     
-    
-    public static ImbalancedFeature getLabelByLabelname(String labelName , ImbalancedFeature[] list)
+    /**
+     * Obtain label by label name
+     * 
+     * @param labelName Label name
+     * @param list List of labels
+     * @return Label
+     */
+    public static ImbalancedFeature getLabelByLabelname(String labelName, 
+            ImbalancedFeature[] list)
     {
         for(int i=0;i<list.length; i++)
         {
@@ -138,7 +186,13 @@ public class DataInfoUtils {
         return null;
     }
     
-    
+    /**
+     * Obtain label index
+     * 
+     * @param labels Labels
+     * @param labelName Label name
+     * @return Label index
+     */
     public static int getLabelIndex (String[] labels, String labelName)
     {
         for(int i=0; i<labels.length;i++)
@@ -151,22 +205,35 @@ public class DataInfoUtils {
         return -1;
     }
     
-    
-    public static String[] getLabelNames(int[] labelIndices, Instances instances)
+    /**
+     * Ibtain label names
+     * 
+     * @param labelIndices Label indices
+     * @param instances Dataset
+     * @return Label names
+     */
+    public static String[] getLabelNames(int[] labelIndices, 
+            Instances instances)
     {
         String[] labelName = new String[labelIndices.length];
                 
         for(int i=0;i<labelIndices.length;i++)
         {
-            labelName[i]=instances.attribute(labelIndices[i]).name();
+            labelName[i] = instances.attribute(labelIndices[i]).name();
         }
         
         return labelName;
     }
     
-    
-    public static int getLabelAppearancesByName(ImbalancedFeature[] imbalancedData,
-            String labelName)
+    /**
+     * Obtain label appearances by name
+     * 
+     * @param imbalancedData Labels
+     * @param labelName Label name
+     * @return Appearances
+     */
+    public static int getLabelAppearancesByName(ImbalancedFeature[] 
+            imbalancedData, String labelName)
     {
         for(int i=0 ; i<imbalancedData.length; i++)
         {
@@ -178,7 +245,14 @@ public class DataInfoUtils {
         return -1;
     }
     
-    
+    /**
+     * Obtain current label values
+     * 
+     * @param instances Dataset
+     * @param position Position
+     * @param labelIndices Label indices
+     * @return Array of values
+     */
     public static int[] getCurrentValueLabels(Instances instances, int position, 
             int[] labelIndices)
     {

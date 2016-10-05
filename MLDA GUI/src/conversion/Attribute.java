@@ -25,9 +25,9 @@ public class Attribute {
 	type = new String();
     }
 	
-    Attribute(String nombre, String tipo)
+    Attribute(String name, String type)
     {
-        this.name = nombre;
-	this.type = tipo;
+        this.name = name;
+	this.type = type;
     }
 }

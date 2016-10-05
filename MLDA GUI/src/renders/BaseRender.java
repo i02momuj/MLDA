@@ -29,19 +29,19 @@ public class BaseRender extends DefaultTableCellRenderer
    double criticalValue;
    
    
-   public BaseRender(String tableType ,double criticalValue)
-   {
+    public BaseRender(String tableType ,double criticalValue)
+    {
        this.tableType = tableType;
        this.criticalValue = criticalValue;
-   }
+    }
     
-   @Override
+    @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
             boolean isSelected, boolean hasFocus, int row, int column )
     {
         super.getTableCellRendererComponent (table, value, isSelected, hasFocus, row, column);
       
-        double currentValue=-1.0, tmp=-1.0;
+        double currentValue=-1.0, tmp;
         String tmp2, tmp3;
 
         if(value !=null && column!=0 && value.toString().trim().length()!=0 && !value.toString().equals("---") )
@@ -59,120 +59,118 @@ public class BaseRender extends DefaultTableCellRenderer
       
         this.setHorizontalAlignment(SwingConstants.CENTER);
        
-        if(tableType.equals("chi_fi"))
-        {
-            if(column == row){ 
-                this.setBackground(Color.gray); 
-                this.setForeground(Color.white);
-            }
-
-            else if (column > row)
-            {
-                if(table.getValueAt(column, row).toString().equals("---")) {
-                    tmp=-1.0;
-                }
-                else{
-                    tmp2 = table.getValueAt(row, column).toString();
-                    if(tmp2.contains("E")){
-                        tmp3 = tmp2.split("E")[0] + "E" + tmp2.split("E")[1];
-                        tmp= Double.parseDouble(tmp3);
-                        table.setValueAt(tmp3, row, column);
-                    }
-                    else{
-                        tmp = Double.parseDouble(tmp2);
-                    }
-                }
-
-                if(tmp > criticalValue){
-                    this.setBackground(Color.lightGray);
-                    this.setForeground(Color.red);
-                }
-                else{  
-                    this.setBackground(Color.lightGray); 
-                    this.setForeground(Color.black);
-                }
-            }
-            else if(column <= row)
-            {
-                if(value!=null&& value.toString().trim().length()!=0 && !value.toString().equals("---"))
+        switch (tableType) {
+            case "chi_fi":
+                if(column == row){
+                    this.setBackground(Color.gray);
+                    this.setForeground(Color.white);
+                }               
+                else if (column > row)
                 {
-                    tmp2 = table.getValueAt(row, column).toString();
-                    if(tmp2.contains("E")){
-                        tmp3 = tmp2.split("E")[0] + "E" + tmp2.split("E")[1];
-                        tmp= Double.parseDouble(tmp3);
-                        table.setValueAt(tmp3, row, column);
+                    if(table.getValueAt(column, row).toString().equals("---")) {
+                        tmp = -1.0;
                     }
                     else{
-                        tmp= Double.parseDouble(tmp2);
+                        tmp2 = table.getValueAt(row, column).toString();
+                        if(tmp2.contains("E")){
+                            tmp3 = tmp2.split("E")[0] + "E" + tmp2.split("E")[1];
+                            tmp= Double.parseDouble(tmp3);
+                            table.setValueAt(tmp3, row, column);
+                        }
+                        else{
+                            tmp = Double.parseDouble(tmp2);
+                        }
                     }
-                    
+
                     if(tmp > criticalValue){
-                        this.setBackground(Color.white); 
+                        this.setBackground(Color.lightGray);
                         this.setForeground(Color.red);
                     }
-                    else {
-                        this.setBackground(Color.white); 
+                    else{
+                        this.setBackground(Color.lightGray);
                         this.setForeground(Color.black);
                     }
                 }
-                else {
-                    this.setBackground(Color.white); 
+                else if(column <= row)
+                {
+                    if(value!=null&& value.toString().trim().length()!=0 && !value.toString().equals("---"))
+                    {
+                        tmp2 = table.getValueAt(row, column).toString();
+                        if(tmp2.contains("E")){
+                            tmp3 = tmp2.split("E")[0] + "E" + tmp2.split("E")[1];
+                            tmp= Double.parseDouble(tmp3);
+                            table.setValueAt(tmp3, row, column);
+                        }
+                        else{
+                            tmp= Double.parseDouble(tmp2);
+                        }
+
+                        if(tmp > criticalValue){
+                            this.setBackground(Color.white);
+                            this.setForeground(Color.red);
+                        }
+                        else {
+                            this.setBackground(Color.white);
+                            this.setForeground(Color.black);
+                        }
+                    }
+                    else {
+                        this.setBackground(Color.white);
+                        this.setForeground(Color.black);
+                    }
+                }  
+                break;
+            case "chi_fi_fixed":
+                if (column==0) {
+                    this.setHorizontalAlignment(SwingConstants.LEFT);
+                    this.setBackground(Color.darkGray);
+                    this.setForeground(Color.white);
+                }  
+                break;
+            case "heatmap":
+                if(column == row){
+                    this.setBackground(Color.lightGray);
                     this.setForeground(Color.black);
                 }
-            }
-        }
-      
-        else if(tableType.equals("chi_fi_fixed"))
-        {
-            if (column==0) { 
-                this.setHorizontalAlignment(SwingConstants.LEFT);
-                this.setBackground(Color.darkGray); 
-                this.setForeground(Color.white);
-            }
-        }
-        else if(tableType.equals("heatmap"))
-        {
-            if(column == row){ 
-                this.setBackground(Color.lightGray); 
-                this.setForeground(Color.black);
-            }
-            else if (column <= row)
-            {
-                if(currentValue > criticalValue){
-                    this.setBackground(Color.red); 
-                    this.setForeground(Color.white);
+                else if (column <= row)
+                {
+                    if(currentValue > criticalValue){
+                        this.setBackground(Color.red);
+                        this.setForeground(Color.white);
+                    }
+                    else{
+                        this.setBackground(Color.white);
+                        this.setForeground(Color.black);
+                    }
                 }
                 else{
-                    this.setBackground(Color.white); 
+                    this.setBackground(Color.white);
                     this.setForeground(Color.black);
-                }
-            }
-            else{
-                this.setBackground(Color.white);
-                this.setForeground(Color.black);
-            }
-        }      
-        else if(tableType.equals("estandar"))
-        {
-            if(column == row){ 
-                this.setBackground(Color.gray); 
-                this.setForeground(Color.white);
-            }
-            else if (column <= row)
-            {
-                if(currentValue > criticalValue){
-                    this.setBackground(Color.red); 
+                }  
+                break;
+            case "estandar":
+                if(column == row){
+                    this.setBackground(Color.gray);
                     this.setForeground(Color.white);
                 }
-                else{
-                    this.setBackground(Color.white); 
-                    this.setForeground(Color.black);
+                else if (column <= row)
+                {
+                    if(currentValue > criticalValue){
+                        this.setBackground(Color.red);
+                        this.setForeground(Color.white);
+                    }
+                    else{
+                        this.setBackground(Color.white);
+                        this.setForeground(Color.black);
+                    }
                 }
-            }
-            else{
-                this.setBackground(Color.gray);
-                this.setForeground(Color.black);
-            }
+                else{
+                    this.setBackground(Color.gray);
+                    this.setForeground(Color.black);
+                }  
+                break;
+            default:
+                break;
         }
 
         this.setBorder(BorderFactory.createLineBorder(Color.black));

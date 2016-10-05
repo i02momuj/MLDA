@@ -22,7 +22,8 @@ import javax.swing.table.DefaultTableCellRenderer;
  */
 public class IRRender extends DefaultTableCellRenderer
 {
-    int posIR, porIR2=-1;
+    int posIR;
+    int posIR2=-1;
     
     public IRRender(int posIR){ 
         this.posIR = posIR;
@@ -31,7 +32,7 @@ public class IRRender extends DefaultTableCellRenderer
     
     public IRRender(int posIR, int posIR2){ 
         this.posIR = posIR; 
-        this.porIR2 = posIR2;
+        this.posIR2 = posIR2;
     }
     
     
@@ -51,16 +52,16 @@ public class IRRender extends DefaultTableCellRenderer
 
         double currentIR2 = -1;
 
-        if(porIR2!=-1){
-           currentIR2 = Double.parseDouble(table.getValueAt(row, porIR2).toString()); 
+        if(posIR2!=-1){
+           currentIR2 = Double.parseDouble(table.getValueAt(row, posIR2).toString()); 
         }
 
        if((currentIR>1.5 && column==posIR )){ 
            this.setForeground(Color.red);
        }
-       else if(porIR2!=-1)
+       else if(posIR2!=-1)
        { 
-           if(currentIR2>1.5 && column==porIR2 ){ 
+           if(currentIR2>1.5 && column==posIR2 ){ 
                this.setForeground(Color.red);
            }
            else { 

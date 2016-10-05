@@ -23,6 +23,11 @@ public class HeapSort
     private static int right; 
     private static int largest;
     
+    /**
+     * Build heap
+     * 
+     * @param a Array of values
+     */
     public static void buildheap(double []a){ 
         n=a.length-1; 
         for(int i=n/2;i>=0;i--){ 
@@ -30,10 +35,21 @@ public class HeapSort
         } 
     } 
     
+    /**
+     * Obtain sorted array
+     * 
+     * @return Sorted array
+     */
     public static double[] getSortedArray(){
         return a;
     }
     
+    /**
+     * Max heap
+     * 
+     * @param a Array of values
+     * @param i i  
+     */
     public static void maxheap(double[] a, int i){ 
         left=2*i; 
         right=2*i+1; 
@@ -53,14 +69,23 @@ public class HeapSort
         } 
     } 
     
-    
+    /**
+     * Swaps values of two indices
+     * 
+     * @param i index1
+     * @param j index2
+     */
     public static void exchange(int i, int j){ 
         double t=a[i]; 
         a[i]=a[j]; 
         a[j]=t; 
     } 
     
-    
+    /**
+     * Sort array
+     * 
+     * @param a0 array
+     */
     public static void sort(double []a0){ 
         a = a0; 
         buildheap(a); 

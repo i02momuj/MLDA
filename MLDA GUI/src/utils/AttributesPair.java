@@ -43,31 +43,58 @@ public class AttributesPair
         
     }
                
-    
+    /**
+     * 
+     * @return Index of attribute1
+     */
     public int getAttribute1Index(){
         return attribute1Index;
     }
     
+    /**
+     * 
+     * @return Index of attribute2
+     */
     public int getAttribute2Index(){
         return attribute2Index;
     }
     
+    /**
+     *
+     * @return Name of attribute1
+     */
     public String getAttributeName1(){ 
         return attributeName1;
     }
     
+    /**
+     * 
+     * @return Name of attribute2
+     */
     public String getAttributeName2(){ 
         return attributeName2;
     }
     
+    /**
+     * 
+     * @return Appearances
+     */
     public double getAppearances(){ 
         return appearances;
     }
     
+    /**
+     * 
+     * @return Attribute1 appearances
+     */
     public int getAttribute1Appearances(){ 
         return attributeAppearances1;
     }
     
+    /**
+     * 
+     * @return Attribute2 appearances
+     */
     public int getAttribute2Appearances(){ 
         return attributeAppearances2;
     }

@@ -61,22 +61,47 @@ public class ImbalancedFeature {
         this.IRInterClass= IRInterClass;
     }
     
+    /**
+     * Get name
+     * 
+     * @return Name
+     */
     public String getName() { 
         return name; 
     }
     
+    /**
+     * Get appearances
+     * 
+     * @return Number of appearances
+     */
     public int getAppearances(){
         return appearances;
     }
     
+    /**
+     * Get IR intra class
+     * 
+     * @return IR intra class
+     */
     public double getIRIntraClass(){
         return IRIntraClass;
     }
     
+    /**
+     * Get variance
+     * 
+     * @return Variance
+     */
     public double getVariance(){
         return variance;
     }
     
+    /**
+     * Get IR inter class
+     * 
+     * @return IR inter class
+     */
     public double getIRInterClass(){
         return IRInterClass;
     }

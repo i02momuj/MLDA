@@ -22,14 +22,21 @@ import weka.core.Instances;
  */
 public class AttributePairsUtils {
     
-    
-    private static ArrayList<AttributesPair> makeAttributePairs(int [] labelPairs, 
-            int[] labelIndices, MultiLabelInstances dataset)
+    /**
+     * Generates attribute pairs
+     * 
+     * @param labelPairs Label pairs
+     * @param labelIndices Label indices
+     * @param dataset Multi-label dataset
+     * @return List of pairs of attributes
+     */
+    private static ArrayList<AttributesPair> makeAttributePairs(int [] 
+            labelPairs, int[] labelIndices, MultiLabelInstances dataset)
     {
-        ArrayList<AttributesPair> list= new ArrayList<>();
+        ArrayList<AttributesPair> list = new ArrayList<>();
         Instances instances = dataset.getDataSet();
 
-        String[] labelNames =DataInfoUtils.getLabelNames(labelIndices, instances);
+        String[] labelNames = DataInfoUtils.getLabelNames(labelIndices, instances);
         AttributesPair current;
 
         ImbalancedFeature[] imbalancedData = MetricUtils.getImbalancedDataByAppearances(dataset);
@@ -40,7 +47,7 @@ public class AttributePairsUtils {
 
         for(int i = 0; i<labelIndices.length; i++)
         {
-            for(int j=i+1 ; j<labelIndices.length ; j++)
+            for(int j=i+1; j<labelIndices.length; j++)
             {
                 value = labelPairs[labelPairsIndex];
 
@@ -61,23 +68,37 @@ public class AttributePairsUtils {
         return list;
     }
     
-    
-    public static int getLabelPairsIndex(int index1, int ind_2, int labels)
+    /**
+     * Get index of a label pair
+     * 
+     * @param index1 Index label 1
+     * @param index2 Index label 2
+     * @param labels Number of labels
+     * @return Label pair index
+     */
+    public static int getLabelPairsIndex(int index1, int index2, int labels)
     {
         int count = index1;
-        int result=0;
+        int result = 0;
         
-        for(int i=1; count>0 ;i++ , count--)
+        for(int i=1; count>0; i++, count--)
         {
             result += labels-i;
         }
-        int distancia = ind_2 - index1;
+        int distance = index2 - index1;
         
-        return result+= distancia-1;
+        return result += distance-1;
     }
     
-    
-    public static int[] updateAttributePairs(int[] labelPairs, int[] labelValues)
+    /**
+     * Update attribute pairs
+     * 
+     * @param labelPairs Pair
+     * @param labelValues Values
+     * @return New pairs
+     */
+    public static int[] updateAttributePairs(int[] labelPairs, int[] 
+            labelValues)
     {
         int index;
         
@@ -90,7 +111,7 @@ public class AttributePairsUtils {
                if(labelValues[i] == labelValues[j])
                {
                    index = getLabelPairsIndex(i, j, labelValues.length);
-                   labelPairs[index]=labelPairs[index]+1;
+                   labelPairs[index] = labelPairs[index]+1;
                }
             }
         }
@@ -98,8 +119,15 @@ public class AttributePairsUtils {
         return labelPairs;
     }
     
- 
-    public static AttributesPair searchAndGet(String att1, String att2, ArrayList<AttributesPair> list )
+    /**
+     * Search a pair of attributes in the list
+     * @param att1 Attribute 1
+     * @param att2 Attribute 2
+     * @param list List of pairs
+     * @return Pair of attributes or null if it does not exist
+     */
+    public static AttributesPair searchAndGet(String att1, String att2, 
+            ArrayList<AttributesPair> list)
     {
         for(AttributesPair current : list)
         {
@@ -114,8 +142,16 @@ public class AttributePairsUtils {
         return null;
     }
    
-    
-    private static AttributesPair getPair(String att1, String att2, ArrayList<AttributesPair> list)
+    /**
+     * Get a pair
+     * 
+     * @param att1 Attribute 1
+     * @param att2 Attribute 2
+     * @param list List of pairs
+     * @return Pair of attributes
+     */
+    private static AttributesPair getPair(String att1, String att2, 
+            ArrayList<AttributesPair> list)
     {
         for( AttributesPair current : list)
         {
@@ -130,7 +166,13 @@ public class AttributePairsUtils {
         return null;
     }
     
-    
+    /**
+     * Find pairs of selected attributes
+     * 
+     * @param pair Pair
+     * @param labels Labels
+     * @return List of pairs
+     */
     public static ArrayList<AttributesPair> findSelectedAttributesPair (
             ArrayList<AttributesPair> pair , ArrayList<String> labels)
     {
@@ -152,8 +194,14 @@ public class AttributePairsUtils {
        return result;
     }
     
-    
-    public static ArrayList<AttributesPair> getAttributePairs(MultiLabelInstances dataset)
+    /**
+     * Get pairs of attributes
+     * 
+     * @param dataset Dataset
+     * @return List of pairs
+     */
+    public static ArrayList<AttributesPair> getAttributePairs(
+            MultiLabelInstances dataset)
     {       
         Instances instances = dataset.getDataSet();
        
@@ -162,7 +210,7 @@ public class AttributePairsUtils {
         
         int [] labelPairAppearances = new int[possibleCombinations];
         int [] currentLabelValues;
-        int[] labelIndices= dataset.getLabelIndices();
+        int[] labelIndices = dataset.getLabelIndices();
                 
         for(int i=0; i<instances.size(); i++)
         {

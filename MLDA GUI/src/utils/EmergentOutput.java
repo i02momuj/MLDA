@@ -12,7 +12,6 @@
 package utils;
 
 import java.util.ArrayList;
-import javax.swing.JFrame;
 import mulan.data.MultiLabelInstances;
 
 /**
@@ -31,7 +30,17 @@ public class EmergentOutput extends javax.swing.JFrame {
     boolean isMeka;
      
    
-    // IR per labelset
+    /**
+     * Emergent output for labelsets
+     * 
+     * @param dataset Dataset
+     * @param posx Position X
+     * @param posy Position Y
+     * @param args Arguments
+     * @param labelNames Label names
+     * @param labelFrequency Labels frequency
+     * @param isMeka Indicates if the dataset is or not in meka format
+     */
     public EmergentOutput(MultiLabelInstances dataset, int posx, int posy, 
             String[] args, ArrayList<String> labelNames, 
             ImbalancedFeature[] labelFrequency, boolean isMeka)
@@ -65,24 +74,30 @@ public class EmergentOutput extends javax.swing.JFrame {
     }
     
          
-    //IR per labelset
-    private void printInformation(ArrayList<String> labelNames, ImbalancedFeature[] imbalancedData)
+    /**
+     * Print information of labelsets
+     * 
+     * @param labelNames Label names
+     * @param imbalancedData Labels
+     */
+    private void printInformation(ArrayList<String> labelNames, 
+            ImbalancedFeature[] imbalancedData)
     {
         String tabs ="\t"+"\t" +"\t";
 
         int nRepeats = Integer.parseInt(info[1]);
         double value = nRepeats*1.0/dataset.getNumInstances();
         
-        jTextArea1.append("Labelset: "+tabs+ info[0]+"\n");
-        jTextArea1.append("# Labels: "+tabs+labelNames.size()+"\n");
+        jTextArea1.append("Labelset: "+tabs + info[0]+"\n");
+        jTextArea1.append("# Labels: "+tabs +labelNames.size()+"\n");
         
         
-        jTextArea1.append("Frequency: "+tabs+ MetricUtils.truncateValue(Double.toString(value), 5)  +"\n");
-        jTextArea1.append("# Examples: " +tabs+info[1]+"\n");
+        jTextArea1.append("Frequency: "+tabs + MetricUtils.truncateValue(Double.toString(value), 5)  +"\n");
+        jTextArea1.append("# Examples: " + tabs + info[1] + "\n");
         
         ImbalancedFeature current;
         double freq;
-        int repeat, id_label=1;
+        int repeat, idLabel = 1;
         
         for(int i=0;i<labelNames.size(); i++)
         {
@@ -94,13 +109,13 @@ public class EmergentOutput extends javax.swing.JFrame {
                 freq = repeat*1.0/dataset.getNumInstances();
             
                 jTextArea1.append("--------------------------------------------------------------------------------------------------------------------------" +"\n");
-                jTextArea1.append("Label "+id_label +":  "+tabs+current.getName()+" \n");
+                jTextArea1.append("Label "+idLabel +":  "+tabs+current.getName()+" \n");
                 
                 jTextArea1.append("Frequency:"+ tabs+ MetricUtils.truncateValue(Double.toString(freq), 5) +"\n");
                   
                 jTextArea1.append("# Examples: "+tabs+ repeat +"\n");
                   
-                id_label++; 
+                idLabel++; 
             }
         } 
     }

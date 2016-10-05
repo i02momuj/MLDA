@@ -22,6 +22,12 @@ import java.util.Set;
  */
 public class Utils {          
     
+    /**
+     * Get maximum key value
+     * 
+     * @param hm HashMap
+     * @return Maximum key value
+     */
     public  static int maxKey (HashMap<Integer,Integer> hm)
     {
         Set<Integer> keys= hm.keySet();
@@ -38,12 +44,18 @@ public class Utils {
         return max;
     }
     
-    
-    public static boolean existsValue (double[] visited , double current)
+    /**
+     * Cheks if exists a value into a double array
+     * 
+     * @param array Array of values
+     * @param current Current value
+     * @return True if it exists and false otherwise
+     */
+    public static boolean existsValue (double[] array , double current)
     {
-        for(int i=0; i<visited.length;i++)
+        for(int i=0; i<array.length;i++)
         {
-            if(visited[i]==current){
+            if(array[i]==current){
                 return true;
             }
         }
@@ -51,7 +63,12 @@ public class Utils {
         return false;
     }
 
-     
+    /**
+     * Get Q1 of an array
+     * 
+     * @param orderedArray Array with ordered values
+     * @return Q1 value
+     */
     public static double getQ1(double[] orderedArray)
     {
         int q = orderedArray.length/4;
@@ -64,7 +81,12 @@ public class Utils {
         }
     }
 
-    
+    /**
+     * Get Q3 of an array
+     * 
+     * @param orderedArray Array with ordered values
+     * @return Q3 value
+     */
     public static double getQ3(double[] orderedArray)
     {
         int q = 3*(orderedArray.length/4);
@@ -77,7 +99,12 @@ public class Utils {
         }
     }
     
-     
+    /**
+     * Obtain the median of an array
+     * 
+     * @param sortedArray Array with ordered values
+     * @return Median
+     */
     public static double getMedian(double[] sortedArray)
     {
         int mean = sortedArray.length/2;
@@ -93,7 +120,12 @@ public class Utils {
         }
     }
         
-
+    /**
+     * Obtain ImbalancedFeature with most number of appearances from a list of ImbalancedFeature objects
+     * 
+     * @param list List of ImbalancedFeature objects
+     * @return ImbalancedFeature with max number of appearances
+     */
     public static ImbalancedFeature getMax(ArrayList<ImbalancedFeature> list)
     {
         ImbalancedFeature max = list.get(0);
@@ -108,8 +140,13 @@ public class Utils {
         return max;       
     }
      
-
-    public static ImbalancedFeature getMin( ArrayList<ImbalancedFeature> list)
+    /**
+     * Obtain ImbalancedFeature with minimum number of appearances from a list of ImbalancedFeature objects
+     * 
+     * @param list List of ImbalancedFeature objects
+     * @return ImbalancedFeature with min number of appearances
+     */
+    public static ImbalancedFeature getMin(ArrayList<ImbalancedFeature> list)
     {
         ImbalancedFeature min = list.get(0);
                
@@ -123,8 +160,16 @@ public class Utils {
         return min;       
     }
     
-
-    public static Object[] getValuesByRow(int rowNumber, double[][] coefficients, String rowName )
+    /**
+     * Get values of a matrix by row
+     * 
+     * @param rowNumber Row number
+     * @param coefficients Matrix of coefficients
+     * @param rowName Row name
+     * @return Array of objects
+     */
+    public static Object[] getValuesByRow(int rowNumber, double[][] 
+            coefficients, String rowName)
     {
         Object[] row = new Object[coefficients.length+1];
         String truncate;
@@ -156,7 +201,12 @@ public class Utils {
         return row;
     }
     
-
+    /**
+     * Obtain maximum value of an int array
+     * 
+     * @param v Array
+     * @return Max value
+     */
     public static int getMax(int [] v)
     {        
         int max = Integer.MIN_VALUE;
@@ -170,7 +220,12 @@ public class Utils {
         return max;
     }
     
-    
+    /**
+     * Obtain minimum value of an int array
+     * 
+     * @param v Array
+     * @return Min value
+     */
     public static int getMin(int [] v)
     {        
         int min = Integer.MAX_VALUE;
@@ -184,37 +239,52 @@ public class Utils {
         return min;
     }
     
-    
+    /**
+     * Initialize a matrix to negative values
+     * 
+     * @param length Length of the square matrix
+     * @return Initialized matrix
+     */
     public static double[][] initializeNegativeValuesMatrix(int length)
     {
         double[][] data = new double[length][length];
          
         for(int i=0;i<length;i++){
             for(int j=0;j<length;j++){
-            data[i][j]=-1.0; 
+                data[i][j] = -1.0; 
            }     
         }
             
         return data;
     }
     
-    
-    public static String[] listToArray(ArrayList<String> lista)
+    /**
+     * Convert a list of String into an array
+     * 
+     * @param list List of String objects
+     * @return 
+     */
+    public static String[] listToArray(ArrayList<String> list)
     {
-        String[] result = new String[lista.size()];
+        String[] result = new String[list.size()];
         
         for( int i=0; i<result.length ;i++)
         {
-            result[i]=lista.get(i);
+            result[i] = list.get(i);
         }
             
         return result;
     }
     
-        
+    /**
+     * Obtain all possible combinations of pairs of n labels
+     * 
+     * @param n Number of labels
+     * @return 
+     */
     public static int getPossibleCombinations(int n)
     {
-        int result=0;
+        int result = 0;
          
         for(int i=n-1; i>0; i--)
         {
@@ -224,7 +294,13 @@ public class Utils {
         return result;
     }
     
-    
+    /**
+     * Check if the number has more than n digits
+     * 
+     * @param d Double number
+     * @param digits Number of digits
+     * @return True if has more than the specified number of digits and false otherwise
+     */
     public static boolean hasMoreNDigits(double d, int digits)
     {
     
@@ -232,37 +308,36 @@ public class Utils {
         int integerPlaces = text.indexOf('.');
         int decimalPlaces = text.length() - integerPlaces - 1;
         
-        if(decimalPlaces<=digits) {
-            return false;
-        }
-        return true;
+        return (decimalPlaces > digits);
     }
     
-   
+    /**
+     * Check if the String contains a number
+     * 
+     * @param s String
+     * @return True if it is a number and false otherwise
+     */
     public static boolean isNumber(String s)
     {
-        if(s.isEmpty()) {
-            return false;
-        }
+        try  
+        {  
+            double d = Double.parseDouble(s);  
+        }  
+        catch(NumberFormatException nfe)  
+        {  
+            return false;  
+        }  
         
-        s = s.toLowerCase().trim();
-        
-        String alphabet ="abcdefghijklmnopqrstuvwxyz";
-        
-        char current;
-        for(int i=0;i<s.length();i++)
-        {
-            current = alphabet.charAt(i);
-                
-            if(s.indexOf(current)!= -1) {
-                return false;
-            }
-        }
-            
-        return true;
+        return true;  
     }
     
-    
+    /**
+     * Check if an array of int contains a value n
+     *  
+     * @param A Array
+     * @param n Number
+     * @return True if A contains n and false otherwise
+     */
     public static boolean contains(int [] A, int n){
         for(int a : A){
             if(a == n){
@@ -273,7 +348,12 @@ public class Utils {
         return false;
     }
     
-    
+    /**
+     * Convert an array of Integer into an array of int
+     * 
+     * @param IntegerArray Array of Integer
+     * @return Array of int
+     */
     public static int[] toPrimitive(Integer[] IntegerArray) {
         int[] result = new int[IntegerArray.length];
 	for (int i = 0; i < IntegerArray.length; i++) {

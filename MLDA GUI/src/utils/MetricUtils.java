@@ -77,6 +77,7 @@ import static utils.Utils.getMax;
 import static utils.Utils.hasMoreNDigits;
 import weka.core.Attribute;
 import weka.core.Instances;
+import static utils.Utils.getMax;
 
 /**
  *
@@ -84,17 +85,29 @@ import weka.core.Instances;
  */
 public class MetricUtils {
     
+    /**
+     * Truncate value as String
+     * 
+     * @param value Value
+     * @param digits Number of digits
+     * @return Truncated value
+     */
     public static String truncateValue (String value, int digits)
     {
-        double valor = Double.parseDouble(value);
-        return truncateValue(valor, digits);
+        return truncateValue(Double.parseDouble(value), digits);
     }
     
-    
+    /**
+     * Truncate value
+     * 
+     * @param value Value
+     * @param digits Number of digits
+     * @return Truncated value
+     */
     public static String truncateValue(double value, int digits)
     {
         String number = Double.toString(value);
-        int countDigits =0;
+        int countDigits = 0;
         String result = "";
         boolean flag =false;
         
@@ -123,12 +136,19 @@ public class MetricUtils {
         return result;
     }
     
-    
-    public static ImbalancedFeature getMaxIRIntraClass(ImbalancedFeature[] imbalancedData, ArrayList<String> visited)
+    /**
+     * Get maximum IR intra class
+     * 
+     * @param imbalancedData Imbalanced data
+     * @param visited Visited
+     * @return Imbalanced feature of max IR intra class
+     */
+    public static ImbalancedFeature getMaxIRIntraClass(ImbalancedFeature[] 
+            imbalancedData, ArrayList<String> visited)
     {
-        ImbalancedFeature max=null ;
+        ImbalancedFeature max = null ;
          
-        for( ImbalancedFeature current : imbalancedData )
+        for(ImbalancedFeature current : imbalancedData)
         {
             if(! DataInfoUtils.existsAttribute(visited, current)) {
                 if(max == null) {
@@ -136,7 +156,9 @@ public class MetricUtils {
                 }
                 else
                 {
-                    if(max.getIRIntraClass() <= current.getIRIntraClass() && max.getVariance() < current.getVariance()) max = current;
+                    if(max.getIRIntraClass() <= current.getIRIntraClass() && max.getVariance() < current.getVariance()) {
+                        max = current;
+                    }
                 }
             }
         }
@@ -144,50 +166,74 @@ public class MetricUtils {
         return max;
     }
     
-    
-    public static ImbalancedFeature getMaxIRInterClass(ImbalancedFeature[] imbalancedData, ArrayList<String> visited)
+    /**
+     * Get maximum IR inter class
+     * 
+     * @param imbalancedData Imbalanced data
+     * @param visited Visited
+     * @return Imbalanced feature of maximum IR inter class
+     */
+    public static ImbalancedFeature getMaxIRInterClass(ImbalancedFeature[] 
+            imbalancedData, ArrayList<String> visited)
     {
-        ImbalancedFeature mayor = null;
+        ImbalancedFeature max = null;
          
         for(ImbalancedFeature current : imbalancedData)
         {
             if(! DataInfoUtils.existsAttribute(visited, current)) {
-                if(mayor == null) {
-                    mayor = current;
+                if(max == null) {
+                    max = current;
                 }
                 else
                 {
-                    if(mayor.getIRInterClass()<= current.getIRInterClass()&& mayor.getVariance() < current.getVariance()) mayor = current;
+                    if(max.getIRInterClass()<= current.getIRInterClass()&& max.getVariance() < current.getVariance()) {
+                        max = current;
+                    }
                 }
             }
         }
         
-        return mayor;
+        return max;
     }
     
-    
-    public static ImbalancedFeature getMinIR(ImbalancedFeature[] imbalancedData, ArrayList<String> visited)
+    /**
+     * Get minimum IR
+     * 
+     * @param imbalancedData Imbalanced data
+     * @param visited Visited
+     * @return Imbalanced feature with minimum IR
+     */
+    public static ImbalancedFeature getMinIR(ImbalancedFeature[] imbalancedData, 
+            ArrayList<String> visited)
     {
-        ImbalancedFeature menor=null ;
+        ImbalancedFeature min = null ;
          
         for( ImbalancedFeature current : imbalancedData )
         {
             if(! DataInfoUtils.existsAttribute(visited, current)) {
-                if(menor == null) {
-                    menor = current;
+                if(min == null) {
+                    min = current;
                 }
                 else
                 {
-                    if(menor.getIRIntraClass() >= current.getIRIntraClass() && menor.getVariance() > current.getVariance()) menor = current;
+                    if(min.getIRIntraClass() >= current.getIRIntraClass() && min.getVariance() > current.getVariance()) {
+                        min = current;
+                    }
                 }
             }
         }
         
-        return menor;
+        return min;
     }
     
-    
-    public static ImbalancedFeature[] sortImbalancedDataByIRIntraClass(ImbalancedFeature[] imbalancedData)
+    /**
+     * Sort labels by IR intra class
+     * 
+     * @param imbalancedData Labels as ImbalancedFeature objects
+     * @return Sorted labels
+     */
+    public static ImbalancedFeature[] sortImbalancedDataByIRIntraClass(
+            ImbalancedFeature[] imbalancedData)
     {
         ImbalancedFeature[] sorted = new ImbalancedFeature[imbalancedData.length];
         
@@ -208,11 +254,17 @@ public class MetricUtils {
         return sorted;                
     }
 
-    
+    /**
+     * Obtain labels ordered by IR inter class
+     * 
+     * @param dataset Dataset
+     * @param labelsByFrequency Labels
+     * @return Labels sorted by IR inter class
+     */
     public static ImbalancedFeature[] getImbalancedDataByIRInterClass( 
             MultiLabelInstances dataset, ImbalancedFeature[] labelsByFrequency)
     {
-        int[] labelIndices= dataset.getLabelIndices();
+        int[] labelIndices = dataset.getLabelIndices();
         
         ImbalancedFeature[] imbalancedData = new ImbalancedFeature[labelIndices.length];
          
@@ -227,31 +279,33 @@ public class MetricUtils {
          
         for(int i=0; i<labelIndices.length;i++)
         {
-            currentAttribute= instances.attribute(labelIndices[i]);
+            currentAttribute = instances.attribute(labelIndices[i]);
            
             for(int j=0; j<instances.size();j++)
             {
-                is=instances.instance(j).value(currentAttribute);
-                if(is ==1.0) {
+                is = instances.instance(j).value(currentAttribute);
+                if(is == 1.0) {
                     n1++;
                 }
                 else {
                     n0++;
                 }
-            } try { 
+            } 
+            
+            try { 
                 if(n0 ==0 || n1 ==0) {
-                    IRIntraClass=0;
+                    IRIntraClass = 0;
                 }
                 else if(n0>n1) {
-                    IRIntraClass= n0/(n1*1.0);
+                    IRIntraClass = n0/(n1*1.0);
                 }
                 else {
-                    IRIntraClass=n1/(n0*1.0);
+                    IRIntraClass = n1/(n0*1.0);
                 }
             } catch(Exception e1)
             {
                 e1.printStackTrace();
-                IRIntraClass=0;            
+                IRIntraClass = 0;            
             }
                     
             variance = (Math.pow((n0-mean), 2) + Math.pow((n1-mean), 2))/2;
@@ -269,21 +323,27 @@ public class MetricUtils {
 
             imbalancedData[i] = new ImbalancedFeature(currentAttribute.name(),currentLabel.getAppearances(),IRIntraClass, variance, IRInterClass);
              
-            n0=0;
-            n1=0;
+            n0 = 0;
+            n1 = 0;
         }
          
         return imbalancedData;
     }
     
-    
-    public static ImbalancedFeature[] getImbalancedData( MultiLabelInstances dataset)
+    /**
+     * Obtain labels as ImbalancedFeature objects
+     * 
+     * @param dataset Datasets
+     * @return Labels as ImbalanceFeature array
+     */
+    public static ImbalancedFeature[] getImbalancedData(
+            MultiLabelInstances dataset)
     {
         int[] labelIndices = dataset.getLabelIndices();
         
         ImbalancedFeature[] imbalancedData = new ImbalancedFeature[labelIndices.length];
          
-        Instances Instancias = dataset.getDataSet();
+        Instances instances = dataset.getDataSet();
          
         int n1=0, n0=0;
         double is, IR, variance;         
@@ -293,21 +353,27 @@ public class MetricUtils {
          
         for(int i=0; i<labelIndices.length;i++)
         {
-            current= Instancias.attribute(labelIndices[i]);
+            current= instances.attribute(labelIndices[i]);
            
-            for(int j=0; j<Instancias.size();j++)
+            for(int j=0; j<instances.size();j++)
             {
-                is=Instancias.instance(j).value(current);
-                if(is ==1.0) {
+                is = instances.instance(j).value(current);
+                if(is == 1.0) {
                     n1++;
                 }
                 else {
                     n0++;
                 }
             } try { 
-                if(n0 ==0 || n1 ==0) IR=0;
-                else if(n0>n1) IR= n0/(n1*1.0);
-                else IR=n1/(n0*1.0);  
+                if(n0 ==0 || n1 ==0) {
+                    IR=0;
+                }
+                else if(n0>n1) {
+                    IR= n0/(n1*1.0);
+                }
+                else {
+                    IR=n1/(n0*1.0);
+                }  
             } catch(Exception e1)
             {
                 e1.printStackTrace();
@@ -316,17 +382,23 @@ public class MetricUtils {
                     
             variance = (Math.pow((n0-mean), 2) + Math.pow((n1-mean), 2))/2;
 
-            imbalancedData[i]= new ImbalancedFeature(current.name(), IR, variance);
+            imbalancedData[i] = new ImbalancedFeature(current.name(), IR, variance);
              
-            n0=0;
-            n1=0;
+            n0 = 0;
+            n1 = 0;
         }
          
         return imbalancedData;
     }
     
-    
-    public static ImbalancedFeature[] getImbalancedDataByAppearances(MultiLabelInstances dataset)
+    /**
+     * Obtain labels ordered by number of appearances
+     * 
+     * @param dataset Dataset
+     * @return Labels as ImbalanceFeature objects
+     */
+    public static ImbalancedFeature[] getImbalancedDataByAppearances(
+            MultiLabelInstances dataset)
     {
         int[] labelIndices = dataset.getLabelIndices();
         
@@ -344,20 +416,26 @@ public class MetricUtils {
              
             for(int j=0; j<instances.size();j++)
             {
-                is=instances.instance(j).value(current);
+                is = instances.instance(j).value(current);
                 if(is ==1.0) {
                     appearances++;
                 }
             }
-            imbalancedData[i]= new ImbalancedFeature(current.name(), appearances);
-            appearances=0;
+            imbalancedData[i] = new ImbalancedFeature(current.name(), appearances);
+            appearances = 0;
         }
          
         return imbalancedData;
     }
     
-    
-    public static ImbalancedFeature[] sortByFrequency (ImbalancedFeature[] labelFrequency)
+    /**
+     * Sort labels by frequency
+     * 
+     * @param labelFrequency Labels as ImbalanceFeature array
+     * @return Sorted labels
+     */
+    public static ImbalancedFeature[] sortByFrequency (ImbalancedFeature[] 
+            labelFrequency)
     {
         ArrayList<ImbalancedFeature> list = new ArrayList();
         
@@ -370,14 +448,21 @@ public class MetricUtils {
         
         for(int i=0 ; i<labelFrequency.length; i++)
         {
-            sorted[i]= getMax(list);
+            sorted[i] = getMax(list);
             list.remove(sorted[i]);
         }
         
         return sorted;
     }
     
-    
+    /**
+     * Obtain number of labels with a certain value
+     * 
+     * @param imbalancedData Labels as ImbalancedFeature objects
+     * @param visited Visited
+     * @param current Current value
+     * @return Number of labels
+     */
     public static int getNumLabelsByIR(ImbalancedFeature[] imbalancedData, 
             double[] visited , double current)
     {
@@ -385,7 +470,7 @@ public class MetricUtils {
             return -1;
         }
         
-        int appearances=0;
+        int appearances = 0;
         
         for(int i=0; i<imbalancedData.length;i++)
         {
@@ -400,8 +485,16 @@ public class MetricUtils {
         return appearances;
     }
     
-    
-    public static int getNumLabelsByIR(double[] IRInterClass, double[] visited, double current)
+    /**
+     * Obtain number of labels by a certain IR
+     * 
+     * @param IRInterClass IR inter class
+     * @param visited Visited
+     * @param current Current value
+     * @return Number of labels
+     */
+    public static int getNumLabelsByIR(double[] IRInterClass, double[] visited, 
+            double current)
     {
         if (existsValue(visited,current)) {
             return -1;
@@ -419,10 +512,17 @@ public class MetricUtils {
         return appearances;
     }
     
-    
-    public static String getMetricValue(String metric, MultiLabelInstances dataset)
+    /**
+     * Obtain metric value, given the name
+     * 
+     * @param metric Metric name
+     * @param dataset Dataset
+     * @return Metric value as String
+     */
+    public static String getMetricValue(String metric, MultiLabelInstances 
+            dataset)
     {       
-        double value =-1.0;
+        double value = -1.0;
         
         MLDataMetric mldm = null;
         
@@ -691,7 +791,11 @@ public class MetricUtils {
         }
     }
     
-    
+    /**
+     * Obtain row data for metrics table principal
+     * 
+     * @return Matrix with row data
+     */
     public static Object[][] getRowData()
     {
         ArrayList<String> metrics = getAllMetrics();
@@ -714,10 +818,14 @@ public class MetricUtils {
         return rowData;
     }
     
-    
+    /**
+     * Obtain row data for metrics table multiple datasets
+     * 
+     * @return Matrix with row data
+     */
     public static Object[][] getRowDataMulti()
     {
-        ArrayList metrics = Get_metrics_multi();
+        ArrayList metrics = getMetricsMulti();
         
         Object rowData[][] = new Object[metrics.size()][2];
         
@@ -729,12 +837,21 @@ public class MetricUtils {
         return rowData;
     }
     
-    
+    /**
+     * Obtain all metric names
+     * 
+     * @return List of metric names
+     */
     public static ArrayList<String> getAllMetrics()
     {
         return(getAllMetricsAlphaSorted());
     }
     
+    /**
+     * Get all metrics names sorted by type
+     * 
+     * @return List of metric names
+     */
     public static ArrayList<String> getAllMetricsTypeSorted()
     {
         ArrayList<String> result= new ArrayList();
@@ -808,6 +925,11 @@ public class MetricUtils {
         return result;
     }
     
+    /**
+     * Obtain all metric names sorted by name
+     * 
+     * @return List of metric names
+     */
     public static ArrayList<String> getAllMetricsAlphaSorted()
     {
         ArrayList<String> result= new ArrayList();
@@ -873,7 +995,12 @@ public class MetricUtils {
         return result;
     }
     
-    
+    /**
+     * Get the tooltip for a specific metric
+     * 
+     * @param metric Metric name
+     * @return Tooltip for the metric
+     */
     public static String getMetricTooltip(String metric)
     {
         String tooltip;
@@ -1060,101 +1187,46 @@ public class MetricUtils {
                 break;
         }
 
-        
-        ArrayList<String> result= new ArrayList();
-
-        //result.add("<html><b>Size metrics</b></html>");
-        result.add("Attributes");
-        result.add("Instances");
-        result.add("Labels");
-        result.add("Distinct labelsets");
-        result.add("Labels x instances x features");
-        result.add("Ratio of number of instances to the number of attributes");
-
-        //result.add("<html><b>Label distribution</b></html>");
-        result.add("Cardinality");
-        result.add("Density");
-        result.add("Maximal entropy of labels");
-        result.add("Mean of entropies of labels");
-        result.add("Minimal entropy of labels");
-        result.add("Standard deviation of label cardinality");
-
-        //result.add("<html><b>Relationship among labels</b></html>");
-        result.add("Average examples per labelset");
-        result.add("Average of unconditionally dependent label pairs by chi-square test");
-        result.add("Bound");
-        result.add("Diversity");
-        result.add("Number of labelsets up to 2 examples");
-        result.add("Number of labelsets up to 5 examples");
-        result.add("Number of labelsets up to 10 examples");
-        result.add("Number of labelsets up to 50 examples");
-        result.add("Number of unconditionally dependent label pairs by chi-square test");
-        result.add("Number of unique labelsets");
-        result.add("Proportion of distinct labelsets");
-        result.add("Ratio of labelsets with number of examples < half of the attributes");
-        result.add("Ratio of unconditionally dependent label pairs by chi-square test");
-        result.add("Ratio of number of labelsets up to 2 examples");
-        result.add("Ratio of number of labelsets up to 5 examples");
-        result.add("Ratio of number of labelsets up to 10 examples");
-        result.add("Ratio of number of labelsets up to 50 examples");
-        result.add("SCUMBLE");
-        result.add("Standard deviation of examples per labelset");
-
-        //result.add("<html><b>Imbalance metrics</b></html>");
-        result.add("CVIR inter class");
-        result.add("Kurtosis cardinality");
-        result.add("Max IR per label inter class");
-        result.add("Max IR per label intra class");
-        result.add("Max IR per labelset");
-        result.add("Mean of IR per label inter class");
-        result.add("Mean of IR per label intra class");       
-        result.add("Mean of IR per labelset");       
-        result.add("Mean of kurtosis");
-        result.add("Mean of skewness of numeric attributes");
-        result.add("Mean of standard deviation of IR per label intra class");
-        result.add("Proportion of maxim label combination (PMax)");
-        result.add("Proportion of unique label combination (PUniq)");
-        result.add("Skewness cardinality");
-
-        //result.add("<html><b>Attributes metrics</b></html>");
-        result.add("Average absolute correlation between numeric attributes");
-        result.add("Average gain ratio");
-        result.add("Mean of entropies of nominal attributes");
-        result.add("Mean of mean of numeric attributes");
-        result.add("Mean of standard deviation of numeric attributes");
-        result.add("Number of binary attributes");
-        result.add("Number of nominal attributes");
-        result.add("Number of numeric attributes");
-        result.add("Proportion of binary attributes");
-        result.add("Proportion of nominal attributes");
-        result.add("Proportion of numeric attributes");
-        result.add("Proportion of numeric attributes with outliers");
-
-        
         return(tooltip);
     }
     
-    
-    public static ArrayList<String> Get_metrics_multi()
+    /**
+     * Get list of metrics for multiple datasets tab
+     * 
+     * @return List of metric names
+     */
+    public static ArrayList<String> getMetricsMulti()
     {
         return(getAllMetrics());
     }
     
-    
-    public static double[] getIRIntraClassValues(ImbalancedFeature[] imbalancedData)
+    /**
+     * Obtain IR intra class values
+     * 
+     * @param imbalancedData Labels
+     * @return IR values
+     */
+    public static double[] getIRIntraClassValues(ImbalancedFeature[] 
+            imbalancedData)
     {
         double[] result = new double[imbalancedData.length];
         
         for(int i=0; i<imbalancedData.length; i++)
         {
-            result[i]=imbalancedData[i].getIRIntraClass();
+            result[i] = imbalancedData[i].getIRIntraClass();
         }
         
         return result;
     }
     
-    
-    public static double[] getIRInterClassValues(ImbalancedFeature[] imbalancedData)
+    /**
+     * Obtain IR inter class values
+     * 
+     * @param imbalancedData Labels as ImbalancedFeature array
+     * @return 
+     */
+    public static double[] getIRInterClassValues(ImbalancedFeature[] 
+            imbalancedData)
     {        
         ImbalancedFeature[] sortedImbalancedData = MetricUtils.sortByFrequency(imbalancedData);
         
@@ -1178,9 +1250,15 @@ public class MetricUtils {
         return IRInterClass;
     }
     
-    
+    /**
+     * Get metric value formatted as String
+     * 
+     * @param name Metric name
+     * @param value Metric value
+     * @return Formatted value
+     */
     public static String getValueFormatted(String name, String value){
-        String formattedValue = new String();
+        String formattedValue;
 
         value = value.replace(",", ".");
 
@@ -1230,9 +1308,15 @@ public class MetricUtils {
         return formattedValue;
     }
     
-    
+    /**
+     * Obtain metric value formatted to the specified number of decimal places
+     * 
+     * @param value Metric value
+     * @param nDecimals Number of decimal places
+     * @return Formatted value
+     */
     public static String getValueFormatted(String value, int nDecimals){
-        String formattedValue = new String();
+        String formattedValue;
 
         value = value.replace(",", ".");
 
@@ -1266,7 +1350,5 @@ public class MetricUtils {
         
         return formattedValue;
     }
-    
-    
-    
+
 }

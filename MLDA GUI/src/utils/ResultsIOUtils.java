@@ -22,9 +22,18 @@ import mulan.data.MultiLabelInstances;
  * @author Jose Maria Moyano Murillo
  */
 public class ResultsIOUtils {
-    public static void saveMetricsTxt(PrintWriter wr, ArrayList<String> metricsList, 
-            MultiLabelInstances dataset, ImbalancedFeature[] imbalancedData, 
-            boolean  isMeka, Hashtable<String, String> tableMetrics)
+    
+    /**
+     * Save metrics as .txt file
+     * 
+     * @param wr PrintWriter
+     * @param metricsList List of metric names
+     * @param dataset Dataset
+     * @param tableMetrics Table with metrics and values
+     */
+    public static void saveMetricsTxt(PrintWriter wr, ArrayList<String> 
+            metricsList, MultiLabelInstances dataset, Hashtable<String, String> 
+            tableMetrics)
     {
         String maxString = new String();
         for(String s : metricsList){
@@ -49,9 +58,17 @@ public class ResultsIOUtils {
         }
     }   
    
-   
-    public static void saveMultiMetricsTxt(PrintWriter wr,ArrayList<String> metricsList, 
-            ArrayList<String> dataNames, Hashtable<String, Hashtable<String, String>> tableMetrics)
+    /**
+     * Save multiple datasets metrics as .txt file
+     * 
+     * @param wr PrintWriter
+     * @param metricsList List of metric names
+     * @param dataNames List of dataset names
+     * @param tableMetrics  Table with metrics and values for all datasets
+     */
+    public static void saveMultiMetricsTxt(PrintWriter wr, ArrayList<String> 
+            metricsList, ArrayList<String> dataNames, 
+            Hashtable<String, Hashtable<String, String>> tableMetrics)
     {
         String maxString = new String();
         for(String s : metricsList){
@@ -59,8 +76,8 @@ public class ResultsIOUtils {
                 maxString = s;
             }
         }
-        double maxLength = maxString.length();
         
+        double maxLength = maxString.length();
         
         String value;
         
@@ -123,10 +140,15 @@ public class ResultsIOUtils {
         } 
     }
    
-   
-    public static void saveMetricsTex(PrintWriter wr,ArrayList<String> metricsList, 
-            MultiLabelInstances dataset, ImbalancedFeature[] imbalancedData, 
-            boolean  isMeka, Hashtable<String, String> tableMetrics)
+    /**
+     * Save metrics as .tex file
+     * 
+     * @param wr PrintWriter
+     * @param metricsList List of metric names
+     * @param tableMetrics Table with metrics and values
+     */
+    public static void saveMetricsTex(PrintWriter wr, ArrayList<String> metricsList, 
+           Hashtable<String, String> tableMetrics)
     {        
         //LaTeX article header
         wr.write("\\documentclass[a4paper,11pt]{article}");
@@ -178,13 +200,21 @@ public class ResultsIOUtils {
         
         wr.write("\\end{document}");
         wr.write(System.getProperty("line.separator"));
-      }
+    }
     
-    
-    public static void saveMultiMetricsTex(PrintWriter wr, ArrayList<String> metricsList, 
-            ArrayList<String> dataNames, Hashtable<String, Hashtable<String, String>> tableMetrics)
+    /**
+     * Save multiple datasets metric values as .tex file
+     * 
+     * @param wr PrintWriter
+     * @param metricsList List of metric names
+     * @param dataNames List of dataset names
+     * @param tableMetrics Table with metrics and values for all datasets
+     */
+    public static void saveMultiMetricsTex(PrintWriter wr, ArrayList<String> 
+            metricsList, ArrayList<String> dataNames, 
+            Hashtable<String, Hashtable<String, String>> tableMetrics)
     {
-        String s;
+        String line;
         
         //LaTeX article header
         wr.write("\\documentclass[a4paper,11pt]{article}");
@@ -207,21 +237,21 @@ public class ResultsIOUtils {
         wr.write("");
         wr.write(System.getProperty("line.separator"));
         
-        s = "\\begin{tabular}{l|";
+        line = "\\begin{tabular}{l|";
         for(int i=0; i<dataNames.size(); i++){
-            s += "r|";
+            line += "r|";
         }
-        s += "}";
-        wr.write(s);
+        line += "}";
+        wr.write(line);
         wr.write(System.getProperty("line.separator"));
         
-        s = " ";
+        line = " ";
         for(String name : dataNames){
-            s = s + "& " + name.replaceAll("_", "\\\\\\_") + " ";
+            line = line + "& " + name.replaceAll("_", "\\\\\\_") + " ";
         }
-        s += " \\\\";
+        line += " \\\\";
         
-        wr.write(s);       
+        wr.write(line);       
         wr.write(System.getProperty("line.separator"));
         
         wr.write("\\hline");
@@ -231,22 +261,22 @@ public class ResultsIOUtils {
         String value = new String();
         for(String metric : metricsList)
         {
-            s = metric;
+            line = metric;
             
             for(int i=0; i<dataNames.size(); i++){
                 value = MetricUtils.getValueFormatted(metric, tableMetrics.get(dataNames.get(i)).get(metric));
             
                 if(value.equals("---")){
-                    s = s + " & " + "NaN";
+                    line = line + " & " + "NaN";
                 }
                 else{
-                    s = s + " & " + value;
+                    line = line + " & " + value;
                 }                
             }
             
-            s += " \\\\";
+            line += " \\\\";
             
-            wr.write(s); 
+            wr.write(line); 
             wr.write(System.getProperty("line.separator"));  
         }
         
@@ -258,12 +288,19 @@ public class ResultsIOUtils {
         
         wr.write("\\end{document}");
         wr.write(System.getProperty("line.separator"));
-     }
+    }
     
-   
-    public static void saveMetricsCsv(PrintWriter wr, ArrayList<String> metricsList, 
-            MultiLabelInstances dataset, ImbalancedFeature[] imbalancedData, 
-            boolean  isMeka, Hashtable<String, String> tableMetrics)
+    /**
+     * Save metrics as .csv file
+     * 
+     * @param wr PrintWriter
+     * @param metricsList List with metric names
+     * @param dataset Dataset
+     * @param tableMetrics Table with metrics and values
+     */
+    public static void saveMetricsCsv(PrintWriter wr, ArrayList<String> 
+            metricsList, MultiLabelInstances dataset, Hashtable<String, String> 
+            tableMetrics)
     {
         wr.write("Relation Name"+ ";" + dataset.getDataSet().relationName());
         wr.write(System.getProperty("line.separator"));  
@@ -283,9 +320,14 @@ public class ResultsIOUtils {
             
             wr.write(System.getProperty("line.separator"));  
         }
-     }
+    }
     
-    
+    /**
+     * Save table as .csv format
+     * 
+     * @param wr PrintWriter
+     * @param table Table
+     */
     public static void saveTableCsv(PrintWriter wr, JTable table)
     {                 
         String line = new String();
@@ -306,9 +348,15 @@ public class ResultsIOUtils {
         }
     }
     
-
-    public static void saveTableLabelsetsFrequencyCsv(PrintWriter wr, JTable table,
-            ArrayList<String> labelsetStrings)
+    /**
+     * Save table of labelsets frequency as .csv file
+     * 
+     * @param wr PrintWriter
+     * @param table Table
+     * @param labelsetStrings Strings defining the labelsets
+     */
+    public static void saveTableLabelsetsFrequencyCsv(PrintWriter wr, JTable 
+            table, ArrayList<String> labelsetStrings)
     {                 
         String line = new String();
 
@@ -333,7 +381,13 @@ public class ResultsIOUtils {
         }
     }
     
-    
+    /**
+     * Save table of labelsets IR as .csv file
+     * 
+     * @param wr PrintWriter
+     * @param table Table
+     * @param labelsetStrings Strings defining the labelsets
+     */
     public static void saveTableLabelsetsIRCsv(PrintWriter wr, JTable table, 
             ArrayList<String> labelsetStrings)
     {                 
@@ -358,7 +412,14 @@ public class ResultsIOUtils {
         }
     }
     
-    
+    /**
+     * Save multi-view table as .csv file
+     * 
+     * @param wr PrintWriter
+     * @param table Table
+     * @param views List of views
+     * @param mlData Dataset
+     */
     public static void saveMVTableCsv(PrintWriter wr, JTable table, 
             Hashtable<String, Integer[]> views, MultiLabelInstances mlData)
     {                 
@@ -395,7 +456,6 @@ public class ResultsIOUtils {
         
         for(int i=0; i<views.size(); i++){
             for(int j=0; j<views.get("View " + (i+1)).length; j++){
-                Integer [] attributes = views.get("View " + (i+1));
                 line = "View " + (i+1) + "; " + mlData.getDataSet().attribute(j).name();
                 wr.write(line);
                 wr.write(System.getProperty("line.separator"));  
@@ -403,9 +463,17 @@ public class ResultsIOUtils {
         }
     }
     
-    
-    public static void saveMultiMetricsCsv(PrintWriter wr,ArrayList<String> metricsList, 
-            ArrayList<String> dataNames, Hashtable<String, Hashtable<String, String>> tableMetrics)
+    /**
+     * Save multiple datasets metrics as .csv file
+     * 
+     * @param wr PrintWriter
+     * @param metricsList List of metric names
+     * @param dataNames List of dataset names
+     * @param tableMetrics Table with metrics and values for all datasets
+     */
+    public static void saveMultiMetricsCsv(PrintWriter wr, ArrayList<String> 
+            metricsList, ArrayList<String> dataNames, 
+            Hashtable<String, Hashtable<String, String>> tableMetrics)
     {
         String value;
          
@@ -437,9 +505,15 @@ public class ResultsIOUtils {
         }
     }
     
-    
-    public static void saveChiPhiTableCsv(PrintWriter wr, double [][] coefficients, 
-            String[] labelNames)
+    /**
+     * Save Chi and Phi coefficients as .csv file. They are stored in two different tables instead only one
+     * 
+     * @param wr PrintWriter
+     * @param coefficients Coefficients
+     * @param labelNames Label names
+     */
+    public static void saveChiPhiTableCsv(PrintWriter wr, double [][] 
+            coefficients, String[] labelNames)
     {
         //Save label names row
         String line;        
@@ -520,9 +594,15 @@ public class ResultsIOUtils {
         }
     }
     
-    
-    public static void saveCoocurrenceTableCsv(PrintWriter wr, double [][] coefficients, 
-            String[] labelNames)
+    /**
+     * Save co-ocurrences table as .csv file
+     * 
+     * @param wr PrintWriter
+     * @param coefficients Coefficients
+     * @param labelNames Label names
+     */
+    public static void saveCoocurrenceTableCsv(PrintWriter wr, double [][] 
+            coefficients, String[] labelNames)
     {
         //Save label names row
         String line = new String();
@@ -556,8 +636,15 @@ public class ResultsIOUtils {
     
     }
     
-    
-    public static void saveHeatmapTableCsv(PrintWriter wr, double [][] coefficients, String[] labelNames)
+    /**
+     * Save heatmap table as .csv file
+     * 
+     * @param wr PrintWriter
+     * @param coefficients Coefficients
+     * @param labelNames Label names
+     */
+    public static void saveHeatmapTableCsv(PrintWriter wr, double [][] 
+            coefficients, String[] labelNames)
     {
         //Save label names row
         String line = new String();
@@ -588,10 +675,17 @@ public class ResultsIOUtils {
     
     }
         
-   
-    public static void saveMetricsArff(PrintWriter wr,ArrayList<String> metric_list, 
-            MultiLabelInstances dataset, ImbalancedFeature[] imbalancedData, 
-            boolean  isMeka, Hashtable<String, String> tableMetrics)
+    /**
+     * Save metrics as .arff file
+     * 
+     * @param wr PrintWriter
+     * @param metricsList List of metric names
+     * @param dataset Dataset
+     * @param tableMetrics Table with metrics and values
+     */
+    public static void saveMetricsArff(PrintWriter wr,ArrayList<String> 
+            metricsList, MultiLabelInstances dataset, Hashtable<String, String>
+            tableMetrics)
     {
         wr.write("@relation" + " \'" + dataset.getDataSet().relationName() + "\'");
         wr.write(System.getProperty("line.separator"));  
@@ -599,7 +693,7 @@ public class ResultsIOUtils {
         wr.write(System.getProperty("line.separator")); 
     
         
-        for(String metric : metric_list)
+        for(String metric : metricsList)
         {
             wr.write("@attribute " + metric.replace(" ", "_") + " numeric");
             wr.write(System.getProperty("line.separator"));  
@@ -613,7 +707,7 @@ public class ResultsIOUtils {
         String line = new String();
         
         String value;
-        for(String metric : metric_list)
+        for(String metric : metricsList)
         {         
             value = MetricUtils.getValueFormatted(metric, tableMetrics.get(metric));
             if(value.equals("---")){
@@ -630,9 +724,17 @@ public class ResultsIOUtils {
         wr.write(System.getProperty("line.separator")); 
     }
     
-    
-    public static void saveMultiMetricsArff(PrintWriter wr,ArrayList<String> metricsList, 
-            ArrayList<String> dataNames, Hashtable<String, Hashtable<String, String>> tableMetrics)
+    /**
+     * Save metrics for multiple datasets as .arff format
+     * 
+     * @param wr PrintWriter
+     * @param metricsList List of metric names
+     * @param dataNames List of dataset names
+     * @param tableMetrics Table with metrics and values for all datasets
+     */
+    public static void saveMultiMetricsArff(PrintWriter wr,ArrayList<String> 
+            metricsList, ArrayList<String> dataNames, 
+            Hashtable<String, Hashtable<String, String>> tableMetrics)
     {
         wr.write("@relation" + " \'" + "relationMLDA" + "\'");
         wr.write(System.getProperty("line.separator"));  
@@ -653,15 +755,15 @@ public class ResultsIOUtils {
         wr.write("@data");
         wr.write(System.getProperty("line.separator"));
         
-        String value = new String();
-        String line = new String();
+        String value;
+        String line;
         
         for(int i=0; i<dataNames.size(); i++){
             line = dataNames.get(i) + ", ";
             
             for(String metric : metricsList)
             {         
-                value=MetricUtils.getValueFormatted(metric, tableMetrics.get(dataNames.get(i)).get(metric));
+                value = MetricUtils.getValueFormatted(metric, tableMetrics.get(dataNames.get(i)).get(metric));
                 if(value.equals("---")){
                     line += "?";
                 }

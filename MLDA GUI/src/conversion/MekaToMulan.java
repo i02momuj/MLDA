@@ -23,16 +23,22 @@ public class MekaToMulan {
     String relationName = new String();
     int labels = 0;
     int c = 0;
-    Vector<Attribute> attributes = new Vector<Attribute>();
+    Vector<Attribute> attributes = new Vector<>();
 	
+    /**
+     * Convert a meka dataset into a mulan dataset
+     * 
+     * @param mekaFileName Name of meka dataset file
+     * @param mulanFileName Name of new mulan dataset file
+     */
     public void convert (String mekaFileName, String mulanFileName)
     {
         FileReader frIn = null;
-	BufferedReader br = null;
+	BufferedReader br;
 	FileWriter outArff = null;
-	PrintWriter pwARFF = null;
+	PrintWriter pwARFF;
 	FileWriter outXML = null;
-	PrintWriter pwXML = null;
+	PrintWriter pwXML;
         
         try{
             frIn = new FileReader(mekaFileName + ".arff");
@@ -43,45 +49,38 @@ public class MekaToMulan {
             outXML = new FileWriter(mulanFileName + ".xml");
             pwXML = new PrintWriter(outXML);
 			
-            String line = new String();
+            String line;
             String [] words;
             
             while((line=br.readLine()) != null)
             {
                 words = line.split(" ");
 				
-                if(words[0].toLowerCase().equals("@relation"))
-		{
-                    words = line.split("-C");
-                    relationName = mulanFileName;   
-                    
-                    words = words[1].split("[^0-9\\-]");
-                    
-                    c = Integer.parseInt(words[1]);
-                    labels = Math.abs(c);
-
-                    pwARFF.println("@relation " + relationName);
-                    pwARFF.println();
-		}
-		else if(words[0].toLowerCase().equals("@attribute"))
-		{
-                    Attribute atr = new Attribute();
-					
-                    atr.name = getAttributeName(line);
-                    atr.type = getAttributeType(line);
-                    
-                    attributes.addElement(atr);
-					
-                    pwARFF.println(line);
-		}
-		else if(words[0].toLowerCase().equals("@data"))
-		{
-                    pwARFF.println();
-                    pwARFF.println(line);
-					
-                    while((line=br.readLine()) != null) {
+                switch (words[0].toLowerCase()) {
+                    case "@relation":
+                        words = line.split("-C");
+                        relationName = mulanFileName;
+                        words = words[1].split("[^0-9\\-]");
+                        c = Integer.parseInt(words[1]);
+                        labels = Math.abs(c);
+                        pwARFF.println("@relation " + relationName);
+                        pwARFF.println();
+                        break;
+                    case "@attribute":
+                        Attribute atr = new Attribute();
+                        atr.name = getAttributeName(line);
+                        atr.type = getAttributeType(line);
+                        attributes.addElement(atr);
                         pwARFF.println(line);
-                    }
+                        break;
+                    case "@data":
+                        pwARFF.println();
+                        pwARFF.println(line);
+                        while((line=br.readLine()) != null) {
+                            pwARFF.println(line);
+                        }   break;
+                    default:
+                        break;
                 }
             }
 			
@@ -92,7 +91,7 @@ public class MekaToMulan {
             pwXML.println("<?xml version=\"1.0\" ?>");
             pwXML.println("<labels xmlns=\"http://mulan.sourceforge.net/labels\">");
 			
-            Attribute a = new Attribute();
+            Attribute a;
 			
             if(c > 0)
             {
@@ -116,7 +115,7 @@ public class MekaToMulan {
             }
 			
             pwXML.println("</labels>");
-	} catch(Exception e1) { 
+	} catch(IOException | NumberFormatException e1) { 
             e1.printStackTrace();
 	} finally {
             try{
@@ -135,10 +134,15 @@ public class MekaToMulan {
 	}
     }
 	
-	
+    /**
+     * Get attribute name from an .arff @attribute line
+     * 
+     * @param s Attribute line
+     * @return Attribute name
+     */
     public String getAttributeName(String s)
     {
-        //Remove '@attribute' -> 10 caracteres
+        //Remove '@attribute' -> 10 characters
         s = s.substring(10);
         s = s.trim();
 		
@@ -178,7 +182,12 @@ public class MekaToMulan {
         return s;
     }
 	
-	
+    /**
+     * Get attribute type from an attribute line
+     * 
+     * @param s attribute line
+     * @return Attribute type
+     */
     public String getAttributeType(String s)
     {
         String [] palabra;

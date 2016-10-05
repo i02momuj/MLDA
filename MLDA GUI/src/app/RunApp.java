@@ -3160,24 +3160,24 @@ public class RunApp extends javax.swing.JFrame {
                                     DataIOUtils.saveMekaDataset(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-test");
                                 }
                                 else{
-                                    DataIOUtils.saveMekaDatasetNoViews(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-train");
-                                    DataIOUtils.saveMekaDatasetNoViews(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-test");
+                                    DataIOUtils.saveMekaDatasetsNoViews(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-train");
+                                    DataIOUtils.saveMekaDatasetsNoViews(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-test");
                                 }
                             }
                             else{
                                 if(radioNoFS.isSelected() && radioNoIS.isSelected()){
-                                    DataIOUtils.saveDataset(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5), "-train");
-                                    DataIOUtils.saveDataset(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5), "-test");
+                                    DataIOUtils.saveDatasets(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5), "-train");
+                                    DataIOUtils.saveDatasets(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5), "-test");
                                     xmlPath = file.getAbsolutePath()+"/"+datasetName.substring(0,datasetName.length()-5)+".xml";
                                 }
                                 else if(radioNoFS.isSelected()){
-                                    DataIOUtils.saveDataset(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-train");
-                                    DataIOUtils.saveDataset(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-test");
+                                    DataIOUtils.saveDatasets(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-train");
+                                    DataIOUtils.saveDatasets(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-test");
                                     xmlPath = file.getAbsolutePath()+"/"+datasetName.substring(0,datasetName.length()-5)+ preprocessedType + ".xml";
                                 }
                                 else{
-                                    DataIOUtils.saveMVDataset(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-train");
-                                    DataIOUtils.saveMVDataset(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-test");
+                                    DataIOUtils.saveMVDatasets(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-train");
+                                    DataIOUtils.saveMVDatasets(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-test");
                                     xmlPath = file.getAbsolutePath()+"/"+datasetName.substring(0,datasetName.length()-5)+ preprocessedType + ".xml";
                                 }
 
@@ -4293,6 +4293,7 @@ public class RunApp extends javax.swing.JFrame {
                     RandomTrainTest pre = new RandomTrainTest();
                     MultiLabelInstances [] partitions = pre.split(preprocessDataset, percentage);
                     trainDataset = partitions[0];
+                    testDataset = partitions[1];
                 }
                 catch (InvalidDataFormatException ex) {
                     Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -5099,7 +5100,7 @@ public class RunApp extends javax.swing.JFrame {
      * @param dataName Dataset name to add
      */
     private void initTableMetricsMulti(String dataName){
-        ArrayList<String> metricsList = MetricUtils.Get_metrics_multi();
+        ArrayList<String> metricsList = MetricUtils.getMetricsMulti();
         
         tableMetricsMulti.get(dataName).clear();
         
@@ -5927,7 +5928,7 @@ public class RunApp extends javax.swing.JFrame {
                     path = file.getAbsolutePath() +".txt";
                     bw = new BufferedWriter(new FileWriter(path));
                     wr = new PrintWriter(bw);
-                    ResultsIOUtils.saveMetricsTxt(wr, metricsList, dataset, imbalancedLabels, isMeka, tableMetrics);
+                    ResultsIOUtils.saveMetricsTxt(wr, metricsList, dataset, tableMetrics);
                     wr.close();
                     bw.close();
                     JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
@@ -5936,7 +5937,7 @@ public class RunApp extends javax.swing.JFrame {
                     path = file.getAbsolutePath() +".tex";
                     bw = new BufferedWriter(new FileWriter(path));
                     wr = new PrintWriter(bw);
-                    ResultsIOUtils.saveMetricsTex(wr, metricsList, dataset, imbalancedLabels, isMeka, tableMetrics);
+                    ResultsIOUtils.saveMetricsTex(wr, metricsList, tableMetrics);
                     wr.close();
                     bw.close();
                     JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
@@ -5945,7 +5946,7 @@ public class RunApp extends javax.swing.JFrame {
                     path = file.getAbsolutePath() +".csv";
                     bw = new BufferedWriter(new FileWriter(path));
                     wr = new PrintWriter(bw);
-                    ResultsIOUtils.saveMetricsCsv(wr, metricsList, dataset, imbalancedLabels, isMeka, tableMetrics);
+                    ResultsIOUtils.saveMetricsCsv(wr, metricsList, dataset, tableMetrics);
                     wr.close();
                     bw.close();
                     JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
@@ -5954,7 +5955,7 @@ public class RunApp extends javax.swing.JFrame {
                     path = file.getAbsolutePath() +".arff";
                     bw = new BufferedWriter(new FileWriter(path));
                     wr = new PrintWriter(bw);
-                    ResultsIOUtils.saveMetricsArff(wr, metricsList, dataset, imbalancedLabels, isMeka, tableMetrics);
+                    ResultsIOUtils.saveMetricsArff(wr, metricsList, dataset, tableMetrics);
                     wr.close();
                     bw.close();
                     JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);

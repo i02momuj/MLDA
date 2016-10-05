@@ -39,7 +39,12 @@ public class Exporter {
         this.tableName = tableName;
     }
         
-     
+    /**
+     * Export table
+     * 
+     * @param columns Table
+     * @return 
+     */
     public boolean export(JTable columns)
     {
         try
@@ -50,7 +55,7 @@ public class Exporter {
             
             WritableWorkbook wb = Workbook.createWorkbook(out);
             
-            WritableSheet ws =wb.createSheet(tableName, 0);
+            WritableSheet ws = wb.createSheet(tableName, 0);
             
             WritableCellFormat wcf2 = new WritableCellFormat();
             wcf2.setAlignment(Alignment.CENTRE);
@@ -71,7 +76,7 @@ public class Exporter {
                 
                 //Add label names
                 if(i==0) {
-                    ws.addCell(new Label(i, 0, "Labels",wcf2));
+                    ws.addCell(new Label(i, 0, "Labels", wcf2));
                 }
                 else
                 { 

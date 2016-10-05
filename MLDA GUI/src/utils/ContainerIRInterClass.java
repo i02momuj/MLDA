@@ -26,7 +26,9 @@ public class ContainerIRInterClass {
         idByIRInterClass = id_ir;
     }
     
-    
+    /**
+     * Sort ids by IR
+     */
     public void sortByIR()
     {
         int tempAppearances;
@@ -52,11 +54,18 @@ public class ContainerIRInterClass {
         }
     }
     
-    
+    /**
+     * Get id by IR
+     * @return id ordered by IR
+     */
     public double[] getIdByIR(){
         return idByIRInterClass;
     }
     
+    /**
+     * Get id by frequency
+     * @return id ordered by frequency
+     */
     public int[] getIdByFrequency(){
         return idByFrequency;
     }
