@@ -69,7 +69,7 @@ public class DataInfoUtils {
      * Obtain number of appearances of a label
      * 
      * @param imbalancedData Labels as ImbalancedFeature object
-     * @return 
+     * @return Array with appearances of each label
      */
     public static double[] getLabelAppearances(ImbalancedFeature[] 
             imbalancedData)

@@ -262,7 +262,7 @@ public class Utils {
      * Convert a list of String into an array
      * 
      * @param list List of String objects
-     * @return 
+     * @return Array of String
      */
     public static String[] listToArray(ArrayList<String> list)
     {
@@ -280,7 +280,7 @@ public class Utils {
      * Obtain all possible combinations of pairs of n labels
      * 
      * @param n Number of labels
-     * @return 
+     * @return Number of combinations
      */
     public static int getPossibleCombinations(int n)
     {
