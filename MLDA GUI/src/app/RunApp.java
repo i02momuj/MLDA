@@ -269,7 +269,6 @@ public class RunApp extends javax.swing.JFrame {
             this.setIconImage(ImageIO.read(new File("src/images/64.png")));
         }
         catch (IOException exc) {
-            exc.printStackTrace();
         }
         
         this.setMinimumSize(new Dimension(780,500));       
