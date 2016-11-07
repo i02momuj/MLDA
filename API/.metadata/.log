@@ -1953,3 +1953,66 @@ java.io.FileNotFoundException: /icons/full/eview16/call_hierarchy.png
 	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:603)
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1465)
 	at org.eclipse.equinox.launcher.Main.main(Main.java:1438)
+!SESSION 2016-11-02 17:03:51.095 -----------------------------------------------
+eclipse.buildId=4.5.2.M20160212-1500
+java.version=1.8.0_91
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=es_ES
+Framework arguments:  -product org.eclipse.epp.package.jee.product -product org.eclipse.epp.package.jee.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.jee.product -data D:\MEGA\TFM\Metrics GUI\API -product org.eclipse.epp.package.jee.product
+
+!ENTRY org.eclipse.egit.core 4 0 2016-11-02 17:04:00.756
+!MESSAGE Remove repository mapping of Git mapped resource for which project or mapped git repository has disappeared: 'RepositoryMapping[<empty> -> '.git', absolute path: 'D:/MEGA/TFM/Metrics GUI/API/MLDA_API/.git' ]'
+!STACK 0
+java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.logAndUnmapGoneMappedResource(GitProjectData.java:544)
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:510)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:479)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:472)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:210)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:103)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:374)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:349)
+	at org.eclipse.egit.core.Activator$IgnoreDerivedResources$1.visit(Activator.java:578)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:63)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:74)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:47)
+	at org.eclipse.egit.core.Activator$IgnoreDerivedResources.resourceChanged(Activator.java:562)
+	at org.eclipse.core.internal.events.NotificationManager$1.run(NotificationManager.java:299)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:289)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:152)
+	at org.eclipse.core.internal.resources.Workspace.broadcastPostChange(Workspace.java:373)
+	at org.eclipse.core.internal.resources.Workspace.endOperation(Workspace.java:1470)
+	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:46)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.eclipse.egit.ui 2 0 2016-11-02 17:04:07.591
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\Jose'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.core.resources 4 567 2016-11-02 17:04:10.440
+!MESSAGE The project description file (.project) for 'ProyectoJava' is missing.  This file contains important information about the project.  The project will not function properly until this file is restored.
+
+!ENTRY org.eclipse.core.resources 4 568 2016-11-02 17:04:14.601
+!MESSAGE Could not write metadata for '/RemoteSystemsTempFiles'.
+!STACK 0
+java.io.FileNotFoundException: D:\MEGA\TFM\Metrics GUI\API\.metadata\.plugins\org.eclipse.core.resources\.projects\RemoteSystemsTempFiles\.markers.snap (El sistema no puede encontrar la ruta especificada)
+	at java.io.FileOutputStream.open0(Native Method)
+	at java.io.FileOutputStream.open(Unknown Source)
+	at java.io.FileOutputStream.<init>(Unknown Source)
+	at java.io.FileOutputStream.<init>(Unknown Source)
+	at org.eclipse.core.internal.localstore.SafeChunkyOutputStream.<init>(SafeChunkyOutputStream.java:45)
+	at org.eclipse.core.internal.localstore.SafeChunkyOutputStream.<init>(SafeChunkyOutputStream.java:41)
+	at org.eclipse.core.internal.resources.SaveManager.visitAndSnap(SaveManager.java:1769)
+	at org.eclipse.core.internal.resources.SaveManager.visitAndSnap(SaveManager.java:1853)
+	at org.eclipse.core.internal.resources.SaveManager.save(SaveManager.java:1222)
+	at org.eclipse.core.internal.resources.SaveManager.save(SaveManager.java:1163)
+	at org.eclipse.core.internal.resources.DelayedSnapshotJob.run(DelayedSnapshotJob.java:52)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.eclipse.ui 2 2 2016-11-02 17:04:40.440
+!MESSAGE Invalid preference category path: org.eclipse.papyrus.infra.core.sasheditor.preferences.generalcategory (bundle: org.eclipse.papyrus.infra.core.sasheditor, page: org.eclipse.papyrus.sasheditor.preferences.tabtooltip)
