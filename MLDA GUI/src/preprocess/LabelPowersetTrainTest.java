@@ -67,7 +67,13 @@ public class LabelPowersetTrainTest{
         seed = aSeed;
     }
 
-    
+    /**
+     * Split data into train and test
+     * 
+     * @param data Dataset
+     * @param percentage Percentage for train data
+     * @return Array of datasets (train and test)
+     */
     public MultiLabelInstances[] split(MultiLabelInstances data, double percentage) {
         try {
             int folds = 100;
@@ -140,7 +146,13 @@ public class LabelPowersetTrainTest{
         }
     }
     
-    
+    /**
+     * Split in k folds stratified
+     * 
+     * @param data Dataset
+     * @param folds Number of folds
+     * @return Array of datasets with all folds
+     */
     public MultiLabelInstances[] stratify(MultiLabelInstances data, int folds) {
         try {
             MultiLabelInstances[] segments = new MultiLabelInstances[folds];

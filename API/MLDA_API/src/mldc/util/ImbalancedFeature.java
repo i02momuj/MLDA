@@ -1,3 +1,14 @@
+/*
+ * This file is part of the MLDA.
+ *
+ * (c)  Jose Maria Moyano Murillo
+ *      Eva Lucrecia Gibaja Galindo
+ *      Sebastian Ventura Soto <sventura@uco.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 package mldc.util;
 
 /**
@@ -19,7 +30,7 @@ public class ImbalancedFeature {
     
     
     /**
-     * Constructor
+     * Constructor specifying name of the attribute
      * 
      * @param name Name of the metric
      */
@@ -34,7 +45,7 @@ public class ImbalancedFeature {
     }
     
     /**
-     * Constructor
+     * Constructor specifying name and number of appearances of the attribute
      * 
      * @param name Name of the metric
      * @param appearances Number of appearances of the feature in the dataset
@@ -50,7 +61,7 @@ public class ImbalancedFeature {
     }
     
     /**
-     * Constructor
+     * Constructor specifying name, IR intra-class and variance of the attribute
      * 
      * @param name Name of the metric
      * @param IRIntraClass IR Intra-class value of the feature
@@ -67,7 +78,7 @@ public class ImbalancedFeature {
     }
     
     /**
-     * Constructor
+     * Constructor specifying name, number of appearances and IR intra-class of the attribute
      * 
      * @param name Name of the metric
      * @param appearances Number of appearances of the feature in the dataset
@@ -84,7 +95,7 @@ public class ImbalancedFeature {
     }
     
     /**
-     * Constructor
+     * Constructor specifying name, number of appearances, IR inter-class, IR intra-class and variance of the attribute
      * 
      * @param name Name of the metric
      * @param appearances Number of appearances of the feature in the dataset

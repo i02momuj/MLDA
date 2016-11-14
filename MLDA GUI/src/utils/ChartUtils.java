@@ -34,7 +34,8 @@ import weka.core.Instance;
 import weka.core.Instances;
 
 /**
- *
+ * This class implemnts some utils for charts
+ * 
  * @author Jose Maria Moyano Murillo
  */
 public class ChartUtils {
@@ -77,6 +78,7 @@ public class ChartUtils {
     
     /**
      * Update IR bar chart
+     * 
      * @param labelsByFrequency Labels ordered by frequency
      * @param IR Imbalance Ratio values
      * @param cp CategoryPlot

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import mulan.data.MultiLabelInstances;
 
 /**
+ * Emergent output for mor information in tables
  * 
  * @author Jose Maria Moyano Murillo
  */
@@ -31,7 +32,7 @@ public class EmergentOutput extends javax.swing.JFrame {
      
    
     /**
-     * Emergent output for labelsets
+     * Constructor with parameters
      * 
      * @param dataset Dataset
      * @param posx Position X
@@ -185,6 +186,11 @@ public class EmergentOutput extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Action when jTextArea1 lost focus
+     * 
+     * @param evt event
+     */
     private void jTextArea1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextArea1FocusLost
         this.setVisible(false);
     }//GEN-LAST:event_jTextArea1FocusLost

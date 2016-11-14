@@ -21,7 +21,8 @@ import weka.core.Attribute;
 import weka.core.Instances;
 
 /**
- *
+ * This class implements some utils for data information
+ * 
  * @author Jose Maria Moyano Murillo
  */
 public class DataInfoUtils {
@@ -206,7 +207,7 @@ public class DataInfoUtils {
     }
     
     /**
-     * Ibtain label names
+     * Obtain label names
      * 
      * @param labelIndices Label indices
      * @param instances Dataset

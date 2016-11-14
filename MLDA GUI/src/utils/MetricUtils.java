@@ -73,14 +73,14 @@ import mldc.size.RatioInstancesToAttributes;
 import mulan.data.MultiLabelInstances;
 import static utils.DataInfoUtils.getLabelByLabelname;
 import static utils.Utils.existsValue;
-import static utils.Utils.getMax;
 import static utils.Utils.hasMoreNDigits;
 import weka.core.Attribute;
 import weka.core.Instances;
 import static utils.Utils.getMax;
 
 /**
- *
+ * Utils for metrics
+ * 
  * @author Jose Maria Moyano Murillo
  */
 public class MetricUtils {

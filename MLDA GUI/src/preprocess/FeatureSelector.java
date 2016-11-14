@@ -24,6 +24,7 @@ import mulan.dimensionalityReduction.BinaryRelevanceAttributeEvaluator;
 import mulan.dimensionalityReduction.Ranker;
 
 /**
+ * This class includes some feature selectors for multi-label datasets
  * 
  * @author Jose Maria Moyano Murillo
  */
@@ -33,7 +34,12 @@ public class FeatureSelector {
     
     private int nFeatures;
     
-    
+    /**
+     * Constructor specifying the dataset and the number a features to select
+     * 
+     * @param dataset Multi-label dataset
+     * @param nFeatures Number of features to select
+     */
     public FeatureSelector(MultiLabelInstances dataset, int nFeatures){
         this.dataset = dataset;
         this.nFeatures = nFeatures;

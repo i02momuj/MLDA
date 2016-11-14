@@ -14,6 +14,7 @@ package models;
 import javax.swing.table.AbstractTableModel;
 
 /**
+ * Table model for metrics table
  * 
  * @author Jose Maria Moyano Murillo
  */
@@ -23,12 +24,22 @@ public class MetricsTableModel extends AbstractTableModel{
  
     String columnNames[] = {"Metric","Value", ""};
 
- 
+    /**
+     * Constructor specifying the data
+     * 
+     * @param rowData data
+     */
     public MetricsTableModel(Object rowData[][])
     {
         this.rowData = rowData; 
     }
  
+    /**
+     * Constructor specifying data and type (for multiple datasets metrics)
+     * 
+     * @param rowData data
+     * @param type type
+     */
     public MetricsTableModel(Object rowData[][], String type)
     {
         this.rowData = rowData;
@@ -40,6 +51,13 @@ public class MetricsTableModel extends AbstractTableModel{
         }
     }
  
+    /**
+     * Constructor specifying data, type and number of columns
+     * 
+     * @param rowData data
+     * @param type type
+     * @param ncol number of columns
+     */
     public MetricsTableModel(Object rowData[][], String type, int ncol)
     {
         this.rowData = rowData;

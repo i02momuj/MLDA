@@ -12,6 +12,7 @@
 package utils;
 
 /**
+ * This class implements a containter of values for IR attributes
  * 
  * @author Jose Maria Moyano Murillo
  */
@@ -20,6 +21,12 @@ public class ContainerIRInterClass {
     private int[] idByFrequency;
     private double[] idByIRInterClass;
     
+    /**
+     * Constructor specifyng IDs sorted by frequency and IR
+     * 
+     * @param id IDs sorted by frequency
+     * @param id_ir IDs sorted by IR
+     */
     public ContainerIRInterClass(int[] id, double[] id_ir)
     {
         idByFrequency = id;
@@ -56,6 +63,7 @@ public class ContainerIRInterClass {
     
     /**
      * Get id by IR
+     * 
      * @return id ordered by IR
      */
     public double[] getIdByIR(){
@@ -64,6 +72,7 @@ public class ContainerIRInterClass {
     
     /**
      * Get id by frequency
+     * 
      * @return id ordered by frequency
      */
     public int[] getIdByFrequency(){

@@ -156,10 +156,20 @@ public class HeatMap extends JPanel {
     drawData();
   }
   
+  /**
+   * Get image
+   * 
+   * @return image
+   */
   public BufferedImage getImage(){
       return bufferedImage;
   }
   
+  /**
+   * Get graphics
+   * 
+   * @return graphics
+   */
   public Graphics2D getBufferedGraphics(){
       return bufferedGraphics;
   }
@@ -172,6 +182,10 @@ public class HeatMap extends JPanel {
    *            The lower bound of x-values, used for axis labels
    * @param xMax
    *            The upper bound of x-values, used for axis labels
+   * @param yMin
+   *            The lower bound of y-values, used for axis labels
+   * @param yMax
+   *            The upper bound of y-values, used for axis labels
    */
   public void setCoordinateBounds(double xMin, double xMax, double yMin,
       double yMax) {
@@ -600,6 +614,7 @@ public class HeatMap extends JPanel {
    * plot to the screen, letting the drawImage method do the resizing. This
    * saves an extreme amount of time.
    */
+  @Override
   public void paintComponent(Graphics g) {
     super.paintComponent(g);
     Graphics2D g2d = (Graphics2D) g;

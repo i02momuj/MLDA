@@ -12,6 +12,7 @@
 package utils;
 
 /**
+ * This class stores metrics for imbalanced features
  * 
  * @author Jose Maria Moyano Murillo
  */
@@ -23,7 +24,12 @@ public class ImbalancedFeature {
     private double variance;
     double IRInterClass;
     
-    
+    /**
+     * Constructor specifying name and appearances of the attribute
+     * 
+     * @param name Name of the attribute
+     * @param appearances Number of appearances of the attribute
+     */
     public ImbalancedFeature(String name, int appearances)
     {
         this.name = name;
@@ -33,6 +39,13 @@ public class ImbalancedFeature {
         IRInterClass=-1;
     }
     
+    /**
+     * Constructor specifying name, IR intra-class and variance of the attribute
+     * 
+     * @param name Name of the attribute
+     * @param IRIntraClass IR intra-class
+     * @param variance variance
+     */
     public ImbalancedFeature(String name, double IRIntraClass, double variance)
     {
         this.name = name;
@@ -42,6 +55,14 @@ public class ImbalancedFeature {
         IRInterClass=-1;
     }
     
+    /**
+     * Constructor specifying name, number of appearances and IR intra-class
+     * of the attribute
+     * 
+     * @param name Name of the attribute
+     * @param appearances Number of appearances
+     * @param IRIntraClass IR intra-class
+     */
     public ImbalancedFeature(String name, int appearances, double IRIntraClass)
     {
         this.name = name;
@@ -51,6 +72,16 @@ public class ImbalancedFeature {
         IRInterClass=-1;
     }
     
+    /**
+     * Constructor specifying name, number of appearances, IR intra-class,
+     * variance and IR inter-class of the attribute
+     * 
+     * @param name Name of the attribute
+     * @param appearances Number of appearances
+     * @param IRIntraClass IR intra-class
+     * @param variance Variance
+     * @param IRInterClass IR inter-class
+     */
     public ImbalancedFeature(String name, int appearances, double IRIntraClass, 
             double variance, double IRInterClass)
     {

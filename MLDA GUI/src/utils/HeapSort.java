@@ -12,6 +12,7 @@
 package utils;
 
 /**
+ * Heap sorting
  * 
  * @author Jose Maria Moyano Murillo
  */
@@ -48,7 +49,7 @@ public class HeapSort
      * Max heap
      * 
      * @param a Array of values
-     * @param i i  
+     * @param i i 
      */
     public static void maxheap(double[] a, int i){ 
         left=2*i; 

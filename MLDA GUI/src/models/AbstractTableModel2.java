@@ -14,6 +14,7 @@ package models;
 import javax.swing.table.AbstractTableModel;
 
 /**
+ * Abstract Table Model 2
  * 
  * @author Jose Maria Moyano Murillo
  */
@@ -22,6 +23,12 @@ public class AbstractTableModel2 extends AbstractTableModel {
     Object[][] data;
     Object[] column;
             
+    /**
+     * Constructor specifying data and columns types
+     * 
+     * @param data data
+     * @param column column types
+     */
     public AbstractTableModel2(Object[][] data, Object[] column)
     {
         this.data = data;
@@ -49,6 +56,13 @@ public class AbstractTableModel2 extends AbstractTableModel {
         return data[row][col + 1];
     }
 
+    /**
+     * Set value at a cell
+     * 
+     * @param obj value
+     * @param row row index
+     * @param col column index
+     */
     public void setValueAt(double obj, int row, int col) {
         data[row][col + 1] = obj;
     }

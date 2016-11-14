@@ -25,6 +25,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 /**
+ * This class allows to convert a Mulan dataset into a Meka dataset
  * 
  * @author Jose Maria Moyano Murillo
  */

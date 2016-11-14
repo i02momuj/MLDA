@@ -17,6 +17,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
+ * Render for tables with IR values
  * 
  * @author Jose Maria Moyano Murillo
  */
@@ -25,11 +26,21 @@ public class IRRender extends DefaultTableCellRenderer
     int posIR;
     int posIR2=-1;
     
+    /**
+     * Constructor with position of IR in table
+     * 
+     * @param posIR Position of IR in table
+     */
     public IRRender(int posIR){ 
         this.posIR = posIR;
     }
     
-    
+    /**
+     * Constructor with position of IR1 and IR2 in table
+     * 
+     * @param posIR Position of IR1 in table
+     * @param posIR2 Position of IR2 in table
+     */
     public IRRender(int posIR, int posIR2){ 
         this.posIR = posIR; 
         this.posIR2 = posIR2;

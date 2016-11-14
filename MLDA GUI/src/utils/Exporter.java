@@ -25,6 +25,7 @@ import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 
 /**
+ * This class allows to export a JTable to a file
  * 
  * @author Jose Maria Moyano Murillo
  */
@@ -33,6 +34,13 @@ public class Exporter {
     private JTable table;
     private String tableName;
 
+    /**
+     * Constructor specifying file, table and table name
+     * 
+     * @param file File
+     * @param table Table
+     * @param tableName Name of the table
+     */
     public Exporter(File file, JTable table, String tableName) {
         this.file = file;
         this.table = table;
@@ -43,7 +51,7 @@ public class Exporter {
      * Export table
      * 
      * @param columns Table
-     * @return 
+     * @return True if is successful and false otherwise
      */
     public boolean export(JTable columns)
     {

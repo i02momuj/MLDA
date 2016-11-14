@@ -17,11 +17,15 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
+ * Default render
  * 
  * @author Jose Maria Moyano Murillo
  */
 public class DefaultRender extends DefaultTableCellRenderer
 {
+    /**
+     * Constructor without parameters
+     */
     public DefaultRender(){}
     
     

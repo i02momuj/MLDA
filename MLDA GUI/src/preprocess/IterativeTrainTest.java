@@ -83,8 +83,7 @@ public class IterativeTrainTest
    *          A multi-label dataset.
    * @param percentage
    *          Percentage of train dataset.
-   * @return MultiLabelInstances
-   * @throws java.lang.Exception */
+   * @return MultiLabelInstances */
   public MultiLabelInstances[] split(MultiLabelInstances data, double percentage)
     {
     int folds = 2;
@@ -107,6 +106,17 @@ public class IterativeTrainTest
     return segments;
     }
 
+  /**
+   * Folds creation
+   * 
+   * @param workingSet Instances
+   * @param random Random numbers generator
+   * @param splitRatio Ratio for splitting folds
+   * @param numLabels Number of labels
+   * @param labelIndices Indices of labels
+   * @param totalNumberOfInstances Number of instances
+   * @return Instances
+   */
   private Instances[] foldsCreation(Instances workingSet, Random random, double[] splitRatio, int numLabels, int[] labelIndices, int totalNumberOfInstances)
     {
     int numFolds = splitRatio.length;

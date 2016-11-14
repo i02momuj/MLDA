@@ -20,15 +20,21 @@ import javax.swing.table.DefaultTableCellRenderer;
 import utils.Utils;
 
 /**
+ * Basic render
  * 
  * @author Jose Maria Moyano Murillo
  */
 public class BaseRender extends DefaultTableCellRenderer
 {
-   String tableType; 
-   double criticalValue;
+    String tableType; 
+    double criticalValue;
    
-   
+    /**
+     * Constructor specifyng type and critical value
+     * 
+     * @param tableType Type of table
+     * @param criticalValue Critical value
+     */
     public BaseRender(String tableType ,double criticalValue)
     {
        this.tableType = tableType;

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete element from project &apos;MLDA_API&apos;&#x0D;&#x0A;- Original project: &apos;MLDA_API&apos;&#x0D;&#x0A;- Original element: &apos;MLDA_API/src/(default package)&apos;" description="Delete element" element1="/src&lt;" elements="1" flags="589830" id="org.eclipse.jdt.ui.delete" resources="0" stamp="1478113165154" subPackages="false" version="1.0"/>
+</session>

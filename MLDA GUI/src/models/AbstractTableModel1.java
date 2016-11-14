@@ -14,6 +14,7 @@ package models;
 import javax.swing.table.AbstractTableModel;
 
 /**
+ * Abstract Table Model 1
  * 
  * @author Jose Maria Moyano Murillo
  */
@@ -22,6 +23,12 @@ public class AbstractTableModel1 extends AbstractTableModel{
     Object[][] data;
     Object[] column;
             
+    /**
+     * Constructor specifying data and columns types
+     * 
+     * @param data data
+     * @param column column types
+     */
     public AbstractTableModel1(Object[][] data, Object[] column)
     {
         this.data = data;

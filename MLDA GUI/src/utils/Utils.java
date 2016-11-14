@@ -17,6 +17,7 @@ import java.util.Set;
 
 
 /**
+ * Some utilities for the software
  * 
  * @author Jose Maria Moyano Murillo
  */

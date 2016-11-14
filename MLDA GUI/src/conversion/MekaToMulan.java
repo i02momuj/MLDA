@@ -15,6 +15,7 @@ import java.io.*;
 import java.util.*;
 
 /**
+ * This class allows to convert Meka datasets into Mulan datasets
  * 
  * @author Jose Maria Moyano Murillo
  */

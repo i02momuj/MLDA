@@ -1,0 +1,11 @@
+import mldc.base.MLDataMetric;
+
+public class newMetric extends MLDataMetric{
+
+	public newMetric() {
+		
+		super("newMetricName");
+	}
+
+	
+}

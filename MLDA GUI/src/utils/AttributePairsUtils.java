@@ -17,7 +17,8 @@ import static utils.Utils.getPossibleCombinations;
 import weka.core.Instances;
 
 /**
- *
+ * This class implements some utils for pairs of attributes
+ * 
  * @author Jose Maria Moyano Murillo
  */
 public class AttributePairsUtils {

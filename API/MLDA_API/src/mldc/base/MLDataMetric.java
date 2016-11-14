@@ -1,3 +1,14 @@
+/*
+ * This file is part of the MLDA.
+ *
+ * (c)  Jose Maria Moyano Murillo
+ *      Eva Lucrecia Gibaja Galindo
+ *      Sebastian Ventura Soto <sventura@uco.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 package mldc.base;
 
 import mulan.data.MultiLabelInstances;
@@ -77,12 +88,6 @@ public class MLDataMetric implements Comparable<MLDataMetric>{
 	
 	
 	@Override
-	/**
-	 * Compares MLDataMetric objects by name
-	 * 
-	 * @param other MLDataMetric object
-	 * @return Comparison by name between them.
-	 */
 	public int compareTo(MLDataMetric other) {
 		return this.name.compareTo(other.getName());
 	}

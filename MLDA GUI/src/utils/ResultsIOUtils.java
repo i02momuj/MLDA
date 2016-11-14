@@ -18,7 +18,8 @@ import javax.swing.JTable;
 import mulan.data.MultiLabelInstances;
 
 /**
- *
+ * Utils for the I/O of results
+ * 
  * @author Jose Maria Moyano Murillo
  */
 public class ResultsIOUtils {

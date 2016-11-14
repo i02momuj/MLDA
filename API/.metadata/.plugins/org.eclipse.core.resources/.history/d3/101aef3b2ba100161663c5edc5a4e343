@@ -1,0 +1,15 @@
+public class newMetric extends MLDataMetric{
+
+	public newMetric() {
+		super("newMetricName");
+		AttributesMetrics.addMetric("newMetricName");
+	}
+	
+	public double calculate(MultiLabelInstances mlData){		
+		double value = 0;
+		
+		/* Calculate the value of the metric */
+		
+		return value;
+	}	
+}

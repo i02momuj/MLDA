@@ -1,3 +1,14 @@
+/*
+ * This file is part of the MLDA.
+ *
+ * (c)  Jose Maria Moyano Murillo
+ *      Eva Lucrecia Gibaja Galindo
+ *      Sebastian Ventura Soto <sventura@uco.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 package mldc.dimensionality;
 
 import mldc.base.MLDataMetric;
@@ -11,6 +22,9 @@ import mulan.data.Statistics;
 */
 public class DistinctLabelsets extends MLDataMetric {
 
+	/**
+	 * Constructor
+	 */
 	public DistinctLabelsets() {
 		super("Distinct labelsets");
 	}

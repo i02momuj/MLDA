@@ -11,91 +11,22 @@
 
 package utils;
 
-import app.RunApp;
-import java.awt.Toolkit;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import mulan.data.MultiLabelInstances;
-import preprocess.FeatureSelector;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
 import weka.core.Attribute;
 import weka.core.Instances;
 import static utils.Utils.getMax;
 import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
-import static utils.Utils.getMax;
-import static utils.Utils.getMin;
 
 /**
+ * This class implements some utils for Data I/O
  * 
  * @author Jose Maria Moyano Murillo
  */
@@ -711,6 +642,7 @@ public class DataIOUtils {
     
     /**
      * Get filepath
+     * 
      * @param path Path
      * @return Filepath
      */

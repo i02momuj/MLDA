@@ -1,0 +1,8 @@
+
+public class Main {
+
+	public static void main(String [] args){
+		newMetric nm = new newMetric();
+		System.out.println(nm.calculate(null));
+	}
+}

@@ -12,6 +12,7 @@
 package utils;
 
 /**
+ * This class implements a pair of attributes
  * 
  * @author Jose Maria Moyano Murillo
  */
@@ -22,6 +23,14 @@ public class AttributesPair
     
     int appearances;
     
+    /**
+     * Constructor specifying the name of both attributes and the number of 
+     * appearances of the pair
+     * 
+     * @param attr1 Name of attribute 1
+     * @param attr2 Name of attribute 2
+     * @param appearances Number of appearances of the pair
+     */
     public AttributesPair(String attr1, String attr2, int appearances)
     {
         this.attributeName1 = attr1;
@@ -29,7 +38,18 @@ public class AttributesPair
         this.appearances = appearances;       
     }
     
-    
+    /**
+     * Constructor specifying the names, indices and number of appearances of 
+     * both attributes, and also the number of appearances of the pair
+     * 
+     * @param attr1 Name of attribute 1
+     * @param attr2 Name of attribute 2
+     * @param appearances Number of appearances of the pair
+     * @param att1Index Index of attribute 1
+     * @param att2Index Index of attribute 2
+     * @param att1Appearances Number of appearances of attribute 1
+     * @param att2Appearances Number of appearances of attribute 2
+     */
     public AttributesPair(String attr1, String attr2,int appearances, 
             int att1Index, int att2Index, int att1Appearances, int att2Appearances)
     {
@@ -44,6 +64,7 @@ public class AttributesPair
     }
                
     /**
+     * Get the attribute 1 index
      * 
      * @return Index of attribute1
      */
@@ -52,6 +73,7 @@ public class AttributesPair
     }
     
     /**
+     * Get the attribute 2 index 
      * 
      * @return Index of attribute2
      */
@@ -60,7 +82,8 @@ public class AttributesPair
     }
     
     /**
-     *
+     * Get the name of attribute 1
+     * 
      * @return Name of attribute1
      */
     public String getAttributeName1(){ 
@@ -68,6 +91,7 @@ public class AttributesPair
     }
     
     /**
+     * Get the name of attribute 2
      * 
      * @return Name of attribute2
      */
@@ -76,6 +100,7 @@ public class AttributesPair
     }
     
     /**
+     * Get the number of appearances of the pair
      * 
      * @return Appearances
      */
@@ -84,6 +109,7 @@ public class AttributesPair
     }
     
     /**
+     * Get the number of appearances of attribute 1
      * 
      * @return Attribute1 appearances
      */
@@ -92,6 +118,7 @@ public class AttributesPair
     }
     
     /**
+     * Get the number of appearances of attribute 2
      * 
      * @return Attribute2 appearances
      */

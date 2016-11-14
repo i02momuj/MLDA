@@ -12,6 +12,7 @@
 package conversion;
 
 /**
+ * This class implements an attribute with a pair name and type
  * 
  * @author Jose Maria Moyano Murillo
  */
@@ -19,12 +20,21 @@ public class Attribute {
     String name;
     String type;
     
+    /**
+     * Constructor
+     */
     Attribute()
     {
         name = new String();
 	type = new String();
     }
 	
+    /**
+     * Constructor specifying name and type
+     * 
+     * @param name Name of the attribute
+     * @param type Type of the attribute
+     */
     Attribute(String name, String type)
     {
         this.name = name;
