@@ -134,8 +134,7 @@ public class HeatMap extends JPanel {
    *            top of the screen. If false, the data will be displayed with
    *            they=0 row at the bottom of the screen.
    * @param colors
-   *            A variable of the type Color[]. See also
-   *            {@link #createMultiGradient} and {@link #createGradient}.
+   *            A variable of the type Color[].
    */
   public HeatMap(double[][] data, boolean useGraphicsYAxis, Color[] colors) {
     super();
@@ -420,7 +419,7 @@ public class HeatMap extends JPanel {
    * @param colors
    *            A variable of type Color[]
    */
-  public void updateGradient(Color[] colors) {
+  public final void updateGradient(Color[] colors) {
     this.colors = (Color[]) colors.clone();
 
     if (data != null) {
@@ -556,7 +555,7 @@ public class HeatMap extends JPanel {
    *            top of the screen. If false, the data will be displayed with
    *            the y=0 row at the bottom of the screen.
    */
-  public void updateData(double[][] data, boolean useGraphicsYAxis) {
+  public final void updateData(double[][] data, boolean useGraphicsYAxis) {
     this.data = new double[data.length][data[0].length];
     for (int ix = 0; ix < data.length; ix++) {
       for (int iy = 0; iy < data[0].length; iy++) {

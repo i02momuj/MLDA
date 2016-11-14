@@ -1223,7 +1223,7 @@ public class MetricUtils {
      * Obtain IR inter class values
      * 
      * @param imbalancedData Labels as ImbalancedFeature array
-     * @return 
+     * @return Array with IR inter-class
      */
     public static double[] getIRInterClassValues(ImbalancedFeature[] 
             imbalancedData)

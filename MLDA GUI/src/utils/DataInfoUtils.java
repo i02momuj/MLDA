@@ -126,7 +126,7 @@ public class DataInfoUtils {
      * 
      * @param dataset Dataset
      * @param labelIndex Label index
-     * @return 
+     * @return Frequency of label
      */
     public static double getLabelFrequency(MultiLabelInstances dataset, 
             int labelIndex)

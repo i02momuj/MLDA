@@ -58,10 +58,7 @@ import mulan.data.MultiLabelInstances;
  * @author F.J. Gonzalez
  * @author Eva Gigaja
  * @version 20150925
- * @see Sechidis, K.; Tsoumakas, G. & Vlahavas, I. Gunopulos, D.; Hofmann, T.;
- *      Malerba, D. & Vazirgiannis, M. (Eds.) On the Stratification of
- *      Multi-label Data Machine Learning and Knowledge Discovery in Databases,
- *      Springer Berlin Heidelberg, 2011, 6913, 145-158 */
+ */
 public class IterativeTrainTest
   {
   /** Seed for reproduction of results */

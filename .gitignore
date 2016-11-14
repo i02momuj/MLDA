@@ -10,7 +10,6 @@ bin/
 datasets/
 MLDA GUI/build/
 MLDA GUI/dist/
-MLDA GUI/lib/
 MLDA GUI/nbproject/
 RemoteSystemsTempFiles
 .Rhistory 

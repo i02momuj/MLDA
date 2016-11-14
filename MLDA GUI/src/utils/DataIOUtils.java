@@ -134,7 +134,7 @@ public class DataIOUtils {
      * Obtain Xml string
      * 
      * @param arffText
-     * @return 
+     * @return String of the xml file
      */
     public static String getXMLString(String arffText)
     {
