@@ -1,5 +1,16 @@
-/dist/
-/build/
-/nbproject/private/
-/MLDA GUI/dist/
+.metadata/
+API/.metadata/
+API/.recommenders/
+API/RemoteSystemsTempFiles/
+API/MLDA_API/bin/
+API/MLDA_API/.settings/
+API/MLDA_API/.classpath 
+API/MLDA_API/.project 
+bin/
 datasets/
+MLDA GUI/build/
+MLDA GUI/dist/
+MLDA GUI/lib/
+MLDA GUI/nbproject/
+RemoteSystemsTempFiles
+.Rhistory 
