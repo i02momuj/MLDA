@@ -8,6 +8,7 @@ API/MLDA_API/.classpath
 API/MLDA_API/.project 
 bin/
 datasets/
+doc/old
 MLDA GUI/build/
 MLDA GUI/dist/
 MLDA GUI/lib/nblibraries.properties

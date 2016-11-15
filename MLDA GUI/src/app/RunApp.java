@@ -77,16 +77,14 @@ import utils.ContainerIRInterClass;
 import utils.EmergentOutput;
 import utils.AttributesPair;
 import utils.Utils;
-import mldc.attributes.AvgGainRatio;
-import mldc.base.MLDataMetric;
-import mldc.labelsDistribution.Cardinality;
-import mldc.labelsDistribution.Density;
-import mldc.labelsRelation.Bound;
-import mldc.labelsRelation.Diversity;
-import mldc.size.DistinctLabelsets;
-import mldc.size.Labels;
-import mldc.size.LxIxF;
-import mldc.size.RatioInstancesToAttributes;
+import mlda.base.*;
+import mlda.metricNames.*;
+import mlda.util.*;
+import mlda.labelsRelation.*;
+import mlda.dimensionality.*;
+import mlda.labelsDistribution.*;
+import mlda.attributes.*;
+import mlda.imbalance.*;
 
 import mulan.data.InvalidDataFormatException;
 import mulan.data.IterativeStratification;
@@ -6024,9 +6022,9 @@ public class RunApp extends javax.swing.JFrame {
         }
 
         //Metrics
-        mldc.size.Instances instances = new mldc.size.Instances();
+        mlda.dimensionality.Instances instances = new mlda.dimensionality.Instances();
         instances.calculate(dataset);
-        mldc.size.Attributes attributes = new mldc.size.Attributes();
+        mlda.dimensionality.Attributes attributes = new mlda.dimensionality.Attributes();
         attributes.calculate(dataset);
         Labels labels = new Labels();
         labels.calculate(dataset);
