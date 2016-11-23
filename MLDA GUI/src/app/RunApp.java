@@ -6749,23 +6749,6 @@ public class RunApp extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
                 }         
             }              
-            else if(f1.getDescription().equals(".xls"))
-            {                                        
-                try
-                {
-                    String path = file.getAbsolutePath() +".xls";
-                    Exporter exp = new Exporter(new File(path), jtable, "prueba");
-                     
-                    if(exp.export(columns))
-                    {
-                        JOptionPane.showMessageDialog(null, "File saved.", "Successful", JOptionPane.INFORMATION_MESSAGE); 
-                    }
-                }
-                catch(Exception e1)
-                {
-                    JOptionPane.showMessageDialog(null, "File not saved correctly.", "Error", JOptionPane.ERROR_MESSAGE); 
-                }
-            }
         }  
     }
 

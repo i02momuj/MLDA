@@ -14,11 +14,11 @@ package mlda.base;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-import mlda.metricNames.AttributesMetrics;
-import mlda.metricNames.DimensionalityMetrics;
-import mlda.metricNames.ImbalanceMetrics;
-import mlda.metricNames.LabelsDistributionMetrics;
-import mlda.metricNames.LabelsRelationMetrics;
+import mlda.metricsTaxonomy.AttributesMetrics;
+import mlda.metricsTaxonomy.DimensionalityMetrics;
+import mlda.metricsTaxonomy.ImbalanceMetrics;
+import mlda.metricsTaxonomy.LabelsDistributionMetrics;
+import mlda.metricsTaxonomy.LabelsRelationMetrics;
 import mulan.data.MultiLabelInstances;
 
 /**
