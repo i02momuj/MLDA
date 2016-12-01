@@ -276,7 +276,7 @@ public class DataIOUtils {
 
         for(MultiLabelInstances currentData : datasets)
         {
-            currentPath = path + "/" + dataName + "-" + type + index + ".arff";
+            currentPath = path + "/" + dataName + type + index + ".arff";
 
             bwCurrent = new BufferedWriter(new FileWriter(currentPath));
             wr = new PrintWriter(bwCurrent);
@@ -515,12 +515,19 @@ public class DataIOUtils {
             c = c + labelIndices.length;
         }
         
-        if(relationName.contains("-V:")){
-            wr.write("@relation " + "\'" + relationName.split("-V:")[0] + ": " + c + " -V:" + relationName.split("-V:")[1] +  "\'");
+        if(relationName.contains("-C")){
+            wr.write("@relation " + "\'" + relationName + "\'");
         }
         else{
-            wr.write("@relation " + "\'" + relationName + ": " + c + "\'");
+            if(relationName.contains("-V:")){
+                wr.write("@relation " + "\'" + relationName.split("-V:")[0] + ": " + c + " -V:" + relationName.split("-V:")[1] +  "\'");
+            }
+            else{
+                wr.write("@relation " + "\'" + relationName + ": " + c + "\'");
+            }
         }
+        
+        
         
         wr.write(System.getProperty("line.separator"));  
 

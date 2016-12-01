@@ -3053,17 +3053,42 @@ public class RunApp extends javax.swing.JFrame {
 
                 if(fc.isDirectorySelectionEnabled())
                 {
+                    String dataName = datasetName.substring(0,datasetName.length()-5);
+                    
+                    if(radioRandomIS.isSelected()){
+                        dataName += "-randomIS";
+                    }
+                    if(radioRandomFS.isSelected()){
+                        dataName += "-randomFS";
+                    }
+                    else if(radioBRFS.isSelected()){
+                        dataName += "-BRFS";
+                    }
+                    if(radioRandomCV.isSelected() || radioRandomHoldout.isSelected()){
+                        dataName += "-random";
+                    }
+                    else if(radioIterativeStratifiedCV.isSelected() || radioIterativeStratifiedHoldout.isSelected()){
+                        dataName += "-iterative";
+                    }
+                    else if(radioLPStratifiedCV.isSelected() || radioLPStratifiedHoldout.isSelected()){
+                        dataName += "-LP";
+                    }
+                    if((radioNoIS.isSelected()) && (radioNoFS.isSelected()) && (radioNoSplit.isSelected())){
+                        if(format.toLowerCase().contains("meka")){
+                            dataName += "-mekaConverted";
+                        }
+                        else if(format.toLowerCase().contains("mulan")){
+                            dataName += "-mulanConverted";
+                        }
+                    }
+                    
                     //Check if none were selected -> Dataset conversion
                     if(radioNoFS.isSelected() && radioNoIS.isSelected() && radioNoSplit.isSelected())
                     {
                         BufferedWriter bwTrain;
                         try {
-
-                            String dataName;
-                            dataName = datasetName.substring(0,datasetName.length()-5);
-
                             if(format.toLowerCase().contains("meka")){
-                                String dataPath = file.getAbsolutePath()+"/"+dataName+"-MekaConverted.arff";
+                                String dataPath = file.getAbsolutePath() + "/" + dataName + ".arff";
 
                                 bwTrain = new BufferedWriter(new FileWriter(dataPath));
                                 PrintWriter wrTrain = new PrintWriter(bwTrain);
@@ -3074,12 +3099,8 @@ public class RunApp extends javax.swing.JFrame {
                                 bwTrain.close();
                             }
                             else{
-                                //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-                                //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-                                //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-
-                                String dataPath = file.getAbsolutePath()+"/"+dataName+"-MulanConverted.arff";
-                                xmlPath = file.getAbsolutePath()+"/"+dataName+"-MulanConverted.xml";
+                                String dataPath = file.getAbsolutePath() + "/" + dataName + ".arff";
+                                xmlPath = file.getAbsolutePath() + "/" + dataName + ".xml";
 
                                 bwTrain = new BufferedWriter(new FileWriter(dataPath));
                                 PrintWriter wrTrain = new PrintWriter(bwTrain);
@@ -3106,18 +3127,6 @@ public class RunApp extends javax.swing.JFrame {
                         }
                     }
 
-                    String preprocessedType = new String();
-
-                    if(radioRandomIS.isSelected()){
-                        preprocessedType += "-randomIS";
-                    }
-                    if(radioBRFS.isSelected()){
-                        preprocessedType += "-BR_FS";
-                    }
-                    else if(radioRandomFS.isSelected()){
-                        preprocessedType += "-randomFS";
-                    }
-
                     //check if only FS and/or IS is selected
                     if((radioBRFS.isSelected() || radioRandomFS.isSelected() || radioRandomIS.isSelected()) && radioNoSplit.isSelected())//Feature and/or instance selection
                     {
@@ -3125,40 +3134,34 @@ public class RunApp extends javax.swing.JFrame {
                         BufferedWriter bwTrain;
                         try {
 
-                            String dataName = datasetName.substring(0,datasetName.length()-5);
-
                             if(format.toLowerCase().contains("meka")){
-                                String dataPath = file.getAbsolutePath()+"/"+dataName+ preprocessedType + ".arff";
+                                String dataPath = file.getAbsolutePath() + "/" + dataName + ".arff";
 
                                 bwTrain = new BufferedWriter(new FileWriter(dataPath));
                                 PrintWriter wrTrain = new PrintWriter(bwTrain);
 
                                 if(radioNoFS.isSelected()){
-                                    DataIOUtils.saveMekaDataset(wrTrain, preprocessedDataset, preprocessedDataset.getDataSet().relationName() + preprocessedType);
+                                    DataIOUtils.saveMekaDataset(wrTrain, preprocessedDataset, preprocessedDataset.getDataSet().relationName());
                                 }
                                 else{
-                                    DataIOUtils.saveMekaDataset(wrTrain, preprocessedDataset, dataName + preprocessedType);
+                                    DataIOUtils.saveMekaDataset(wrTrain, preprocessedDataset, dataName);
                                 }
 
                                 wrTrain.close();
                                 bwTrain.close();
                             }
                             else{
-                                //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-                                //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-                                //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-
-                                String dataPath = file.getAbsolutePath()+"/"+dataName+ preprocessedType + ".arff";
-                                xmlPath = file.getAbsolutePath()+"/"+dataName+ preprocessedType +".xml";
+                                String dataPath = file.getAbsolutePath() + "/" + dataName + ".arff";
+                                xmlPath = file.getAbsolutePath() + "/" + dataName +".xml";
 
                                 bwTrain = new BufferedWriter(new FileWriter(dataPath));
                                 PrintWriter wrTrain = new PrintWriter(bwTrain);
                                 
                                 if(radioNoFS.isSelected()){
-                                    DataIOUtils.saveDataset(wrTrain, preprocessedDataset, preprocessedDataset.getDataSet().relationName() + preprocessedType);
+                                    DataIOUtils.saveDataset(wrTrain, preprocessedDataset, preprocessedDataset.getDataSet().relationName());
                                 }
                                 else{
-                                    DataIOUtils.saveDataset(wrTrain, preprocessedDataset, dataName+ preprocessedType);
+                                    DataIOUtils.saveDataset(wrTrain, preprocessedDataset, dataName);
                                 }
 
                                 wrTrain.close();
@@ -3185,23 +3188,9 @@ public class RunApp extends javax.swing.JFrame {
                     {
                         BufferedWriter bwTrain;
                         try {
-
-                            String dataName = datasetName.substring(0,datasetName.length()-5);
-
-                            //Paths trainPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-                            //Paths testPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-                            //Paths xmlPath = new Paths.get(file.getAbsolutePath() + "/" + name_dataset + "_train.arff");
-
-                            if(radioNoFS.isSelected() && radioNoIS.isSelected()){
-                                trainPath = file.getAbsolutePath()+"/"+dataName+"-train.arff";
-                                testPath = file.getAbsolutePath()+"/"+dataName+"-test.arff";
-                                xmlPath = file.getAbsolutePath()+"/"+dataName+".xml";
-                            }
-                            else{
-                                trainPath = file.getAbsolutePath()+"/"+dataName+ preprocessedType + "-train.arff";
-                                testPath = file.getAbsolutePath()+"/"+dataName+ preprocessedType + "-test.arff";
-                                xmlPath = file.getAbsolutePath()+"/"+dataName+ preprocessedType + ".xml";
-                            }
+                            trainPath = file.getAbsolutePath() + "/" + dataName + "_train.arff";
+                            testPath = file.getAbsolutePath() + "/" + dataName + "_test.arff";
+                            xmlPath = file.getAbsolutePath() + "/" + dataName + ".xml";
 
                             if(format.toLowerCase().contains("meka")){
                                 bwTrain = new BufferedWriter(new FileWriter(trainPath));
@@ -3280,35 +3269,44 @@ public class RunApp extends javax.swing.JFrame {
                         try{
 
                             if(format.toLowerCase().contains("meka")){
+                                DataIOUtils.saveMekaDataset(trainDatasets,file.getAbsolutePath(), dataName, "_train");
+                                DataIOUtils.saveMekaDataset(testDatasets,file.getAbsolutePath(), dataName, "_test");
+                                /*
                                 if(radioNoFS.isSelected() && radioNoIS.isSelected()){
-                                    DataIOUtils.saveMekaDataset(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5), "-train");
-                                    DataIOUtils.saveMekaDataset(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5), "-test");
+                                    DataIOUtils.saveMekaDataset(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5), "_train");
+                                    DataIOUtils.saveMekaDataset(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5), "_test");
                                 }
                                 if(radioNoFS.isSelected()){
-                                    DataIOUtils.saveMekaDataset(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-train");
-                                    DataIOUtils.saveMekaDataset(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-test");
+                                    DataIOUtils.saveMekaDataset(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5), "_train");
+                                    DataIOUtils.saveMekaDataset(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5), "_test");
                                 }
                                 else{
-                                    DataIOUtils.saveMekaDatasetsNoViews(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-train");
-                                    DataIOUtils.saveMekaDatasetsNoViews(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-test");
+                                    DataIOUtils.saveMekaDatasetsNoViews(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5), "_train");
+                                    DataIOUtils.saveMekaDatasetsNoViews(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5), "_test");
                                 }
+                                */
                             }
                             else{
+                                /*
                                 if(radioNoFS.isSelected() && radioNoIS.isSelected()){
-                                    DataIOUtils.saveDatasets(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5), "-train");
-                                    DataIOUtils.saveDatasets(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5), "-test");
+                                    DataIOUtils.saveDatasets(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5), "_train");
+                                    DataIOUtils.saveDatasets(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5), "_test");
                                     xmlPath = file.getAbsolutePath()+"/"+datasetName.substring(0,datasetName.length()-5)+".xml";
                                 }
                                 else if(radioNoFS.isSelected()){
-                                    DataIOUtils.saveDatasets(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-train");
-                                    DataIOUtils.saveDatasets(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-test");
-                                    xmlPath = file.getAbsolutePath()+"/"+datasetName.substring(0,datasetName.length()-5)+ preprocessedType + ".xml";
+                                    DataIOUtils.saveDatasets(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5), "_train");
+                                    DataIOUtils.saveDatasets(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  "_test");
+                                    xmlPath = file.getAbsolutePath()+"/"+datasetName.substring(0,datasetName.length()-5) + ".xml";
                                 }
                                 else{
-                                    DataIOUtils.saveMVDatasets(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-train");
-                                    DataIOUtils.saveMVDatasets(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  preprocessedType + "-test");
-                                    xmlPath = file.getAbsolutePath()+"/"+datasetName.substring(0,datasetName.length()-5)+ preprocessedType + ".xml";
+                                    DataIOUtils.saveMVDatasets(trainDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5), "_train");
+                                    DataIOUtils.saveMVDatasets(testDatasets,file.getAbsolutePath(), datasetName.substring(0,datasetName.length()-5),  "_test");
+                                    xmlPath = file.getAbsolutePath()+"/"+datasetName.substring(0,datasetName.length()-5)+ ".xml";
                                 }
+                                */
+                                DataIOUtils.saveDatasets(trainDatasets,file.getAbsolutePath(), dataName, "_train");
+                                DataIOUtils.saveDatasets(testDatasets,file.getAbsolutePath(), dataName,  "_test");
+                                xmlPath = file.getAbsolutePath()+"/"+ dataName + ".xml";
 
                                 BufferedWriter bwXml = new BufferedWriter(new FileWriter(xmlPath));
                                 PrintWriter wrXml = new PrintWriter(bwXml);
