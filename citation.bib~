@@ -1,0 +1,10 @@
+@inproceedings{Moyano:RKEEL,
+  author    = {Jose M. Moyano and S{\'{a}}nchez},
+  title     = {{RKEEL:} Using {KEEL} in {R} code},
+  booktitle = {2016 {IEEE} International Conference on Fuzzy Systems, {FUZZ-IEEE}
+               2016, Vancouver, BC, Canada, July 24-29, 2016},
+  pages     = {257--264},
+  year      = {2016},
+  url       = {http://dx.doi.org/10.1109/FUZZ-IEEE.2016.7737695},
+  doi       = {10.1109/FUZZ-IEEE.2016.7737695},
+}
