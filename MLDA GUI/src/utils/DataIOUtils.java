@@ -205,6 +205,7 @@ public class DataIOUtils {
 
         for(MultiLabelInstances currentData : datasets)
         {
+            System.out.println(currentData.getDataSet().get(0).toString());
             currentPath = path + "/" + dataName + type + index + ".arff";
 
             bwCurrent = new BufferedWriter(new FileWriter(currentPath));

@@ -4559,26 +4559,34 @@ public class RunApp extends javax.swing.JFrame {
 
                     Instances [] foldsCV = new Instances[nFolds];
                     for(int i=0; i<nFolds; i++){
-                        foldsCV[i] = new Instances(preprocessDataset.getDataSet(), 1);
+                        foldsCV[i] = new Instances(dataTemp);
+                        foldsCV[i].clear();
                     }
 
                     for(int i=0; i<dataTemp.numInstances(); i++){
                         foldsCV[i%nFolds].add(dataTemp.get(i));
                     }
 
-                    train = new Instances(preprocessDataset.getDataSet(), 0);
-                    test = new Instances(preprocessDataset.getDataSet(), 0);
+                    train = new Instances(dataTemp);
+                    test = new Instances(dataTemp);
                     for(int i=0; i<nFolds; i++){
                         train.clear();
                         test.clear();
                         for(int j=0; j<nFolds; j++){
                             if(i != j){
+                                System.out.println("Add fold " + j + " to train");
                                 train.addAll(foldsCV[j]);
                             }
                         }
+                        System.out.println("Add fold " + i + " to test");
                         test.addAll(foldsCV[i]);
-                        trainDatasets.add(new MultiLabelInstances(train, preprocessDataset.getLabelsMetaData()));
-                        testDatasets.add(new MultiLabelInstances(test, preprocessDataset.getLabelsMetaData()));
+                        System.out.println(train.get(0).toString());
+                        System.out.println(test.get(0).toString());
+                        trainDatasets.add(new MultiLabelInstances(new Instances(train), preprocessDataset.getLabelsMetaData()));
+                        testDatasets.add(new MultiLabelInstances(new Instances(test), preprocessDataset.getLabelsMetaData()));
+                        System.out.println(trainDatasets.get(i).getDataSet().get(0).toString());
+                        System.out.println(testDatasets.get(i).getDataSet().get(0).toString());
+                        System.out.println("---");
                     }
                 }
 
