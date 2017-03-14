@@ -12,6 +12,7 @@
 package mlda.labelsRelation;
 
 import mlda.base.MLDataMetric;
+import mlda.dimensionality.Instances;
 import mulan.data.MultiLabelInstances;
 
 /**
@@ -36,6 +37,14 @@ public class Bound extends MLDataMetric{
 	 */
 	public double calculate(MultiLabelInstances mlData){	
 		this.value = Math.pow(2, mlData.getNumLabels());
+		
+		Instances instances = new Instances();
+		double nInst = instances.calculate(mlData);
+		
+		if(nInst < this.value){
+			this.value = nInst;
+		}
+		
 		return value;
 	}
 

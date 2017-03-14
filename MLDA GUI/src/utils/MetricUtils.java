@@ -15,7 +15,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import mlda.base.*;
-import mlda.metricNames.*;
+import mlda.metricsTaxonomy.*;
 import mlda.util.*;
 import mlda.labelsRelation.*;
 import mlda.dimensionality.*;

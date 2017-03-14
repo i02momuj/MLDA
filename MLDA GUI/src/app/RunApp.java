@@ -78,7 +78,7 @@ import utils.EmergentOutput;
 import utils.AttributesPair;
 import utils.Utils;
 import mlda.base.*;
-import mlda.metricNames.*;
+import mlda.metricsTaxonomy.*;
 import mlda.util.*;
 import mlda.labelsRelation.*;
 import mlda.dimensionality.*;

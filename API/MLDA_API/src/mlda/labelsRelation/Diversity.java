@@ -39,7 +39,9 @@ public class Diversity extends MLDataMetric{
 		Statistics stat = new Statistics();
 		stat.calculateStats(mlData);
 		
-		this.value = stat.labelSets().size() / Math.pow(2, mlData.getNumLabels());
+		Bound b = new Bound();
+		
+		this.value = stat.labelSets().size() / b.calculate(mlData);
 		return value;
 	}
 
