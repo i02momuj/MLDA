@@ -530,7 +530,7 @@ public class RunApp extends javax.swing.JFrame {
         TabPrincipal.setEnabledAt(3, false);
         TabPrincipal.setEnabledAt(4, false);
         TabPrincipal.setEnabledAt(5, false);
-        TabPrincipal.setEnabledAt(6, false);
+        TabPrincipal.setEnabledAt(6, true); //Multiple datasets table enabled
         TabPrincipal.setEnabledAt(7, false);
     }
     
