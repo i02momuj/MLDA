@@ -3714,9 +3714,11 @@ public class RunApp extends javax.swing.JFrame {
                         progressFrame.setVisible(false);
                         progressFrame.repaint();
 
+                        /*
                         if(returnCode == 1){
                             JOptionPane.showMessageDialog(null, "Dataset saved succesfully.", "Successful", JOptionPane.INFORMATION_MESSAGE);
                         }
+                        */
 
                         Toolkit.getDefaultToolkit().beep();
                     }//run
@@ -4194,6 +4196,8 @@ public class RunApp extends javax.swing.JFrame {
                             String dataPath = file.getAbsolutePath()+"/"+dataName+ preprocessedType + ".arff";
                             xmlPath = file.getAbsolutePath()+"/"+dataName+ preprocessedType +".xml";
 
+                            System.out.println("dataPath: " + dataPath);
+                            
                             bwTrain = new BufferedWriter(new FileWriter(dataPath));
                             PrintWriter wrTrain = new PrintWriter(bwTrain);
 
@@ -4213,8 +4217,9 @@ public class RunApp extends javax.swing.JFrame {
 
                         JOptionPane.showMessageDialog(null, "All files have been saved.", "Successful", JOptionPane.INFORMATION_MESSAGE);
                     } catch (IOException ex) {
-                        JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "The selected folder to save the dataset does not exist. \nPlease select a correct folder.", "alert", JOptionPane.ERROR_MESSAGE);
                         Logger.getLogger(RunApp.class.getName()).log(Level.SEVERE, null, ex);
+                        return -1;
                     }
                     Toolkit.getDefaultToolkit().beep();
                 }
@@ -4223,6 +4228,7 @@ public class RunApp extends javax.swing.JFrame {
         catch(Exception e){
             JOptionPane.showMessageDialog(null, "An error ocurred while saving the dataset files.", "alert", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
+            return -1;
         }
         
         return 1;

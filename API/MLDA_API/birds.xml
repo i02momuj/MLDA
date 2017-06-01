@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<labels xmlns="http://mulan.sourceforge.net/labels">
+<label name="BrownCreeper"></label>
+<label name="PacificWren"></label>
+<label name="PacificSlopeFlycatcher"></label>
+<label name="RedBreastedNuthatch"></label>
+<label name="DarkEyedJunco"></label>
+<label name="OliveSidedFlycatcher"></label>
+<label name="HermitThrush"></label>
+<label name="ChestnutBackedChickadee"></label>
+<label name="VariedThrush"></label>
+<label name="HermitWarbler"></label>
+<label name="SwainsonsThrush"></label>
+<label name="HammondsFlycatcher"></label>
+<label name="WesternTanager"></label>
+<label name="BlackHeadedGrosbeak"></label>
+<label name="GoldenCrownedKinglet"></label>
+<label name="WarblingVireo"></label>
+<label name="MacGillivraysWarbler"></label>
+<label name="StellarsJay"></label>
+<label name="CommonNighthawk"></label>
+</labels>

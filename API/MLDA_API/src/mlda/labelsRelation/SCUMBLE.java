@@ -79,12 +79,17 @@ public class SCUMBLE extends MLDataMetric{
         		}        		
         	}
         	
-//        	System.out.println("prod: " + prod);
-//    		System.out.println("IRLmean: " + IRLmean);
+        	if(nActive == 0){
+        		sum += 1;
+        	}
+        	else{
+        		IRLmean /= nActive;
+            	
+            	System.out.println(IRLmean);
+            	
+            	sum += 1 - (Math.pow(prod, 1.0/nLabels) / IRLmean);
+        	}        	
         	
-        	IRLmean /= nActive;
-        	
-        	sum += 1 - (Math.pow(prod, 1.0/nLabels) / IRLmean);
         }
         
         SCUMBLE = sum / mlData.getNumInstances();
