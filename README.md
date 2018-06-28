@@ -12,4 +12,18 @@ Please, cite this work using the *citation.bib* file or the following reference:
 
 J.M. Moyano, E. Gibaja and S. Ventura. MLDA: A tool for analyzing multi-label datasets. Knowledge-Based Systems (2017). http://dx.doi.org/10.1016/j.knosys.2017.01.018.
 
-![SUM](doc/images/MLDA_labels.png) 
+![Summary tab](doc/images/MLDA_summary.png "Summary tab")
+
+![Preprocess tab](doc/images/MLDA_preprocess.png "Preprocess tab")
+
+![Transformation tab](doc/images/MLDA_transformation.png "Transformation tab")
+
+![Labels tab](doc/images/MLDA_labels.png "Labels tab")
+
+![Attributes tab](doc/images/MLDA_attributes.png "Attributes tab")
+
+![Dependences tab](doc/images/MLDA_dependences.png "Dependences tab")
+
+![Multiple datasets tab](doc/images/MLDA_multiple.png "Multiple datasets tab")
+
+![MVML tab](doc/images/MLDA_mvml.png "MVML tab")
